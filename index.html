@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A★ Biology Flashcards</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d1117;color:#eee;font-family:Arial,sans-serif;padding:10px;font-size:15px}
+h2{color:#FFD700;font-size:16px;margin-bottom:4px}
+.sub{font-size:11px;color:#888;margin-bottom:10px}
+.tabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.tab{padding:5px 10px;background:#1c2333;border:1px solid #30363d;border-radius:20px;color:#aaa;cursor:pointer;font-size:11px}
+.tab.on{background:#FFD700;color:#000;border-color:#FFD700;font-weight:bold}
+.info{display:flex;justify-content:space-between;font-size:12px;color:#888;margin-bottom:6px}
+.pbar{height:4px;background:#30363d;border-radius:99px;margin-bottom:10px;overflow:hidden}
+.pfill{height:100%;background:#FFD700;border-radius:99px;transition:width .3s}
+.card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:16px;min-height:160px;margin-bottom:10px;cursor:pointer;position:relative}
+.card.shown{background:#0f2a0f;border-color:#2a5a2a}
+.cnum{position:absolute;top:10px;right:12px;font-size:11px;color:#555}
+.topic{font-size:10px;color:#FFD700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.q{font-size:16px;line-height:1.5;text-align:center;padding:10px 0;color:#eee}
+.hint{text-align:center;color:#555;font-size:12px;margin-top:10px}
+.asec{display:none}
+.card.shown .asec{display:block}
+.card.shown .qsec{display:none}
+.albl{font-size:10px;color:#4CAF50;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:bold}
+.ans{font-size:14px;line-height:1.7;white-space:pre-wrap;color:#eee}
+.tip{background:#1a2a1a;border-left:3px solid #FFD700;padding:8px 10px;margin-top:10px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0}
+.tip b{color:#FFD700}
+.nav{display:flex;gap:6px;margin-bottom:8px}
+.btn{flex:1;padding:10px;border-radius:8px;border:1px solid #30363d;background:#1c2333;color:#eee;font-size:13px;font-weight:bold;cursor:pointer}
+.btn:active{opacity:.7}
+.btn.gold{background:#FFD700;color:#000;border-color:#FFD700}
+.rbs{display:none;gap:5px;margin-bottom:10px}
+.rbs.show{display:flex}
+.rb{flex:1;padding:8px 2px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;border:1px solid;text-align:center}
+.rb:active{opacity:.7}
+.re{background:#0a2a0a;color:#4CAF50;border-color:#2a5a2a}
+.ro{background:#0a1a3a;color:#58a6ff;border-color:#1a3a6a}
+.rh{background:#2a1a0a;color:#ffa657;border-color:#5a3a1a}
+.rm{background:#2a0a0a;color:#ff6b6b;border-color:#5a1a1a}
+.stats{display:flex;gap:6px;margin-bottom:10px}
+.chip{flex:1;background:#1c2333;border:1px solid #30363d;border-radius:8px;padding:6px;text-align:center;font-size:11px;color:#888}
+.chip b{display:block;font-size:18px;font-weight:bold;color:#eee}
+.chip.g b{color:#4CAF50}.chip.r b{color:#ff6b6b}.chip.y b{color:#FFD700}
+.done{text-align:center;padding:30px 16px;background:#1c2333;border:1px solid #30363d;border-radius:12px;display:none}
+.done h3{color:#FFD700;font-size:20px;margin-bottom:10px}
+.done p{color:#aaa;margin-bottom:16px;font-size:14px}
+.shuffle{float:right;padding:4px 10px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:11px;cursor:pointer;margin-bottom:6px}
+</style>
+</head>
+<body>
+<h2>⭐ A★ Biology Master Flashcards</h2>
+<div class="sub">Pearson Edexcel A Level Biology B (9BI0) — 500 Cards</div>
+
+<div class="tabs" id="TB"></div>
+
+<div class="stats">
+  <div class="chip"><b id="sT">0</b>Total</div>
+  <div class="chip y"><b id="sD">0</b>Done</div>
+  <div class="chip g"><b id="sE">0</b>Easy</div>
+  <div class="chip r"><b id="sH">0</b>Hard</div>
+</div>
+
+<div class="info">
+  <span id="IF">Card 1 of 0</span>
+  <button class="shuffle" onclick="shuf()">🔀 Shuffle</button>
+</div>
+<div class="pbar"><div class="pfill" id="PB" style="width:0%"></div></div>
+
+<div id="MC">
+  <div class="card" id="CD" onclick="rev()">
+    <span class="cnum" id="CN"></span>
+    <div class="qsec">
+      <div class="topic" id="TG"></div>
+      <div class="q" id="QQ"></div>
+      <div class="hint">👆 Tap to reveal A★ Answer</div>
+    </div>
+    <div class="asec">
+      <div class="topic" id="TG2"></div>
+      <div class="albl">✅ A★ Answer</div>
+      <div class="ans" id="AA"></div>
+      <div class="tip" id="TP"></div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="btn" onclick="go(-1)">← Prev</button>
+    <button class="btn gold" onclick="rev()">👁 Reveal</button>
+    <button class="btn" onclick="go(1)">Next →</button>
+  </div>
+
+  <div class="rbs" id="RB">
+    <button class="rb re" onclick="rt('e')">✅ Easy</button>
+    <button class="rb ro" onclick="rt('o')">👍 Got it</button>
+    <button class="rb rh" onclick="rt('h')">⚠️ Hard</button>
+    <button class="rb rm" onclick="rt('m')">❌ Missed</button>
+  </div>
+</div>
+
+<div class="done" id="DN">
+  <h3>🎉 Section Complete!</h3>
+  <p>All cards reviewed! Focus on Hard and Missed ones next time.</p>
+  <button class="btn gold" style="max-width:200px;margin:0 auto;display:block" onclick="rst()">🔄 Review Again</button>
+</div>
+
+<script>
+var TP=["1-Cell Structure","2-Bio Molecules","3-Enzymes","4-Membranes","5-Genetics","6-Respiration","7-Photosynthesis","8-Homeostasis","9-Ecology","10-Practical"];
+
+var cards=[
+// TOPIC 1 - Cell Structure (25 cards)
+[0,"State the Cell Theory.","1. All living organisms are composed of cells.\n2. Cells are the basic structural and functional units of life.\n3. New cells arise from pre-existing cells through cell division.","State all three principles."],
+[0,"Which organelle produces ATP?","The mitochondrion carries out aerobic respiration and produces ATP by oxidative phosphorylation.","Link structure (cristae) to function (ATP synthesis)."],
+[0,"Why do mitochondria have folded inner membranes?","The folds (cristae) increase the surface area available for the electron transport chain and ATP synthase, maximising ATP production.","Cristae = increased surface area = more ATP synthase."],
+[0,"Why are ribosomes non-membrane-bound organelles?","They are composed of ribosomal RNA and proteins and are not surrounded by any membrane.","80S in eukaryotes, 70S in prokaryotes."],
+[0,"Give two functions of the Golgi apparatus.","1. Modifies proteins.\n2. Packages proteins into vesicles for transport or secretion.","Golgi = post office of the cell."],
+[0,"What is the function of the rough ER?","Synthesises and transports proteins. The ribosomes on its surface produce proteins for secretion.","Rough ER = ribosomes present → protein synthesis."],
+[0,"What is the function of the smooth ER?","Synthesises lipids and steroids; involved in detoxification.","Smooth ER = no ribosomes → lipid synthesis."],
+[0,"What is the role of the nucleus?","Contains DNA and controls gene expression; the nucleolus produces ribosomal RNA.","Nucleus = control centre of the cell."],
+[0,"What are the differences between prokaryotic and eukaryotic cells?","Prokaryotes: no nucleus, no membrane-bound organelles, smaller (1–10 μm), circular DNA, 70S ribosomes.\nEukaryotes: nucleus present, membrane-bound organelles, larger (10–100 μm), linear DNA, 80S ribosomes.","Pro = before nucleus; Eu = true nucleus."],
+[0,"What is a cell wall made of in plants?","Cellulose microfibrils provide structural support.","Plant cell wall = cellulose; fungal cell wall = chitin."],
+[0,"What is the function of the vacuole in plant cells?","Maintains turgor pressure (filled with cell sap), supports the cell and stores solutes.","Large central vacuole = unique to plant cells."],
+[0,"What is the function of chloroplasts?","Carry out photosynthesis — converting light energy into chemical energy (glucose).","Double membrane; contain thylakoids and stroma."],
+[0,"What is the role of the cytoskeleton?","Maintains cell shape, enables cell movement and organelle transport via microtubules and microfilaments.","Actin = microfilaments; tubulin = microtubules."],
+[0,"What is the function of lysosomes?","Contain hydrolytic enzymes that digest worn-out organelles and foreign material.","Lysosomes = recycling centre."],
+[0,"What is the difference between plant and animal cells?","Plant cells: cell wall, chloroplasts, large vacuole, no centrioles.\nAnimal cells: no cell wall, no chloroplasts, small vacuoles, centrioles present.",""],
+[0,"What is the resolution of a light microscope?","200 nm (0.2 μm).","Resolution = ability to distinguish two separate points."],
+[0,"What is the resolution of an electron microscope?","0.1–0.5 nm (up to 500× greater than light microscope).","Electrons have shorter wavelength → higher resolution."],
+[0,"What is magnification?","Magnification = Image size ÷ Actual size.","Always show working in exam calculations."],
+[0,"What is the difference between magnification and resolution?","Magnification increases the apparent size; resolution is the ability to distinguish fine detail.","High magnification without high resolution = blurry image."],
+[0,"How is a transmission electron microscope different from a scanning EM?","TEM: electrons pass through specimen → internal detail.\nSEM: electrons bounce off surface → 3D surface image.","TEM = internal; SEM = surface."],
+[0,"Why must specimens be dead in electron microscopy?","Electrons are fired in a vacuum; living cells cannot survive vacuum conditions.","This is a limitation of EM."],
+[0,"What is a eukaryote?","An organism whose cells contain a membrane-bound nucleus and membrane-bound organelles.","Examples: animals, plants, fungi, protists."],
+[0,"What is a prokaryote?","An organism whose cells lack a membrane-bound nucleus and membrane-bound organelles.","Examples: bacteria, archaea."],
+[0,"What is a plasmid?","A small, circular, double-stranded DNA molecule found in prokaryotic cells, separate from the main chromosome.","Plasmids can carry antibiotic resistance genes."],
+[0,"What is endosymbiosis theory?","Mitochondria and chloroplasts were once free-living prokaryotes engulfed by a host cell; they now live in a mutually beneficial relationship.","Evidence: double membrane, own DNA, 70S ribosomes."],
+
+// TOPIC 2 - Biological Molecules (35 cards)
+[1,"What is a condensation reaction?","A reaction that joins two molecules together with the formation of a covalent bond and the removal of one molecule of water.","Condensation = bond formed + water removed."],
+[1,"What is hydrolysis?","The breakdown of a molecule by the addition of water, breaking covalent bonds.","Hydrolysis = bond broken + water added."],
+[1,"Why is glucose suitable for respiration?","Small and soluble; easily transported; readily broken down to release energy; produces ATP efficiently.","Alpha glucose is used in respiration."],
+[1,"Why is starch suitable for storage?","Insoluble; compact; does not affect water potential; easily hydrolysed when required.","Starch = amylose + amylopectin."],
+[1,"What is the difference between alpha and beta glucose?","Alpha glucose: -OH on carbon 1 is below the ring.\nBeta glucose: -OH on carbon 1 is above the ring.","Alpha → starch/glycogen; Beta → cellulose."],
+[1,"What bonds form between glucose monomers in starch?","Glycosidic bonds formed by condensation reactions between alpha glucose molecules.","1-4 glycosidic bonds in amylose; 1-4 and 1-6 in amylopectin."],
+[1,"Why is cellulose strong?","Beta glucose monomers form straight chains that hydrogen bond with adjacent chains, forming strong microfibrils.","Alternating beta glucose = straight chains = H-bonds between chains."],
+[1,"What is glycogen and why is it a good storage molecule?","Branched polysaccharide of alpha glucose. Compact; insoluble; quickly hydrolysed due to many branch ends.","Glycogen stored in liver and muscle."],
+[1,"What is the structure of a triglyceride?","One glycerol molecule joined to three fatty acid molecules by three ester bonds formed by condensation reactions.","3 fatty acids + 1 glycerol = triglyceride."],
+[1,"What is the difference between saturated and unsaturated fatty acids?","Saturated: no C=C double bonds; solid at room temperature.\nUnsaturated: one or more C=C double bonds; liquid at room temperature.","Saturated fats → heart disease risk."],
+[1,"Why are triglycerides good energy storage molecules?","High ratio of hydrogen to oxygen → releases more energy per gram than carbohydrates; insoluble so does not affect water potential.","Fat releases ~twice as much energy per gram as carbohydrate."],
+[1,"What is a phospholipid?","Glycerol + 2 fatty acids + phosphate group. Hydrophilic head (phosphate) and hydrophobic tails (fatty acids).","Amphipathic structure = forms bilayer spontaneously."],
+[1,"What are the levels of protein structure?","Primary: sequence of amino acids.\nSecondary: alpha helix or beta pleated sheet (H-bonds).\nTertiary: 3D folding (H-bonds, ionic bonds, disulfide bridges).\nQuaternary: 2+ polypeptide chains.","All levels determine protein function."],
+[1,"What bonds stabilise tertiary structure?","Hydrogen bonds, ionic bonds, disulfide bridges and hydrophobic interactions.","Disulfide bridges are covalent; all others are weaker."],
+[1,"What is a peptide bond?","A covalent bond formed between the amine group of one amino acid and the carboxyl group of another by a condensation reaction.","Condensation = peptide bond + water."],
+[1,"What is a globular protein? Give an example.","A spherical, water-soluble protein with a hydrophilic exterior. Example: haemoglobin, enzymes.","Globular = functional proteins."],
+[1,"What is a fibrous protein? Give an example.","A long, insoluble structural protein. Example: collagen, keratin.","Fibrous = structural proteins."],
+[1,"Why is water important to living organisms?","High specific heat capacity; solvent; metabolite; high latent heat; cohesion properties; transparent.","Learn all properties of water."],
+[1,"What is the role of hydrogen bonds in water?","Hold water molecules together (cohesion); give high specific heat capacity and latent heat of vaporisation.","H-bonds are weak individually but strong collectively."],
+[1,"What is the biuret test?","Tests for protein. Add sodium hydroxide then copper sulfate solution. Positive result: purple/lilac colour.","Biuret = protein → purple."],
+[1,"What is the Benedict's test?","Tests for reducing sugars. Add Benedict's reagent and heat. Positive result: brick-red precipitate.","Reducing sugars → brick red."],
+[1,"How do you test for starch?","Add iodine solution. Positive result: blue-black colour.","Iodine = starch → blue-black."],
+[1,"How do you test for lipids?","Emulsion test: dissolve in ethanol, add water. Positive result: cloudy white emulsion.","Lipid + ethanol + water → cloudy."],
+[1,"What is DNA made of?","Nucleotides each containing: deoxyribose sugar, phosphate group, and one of four bases (A, T, C, G).","DNA = double helix; complementary base pairs."],
+[1,"What are complementary base pairs in DNA?","Adenine pairs with Thymine (2 H-bonds).\nCytosine pairs with Guanine (3 H-bonds).","AT = 2 bonds; CG = 3 bonds."],
+[1,"What is RNA?","A single-stranded nucleic acid containing ribose sugar, phosphate and bases A, U, C, G (uracil replaces thymine).","RNA = single strand; U replaces T."],
+[1,"What are the three types of RNA and their functions?","mRNA: carries genetic code from nucleus to ribosome.\ntRNA: brings amino acids to ribosome.\nrRNA: forms ribosome structure.","mRNA = message; tRNA = transfer; rRNA = ribosome."],
+[1,"What is ATP and why is it important?","Adenosine triphosphate — the universal energy currency of cells. Releases energy when hydrolysed to ADP + Pi.","ATP → ADP + Pi + energy (30.5 kJ/mol)."],
+[1,"Why is ATP better than glucose as an immediate energy source?","ATP releases energy in small, manageable amounts; energy released immediately; cannot be stored and diffuses to where needed.","ATP = immediate energy; glucose = long-term storage."],
+[1,"What is the difference between monosaccharides, disaccharides and polysaccharides?","Monosaccharides: single sugar units (glucose, fructose).\nDisaccharides: two units joined by glycosidic bond (sucrose, maltose).\nPolysaccharides: many units (starch, cellulose, glycogen).","Mono=1, Di=2, Poly=many"],
+[1,"What is the structure of haemoglobin?","Quaternary structure: 4 polypeptide chains (2 alpha, 2 beta), each with a haem group containing Fe²⁺ that binds O₂.","Haemoglobin = globular protein with quaternary structure."],
+[1,"What is the structure of collagen?","Fibrous protein: 3 polypeptide chains wound into a triple helix, cross-linked by covalent bonds for strength.","Collagen = strength in tendons, bone, skin."],
+[1,"What is an enzyme?","A biological catalyst that speeds up chemical reactions by lowering activation energy, without being used up.","Enzymes are specific to their substrate."],
+[1,"What are inorganic ions and give two examples?","Ions not containing carbon, essential for biological processes.\nExamples: Fe²⁺ (haemoglobin), Mg²⁺ (chlorophyll), Ca²⁺ (bone).","Inorganic ions = cofactors for many enzymes."],
+[1,"What is the test for non-reducing sugars?","Boil with dilute HCl (to hydrolyse), neutralise with sodium hydrogen carbonate, then add Benedict's and heat. Positive = brick-red.","Non-reducing → must hydrolyse first."],
+
+// TOPIC 3 - Enzymes (30 cards)
+[2,"Define activation energy.","The minimum energy required for a chemical reaction to begin.","Enzymes lower activation energy → faster reactions."],
+[2,"How do enzymes lower activation energy?","They provide an alternative reaction pathway that requires less activation energy.","Lock and key vs induced fit model."],
+[2,"Why does increasing substrate concentration eventually have no effect?","All enzyme active sites become occupied (enzymes saturated), so the rate cannot increase further.","At saturation, adding more substrate has no effect."],
+[2,"What is the lock and key model?","The substrate fits exactly into the complementary-shaped active site of the enzyme, like a key in a lock.","Lock and key = rigid active site."],
+[2,"What is the induced fit model?","The active site changes shape slightly when the substrate binds, improving the fit and stressing the substrate bonds.","Induced fit = flexible active site — more accurate model."],
+[2,"How does temperature affect enzyme activity?","Increasing temperature increases kinetic energy and collision frequency, increasing rate. Above optimum temperature, the enzyme denatures (active site changes shape irreversibly).","Optimum ≠ maximum — above optimum = denaturation."],
+[2,"How does pH affect enzyme activity?","Extreme pH disrupts hydrogen bonds and ionic bonds in the active site, altering its shape and denaturing the enzyme.","Each enzyme has an optimum pH."],
+[2,"What is a competitive inhibitor?","A molecule with a similar shape to the substrate that competes for the enzyme active site, reducing product formation. Effect can be overcome by increasing substrate concentration.","Competitive = same active site; reversible."],
+[2,"What is a non-competitive inhibitor?","A molecule that binds to an allosteric site on the enzyme (not the active site), changing the shape of the active site so the substrate cannot bind. Cannot be overcome by increasing substrate concentration.","Non-competitive = allosteric site; cannot be reversed by substrate."],
+[2,"What is an allosteric site?","A site on an enzyme other than the active site where a modulator molecule can bind, causing a conformational change in the active site.","Allosteric = 'other site'."],
+[2,"What is enzyme denaturation?","Permanent change in the tertiary structure of an enzyme (active site shape changes) due to excessive heat or extreme pH.","Denaturation is IRREVERSIBLE."],
+[2,"What factors affect enzyme activity?","Temperature, pH, substrate concentration, enzyme concentration, inhibitor concentration.","Remember all five factors."],
+[2,"What happens if enzyme concentration increases?","Rate increases (more active sites available) until substrate concentration becomes the limiting factor.","Enzyme concentration ↑ → rate ↑ (if substrate not limiting)."],
+[2,"What is Vmax?","The maximum rate of reaction when all enzyme active sites are saturated with substrate.","Vmax is constant for a given enzyme concentration."],
+[2,"What is Km?","The substrate concentration at which the reaction rate is half of Vmax. Low Km = high affinity for substrate.","Km = measure of enzyme-substrate affinity."],
+[2,"What is an enzyme cofactor?","A non-protein molecule or ion that binds to an enzyme and is required for its activity (e.g. Mg²⁺, Zn²⁺).","Cofactor = non-protein helper for enzyme."],
+[2,"What is a coenzyme?","An organic cofactor that temporarily binds to the enzyme and is chemically changed during the reaction (e.g. NAD, FAD).","Coenzyme = organic cofactor; e.g. NAD in respiration."],
+[2,"What is a prosthetic group?","A cofactor permanently bound to an enzyme or protein (e.g. haem group in haemoglobin).","Prosthetic = permanently bound."],
+[2,"What is end-product inhibition?","The final product of a metabolic pathway acts as a non-competitive inhibitor of an earlier enzyme, controlling the rate of production.","End-product inhibition = negative feedback at enzyme level."],
+[2,"What is the difference between reversible and irreversible inhibition?","Reversible: inhibitor binds temporarily; enzyme function restored when inhibitor removed.\nIrreversible: inhibitor binds permanently; enzyme function permanently lost.","Irreversible inhibitors can be used as drugs (e.g. aspirin)."],
+[2,"How does increasing enzyme concentration affect rate?","Rate increases proportionally until substrate concentration becomes limiting.","Straight-line increase until substrate is limiting factor."],
+[2,"What is a metabolic pathway?","A series of enzyme-controlled chemical reactions where the product of one reaction is the substrate for the next.","Metabolic pathways = chains of enzyme reactions."],
+[2,"Why are enzymes specific?","The active site has a specific complementary shape to only one substrate (or group of closely related substrates).","Specificity = complementary shape of active site."],
+[2,"Give an example of enzyme use in industry.","Protease in biological washing powder breaks down protein stains at low temperature.","Isomerase converts glucose to fructose (sweeter, food industry)."],
+[2,"What is the effect of a heavy metal ion on enzyme activity?","Heavy metal ions (e.g. mercury, lead) act as non-competitive inhibitors, binding to the enzyme and denaturing it.","Heavy metals = enzyme poisons."],
+[2,"What is the significance of the active site?","The active site has a specific 3D shape complementary to the substrate; it is where the substrate binds and the reaction occurs.","Active site shape = determined by tertiary structure."],
+[2,"What is product inhibition?","When the product of a reaction inhibits the enzyme that produced it, preventing over-production.","Negative feedback at molecular level."],
+[2,"What is an intracellular enzyme?","An enzyme that functions inside the cell (e.g. catalase in cytoplasm breaks down hydrogen peroxide).","Intracellular = inside cell."],
+[2,"What is an extracellular enzyme?","An enzyme that is secreted and functions outside the cell (e.g. digestive enzymes in the gut).","Extracellular = outside cell."],
+[2,"Why is enzyme action temperature-sensitive?","Kinetic energy increases with temperature, increasing collision rate. Above optimum, H-bonds in active site break → denaturation.","Q10 rule: rate doubles for every 10°C rise (up to optimum)."],
+
+// TOPIC 4 - Cell Membranes (30 cards)
+[3,"State the Fluid Mosaic Model.","The cell membrane is a phospholipid bilayer containing proteins that move laterally, creating a dynamic (fluid) and varied (mosaic) structure.","Singer and Nicolson, 1972."],
+[3,"Why are phospholipids amphipathic?","They contain a hydrophilic phosphate head (attracted to water) and hydrophobic fatty acid tails (repelled by water).","Amphipathic = both hydrophilic and hydrophobic."],
+[3,"What is facilitated diffusion?","The passive movement of substances down their concentration gradient through specific channel or carrier proteins. No energy required.","Passive = no ATP; needs protein channels."],
+[3,"What is the role of cholesterol in the membrane?","Regulates membrane fluidity: prevents fatty acid tails packing too closely (increases fluidity) and reduces excessive fluidity at high temperatures (stabilises membrane).","Cholesterol = membrane stabiliser."],
+[3,"What is active transport?","The movement of substances against their concentration gradient using ATP energy and carrier proteins.","Active = ATP required; against gradient."],
+[3,"What is osmosis?","The net movement of water molecules from a region of higher water potential to lower water potential across a partially permeable membrane.","Osmosis = passive movement of water only."],
+[3,"What is diffusion?","The net movement of molecules from a region of higher concentration to lower concentration down a concentration gradient. No energy required.","Diffusion = passive; down concentration gradient."],
+[3,"What factors affect the rate of diffusion?","Concentration gradient, surface area, temperature, distance (membrane thickness), molecular size.","Fick's law: rate ∝ (SA × concentration gradient) ÷ thickness."],
+[3,"What are the two types of membrane proteins?","Intrinsic (integral) proteins: span the entire bilayer.\nExtrinsic (peripheral) proteins: attached to surface only.","Intrinsic = embedded; extrinsic = surface only."],
+[3,"What is the function of glycoproteins in the membrane?","Cell signalling, cell recognition and cell adhesion. Act as receptor sites for hormones and neurotransmitters.","Glycoprotein = protein + carbohydrate chain."],
+[3,"What is the function of glycolipids?","Cell recognition and cell signalling; form part of the glycocalyx.","Glycolipid = lipid + carbohydrate chain."],
+[3,"Why is the phospholipid bilayer selectively permeable?","The hydrophobic core prevents passage of polar/charged molecules; small non-polar molecules can pass freely.","Size and polarity determine what crosses the bilayer."],
+[3,"What molecules can freely cross the phospholipid bilayer?","Small, non-polar molecules: O₂, CO₂, ethanol, steroid hormones. Also small water molecules (via aquaporins or directly).","Non-polar = passes freely; polar = needs protein."],
+[3,"What is endocytosis?","The process by which cells engulf substances by surrounding them with their cell surface membrane to form a vesicle.","Endocytosis = in; Exocytosis = out."],
+[3,"What is exocytosis?","The process by which vesicles fuse with the cell surface membrane to release their contents outside the cell.","Exocytosis = secretion of proteins."],
+[3,"How does temperature affect membrane fluidity?","Low temperature: phospholipids pack closely, membrane more rigid.\nHigh temperature: phospholipids move apart, membrane more fluid; may become too permeable or disintegrate.","Cholesterol buffers the effect of temperature."],
+[3,"What is water potential?","A measure of the tendency of water to move by osmosis. Pure water has a water potential of 0 kPa; adding solutes decreases water potential (more negative).","Water potential = osmotic potential + pressure potential."],
+[3,"What happens to an animal cell in a hypotonic solution?","It takes in water by osmosis, swells and may burst (crenation in reverse = lysis).","Hypotonic = more water outside → water enters cell."],
+[3,"What happens to a plant cell in a hypotonic solution?","It takes in water by osmosis; becomes turgid (cell wall prevents bursting). Turgor pressure increases.","Turgid plant cells support non-woody plants."],
+[3,"What is plasmolysis?","When a plant cell is placed in a hypertonic solution, it loses water by osmosis. The vacuole shrinks and the cell membrane pulls away from the cell wall.","Plasmolysis = plant cell loses water; membrane pulls away from wall."],
+[3,"What is turgidity in plant cells?","When a plant cell is fully inflated with water; the cell wall resists further entry, creating turgor pressure that supports the plant.","Turgid = healthy, supported plant cell."],
+[3,"What is carrier protein function in active transport?","Carrier proteins bind specific molecules, use ATP to change shape, and transport molecules against the concentration gradient.","Carrier proteins = energy-dependent transport."],
+[3,"What is a channel protein?","A protein that forms a hydrophilic pore through the membrane, allowing specific ions or polar molecules to pass by facilitated diffusion.","Channel proteins = specific + passive."],
+[3,"What evidence supports the Fluid Mosaic Model?","Freeze-fracture electron microscopy showed proteins embedded in and spanning the bilayer; fluorescent protein labelling showed lateral movement of proteins.","Fluid = proteins move; Mosaic = variety of proteins."],
+[3,"What is the sodium-potassium pump?","An active transport carrier protein that moves 3 Na⁺ out and 2 K⁺ into the cell per ATP molecule. Maintains electrochemical gradient.","Na⁺/K⁺ pump = 3 out, 2 in; uses ATP."],
+[3,"How does the sodium-potassium pump help glucose absorption?","Creates a Na⁺ gradient; Na⁺ re-enters cell via co-transporter protein, bringing glucose in alongside it (co-transport).","Co-transport = secondary active transport."],
+[3,"What is co-transport?","A form of active transport where one substance moves down its concentration gradient, driving the movement of another substance against its gradient through a shared carrier protein.","Example: glucose-Na⁺ co-transport in gut epithelium."],
+[3,"What is the role of aquaporins?","Channel proteins that specifically facilitate the rapid passage of water molecules across the membrane by osmosis.","Aquaporins = water channels."],
+[3,"How does ethanol affect the cell membrane?","It dissolves in the phospholipid bilayer, increasing membrane fluidity and permeability, potentially disrupting cell function.","Ethanol = membrane permeability increases."],
+[3,"What is the glycocalyx?","The layer of glycoproteins and glycolipids on the outer surface of the cell membrane involved in cell recognition, signalling and protection.","Glycocalyx = sugary coat on cell surface."],
+
+// TOPIC 5 - Genetics (60 cards)
+[4,"Define a gene.","A sequence of DNA that codes for a polypeptide or a functional RNA molecule.","One gene → one polypeptide (simplified)."],
+[4,"What is an allele?","An alternative form of a gene found at the same locus on homologous chromosomes.","Different alleles → different versions of a trait."],
+[4,"Why is DNA replication semi-conservative?","Each daughter DNA molecule contains one original (template) strand and one newly synthesised strand.","Meselson-Statt experiment proved semi-conservative replication."],
+[4,"What is a codon?","A sequence of three bases (triplet) on mRNA that codes for a specific amino acid.","64 codons; 61 code for amino acids + 3 stop codons."],
+[4,"What is a mutation?","A change in the sequence of bases in DNA.","Mutations can be substitution, insertion or deletion."],
+[4,"What is transcription?","The process by which the base sequence of a gene (DNA) is copied into mRNA in the nucleus.","DNA → mRNA (in nucleus)."],
+[4,"What is translation?","The process by which the mRNA sequence is decoded at the ribosome to produce a specific polypeptide.","mRNA → protein (at ribosome)."],
+[4,"What is the role of tRNA in translation?","tRNA carries a specific amino acid to the ribosome; the anticodon on tRNA is complementary to the codon on mRNA.","Anticodon on tRNA = complement of mRNA codon."],
+[4,"What is a frameshift mutation?","An insertion or deletion of a base that shifts the reading frame of all subsequent codons, altering the entire amino acid sequence after the mutation.","Frameshift = drastic effect; changes all codons after mutation."],
+[4,"What is a substitution mutation?","One base is replaced by another; may change one amino acid (or have no effect if codes for same amino acid — silent mutation).","Substitution = may cause missense, nonsense or silent mutation."],
+[4,"What is the genetic code?","The set of rules by which codons in mRNA are translated into amino acids. It is universal, degenerate and non-overlapping.","Universal = same in all organisms; degenerate = multiple codons per amino acid."],
+[4,"Why is the genetic code degenerate?","Multiple codons can code for the same amino acid (64 codons, only 20 amino acids).","Degeneracy provides protection against mutation effects."],
+[4,"What is meiosis?","A type of cell division that produces four genetically non-identical haploid daughter cells from a diploid parent cell.","Meiosis = gamete production; 4 haploid cells."],
+[4,"What is mitosis?","A type of cell division that produces two genetically identical diploid daughter cells from a diploid parent cell.","Mitosis = growth and repair; 2 identical diploid cells."],
+[4,"What is the difference between haploid and diploid?","Haploid (n): one set of chromosomes (e.g. gametes).\nDiploid (2n): two sets of homologous chromosomes (e.g. body cells).","Humans: 2n = 46 (diploid); n = 23 (haploid)."],
+[4,"What is crossing over?","During meiosis I, homologous chromosomes exchange segments at chiasmata, producing new combinations of alleles (recombinants).","Crossing over → genetic variation."],
+[4,"What is independent assortment?","During meiosis I, homologous chromosome pairs orient randomly at the metaphase plate, so each gamete receives a random combination of maternal and paternal chromosomes.","Independent assortment → 2²³ possible combinations in humans."],
+[4,"What is a dominant allele?","An allele whose phenotype is expressed even when only one copy is present (heterozygous).","Dominant = expressed in heterozygote."],
+[4,"What is a recessive allele?","An allele whose phenotype is only expressed when two copies are present (homozygous recessive).","Recessive = only expressed in homozygote."],
+[4,"What is codominance?","When both alleles are expressed equally in the phenotype of a heterozygote.","Example: ABO blood group (IA and IB are codominant)."],
+[4,"What is sex linkage?","When a gene is located on the sex chromosomes (usually X chromosome). Males (XY) are more likely to express X-linked recessive conditions.","Males have only one X → cannot be carriers."],
+[4,"What is a monohybrid cross?","A genetic cross involving one gene with two alleles, used to predict offspring phenotype ratios.","Use a Punnett square."],
+[4,"What is a dihybrid cross?","A genetic cross involving two genes, each with two alleles, to predict offspring phenotype ratios.","Expected ratio of 9:3:3:1 in F2 generation (both dominant)."],
+[4,"What is linkage?","When two genes are located on the same chromosome and tend to be inherited together (do not assort independently).","Linked genes violate independent assortment."],
+[4,"What is epistasis?","When one gene masks or suppresses the expression of another gene at a different locus.","Epistasis = gene-gene interaction."],
+[4,"What is the chi-squared test used for in genetics?","To determine whether observed offspring ratios differ significantly from expected ratios, testing if any deviation is due to chance.","χ² = Σ (O-E)²/E; compare to critical value."],
+[4,"What is a phenotype?","The observable characteristics of an organism resulting from the interaction of its genotype and the environment.","Phenotype = what you see."],
+[4,"What is a genotype?","The genetic makeup (allele combination) of an organism.","Genotype = allele combination."],
+[4,"What is the Hardy-Weinberg principle?","States that allele and genotype frequencies in a population remain constant from generation to generation in the absence of evolutionary forces.\np² + 2pq + q² = 1 and p + q = 1.","HWP assumes: large population, random mating, no selection, no mutation, no migration."],
+[4,"What is natural selection?","The process by which organisms with advantageous heritable traits survive and reproduce more successfully, passing traits to offspring.","Natural selection = differential survival and reproduction."],
+[4,"What is genetic drift?","Random changes in allele frequencies in a small population, not due to natural selection.","Genetic drift is more significant in small populations."],
+[4,"What is speciation?","The formation of a new species when populations become reproductively isolated and accumulate different mutations over time.","Allopatric = geographic isolation; sympatric = same area."],
+[4,"What is a gene pool?","The total of all alleles of all genes in a population at a given time.","Larger gene pool = more genetic variation."],
+[4,"What is the role of RNA polymerase in transcription?","RNA polymerase binds to the promoter region, unwinds DNA and catalyses synthesis of mRNA using the template strand.","RNA polymerase moves 3'→5' along template strand."],
+[4,"What is a promoter?","A specific DNA sequence upstream of a gene where RNA polymerase binds to initiate transcription.","Promoter = on/off switch for gene."],
+[4,"What is the difference between the template strand and coding strand of DNA?","Template strand: read by RNA polymerase (3'→5') to produce mRNA.\nCoding strand: same sequence as mRNA (with T instead of U).","mRNA sequence matches coding strand (with U replacing T)."],
+[4,"What is pre-mRNA and why is it processed?","Pre-mRNA contains both introns (non-coding) and exons (coding). Introns are removed by splicing to produce mature mRNA.","Pre-mRNA → remove introns → mature mRNA."],
+[4,"What are introns and exons?","Introns: non-coding sequences in pre-mRNA; removed by splicing.\nExons: coding sequences that are joined together to form mature mRNA.","In = introns (removed); Ex = exons (expressed)."],
+[4,"What is alternative splicing?","Different exons from the same pre-mRNA are joined in different combinations, producing different proteins from the same gene.","Alternative splicing = one gene → many proteins."],
+[4,"What is epigenetics?","Changes in gene expression caused by chemical modifications to DNA or histones (e.g. methylation, acetylation) without changes to the DNA sequence.","Epigenetics = gene expression changes without DNA sequence change."],
+[4,"What is DNA methylation?","The addition of methyl groups to cytosine bases in DNA, which typically silences gene expression.","Methylation = gene silencing."],
+[4,"What is histone acetylation?","The addition of acetyl groups to histone proteins, which loosens DNA packaging and increases gene expression.","Acetylation = gene activation."],
+[4,"What is a stem cell?","An undifferentiated cell capable of self-renewal and differentiation into specialised cell types.","Embryonic stem cells are totipotent; adult stem cells are multipotent."],
+[4,"What is differentiation?","The process by which a less specialised cell becomes a more specialised cell type, with a specific structure and function.","Differentiation = selective gene expression."],
+[4,"What is gene expression?","The process by which the information in a gene is used to produce a functional gene product (protein or RNA).","Gene expression = transcription + translation."],
+[4,"What is an operon?","A cluster of genes under the control of a single promoter, allowing coordinated regulation of gene expression (common in prokaryotes).","lac operon = classic example in E. coli."],
+[4,"What are transcription factors?","Proteins that bind to specific DNA sequences near genes (enhancers or silencers) to regulate the rate of transcription.","Transcription factors = gene switches."],
+[4,"What is a polygenic trait?","A trait controlled by more than one gene, often showing a continuous distribution (e.g. height, skin colour).","Polygenic = many genes → continuous variation."],
+[4,"What is continuous variation?","Variation that shows a range of phenotypes between two extremes, usually controlled by multiple genes and influenced by environment.","Continuous variation → normal distribution curve."],
+[4,"What is discontinuous variation?","Variation that falls into distinct categories with no intermediates, usually controlled by one or two genes.","Example: ABO blood groups."],
+[4,"What causes genetic variation?","Mutation, meiosis (crossing over, independent assortment), random fertilisation.","All three sources of variation are important."],
+[4,"What is a test cross?","A cross between an organism of unknown genotype and a homozygous recessive organism to determine the unknown genotype.","Test cross = × homozygous recessive."],
+[4,"What is incomplete dominance?","When a heterozygote shows an intermediate phenotype between the two homozygous phenotypes.","Example: red × white snapdragon → pink."],
+[4,"What is a karyotype?","A visual display of the complete set of chromosomes of an organism, arranged by size and type.","Karyotype reveals chromosomal abnormalities (e.g. Down syndrome = trisomy 21)."],
+[4,"What is non-disjunction?","The failure of chromosomes or chromatids to separate correctly during meiosis, resulting in gametes with incorrect chromosome numbers.","Non-disjunction → aneuploidy (e.g. trisomy, monosomy)."],
+[4,"What is the lac operon?","A bacterial gene regulation system in E. coli: in the absence of lactose, a repressor blocks the operon; in the presence of lactose, the repressor is inactivated and structural genes are expressed.","Lac operon = inducible operon."],
+[4,"What is gene cloning?","The production of multiple identical copies of a gene using restriction enzymes, vectors and host organisms.","Restriction enzyme cuts DNA; ligase seals it into vector."],
+[4,"What is PCR?","Polymerase Chain Reaction — a technique to amplify a specific DNA sequence rapidly using DNA polymerase, primers and thermal cycling.","PCR: denature → anneal → extend (repeated cycles)."],
+[4,"What is gel electrophoresis?","A technique that separates DNA fragments by size using an electric field; smaller fragments move further through the gel.","Smaller = moves further; larger = stays near well."],
+[4,"What is genetic engineering?","The deliberate modification of an organism's genome by inserting, deleting or altering genes using biotechnology techniques.","GMO = genetically modified organism."],
+
+// TOPIC 6 - Respiration (60 cards)
+[5,"Where does glycolysis occur?","In the cytoplasm (cytosol).","Glycolysis = anaerobic stage; occurs in all cells."],
+[5,"What are the products of glycolysis?","2 pyruvate, net gain of 2 ATP, 2 reduced NAD (NADH).","Glycolysis: glucose → 2 pyruvate + 2 ATP + 2 NADH."],
+[5,"Why is oxygen essential for aerobic respiration?","It acts as the final electron acceptor in the electron transport chain, allowing NADH and FADH₂ to be re-oxidised and ATP production to continue.","Without O₂, ETC stops → no oxidative phosphorylation."],
+[5,"What is the link reaction?","Pyruvate is decarboxylated and combined with coenzyme A to produce acetyl-CoA, CO₂ and reduced NAD. Occurs in the mitochondrial matrix.","Pyruvate → Acetyl-CoA + CO₂ + NADH."],
+[5,"What is the Krebs cycle?","A series of reactions in the mitochondrial matrix where acetyl-CoA is oxidised, producing CO₂, ATP, reduced NAD and reduced FAD.","Krebs cycle: 2 turns per glucose molecule."],
+[5,"How many ATP are produced per glucose in aerobic respiration?","Approximately 30–32 ATP per glucose molecule.","Glycolysis: 2 ATP; Krebs: 2 ATP; Oxidative phosphorylation: ~26–28 ATP."],
+[5,"What is oxidative phosphorylation?","The production of ATP in the inner mitochondrial membrane using the proton gradient generated by the electron transport chain (chemiosmosis).","Oxidative phosphorylation = ETC + chemiosmosis."],
+[5,"What is chemiosmosis?","The movement of protons (H⁺) down their electrochemical gradient through ATP synthase to produce ATP.","Chemiosmosis = proton gradient → ATP synthesis."],
+[5,"What is the role of NAD in respiration?","NAD accepts hydrogen (electrons + protons) from oxidation reactions, becoming reduced NAD (NADH), which donates electrons to the ETC.","NAD = hydrogen/electron carrier."],
+[5,"What is the role of the electron transport chain?","Electrons from NADH and FADH₂ pass through protein complexes in the inner mitochondrial membrane, releasing energy to pump protons into the intermembrane space, creating a gradient for ATP synthesis.","ETC: electrons → proton pump → ATP synthesis."],
+[5,"What is anaerobic respiration in animals?","Pyruvate is reduced to lactate by reduced NAD, regenerating NAD so glycolysis can continue.\nGlucose → 2 lactate + 2 ATP.","Lactate fermentation: no O₂; NAD regenerated."],
+[5,"What is anaerobic respiration in yeast?","Pyruvate is decarboxylated to ethanal, then reduced to ethanol by reduced NAD, regenerating NAD.\nGlucose → 2 ethanol + 2 CO₂ + 2 ATP.","Alcoholic fermentation: ethanol + CO₂ produced."],
+[5,"What is the role of ATP synthase?","ATP synthase is an enzyme in the inner mitochondrial membrane that uses the energy from protons flowing through it (chemiosmosis) to phosphorylate ADP to ATP.","ATP synthase = molecular turbine."],
+[5,"What is substrate-level phosphorylation?","The direct production of ATP from ADP + Pi during metabolic reactions (glycolysis and Krebs cycle), not involving the ETC.","Substrate-level: glycolysis (2 ATP) + Krebs (2 ATP) = 4 ATP."],
+[5,"What is the purpose of the Krebs cycle?","To completely oxidise acetyl-CoA, producing CO₂, reduced coenzymes (NADH, FADH₂) and ATP (substrate-level phosphorylation).","Krebs = carbon skeleton fully oxidised; H carriers filled."],
+[5,"What is coenzyme A (CoA)?","A coenzyme that carries acetyl groups (2C) into the Krebs cycle as acetyl-CoA.","CoA = 'taxi' for acetyl groups."],
+[5,"What is the P/O ratio?","The number of ATP molecules produced per oxygen atom consumed. NADH produces approximately 2.5 ATP; FADH₂ produces approximately 1.5 ATP.","NADH = 2.5 ATP; FADH₂ = 1.5 ATP (modern values)."],
+[5,"Why is the inner mitochondrial membrane highly folded?","The cristae increase the surface area available for the ETC and ATP synthase, maximising ATP production.","Cristae = inner membrane folds = more ETC proteins."],
+[5,"What is the intermembrane space?","The space between the outer and inner mitochondrial membranes where protons accumulate, creating the proton gradient.","High H⁺ in intermembrane space → gradient for chemiosmosis."],
+[5,"What is the mitochondrial matrix?","The inner compartment of the mitochondria where the link reaction and Krebs cycle occur.","Matrix = site of link reaction and Krebs cycle."],
+[5,"What is the net ATP yield from glycolysis?","Net gain of 2 ATP per glucose molecule.","Glycolysis: 4 ATP produced − 2 ATP used = net 2 ATP."],
+[5,"What happens to pyruvate in aerobic conditions?","Pyruvate is transported into the mitochondrial matrix and undergoes the link reaction to form acetyl-CoA.","In aerobic conditions: pyruvate → mitochondria → link reaction."],
+[5,"What is the oxygen debt (EPOC)?","The extra oxygen required after intense exercise to oxidise accumulated lactate back to glucose (in the liver) and restore normal metabolic state.","Oxygen debt = excess post-exercise oxygen consumption."],
+[5,"What is the role of FAD in respiration?","FAD accepts hydrogen in the Krebs cycle, becoming FADH₂, which donates electrons to the ETC at a lower energy level than NADH.","FADH₂ enters ETC at Complex II → fewer ATP than NADH."],
+[5,"What is the effect of cyanide on respiration?","Cyanide blocks Complex IV (cytochrome oxidase) in the ETC, preventing oxygen from accepting electrons, halting the ETC and stopping ATP production.","Cyanide = ETC inhibitor → rapidly fatal."],
+[5,"What is the effect of DNP (dinitrophenol) on respiration?","DNP dissipates the proton gradient across the inner mitochondrial membrane, so protons bypass ATP synthase → no ATP production; energy released as heat.","DNP = uncoupler; proton gradient lost; no ATP."],
+[5,"What is the significance of NAD being regenerated in anaerobic respiration?","Allows glycolysis to continue in the absence of oxygen, providing cells with a small amount of ATP for survival.","Without NAD regeneration, glycolysis stops → cell death."],
+[5,"What is the total CO₂ released per glucose in aerobic respiration?","6 CO₂ per glucose: 2 from link reaction + 4 from Krebs cycle (2 turns).","2 CO₂ from link reaction; 2 CO₂ per turn of Krebs."],
+[5,"What is the respiratory quotient (RQ)?","RQ = CO₂ produced ÷ O₂ consumed.\nCarbohydrate: RQ = 1.0; Fat: RQ ≈ 0.7; Protein: RQ ≈ 0.9.","RQ = 1 → carbohydrate; RQ < 1 → fat/protein."],
+[5,"What is the role of coenzyme Q (ubiquinone)?","A mobile electron carrier in the inner mitochondrial membrane that transfers electrons between Complex I/II and Complex III.","Coenzyme Q = mobile electron shuttle in inner membrane."],
+
+// TOPIC 7 - Photosynthesis (60 cards)
+[6,"What is photolysis?","The light-driven splitting of water into oxygen (released), electrons and hydrogen ions (protons) in the thylakoid membrane.","Photolysis: 2H₂O → 4H⁺ + 4e⁻ + O₂."],
+[6,"Why is ATP needed in the Calvin cycle?","ATP supplies the energy required to reduce glycerate 3-phosphate (GP) to triose phosphate (TP).","Calvin cycle: CO₂ fixation → reduction (needs ATP + NADPH)."],
+[6,"What is RuBisCO?","Ribulose bisphosphate carboxylase/oxygenase — the enzyme that catalyses the fixation of CO₂ to ribulose bisphosphate (RuBP) in the Calvin cycle.","RuBisCO = most abundant enzyme on Earth."],
+[6,"What are the two main stages of photosynthesis?","Light-dependent reactions (in thylakoid membrane): produce ATP and NADPH.\nLight-independent reactions/Calvin cycle (in stroma): use ATP and NADPH to fix CO₂ into sugar.","Light-dependent: thylakoid; Light-independent: stroma."],
+[6,"What is the role of chlorophyll?","Chlorophyll absorbs light energy (mainly red and blue wavelengths, reflects green) and converts it to chemical energy (ATP and NADPH).","Chlorophyll reflects green → plants appear green."],
+[6,"What is photophosphorylation?","The production of ATP from ADP + Pi using light energy in the thylakoid membrane via chemiosmosis.","Photophosphorylation = light → ATP."],
+[6,"What is non-cyclic photophosphorylation?","Electrons flow from PSII through the ETC to PSI; water is split (photolysis) to replace electrons; NADP is reduced to NADPH; ATP is produced.","Non-cyclic: produces ATP + NADPH + O₂."],
+[6,"What is cyclic photophosphorylation?","Electrons from PSI are recycled back through the ETC without reducing NADP or splitting water; only ATP is produced.","Cyclic: produces ATP only; no NADPH, no O₂."],
+[6,"What is the role of NADP in photosynthesis?","NADP accepts electrons and protons to become NADPH in the light-dependent reactions; NADPH is used to reduce GP to TP in the Calvin cycle.","NADP = electron/hydrogen carrier in photosynthesis."],
+[6,"What is the Calvin cycle?","A series of reactions in the stroma: CO₂ is fixed onto RuBP by RuBisCO; GP is formed; reduced to TP using ATP and NADPH; RuBP is regenerated.","Calvin cycle: CO₂ → GP → TP → RuBP."],
+[6,"What is glycerate 3-phosphate (GP)?","A 3-carbon molecule produced when CO₂ is fixed onto RuBP; it is the first stable product of carbon fixation.","CO₂ + RuBP → 2 GP (3C each)."],
+[6,"What is triose phosphate (TP)?","A 3-carbon sugar produced by reducing GP using ATP and NADPH; it can be used to produce glucose, amino acids, fatty acids or to regenerate RuBP.","TP = versatile 3C intermediate."],
+[6,"What is ribulose bisphosphate (RuBP)?","A 5-carbon compound that accepts CO₂ in the Calvin cycle; regenerated using ATP.","RuBP = CO₂ acceptor; 5C; regenerated using ATP."],
+[6,"What factors affect the rate of photosynthesis?","Light intensity, CO₂ concentration, temperature, water availability, chlorophyll concentration.","Any one can be the limiting factor."],
+[6,"How does light intensity affect photosynthesis?","Increasing light intensity increases the rate of photosynthesis (more photons excite more chlorophyll electrons) until another factor becomes limiting.","Light intensity → rate ↑ until limiting factor."],
+[6,"How does CO₂ concentration affect photosynthesis?","Increasing CO₂ concentration increases the rate of the Calvin cycle (more substrate for RuBisCO) until another factor is limiting.","CO₂ ↑ → Calvin cycle rate ↑."],
+[6,"How does temperature affect photosynthesis?","Increasing temperature increases rate (up to optimum ~25–35°C); above optimum, enzymes denature (RuBisCO) → rate falls sharply.","Temperature optimum for photosynthesis ≈ 25–35°C."],
+[6,"What is a limiting factor?","A factor that limits the rate of a process because it is present in insufficient quantity, even if other conditions are optimal.","Law of limiting factors: Blackman (1905)."],
+[6,"What is the absorption spectrum of chlorophyll?","Chlorophyll absorbs most light in the red (650–700 nm) and blue (400–500 nm) regions; reflects green (500–600 nm).","Absorption ≠ action spectrum; both needed in exam."],
+[6,"What is the action spectrum of photosynthesis?","A graph showing the rate of photosynthesis at different wavelengths; highest at red and blue wavelengths (matches absorption spectrum).","Action spectrum mirrors absorption spectrum of chlorophyll."],
+[6,"What is the role of accessory pigments?","Carotenoids and xanthophylls absorb light at wavelengths not absorbed by chlorophyll a, broadening the range of light usable for photosynthesis.","Accessory pigments extend light absorption range."],
+[6,"What is photosystem I (PSI)?","A protein complex in the thylakoid membrane that absorbs light at 700 nm; re-energises electrons from PSII to reduce NADP to NADPH.","PSI = P700; produces NADPH."],
+[6,"What is photosystem II (PSII)?","A protein complex in the thylakoid membrane that absorbs light at 680 nm; splits water (photolysis) and passes electrons to the ETC.","PSII = P680; photolysis; O₂ released here."],
+[6,"What is the chemiosmosis in the chloroplast?","Protons accumulate in the thylakoid lumen via PSII and the ETC; they flow through ATP synthase (in the thylakoid membrane) into the stroma, producing ATP.","Chloroplast chemiosmosis: stroma side of ATP synthase."],
+[6,"Where does the light-dependent reaction occur?","In the thylakoid membrane of the chloroplast.","Thylakoid = light-dependent; stroma = Calvin cycle."],
+[6,"Where does the Calvin cycle occur?","In the stroma of the chloroplast.","Stroma = light-independent; uses products of light-dependent reactions."],
+[6,"What is the net equation for photosynthesis?","6CO₂ + 6H₂O + light energy → C₆H₁₂O₆ + 6O₂","Learn the overall equation — often asked."],
+[6,"Why must RuBP be regenerated in the Calvin cycle?","To maintain a continuous supply of CO₂ acceptor molecules so CO₂ fixation can continue.","Without RuBP regeneration, Calvin cycle stops."],
+[6,"What are the products of the light-dependent reactions?","ATP, NADPH and O₂.","O₂ is a by-product of photolysis."],
+[6,"How many turns of the Calvin cycle are needed to produce one glucose?","6 turns (to fix 6 CO₂), producing 12 TP, of which 10 are used to regenerate RuBP and 2 are used to make 1 glucose.","6 CO₂ → 6 turns → 12 TP → 1 glucose (2 TP)."],
+[6,"What is photorespiration?","When RuBisCO fixes O₂ instead of CO₂ (in high O₂/low CO₂ conditions), producing glycolate instead of GP, wasting energy.","Photorespiration: O₂ fixed instead of CO₂ → wasteful."],
+
+// TOPIC 8 - Homeostasis (60 cards)
+[7,"What is negative feedback?","A mechanism that reverses deviations from a set point, maintaining internal conditions within narrow limits.","Negative feedback = self-correcting; restores set point."],
+[7,"Which hormone lowers blood glucose?","Insulin (secreted by beta cells of the islets of Langerhans in the pancreas).","Insulin ↓ blood glucose; glucagon ↑ blood glucose."],
+[7,"Which hormone increases blood glucose?","Glucagon (secreted by alpha cells of the islets of Langerhans in the pancreas).","Remember: alpha = glucagon (raises); beta = insulin (lowers)."],
+[7,"What is thermoregulation?","The process by which organisms maintain their core body temperature within a narrow range despite changes in the external environment.","Hypothalamus = thermoregulatory centre in mammals."],
+[7,"What is the role of the hypothalamus in thermoregulation?","Acts as the thermostat: detects temperature changes in blood, compares to set point, and sends signals to effectors (skin, muscles) to correct deviations.","Hypothalamus = central thermoreceptor + control centre."],
+[7,"What responses occur when body temperature rises?","Vasodilation: blood vessels in skin dilate, more blood near surface, more heat lost.\nSweating: evaporation of sweat cools skin.\nBehaviour: remove clothing.","Vasodilation + sweating = cooling responses."],
+[7,"What responses occur when body temperature falls?","Vasoconstriction: blood vessels in skin constrict, less blood near surface, less heat lost.\nShivering: rapid muscle contractions generate heat.\nErector pili: raise hairs to trap air insulation layer.","Vasoconstriction + shivering = warming responses."],
+[7,"What is the role of insulin in blood glucose regulation?","Insulin binds to receptors on liver and muscle cells, stimulating uptake of glucose, glycogenesis (glucose → glycogen) and increased respiration.","Insulin → glycogenesis → blood glucose falls."],
+[7,"What is the role of glucagon in blood glucose regulation?","Glucagon binds to receptors on liver cells, stimulating glycogenolysis (glycogen → glucose) and gluconeogenesis (non-carbohydrates → glucose).","Glucagon → glycogenolysis → blood glucose rises."],
+[7,"What is glycogenesis?","The conversion of glucose to glycogen for storage in liver and muscle cells, stimulated by insulin.","Glycogenesis = glucose → glycogen (storage)."],
+[7,"What is glycogenolysis?","The breakdown of glycogen to glucose in liver and muscle cells, stimulated by glucagon and adrenaline.","Glycogenolysis = glycogen → glucose (release)."],
+[7,"What is gluconeogenesis?","The synthesis of glucose from non-carbohydrate sources (e.g. amino acids, glycerol) in the liver, stimulated by glucagon.","Gluconeogenesis = making glucose from non-carbs."],
+[7,"What is diabetes mellitus Type 1?","An autoimmune condition in which the immune system destroys the beta cells of the pancreas, so no insulin is produced. Treated with insulin injections.","Type 1 = no insulin produced; autoimmune."],
+[7,"What is diabetes mellitus Type 2?","A condition in which cells become resistant to insulin or the pancreas produces insufficient insulin. Often linked to obesity and lifestyle factors. Managed by diet and exercise.","Type 2 = insulin resistance; lifestyle-related."],
+[7,"What is osmoregulation?","The control of water potential and solute concentration in body fluids.","Kidneys regulate water potential in humans."],
+[7,"What is the role of ADH in osmoregulation?","Antidiuretic hormone (ADH) is released from the posterior pituitary when blood water potential is low; it increases the permeability of the collecting duct to water, promoting water reabsorption.","ADH ↑ → more water reabsorbed → concentrated urine."],
+[7,"What is the countercurrent multiplier in the kidney?","The loop of Henle creates a high solute concentration in the medulla by active transport of Na⁺ out of the ascending limb, which draws water out of the descending limb.","Loop of Henle = creates medullary gradient for water reabsorption."],
+[7,"What is the role of the proximal convoluted tubule (PCT)?","Selective reabsorption of glucose, amino acids, Na⁺ and most water from the filtrate back into the blood.","PCT = main site of selective reabsorption."],
+[7,"What is the role of the loop of Henle?","Creates and maintains a high solute concentration in the medulla, driving water reabsorption from the collecting duct.","Descending loop: permeable to water; ascending loop: active Na⁺ transport."],
+[7,"What is the role of the distal convoluted tubule (DCT)?","Fine-tuning of ion balance under the control of aldosterone; some water and ion reabsorption.","DCT + collecting duct = regulated by ADH and aldosterone."],
+[7,"What is aldosterone?","A steroid hormone from the adrenal cortex that increases Na⁺ reabsorption in the DCT and collecting duct, raising blood pressure and blood sodium.","Aldosterone ↑ Na⁺ reabsorption → water follows by osmosis."],
+[7,"What is the role of the collecting duct?","Reabsorption of water under the control of ADH; carries filtrate to the renal pelvis.","Collecting duct permeability regulated by ADH."],
+[7,"What is ultrafiltration?","High pressure filtration of blood in the glomerulus; small molecules (glucose, amino acids, urea, ions, water) are forced into the Bowman's capsule.","Ultrafiltration: size-based; large molecules (plasma proteins, cells) remain in blood."],
+[7,"What is the Bowman's capsule?","A cup-shaped structure surrounding the glomerulus that collects the glomerular filtrate.","Glomerulus + Bowman's capsule = Malpighian body (renal corpuscle)."],
+[7,"What is the glomerulus?","A knot of capillaries inside the Bowman's capsule where ultrafiltration occurs; blood pressure here is high due to the wider afferent arteriole.","Glomerular filtration rate (GFR) = 125 mL/min in healthy adult."],
+[7,"What is a reflex arc?","A simple nervous pathway: stimulus → receptor → sensory neurone → spinal cord (relay neurone) → motor neurone → effector → response.","Reflex arc = fast, involuntary, protective."],
+[7,"What is synaptic transmission?","The transfer of a nerve impulse across a synapse via neurotransmitter release: action potential → Ca²⁺ influx → vesicle fusion → neurotransmitter released → binds postsynaptic receptor.","Synaptic transmission: electrical → chemical → electrical."],
+[7,"What is acetylcholine?","A neurotransmitter released at cholinergic synapses; binds to receptors on the postsynaptic membrane to generate an action potential.","Acetylcholine = excitatory neurotransmitter at many synapses."],
+[7,"What is an action potential?","A temporary reversal of the membrane potential in a neurone: depolarisation (+40 mV), repolarisation, hyperpolarisation, return to resting potential (−70 mV).","Action potential: −70 mV → +40 mV → −70 mV."],
+[7,"What is the refractory period?","The period after an action potential during which the neurone cannot generate another action potential; ensures one-way transmission and limits frequency of impulses.","Refractory period = recovery time; ensures one-way conduction."],
+[7,"What is the all-or-nothing principle?","An action potential is either generated at full magnitude or not at all; there is no partial action potential.","Stimulus above threshold = full AP; below = none."],
+[7,"What is saltatory conduction?","The jumping of action potentials from one node of Ranvier to the next in myelinated neurones, greatly increasing conduction speed.","Saltatory conduction = faster than non-myelinated."],
+[7,"What is myelin and its role?","A lipid sheath produced by Schwann cells around axons; it insulates the axon and increases the speed of nerve impulse transmission.","Myelin = insulator; Nodes of Ranvier = exposed membrane."],
+[7,"What is the role of calcium ions in synaptic transmission?","When an action potential arrives at the presynaptic terminal, Ca²⁺ channels open, Ca²⁺ enters the cell and causes synaptic vesicles to fuse with the presynaptic membrane, releasing neurotransmitters.","Ca²⁺ = trigger for vesicle fusion → neurotransmitter release."],
+[7,"What is summation at a synapse?","Temporal summation: repeated stimuli from one neurone build up enough neurotransmitter to trigger an AP.\nSpatial summation: multiple neurones release neurotransmitter simultaneously.","Summation = multiple inputs needed to reach threshold."],
+[7,"What is the endocrine system?","A system of ductless glands that secrete hormones directly into the blood, which transport them to target cells.","Endocrine = ductless glands + blood transport."],
+[7,"What is a second messenger system?","Signal transduction: hormone (first messenger) binds to receptor → activates adenylate cyclase → cAMP (second messenger) produced → activates protein kinase cascade.","cAMP = second messenger; amplifies hormone signal."],
+[7,"What is adrenaline and what does it do?","A hormone from the adrenal medulla that prepares the body for 'fight or flight': increases heart rate, blood glucose, dilates pupils and airways.","Adrenaline = fight or flight hormone."],
+[7,"What is the role of the hypothalamus in hormone release?","The hypothalamus releases releasing hormones that stimulate or inhibit the anterior pituitary, controlling the release of TSH, FSH, LH, ACTH, GH.","Hypothalamus → pituitary → target gland = hypothalamic-pituitary axis."],
+[7,"What is positive feedback?","A mechanism that amplifies a deviation from the set point; uncommon in homeostasis but occurs in some situations (e.g. oxytocin during childbirth, action potential depolarisation).","Positive feedback = amplifying; opposite of negative feedback."],
+[7,"What is vasodilation?","The widening of blood vessels (arterioles) caused by relaxation of smooth muscle in the vessel wall, allowing increased blood flow near the skin surface and increased heat loss.","Vasodilation = more blood to skin = more heat loss."],
+[7,"What is vasoconstriction?","The narrowing of blood vessels (arterioles) caused by contraction of smooth muscle in the vessel wall, reducing blood flow near the skin surface and conserving heat.","Vasoconstriction = less blood to skin = less heat loss."],
+[7,"What is counter-current heat exchange?","A mechanism in some organisms where warm arterial blood flowing to extremities is cooled by cool venous blood returning, conserving heat.","Common in marine mammals and birds — feet/flippers."],
+[7,"What is ectothermy?","A strategy in which body temperature depends on external heat sources; the organism uses behaviour to regulate temperature.","Ectotherm = cold-blooded; examples: reptiles, fish."],
+[7,"What is endothermy?","A strategy in which body temperature is maintained by metabolic heat production regardless of external temperature.","Endotherm = warm-blooded; examples: mammals, birds."],
+[7,"What are the advantages of endothermy?","Constant body temperature allows enzyme activity to be maintained at optimum; allows activity in cold environments.","Disadvantage: requires more food (more energy)."],
+[7,"What are the advantages of ectothermy?","Less energy required for thermoregulation, so more energy available for growth and reproduction.","Disadvantage: activity limited by environmental temperature."],
+[7,"What is insulin's mechanism of action?","Insulin binds to receptor tyrosine kinase receptors on target cells → activates signalling cascade → increases GLUT4 transporter insertion into membrane → increased glucose uptake.","Insulin → GLUT4 insertion → more glucose enters cell."],
+[7,"What is the fight-or-flight response?","A rapid physiological response to a perceived threat: adrenaline and noradrenaline released from adrenal medulla → increased heart rate, blood glucose, and altered blood flow to muscles.","Fight-or-flight = sympathetic nervous system activation."],
+
+// TOPIC 9 - Ecology (70 cards)
+[8,"Define biodiversity.","The variety of living organisms within a habitat, ecosystem or the entire biosphere, including genetic, species and ecosystem diversity.","Three levels: genetic, species, ecosystem."],
+[8,"Why is biodiversity important?","Greater biodiversity increases ecosystem stability, resilience to change, and provides ecosystem services essential for human survival.","More species = more stable ecosystem."],
+[8,"What is succession?","The gradual, directional change in species composition within an ecosystem over time, from pioneer species to a climax community.","Primary succession starts on bare rock; secondary on soil."],
+[8,"What is a food chain?","A linear sequence showing the transfer of energy from one organism to the next through feeding relationships.","Energy flows; matter cycles."],
+[8,"What is a food web?","A network of interconnected food chains showing the feeding relationships within an ecosystem.","Food web = more realistic than food chain."],
+[8,"What is a trophic level?","The position of an organism in a food chain based on the number of energy transfers from the primary producer.","Trophic level 1 = producers; TL2 = primary consumers, etc."],
+[8,"What is the 10% rule in energy flow?","On average, only 10% of energy is transferred from one trophic level to the next; 90% is lost as heat, excretion and undigested material.","10% efficiency → pyramid of energy always a true pyramid."],
+[8,"What is gross primary productivity (GPP)?","The total energy fixed by producers through photosynthesis per unit area per unit time.","GPP = total photosynthesis."],
+[8,"What is net primary productivity (NPP)?","The energy available to consumers after the producer uses some energy for its own respiration.\nNPP = GPP − R (respiration).","NPP = GPP − Respiration."],
+[8,"What is secondary productivity?","The rate of energy storage by consumers (animals), after subtracting energy lost to respiration.","Secondary productivity = energy assimilated − respiration."],
+[8,"What factors affect population size?","Birth rate, death rate, immigration, emigration, food availability, predation, disease, competition.","Population change = births + immigration − deaths − emigration."],
+[8,"What is an ecosystem?","A community of organisms (biotic) and their physical environment (abiotic), interacting as a system.","Ecosystem = biotic + abiotic components."],
+[8,"What is a community?","All the populations of different species living in the same habitat at the same time, interacting with each other.","Community = all populations in one habitat."],
+[8,"What is a population?","All the individuals of the same species living in the same area at the same time.","Population = same species, same area, same time."],
+[8,"What is a habitat?","The place where an organism lives, characterised by its physical and chemical properties.","Habitat = physical environment of an organism."],
+[8,"What is a niche?","The role of an organism in its ecosystem, including its habitat, feeding relationships, and interactions with other species.","Each species occupies a unique niche."],
+[8,"What is interspecific competition?","Competition between individuals of different species for the same limited resources.","Interspecific = between species."],
+[8,"What is intraspecific competition?","Competition between individuals of the same species for the same limited resources.","Intraspecific = within species; more intense than interspecific."],
+[8,"What is predation?","A relationship in which one organism (predator) kills and eats another (prey).","Predator-prey cycles: Lotka-Volterra model."],
+[8,"What is mutualism?","A symbiotic relationship in which both organisms benefit.","Example: nitrogen-fixing bacteria in root nodules of legumes."],
+[8,"What is parasitism?","A relationship in which one organism (parasite) benefits at the expense of the host.","Example: tapeworm in human gut."],
+[8,"What is the carbon cycle?","The cycling of carbon through living organisms, the atmosphere, oceans and lithosphere via photosynthesis, respiration, decomposition and combustion.","Carbon cycle = photosynthesis ↔ respiration + decomposition + combustion."],
+[8,"What is the nitrogen cycle?","The cycling of nitrogen through ecosystems involving nitrogen fixation, nitrification, denitrification and ammonification.","N₂ → NH₃ (fixation) → NO₂⁻ → NO₃⁻ (nitrification) → N₂ (denitrification)."],
+[8,"What is nitrogen fixation?","The conversion of atmospheric N₂ to ammonia (NH₃) by nitrogen-fixing bacteria (e.g. Rhizobium in root nodules) or lightning.","Nitrogen fixation: N₂ → NH₃; by Rhizobium or Azotobacter."],
+[8,"What is nitrification?","The conversion of ammonium ions (NH₄⁺) to nitrite (NO₂⁻) then to nitrate (NO₃⁻) by nitrifying bacteria (e.g. Nitrosomonas, Nitrobacter).","Nitrification: NH₄⁺ → NO₂⁻ → NO₃⁻ (aerobic process)."],
+[8,"What is denitrification?","The conversion of nitrate (NO₃⁻) back to N₂ gas by denitrifying bacteria in anaerobic conditions.","Denitrification: NO₃⁻ → N₂; anaerobic; reduces soil nitrogen."],
+[8,"What is ammonification?","The decomposition of proteins and urea in dead organic matter to ammonium ions (NH₄⁺) by decomposers (bacteria and fungi).","Ammonification: proteins → NH₄⁺; by decomposers."],
+[8,"What is eutrophication?","The excessive growth of algae and cyanobacteria caused by run-off of fertilisers (nitrates, phosphates) into water bodies, leading to oxygen depletion and death of aquatic organisms.","Eutrophication: fertiliser runoff → algal bloom → oxygen depletion."],
+[8,"What is the process of eutrophication?","1. Excess nitrates/phosphates enter water.\n2. Algal bloom → blocks light.\n3. Aquatic plants die.\n4. Decomposers multiply, using O₂.\n5. Oxygen depleted (BOD rises).\n6. Aerobic organisms die.","BOD = biological oxygen demand; indicator of water quality."],
+[8,"What is the greenhouse effect?","The trapping of infrared radiation by greenhouse gases (CO₂, CH₄, H₂O) in the atmosphere, warming the Earth.","Enhanced greenhouse effect = global warming due to human activity."],
+[8,"What is deforestation and why does it affect carbon cycle?","Removal of trees reduces photosynthesis (less CO₂ absorbed), and burning/decomposition releases stored carbon, increasing atmospheric CO₂.","Deforestation → ↑ atmospheric CO₂ → enhanced greenhouse effect."],
+[8,"What is a pyramid of numbers?","A diagram showing the number of organisms at each trophic level in a food chain.","Pyramid of numbers can be inverted (e.g. one oak tree supports many insects)."],
+[8,"What is a pyramid of biomass?","A diagram showing the dry mass of organisms at each trophic level; more accurate than pyramid of numbers.","Biomass pyramids are almost always true pyramids."],
+[8,"What is a pyramid of energy?","A diagram showing the energy content at each trophic level per unit area per unit time; always a true pyramid.","Energy pyramid is always a true pyramid; energy is lost at each level."],
+[8,"What is the Simpson's Diversity Index?","D = 1 − [Σn(n−1)/N(N−1)]\nMeasures species richness and evenness; D close to 1 = high diversity.","D near 1 = high diversity; D near 0 = low diversity."],
+[8,"What is a biotic factor?","A living component of the environment that affects organisms, e.g. predation, competition, disease, food availability.","Biotic = biological; living factors."],
+[8,"What is an abiotic factor?","A non-living physical or chemical component of the environment, e.g. temperature, pH, light intensity, humidity.","Abiotic = non-biological; non-living factors."],
+[8,"What is primary succession?","Succession that begins on bare, lifeless substrate (e.g. bare rock, volcanic lava) with no existing soil.","Pioneer species (e.g. lichens) colonise bare rock first."],
+[8,"What is secondary succession?","Succession that begins on land where a community has been destroyed but soil remains (e.g. after fire, farming).","Secondary succession is faster than primary (soil present)."],
+[8,"What is a climax community?","The final, stable community reached at the end of succession, where species composition no longer changes.","Climax community = equilibrium; dominated by largest plants (e.g. oak woodland in UK)."],
+[8,"What are pioneer species?","The first species to colonise a bare substrate; they are adapted to extreme conditions and modify the environment for subsequent species.","Pioneer species: lichens, mosses; modify abiotic conditions."],
+[8,"What is decomposition?","The breakdown of dead organic material by decomposers (bacteria and fungi), releasing nutrients back into the soil and CO₂ into the atmosphere.","Decomposers = bacteria and fungi; essential for nutrient cycling."],
+[8,"What is conservation?","The management of ecosystems to maintain biodiversity and protect species from extinction while allowing sustainable human use.","Conservation ≠ preservation; conservation = active management."],
+[8,"What is an invasive species?","A non-native species introduced to an ecosystem that outcompetes native species, often reducing biodiversity.","Invasive species = major cause of species loss."],
+[8,"What is the mark-release-recapture method?","A method to estimate population size:\nN = (M × S) ÷ R\nM = marked; S = second sample; R = recaptured marked individuals.","Assumes: marks don't affect survival; random mixing; population closed."],
+[8,"What is carrying capacity?","The maximum population size that an environment can sustain indefinitely, given the available resources.","Carrying capacity = K in logistic growth model."],
+[8,"What is exponential growth?","Rapid, unrestricted population growth when resources are unlimited; J-shaped growth curve.","Exponential growth: dN/dt = rN (no limiting factors)."],
+[8,"What is logistic growth?","Population growth that slows as it approaches carrying capacity due to limiting factors; S-shaped (sigmoid) curve.","Logistic growth: S-curve; levels off at K."],
+[8,"What is biomagnification?","The accumulation of persistent pollutants (e.g. DDT, mercury) at increasing concentrations at higher trophic levels.","Biomagnification: toxin concentration ↑ at each trophic level."],
+[8,"What is ecosystem services?","The benefits that humans obtain from ecosystems: food, clean water, climate regulation, pollination, medicines, cultural value.","Ecosystem services = value of biodiversity to humans."],
+[8,"What is the role of decomposers in nutrient cycling?","Decomposers break down dead organic matter, releasing inorganic ions (e.g. nitrates, phosphates) back into the soil for uptake by plants.","Without decomposers, nutrients would be locked in dead matter."],
+[8,"What is the water (hydrological) cycle?","The continuous movement of water through evaporation, transpiration, condensation, precipitation, surface runoff and groundwater percolation.","Water cycle = driven by solar energy and gravity."],
+[8,"What is a keystone species?","A species that has a disproportionately large effect on its ecosystem relative to its abundance; its removal causes major ecosystem changes.","Example: sea otters control sea urchin populations, protecting kelp forests."],
+[8,"What is species richness?","The number of different species present in an ecosystem or area.","Species richness ≠ biodiversity; also need evenness."],
+[8,"What is species evenness?","A measure of how equal the number of individuals of each species is in a community.","High evenness = no one species dominates."],
+[8,"What are causes of species extinction?","Habitat loss, climate change, pollution, invasive species, overexploitation, disease.","Acronym: HIPPCO (Habitat loss, Invasive species, Pollution, Population growth, Climate change, Overexploitation)."],
+[8,"What is sustainable resource management?","Using natural resources at a rate that allows them to be replenished, ensuring availability for future generations.","Sustainable = meets present needs without compromising future needs."],
+[8,"What is rewilding?","The large-scale restoration of ecosystems by reintroducing keystone species and allowing natural processes to resume.","Rewilding example: reintroduction of wolves in Yellowstone → trophic cascade."],
+[8,"What is an indicator species?","A species whose presence, absence or abundance reflects the quality of the environment (e.g. lichens indicate low air pollution; mayfly larvae indicate good water quality).","Indicator species = biological pollution indicators."],
+[8,"What is the role of mycorrhizae in ecosystems?","Fungal networks (mycorrhizae) form mutualistic associations with plant roots, increasing nutrient and water uptake in exchange for sugars.","Mycorrhizae = fungal root network; mutualism."],
+[8,"What is an ecological niche?","The specific role of a species in its ecosystem, including its habitat requirements, feeding relationships, time of activity and interactions with other species.","No two species can occupy the same niche — competitive exclusion principle."],
+[8,"What is habitat fragmentation?","The division of large continuous habitats into smaller, isolated patches by human activities, reducing species movement and genetic diversity.","Habitat fragmentation → reduced gene flow → inbreeding."],
+[8,"What is an edge effect?","The change in species composition and abundance near the boundary (edge) between two different habitat types.","Edge habitats can have higher or lower biodiversity than interior."],
+[8,"What is the competitive exclusion principle?","Two species competing for exactly the same resources cannot coexist indefinitely; the superior competitor will exclude the other.","Gause's principle: same niche → one species wins."],
+[8,"What is resource partitioning?","Different species in a community reduce competition by using different parts of a shared resource (e.g. feeding at different heights in a tree).","Resource partitioning = ecological niche subdivision."],
+
+// TOPIC 10 - Practical Skills (70 cards)
+[9,"What is an independent variable?","The variable deliberately changed by the investigator.","IV is on the x-axis of a graph."],
+[9,"What is a dependent variable?","The variable measured during the investigation, which may change as a result of changes in the independent variable.","DV is on the y-axis of a graph."],
+[9,"What is a control variable?","A variable kept constant throughout an investigation to ensure a fair test.","Control variables must be identified and justified."],
+[9,"Why repeat experiments?","To improve reliability, identify anomalous results and calculate a mean.","Repeats improve reliability; repeating by different investigators = reproducibility."],
+[9,"When should Student's t-test be used?","To determine whether there is a statistically significant difference between the means of two sets of data.","t-test: compares two means; data should be normally distributed."],
+[9,"What is the null hypothesis?","A statement that there is no significant difference (or relationship) between two sets of data, used in statistical tests.","Statistical tests either reject or fail to reject the null hypothesis."],
+[9,"What is the chi-squared test used for?","To test whether observed results differ significantly from expected results (for categorical data, e.g. genetic ratios).","χ² = Σ(O−E)²/E; compare to critical value at p ≤ 0.05."],
+[9,"What is the Spearman's rank correlation coefficient used for?","To determine whether there is a significant correlation (positive or negative) between two sets of ranked data.","Spearman's rank: −1 to +1; test significance with critical value table."],
+[9,"What is a correlation?","A relationship between two variables where as one changes, the other tends to change; does not imply causation.","Correlation ≠ causation — always state this."],
+[9,"What is a causal relationship?","A relationship in which a change in one variable directly causes a change in another.","Causal = mechanism demonstrated; correlation alone ≠ causation."],
+[9,"What is a control experiment?","An experiment that is identical to the test experiment in all respects except the independent variable; used to rule out alternative explanations.","Control = comparison baseline."],
+[9,"What is a placebo?","An inactive substance used in a control group to allow comparison with the experimental treatment; participants do not know which group they are in.","Placebo effect must be controlled in drug trials."],
+[9,"What is a double-blind trial?","A clinical trial in which neither the participants nor the researchers know who receives the treatment or placebo, to prevent bias.","Double-blind = neither researcher nor participant knows treatment."],
+[9,"What is peer review?","The process by which scientific work is evaluated by independent experts in the same field before publication, to check validity and reliability.","Peer review = quality control of science."],
+[9,"What is accuracy?","How close a measurement is to the true or accepted value.","Accuracy = closeness to true value; precision = reproducibility."],
+[9,"What is precision?","How close repeated measurements are to each other (reproducibility), regardless of whether they are close to the true value.","Precise but not accurate = systematic error."],
+[9,"What is reliability?","The consistency of results when an experiment is repeated under the same conditions.","Reliability ↑ with more repeats."],
+[9,"What is validity?","Whether an experiment measures what it is intended to measure; controlled variables ensure validity.","Valid = controls in place; measuring the right thing."],
+[9,"What is a systematic error?","An error that consistently occurs in the same direction, shifting all results by the same amount (e.g. zero error on a balance).","Systematic error affects accuracy; cannot be reduced by repeating."],
+[9,"What is a random error?","An unpredictable error that varies in magnitude and direction between measurements.","Random error affects precision; reduced by repeating and averaging."],
+[9,"What is an anomalous result?","A result that does not fit the pattern of the other data, usually caused by an error in the investigation.","Anomalous results should be identified and excluded from mean."],
+[9,"How is magnification calculated?","Magnification = Image size ÷ Actual size.","Always convert units to the same scale before calculating."],
+[9,"How do you convert micrometres to millimetres?","Divide by 1000 (1 mm = 1000 μm).","μm ÷ 1000 = mm."],
+[9,"What is the formula for calculating rate?","Rate = 1 ÷ time (for reactions)\nOr: rate = quantity produced or consumed ÷ time.","Rate = 1/t when measuring time for a fixed change."],
+[9,"What is the formula for percentage change?","Percentage change = [(new value − original value) ÷ original value] × 100.","Always compare to the original value (not new value)."],
+[9,"What is standard deviation?","A measure of the spread of data around the mean; a large SD indicates a wide spread of data.","SD = measure of variation; small SD = data clustered around mean."],
+[9,"What is standard error?","A measure of how accurately the sample mean estimates the true population mean; decreases as sample size increases.","SE = SD ÷ √n; smaller SE = more precise estimate."],
+[9,"What are error bars on a graph?","Lines extending from data points showing the range of data (SD, SE or range); overlapping error bars suggest no significant difference.","Overlapping SE bars → not significant; non-overlapping → likely significant."],
+[9,"What is a mean?","The average of a data set: sum of all values ÷ number of values.","Use mean with SD/SE to summarise data."],
+[9,"What is a median?","The middle value in a data set when ordered from smallest to largest.","Median is less affected by extreme values (outliers) than the mean."],
+[9,"What is a mode?","The most frequently occurring value in a data set.","Mode is most useful for categorical data."],
+[9,"What is a sample?","A subset of the population studied in an investigation.","Larger sample = more representative = more reliable."],
+[9,"Why use a large sample size?","To reduce the effect of chance variation, increase reliability and make results more representative of the population.","Large n → more reliable results."],
+[9,"What is a transect?","A line along which organisms are sampled systematically to investigate the distribution of species across an area.","Belt transect: quadrats placed along line; continuous sampling."],
+[9,"What is a quadrat?","A square frame placed randomly or systematically in a habitat to count or estimate the abundance or percentage cover of organisms.","Random placement avoids sampling bias."],
+[9,"What is random sampling?","A sampling method in which every location has an equal chance of being selected, using random number tables or coordinates to avoid bias.","Random sampling prevents experimenter bias."],
+[9,"What is systematic sampling?","A sampling method in which samples are taken at regular intervals along a transect or grid.","Used when investigating gradual environmental changes."],
+[9,"What is stratified sampling?","A sampling method in which the population is divided into subgroups and samples are taken from each subgroup in proportion to its size.","Stratified sampling = proportional representation of subgroups."],
+[9,"What is an aseptic technique?","A set of procedures used to prevent contamination of cultures with unwanted microorganisms (e.g. flaming loops, working near Bunsen burner).","Aseptic technique essential in microbiology practicals."],
+[9,"What is the formula for population estimation (mark-release-recapture)?","Population size (N) = (M × S) ÷ R\nM = number marked; S = size of second sample; R = number recaptured that were marked.","Assumes marks don't affect survival; random mixing; closed population."],
+[9,"What is a serial dilution?","A series of dilutions in which the concentration is reduced by the same factor each time (e.g. ×10 each time).","Used in calibration curves and microbiology."],
+[9,"What is a calibration curve?","A graph produced using known standard concentrations to allow the unknown concentration of a sample to be determined.","Used in colorimetry and enzyme assays."],
+[9,"What is colorimetry?","A technique that measures the absorbance or transmission of light through a coloured solution to determine the concentration of a substance.","Colorimeter measures light absorbance; used in enzyme/glucose assays."],
+[9,"What is chromatography used for?","To separate mixtures of substances (e.g. pigments) based on differences in solubility and attraction to the stationary phase.","Rf = distance moved by spot ÷ distance moved by solvent."],
+[9,"What is the Rf value?","Rf = distance moved by substance ÷ distance moved by solvent front.\nUsed to identify substances in chromatography.","Rf value is specific to substance, solvent and conditions."],
+[9,"What is gel electrophoresis used for?","To separate DNA, RNA or protein molecules by size using an electric field; smaller molecules move further.","Gel electrophoresis: small = moves far; large = stays near well."],
+[9,"What is a haemocytometer?","A specialised microscope slide used to count cells in a known volume of fluid, used for counting blood cells or yeast.","Haemocytometer: count cells in grid squares × dilution factor."],
+[9,"What is a respirometer?","A device used to measure the rate of oxygen consumption (or CO₂ production) by an organism, to measure metabolic rate.","Respirometer: uses manometer to measure O₂ consumption."],
+[9,"What is the formula for efficiency of energy transfer?","Efficiency (%) = (energy at higher trophic level ÷ energy at lower trophic level) × 100.","Typical efficiency = 10%."],
+[9,"What is a potometer?","A device used to measure the rate of water uptake by a plant shoot (as an indirect measure of transpiration rate).","Potometer: measures water uptake, not actual transpiration."],
+[9,"How does a bubble potometer work?","Air bubble in capillary tube moves as water is taken up by the shoot; distance moved per unit time = rate of water uptake.","Distance ÷ time = rate; cross-sectional area × distance = volume."],
+[9,"What is a valid conclusion?","A conclusion that is supported by the data, refers to the hypothesis and considers the limitations of the investigation.","Conclusion must be justified by evidence."],
+[9,"What are sources of error in biology experiments?","Random error, systematic error, human error (e.g. parallax), biological variation, contamination.","Identify and suggest improvements."],
+[9,"What is a risk assessment?","An evaluation of potential hazards in an experiment and the precautions taken to minimise risk.","Risk assessment required for all practical work."],
+[9,"What is a hazard?","Anything that has the potential to cause harm (e.g. hot water, chemicals, broken glassware).","Hazard ≠ risk; risk = probability of harm occurring."],
+[9,"What is ethical consideration in biology?","Consideration of potential harm to organisms, privacy of participants and social impact of research.","Animal experiments must be justified; minimise suffering (3Rs: Replace, Reduce, Refine)."],
+[9,"What is the 3Rs principle in animal testing?","Replace: use alternatives to animals where possible.\nReduce: use fewer animals.\nRefine: minimise suffering and improve welfare.","3Rs = ethical standard for animal research."],
+[9,"What is the formula for standard deviation (simplified)?","SD = √[Σ(x − x̄)² ÷ (n − 1)]\nWhere x̄ = mean, n = number of values.","Use n−1 for sample standard deviation."],
+[9,"What is the difference between a hypothesis and a prediction?","Hypothesis: a testable explanation for an observation.\nPrediction: a specific, measurable outcome expected if the hypothesis is correct.","Hypothesis = why; Prediction = what will happen."],
+[9,"What is interpolation?","Reading a value from within the range of data on a graph.","Interpolation = within data range; reliable."],
+[9,"What is extrapolation?","Extending a graph beyond the range of data to estimate values outside the measured range.","Extrapolation = beyond data range; less reliable."],
+[9,"What is a line of best fit?","A line drawn through data points on a graph that represents the general trend; does not have to pass through all points.","Line of best fit: equal numbers of points above and below."],
+[9,"What is the difference between qualitative and quantitative data?","Qualitative: descriptive, non-numerical (e.g. colour, texture).\nQuantitative: numerical measurements.","Quantitative data can be analysed statistically."],
+[9,"What is a continuous variable?","A variable that can take any numerical value within a range (e.g. mass, temperature, length).","Continuous variable: displayed as line graph."],
+[9,"What is a categorical variable?","A variable that falls into distinct groups with no numerical relationship (e.g. species, blood group).","Categorical variable: displayed as bar chart."],
+[9,"What is the formula for calculating percentage cover in a quadrat?","Number of squares containing the species ÷ total number of squares × 100.","Used in plant ecology surveys."],
+[9,"What is a discontinuous variable?","A variable that can only take specific discrete values (e.g. number of spots, number of offspring).","Discontinuous: bar chart (gaps between bars)."]
+];
+
+var cur=0,idx=0,shown=false,deck=[],easy=0,hard=0,done=0;
+function mkDeck(){deck=[];for(var i=0;i<cards.length;i++){if(cards[i][0]===cur)deck.push(i);}}
+function tabs(){
+  var h="";
+  for(var i=0;i<TP.length;i++){
+    var cnt=0;for(var j=0;j<cards.length;j++){if(cards[j][0]===i)cnt++;}
+    h+='<span class="tab'+(i===cur?" on":"")+'" onclick="sw('+i+')">'+TP[i]+' ('+cnt+')</span>';
+  }
+  document.getElementById("TB").innerHTML=h;
+}
+function render(){
+  if(!deck.length)return;
+  var c=cards[deck[idx]];
+  document.getElementById("TG").textContent=TP[c[0]];
+  document.getElementById("TG2").textContent=TP[c[0]];
+  document.getElementById("QQ").textContent=c[1];
+  document.getElementById("AA").textContent=c[2];
+  document.getElementById("TP").innerHTML="<b>🎯 Exam Tip:</b> "+c[3];
+  document.getElementById("CN").textContent=(idx+1)+" / "+deck.length;
+  document.getElementById("CD").className=shown?"card shown":"card";
+  document.getElementById("RB").className=shown?"rbs show":"rbs";
+  document.getElementById("IF").textContent="Card "+(idx+1)+" of "+deck.length;
+  var pct=Math.round((done/cards.length)*100);
+  document.getElementById("PB").style.width=pct+"%";
+  document.getElementById("sT").textContent=cards.length;
+  document.getElementById("sD").textContent=done;
+  document.getElementById("sE").textContent=easy;
+  document.getElementById("sH").textContent=hard;
+}
+function rev(){if(!shown){shown=true;render();}}
+function go(d){
+  shown=false;idx+=d;
+  if(idx<0)idx=deck.length-1;
+  if(idx>=deck.length)idx=0;
+  render();
+}
+function rt(r){
+  done++;
+  if(r==='e'||r==='o')easy++;
+  else hard++;
+  shown=false;idx++;
+  if(idx>=deck.length){
+    idx=0;
+    document.getElementById("MC").style.display="none";
+    document.getElementById("DN").style.display="block";
+  } else { render(); }
+}
+function sw(n){cur=n;idx=0;shown=false;mkDeck();tabs();document.getElementById("MC").style.display="block";document.getElementById("DN").style.display="none";render();}
+function rst(){idx=0;shown=false;document.getElementById("MC").style.display="block";document.getElementById("DN").style.display="none";render();}
+function shuf(){deck.sort(function(){return Math.random()-0.5;});idx=0;shown=false;render();}
+mkDeck();tabs();render();
+</script>
+</body>
+</html>
