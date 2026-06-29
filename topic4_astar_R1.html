@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 4 A★ Master Series</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#0d1117;color:#eee;font-family:Arial,sans-serif;padding:10px;font-size:15px;min-height:100vh}
+
+/* HOME */
+.home{max-width:540px;margin:0 auto;padding:10px 0 40px}
+.logo{text-align:center;margin-bottom:20px;padding:16px}
+.logo h1{color:#FFD700;font-size:22px;font-weight:bold;margin-bottom:4px}
+.logo p{color:#888;font-size:12px;line-height:1.6}
+.block-grid{display:flex;flex-direction:column;gap:10px}
+.bc{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:14px;cursor:pointer;transition:border-color .2s}
+.bc:active{opacity:.8}
+.bc h3{color:#FFD700;font-size:14px;margin-bottom:4px}
+.bc p{color:#aaa;font-size:12px;line-height:1.4;margin-bottom:8px}
+.bc-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:bold}
+.t1{background:#1f3a5f;color:#58a6ff}
+.t2{background:#1a3a1a;color:#39d353}
+.t3{background:#3a1a1a;color:#f78166}
+.t4{background:#2a1a3a;color:#d2a8ff}
+.open-btn{display:block;width:100%;padding:9px;border-radius:8px;border:none;font-size:13px;font-weight:bold;cursor:pointer;text-align:center;background:#FFD700;color:#000}
+
+/* APP */
+.app{display:none;max-width:600px;margin:0 auto}
+.topbar{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #30363d}
+.back{padding:5px 12px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:12px;cursor:pointer}
+.back:active{opacity:.7}
+.app-title{font-size:13px;font-weight:bold;color:#FFD700;flex:1;line-height:1.3}
+
+/* MODE TABS */
+.modes{display:flex;gap:4px;margin-bottom:10px}
+.mode{flex:1;padding:7px 4px;background:#1c2333;border:1px solid #30363d;border-radius:8px;color:#aaa;cursor:pointer;font-size:11px;font-weight:bold;text-align:center}
+.mode.on{background:#FFD700;color:#000;border-color:#FFD700}
+
+/* SECTION TABS */
+.stabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.stab{padding:5px 9px;background:#1c2333;border:1px solid #30363d;border-radius:20px;color:#aaa;cursor:pointer;font-size:11px}
+.stab.on{background:#FFD700;color:#000;border-color:#FFD700;font-weight:bold}
+
+/* STATS */
+.stats{display:flex;gap:5px;margin-bottom:8px}
+.chip{flex:1;background:#1c2333;border:1px solid #30363d;border-radius:8px;padding:5px 4px;text-align:center;font-size:10px;color:#888}
+.chip b{display:block;font-size:15px;font-weight:bold;color:#eee}
+.chip.g b{color:#39d353}.chip.r b{color:#f78166}.chip.y b{color:#FFD700}
+
+/* PROGRESS */
+.prow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.plbl{font-size:11px;color:#888;white-space:nowrap}
+.pbar{flex:1;height:4px;background:#30363d;border-radius:99px;overflow:hidden}
+.pfill{height:100%;background:#FFD700;border-radius:99px;transition:width .3s}
+
+/* CARD */
+.card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:16px;min-height:180px;margin-bottom:10px;cursor:pointer;position:relative}
+.card.shown{background:#0a1a2a;border-color:#1a4a8a}
+.cnum{position:absolute;top:10px;right:12px;font-size:10px;color:#555}
+.sbadge{display:inline-block;font-size:9px;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-bottom:10px}
+.s0{background:#1f3a5f;color:#58a6ff}
+.s1{background:#1a3a1a;color:#39d353}
+.s2{background:#2a1a3a;color:#d2a8ff}
+.s3{background:#3a2a0a;color:#ffa657}
+.s4{background:#0a2a2a;color:#39d3d3}
+.s5{background:#2a0a2a;color:#f78166}
+.s6{background:#1a2a3a;color:#58a6ff}
+.cq{font-size:16px;line-height:1.5;text-align:center;padding:10px 0;color:#eee}
+.chint{text-align:center;color:#555;font-size:12px;margin-top:10px}
+.asec{display:none}
+.card.shown .asec{display:block}
+.card.shown .qsec{display:none}
+.albl{font-size:10px;color:#39d353;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:bold}
+.ans{font-size:13px;line-height:1.78;white-space:pre-wrap;color:#eee}
+.etip{background:#0d1a0d;border-left:3px solid #FFD700;padding:8px 10px;margin-top:10px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0}
+.etip b{color:#FFD700}
+
+/* EXAM CARD */
+.exam-card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:16px;margin-bottom:10px;position:relative}
+.exam-card.shown{background:#0a1f0a;border-color:#1a5a1a}
+.marks-badge{display:inline-block;font-size:10px;font-weight:bold;padding:2px 10px;border-radius:20px;background:#3a2a0a;color:#ffa657;margin-bottom:10px}
+.exam-q{font-size:15px;line-height:1.55;color:#eee;margin-bottom:12px}
+.reveal-answer-btn{width:100%;padding:9px;border-radius:8px;border:none;background:#1f3a5f;color:#58a6ff;font-size:13px;font-weight:bold;cursor:pointer;margin-bottom:0}
+.reveal-answer-btn:active{opacity:.7}
+.model-ans{display:none;margin-top:12px}
+.exam-card.shown .model-ans{display:block}
+.model-lbl{font-size:10px;color:#39d353;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:bold}
+.model-text{font-size:13px;line-height:1.75;color:#eee;white-space:pre-wrap}
+.examiner-tips{background:#1a2a0a;border-left:3px solid #39d353;padding:8px 10px;margin-top:10px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0}
+.examiner-tips b{color:#39d353}
+.exam-nav{display:flex;gap:8px;margin-top:10px}
+.exam-nav button{flex:1;padding:9px;border-radius:8px;border:1px solid #30363d;background:#1c2333;color:#eee;font-size:12px;font-weight:bold;cursor:pointer}
+.exam-nav button:active{opacity:.7}
+.exam-counter{font-size:12px;color:#888;text-align:center;margin-bottom:8px}
+
+/* MISTAKE CARD */
+.mistake-card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:14px;margin-bottom:10px}
+.mistake-card .wrong{background:#2a0a0a;border-radius:8px;padding:10px;margin-bottom:8px;font-size:13px;color:#f78166;line-height:1.6}
+.mistake-card .right{background:#0a2a0a;border-radius:8px;padding:10px;font-size:13px;color:#39d353;line-height:1.6}
+.mistake-card h4{font-size:12px;color:#888;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+
+/* NAV */
+.nav{display:flex;gap:6px;margin-bottom:8px}
+.btn{flex:1;padding:10px;border-radius:8px;border:1px solid #30363d;background:#1c2333;color:#eee;font-size:12px;font-weight:bold;cursor:pointer}
+.btn:active{opacity:.7}
+.btn.gold{background:#FFD700;color:#000;border-color:#FFD700}
+
+/* RATE */
+.rbs{display:none;gap:5px;margin-bottom:8px}
+.rbs.show{display:flex}
+.rb{flex:1;padding:8px 2px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;border:1px solid;text-align:center}
+.rb:active{opacity:.7}
+.re{background:#0a2a0a;color:#39d353;border-color:#2a6a2a}
+.ro{background:#0a1a3a;color:#58a6ff;border-color:#1a3a6a}
+.rh{background:#2a1a0a;color:#ffa657;border-color:#5a3a1a}
+.rm{background:#2a0a0a;color:#f78166;border-color:#5a1a1a}
+.rprompt{font-size:11px;color:#888;text-align:center;margin-bottom:6px;display:none}
+.rprompt.show{display:block}
+
+/* TOOLBAR */
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.toolbar span{font-size:11px;color:#888}
+.shuf{padding:4px 10px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:11px;cursor:pointer}
+
+/* DONE */
+.done{text-align:center;padding:30px 16px;background:#1c2333;border:1px solid #30363d;border-radius:12px;display:none}
+.done h3{color:#FFD700;font-size:18px;margin-bottom:8px}
+.done p{color:#aaa;font-size:13px;margin-bottom:16px;line-height:1.5}
+.hide{display:none!important}
+
+/* GITHUB GUIDE */
+.guide{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:16px;margin-bottom:10px}
+.guide h3{color:#FFD700;font-size:14px;margin-bottom:12px}
+.step{display:flex;gap:10px;margin-bottom:14px;align-items:flex-start}
+.step-num{background:#FFD700;color:#000;font-size:11px;font-weight:bold;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step-content h4{font-size:13px;color:#eee;margin-bottom:4px}
+.step-content p{font-size:12px;color:#aaa;line-height:1.6}
+.step-content code{background:#0d1117;color:#58a6ff;padding:2px 6px;border-radius:4px;font-size:11px;font-family:monospace}
+.tip-box{background:#0d1a0d;border-left:3px solid #39d353;padding:8px 10px;border-radius:0 6px 6px 0;font-size:12px;color:#aaa;margin-top:8px;line-height:1.6}
+.warn-box{background:#1a0d0d;border-left:3px solid #f78166;padding:8px 10px;border-radius:0 6px 6px 0;font-size:12px;color:#aaa;margin-top:8px;line-height:1.6}
+.url-box{background:#0d1117;border:1px solid #1f3a5f;border-radius:8px;padding:10px;font-family:monospace;font-size:13px;color:#58a6ff;text-align:center;margin:8px 0;word-break:break-all}
+</style>
+</head>
+<body>
+
+<!-- ═══ HOME ═══ -->
+<div class="home" id="homeScreen">
+  <div class="logo">
+    <h1>⭐ A★ Master Series</h1>
+    <p>Topic 4 — Exchange and Transport<br>Pearson Edexcel A Level Biology B (9BI0)<br>Choose a Learning Block to revise</p>
+  </div>
+  <div class="block-grid" id="blockGrid"></div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div class="app" id="appScreen">
+  <div class="topbar">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div class="app-title" id="appTitle"></div>
+  </div>
+
+  <!-- MODE -->
+  <div class="modes">
+    <div class="mode on" id="mFlash" onclick="setMode('flash')">🃏 Flashcards</div>
+    <div class="mode" id="mExam" onclick="setMode('exam')">📝 Exam Qs</div>
+    <div class="mode" id="mMistakes" onclick="setMode('mistakes')">⚠️ Mistakes</div>
+    <div class="mode" id="mGithub" onclick="setMode('github')">📂 GitHub</div>
+  </div>
+
+  <!-- FLASH MODE -->
+  <div id="flashMode">
+    <div class="stabs" id="stabs"></div>
+    <div class="stats">
+      <div class="chip"><b id="sT">0</b>Cards</div>
+      <div class="chip y"><b id="sD">0</b>Done</div>
+      <div class="chip g"><b id="sE">0</b>Easy</div>
+      <div class="chip r"><b id="sH">0</b>Hard</div>
+    </div>
+    <div class="prow">
+      <span class="plbl" id="plbl">0/0</span>
+      <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
+    </div>
+    <div id="MC">
+      <div class="toolbar">
+        <span id="cardlbl"></span>
+        <button class="shuf" onclick="shuf()">🔀 Shuffle</button>
+      </div>
+      <div class="card" id="CD" onclick="rev()">
+        <span class="cnum" id="CN"></span>
+        <div class="qsec">
+          <span class="sbadge" id="badge"></span>
+          <div class="cq" id="QQ"></div>
+          <div class="chint">👆 Tap to reveal A★ answer</div>
+        </div>
+        <div class="asec">
+          <span class="sbadge" id="badge2"></span>
+          <div class="albl">✅ A★ Answer</div>
+          <div class="ans" id="AA"></div>
+          <div class="etip hide" id="TIP"></div>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="btn" onclick="go(-1)">← Prev</button>
+        <button class="btn gold" onclick="rev()">👁 Reveal</button>
+        <button class="btn" onclick="go(1)">Next →</button>
+      </div>
+      <div class="rprompt" id="rp">How well did you know this?</div>
+      <div class="rbs" id="RB">
+        <button class="rb re" onclick="rt('e')">✅ Easy</button>
+        <button class="rb ro" onclick="rt('o')">👍 Got it</button>
+        <button class="rb rh" onclick="rt('h')">⚠️ Hard</button>
+        <button class="rb rm" onclick="rt('m')">❌ Missed</button>
+      </div>
+    </div>
+    <div class="done" id="DN">
+      <h3>🎉 Section Complete!</h3>
+      <p>Well done! Switch to Exam Qs to test yourself under exam conditions.</p>
+      <button class="btn gold" style="max-width:200px;margin:0 auto;display:block" onclick="rst()">🔄 Review Again</button>
+    </div>
+  </div>
+
+  <!-- EXAM MODE -->
+  <div id="examMode" class="hide">
+    <div class="exam-counter" id="examCounter"></div>
+    <div id="examContent"></div>
+    <div class="exam-nav">
+      <button onclick="examGo(-1)">← Prev</button>
+      <button onclick="examGo(1)">Next →</button>
+    </div>
+  </div>
+
+  <!-- MISTAKES MODE -->
+  <div id="mistakesMode" class="hide">
+    <div id="mistakesContent"></div>
+  </div>
+
+  <!-- GITHUB MODE -->
+  <div id="githubMode" class="hide">
+    <div class="guide">
+      <h3>📂 How to Upload to GitHub Pages (Step-by-Step)</h3>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Create a GitHub account</h4>
+          <p>Go to <code>github.com</code> → click <strong>Sign up</strong> → enter your email, password, and choose a username (e.g. <code>suntanhk</code>).<br>Verify your email address to activate the account.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Create a new repository</h4>
+          <p>After logging in:<br>
+          • Click the <strong>+</strong> icon (top right) → <strong>New repository</strong><br>
+          • Repository name: <code>bio-flashcards</code><br>
+          • Set to <strong>Public</strong> (required for free GitHub Pages)<br>
+          • Tick ✅ <strong>Add a README file</strong><br>
+          • Click <strong>Create repository</strong></p>
+          <div class="tip-box">✅ Public = free hosting. Private repos need a paid plan for Pages.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Upload your HTML file</h4>
+          <p>On your new repository page:<br>
+          • Click <strong>Add file</strong> → <strong>Upload files</strong><br>
+          • Drag and drop your <code>index.html</code> file (or click to browse)<br>
+          • Scroll down → click <strong>Commit changes</strong></p>
+          <div class="warn-box">⚠️ The file MUST be named <code>index.html</code> — this is the default page GitHub Pages loads.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Enable GitHub Pages</h4>
+          <p>In your repository:<br>
+          • Click <strong>Settings</strong> (top menu)<br>
+          • Scroll left sidebar → click <strong>Pages</strong><br>
+          • Under <strong>Source</strong> → select <strong>Deploy from a branch</strong><br>
+          • Branch: choose <strong>main</strong> → folder: <strong>/ (root)</strong><br>
+          • Click <strong>Save</strong></p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h4>Wait 2–3 minutes then visit your site</h4>
+          <p>Your site will be live at:</p>
+          <div class="url-box">https://YOUR-USERNAME.github.io/bio-flashcards</div>
+          <p>For example, if your username is <code>suntanhk</code>:</p>
+          <div class="url-box">https://suntanhk.github.io/bio-flashcards</div>
+          <div class="tip-box">✅ Works on iPhone, Android, and all browsers. Completely free and permanent.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <h4>Updating your flashcards (when you get new files)</h4>
+          <p>To replace the file with a newer version:<br>
+          • Go to your repository → click on <code>index.html</code><br>
+          • Click the <strong>pencil ✏️ icon</strong> (or go to Add file → Upload files)<br>
+          • Upload the new file → click <strong>Commit changes</strong><br>
+          • Wait 1–2 minutes → refresh your site URL</p>
+          <div class="tip-box">✅ You can also upload multiple HTML files (e.g. <code>topic4.html</code>, <code>topic5.html</code>) and link them from <code>index.html</code>.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-content">
+          <h4>Save to iPhone Home Screen (like an App)</h4>
+          <p>Open your site in <strong>Safari</strong> on iPhone:<br>
+          • Tap the <strong>Share button</strong> (box with arrow at bottom)<br>
+          • Tap <strong>Add to Home Screen</strong><br>
+          • Tap <strong>Add</strong><br><br>
+          The flashcard app now appears as an icon on your home screen — just like a real app!</p>
+          <div class="tip-box">✅ Works offline once loaded. No App Store needed.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════
+// DATA: All Learning Blocks
+// Format per card: [sectionIdx, question, answer, examTip]
+// ═══════════════════════════════
+
+var BLOCKS = [
+{
+  id:"4.1", title:"4.1 Gas Exchange Surfaces & Diffusion",
+  tags:["Diffusion","SA:V Ratio","Adaptations"],
+  sections:["📖 Learn","🔬 Understand","💡 Remember","✏️ Apply"],
+  cards:[
+    [0,"What is gas exchange?","The movement of oxygen and carbon dioxide between an organism and its environment.\n\nIt occurs by diffusion — no energy (ATP) required.","Always state 'by diffusion' and 'no energy required'."],
+    [0,"Define diffusion.","The net movement of molecules from a region of higher concentration to a region of lower concentration.\n\nNo ATP is required.","'Net movement' and 'concentration gradient' must appear in your definition."],
+    [0,"What five factors increase the rate of diffusion?","1. Larger concentration gradient\n2. Larger surface area\n3. Thinner exchange surface\n4. Shorter diffusion distance\n5. Higher temperature (in gases)","Learn all five — exam questions often ask for 3 or 4 factors."],
+    [1,"Why do large organisms need specialised exchange systems?","Large organisms have a LOW surface area to volume (SA:V) ratio.\n\nDiffusion distances are too large and metabolic demand is too high.\n\nSpecialised exchange surfaces and transport systems are required.","Always link SA:V ratio to need for exchange surfaces."],
+    [1,"List four adaptations of efficient gas exchange surfaces.","1. Large surface area\n2. Thin epithelium (one cell thick — short diffusion distance)\n3. Good blood supply (maintains steep concentration gradient)\n4. Ventilation (replaces air/water, maintains gradient)","All four must be named for 6-mark answers."],
+    [1,"Why does ventilation improve diffusion rate?","Ventilation replaces air or water at the exchange surface.\n\nThis maintains a steep concentration gradient between the gas at the surface and the blood.\n\nSteeper gradient = faster diffusion.","Link ventilation to gradient maintenance, not just 'fresh air'."],
+    [2,"Define surface area to volume ratio.","The ratio of an organism's surface area (available for exchange) to its total volume.\n\nSmall organisms: high SA:V → efficient diffusion\nLarge organisms: low SA:V → need specialised systems","SA:V ratio decreases as size increases — key concept."],
+    [2,"Define gas exchange surface.","A specialised structure where gases (O₂ and CO₂) diffuse between an organism and its environment.","Examples: alveoli (mammals), gill lamellae (fish)."],
+    [3,"Explain why lungs have a large surface area.","The lungs contain millions of alveoli.\n\nThis increases the total surface area available for gas exchange.\n\nA greater surface area allows more oxygen to diffuse into the blood per unit time.\n\nThis meets the high metabolic demand of mammals.","More alveoli = more SA = more O₂ uptake per minute."],
+    [3,"A student says diffusion requires energy. Is this correct? Explain.","No — diffusion is a PASSIVE process.\n\nMolecules move down a concentration gradient driven by random kinetic energy.\n\nNo ATP is required.","Passive = no ATP. This is frequently tested."]
+  ],
+  examQs:[
+    {marks:6,q:"Explain how gas exchange surfaces are adapted for efficient diffusion.",a:"Gas exchange surfaces are adapted to maximise the rate of diffusion. They have a large surface area, such as the many alveoli in lungs or gill filaments in fish, which increases the area available for gas exchange. The surface is very thin, often only one cell thick, which reduces diffusion distance. A good blood supply maintains a steep concentration gradient by removing oxygen and bringing carbon dioxide. Ventilation also helps maintain the concentration gradient by continuously replacing air or water at the surface.",tips:"All four key adaptations (SA, thin, blood supply, ventilation) + correct diffusion terminology + clear cause→effect links."},
+    {marks:4,q:"Describe the process of diffusion.",a:"Diffusion is the net movement of particles from a region of higher concentration to a region of lower concentration. It occurs down a concentration gradient and does not require energy. It continues until equilibrium is reached.",tips:"Define net movement + concentration gradient + no energy required."},
+    {marks:5,q:"Explain the importance of a large surface area in gas exchange.",a:"A large surface area increases the rate of diffusion because more particles can pass across the surface at the same time. This allows more oxygen to be absorbed and more carbon dioxide to be removed, increasing the efficiency of gas exchange.",tips:"Link surface area → rate of diffusion → efficiency."},
+    {marks:8,q:"Evaluate the importance of structural adaptations in gas exchange systems.",a:"Structural adaptations are essential for efficient gas exchange. Large surface area increases the rate of diffusion, while thin exchange surfaces reduce diffusion distance. Good blood supply maintains concentration gradients, and ventilation ensures continuous gas exchange. These features allow organisms to meet their metabolic demands. However, these adaptations may require energy for ventilation and circulation. Despite this cost, they are essential for survival in large multicellular organisms with low surface area to volume ratios.",tips:"Explain multiple adaptations + link structure to function + include limitation (energy cost) + conclude importance clearly."}
+  ],
+  mistakes:[
+    {wrong:"Saying diffusion requires energy (ATP)",right:"Diffusion is PASSIVE — no ATP required. Molecules move due to random kinetic energy down a concentration gradient."},
+    {wrong:"Forgetting to mention the concentration gradient",right:"The concentration gradient is the DRIVING FORCE of diffusion — always state it."},
+    {wrong:"Not linking structure to function in answers",right:"Always state WHY a feature increases diffusion — e.g. 'thin walls reduce diffusion distance, so rate of diffusion increases'."}
+  ]
+},
+{
+  id:"4.2", title:"4.2 Mammalian Gas Exchange: Lungs & Alveoli",
+  tags:["Alveoli","Ventilation","Airways"],
+  sections:["📖 Learn","🔬 Understand","💡 Remember","✏️ Apply"],
+  cards:[
+    [0,"What is the pathway of air in the mammalian gas exchange system?","Trachea → Bronchi → Bronchioles → Alveoli\n\nPrimary function: maximise O₂ uptake and CO₂ removal by diffusion.","Learn the pathway in order — frequently tested."],
+    [0,"What are the key features of the trachea?","• Cartilage rings — prevent collapse\n• Ciliated epithelium — moves mucus upwards\n• Goblet cells — secrete mucus to trap particles","Cartilage = support; cilia = cleaning; goblet cells = mucus."],
+    [0,"What is the difference between bronchi and bronchioles?","Bronchi: cartilage present → structural support\nBronchioles: no cartilage; smooth muscle present → controls airway diameter (bronchodilation / bronchoconstriction)","Bronchi = cartilage; bronchioles = smooth muscle only."],
+    [1,"List five adaptations of alveoli for gas exchange.","1. Large surface area (millions of alveoli)\n2. Thin walls — one cell thick (short diffusion distance)\n3. Moist surface — gases dissolve before diffusing\n4. Dense capillary network — maintains steep concentration gradient\n5. Elastic fibres — allow recoil during ventilation","All five must be included in 6-mark answers about alveoli."],
+    [1,"Describe the mechanism of inhalation.","• Diaphragm contracts and flattens\n• Intercostal muscles contract\n• Rib cage moves up and out\n• Thoracic volume increases\n• Pressure decreases\n• Air enters lungs (high → low pressure)","Inhalation = active (muscles contract). Exhalation = mostly passive."],
+    [1,"Describe the mechanism of exhalation.","• Diaphragm relaxes and domes upward\n• Rib cage moves down and in\n• Thoracic volume decreases\n• Pressure increases\n• Air forced out of lungs","Exhalation = largely passive (relaxation of muscles)."],
+    [1,"How does ventilation maintain diffusion gradients?","Ventilation brings fresh air into alveoli (high O₂, low CO₂) and removes stale air (low O₂, high CO₂).\n\nThis maintains:\n• High O₂ in alveoli → steep gradient for O₂ diffusion INTO blood\n• Low CO₂ in alveoli → steep gradient for CO₂ diffusion OUT of blood","Always link ventilation → gradient maintenance → diffusion rate."],
+    [2,"Define alveolus.","A tiny air sac in the lung where gas exchange occurs.\n\nPlural: alveoli.","Alveolus = exchange surface; capillary = transport."],
+    [2,"Define ventilation.","The movement of air into and out of the lungs to maintain concentration gradients for gas exchange.","Ventilation ≠ gas exchange. Ventilation maintains the gradient; diffusion IS the exchange."],
+    [3,"Explain why alveoli are efficient gas exchange structures.","1. Large number → large total surface area\n2. One-cell-thick walls → short diffusion distance\n3. Dense capillary network → steep gradient maintained\n4. Ventilation → continuous fresh air supply\n5. Moist surface → gases dissolve for diffusion\n\nAll five features work together to maximise O₂ uptake and CO₂ removal.","Five features — aim to include all five in 6-mark questions."]
+  ],
+  examQs:[
+    {marks:6,q:"Explain how the structure of the alveoli is adapted for efficient gas exchange.",a:"Alveoli are adapted for efficient gas exchange by having a very large surface area due to their large number and spherical shape. Their walls are one cell thick, which provides a short diffusion distance. They are surrounded by a dense network of capillaries that maintains a steep concentration gradient by removing oxygen and bringing carbon dioxide. The alveoli also have a moist surface so gases can dissolve before diffusing. Ventilation continually replaces air in the lungs, maintaining diffusion gradients for oxygen and carbon dioxide exchange.",tips:"All key structural adaptations + capillary network + diffusion gradient maintenance + ventilation link."},
+    {marks:4,q:"Describe the role of cilia and mucus in the airways.",a:"Mucus traps dust and microorganisms in the airways. Cilia then beat to move the mucus upwards towards the throat, where it can be swallowed or removed. This helps keep the gas exchange surfaces clean.",tips:"Mucus = traps; cilia = moves mucus upward. Both needed."},
+    {marks:5,q:"Explain how ventilation maintains a concentration gradient in the lungs.",a:"Ventilation constantly brings fresh air into the lungs during inhalation and removes stale air during exhalation. This ensures that oxygen concentration in the alveoli remains high and carbon dioxide concentration remains low compared to the blood, maintaining a steep diffusion gradient.",tips:"State both: O₂ gradient maintained AND CO₂ gradient maintained."},
+    {marks:8,q:"Evaluate the effectiveness of the mammalian gas exchange system.",a:"The mammalian gas exchange system is highly efficient due to its large surface area provided by millions of alveoli. The thin alveolar walls reduce diffusion distance, and the dense capillary network maintains steep concentration gradients. Ventilation ensures continuous replenishment of gases. However, the system requires energy for breathing movements and maintenance of airflow. It can also be affected by diseases such as asthma or emphysema, which reduce efficiency. Despite these limitations, the system is highly effective in meeting the high oxygen demands of mammals.",tips:"Include multiple adaptations + efficiency explanation + limitation (disease or energy cost) + balanced judgement."}
+  ],
+  mistakes:[
+    {wrong:"Confusing bronchi and bronchioles",right:"Bronchi = cartilage present. Bronchioles = no cartilage, smooth muscle controls diameter."},
+    {wrong:"Forgetting the role of capillaries in maintaining diffusion gradient",right:"Capillaries continuously remove O₂ and deliver CO₂, maintaining the steep concentration gradient. Always include this."},
+    {wrong:"Saying ventilation IS gas exchange",right:"Ventilation maintains the concentration GRADIENT. Gas exchange (diffusion of O₂ and CO₂) is a separate process that depends on this gradient."}
+  ]
+},
+{
+  id:"4.3", title:"4.3 Gas Exchange in Fish: Countercurrent Exchange",
+  tags:["Gills","Countercurrent","Lamellae"],
+  sections:["📖 Learn","🔬 Understand","💡 Remember","✏️ Apply"],
+  cards:[
+    [0,"Why do fish need a highly efficient gas exchange system?","Water contains much less dissolved oxygen than air.\n\nFish must extract enough O₂ from a medium with low O₂ content.\n\nTherefore they require highly efficient gills with countercurrent exchange.","Low O₂ in water → fish need very efficient system."],
+    [0,"What are the components of fish gills?","• Gill arches — structural support\n• Gill filaments — extend from arches; provide large surface area\n• Lamellae — tiny folds on filaments; increase surface area further","Arch → filament → lamellae (increasing detail)."],
+    [0,"How is water flow maintained over fish gills?","Unidirectional flow:\n1. Mouth opens → water enters\n2. Mouth closes → operculum opens\n3. Water forced over gills\n4. Water exits through operculum\n\nThis maintains a continuous diffusion gradient.","Fish use UNIDIRECTIONAL water flow — not tidal like mammals."],
+    [1,"Define countercurrent exchange.","A system where two fluids flow in OPPOSITE directions across an exchange surface.\n\nIn fish: water flows one way over lamellae; blood flows the opposite way in capillaries.","Opposite directions = gradient maintained along ENTIRE surface."],
+    [1,"Why is countercurrent exchange more efficient than concurrent flow?","In countercurrent exchange:\n• Blood always meets water with higher O₂ at every point\n• Concentration gradient is maintained along the entire lamella\n• O₂ diffuses continuously into blood\n• Equilibrium is never reached\n\nIn concurrent flow:\n• Equilibrium reached halfway → diffusion stops\n• Less oxygen is absorbed overall","Countercurrent = no equilibrium reached = maximum O₂ uptake."],
+    [1,"What structural adaptations do gill lamellae have?","• Thin walls — short diffusion distance\n• Large surface area (many lamellae)\n• Rich capillary network — maintains steep O₂ gradient\n• Moist surface — gases dissolve for diffusion","Lamellae adaptations mirror alveoli adaptations."],
+    [2,"Define lamellae.","Thin folds on fish gill filaments that increase surface area for gas exchange.\n\nThey contain capillaries for blood flow and have thin walls for short diffusion distance.","Lamellae = gas exchange surface in fish (like alveoli in mammals)."],
+    [3,"Explain why countercurrent exchange increases oxygen uptake in fish.","• Water flows over lamellae in opposite direction to blood\n• At every point, water O₂ concentration > blood O₂ concentration\n• O₂ diffuses continuously from water into blood along entire length\n• Equilibrium is NEVER reached\n• Maximum O₂ uptake is achieved\n\nResult: fish can absorb up to 80% of dissolved O₂ from water.","Emphasise: gradient maintained at ALL points = continuous diffusion."]
+  ],
+  examQs:[
+    {marks:6,q:"Explain how countercurrent exchange increases the efficiency of gas exchange in fish.",a:"Countercurrent exchange occurs when water flows over the gills in the opposite direction to blood flow in the capillaries. This arrangement maintains a concentration gradient along the entire length of the lamellae because the water always has a higher oxygen concentration than the blood it passes. As a result, oxygen continuously diffuses from water into the blood along the full exchange surface. This prevents equilibrium from being reached too early and maximises oxygen uptake.",tips:"Correct direction of flows + maintained gradient + continuous diffusion + prevention of equilibrium."},
+    {marks:4,q:"Describe the structure of fish gills.",a:"Fish gills consist of gill arches that support gill filaments. The filaments contain many lamellae, which increase the surface area for gas exchange. The lamellae have thin walls and are surrounded by a network of capillaries.",tips:"Arch → filament → lamellae + thin walls + capillaries."},
+    {marks:5,q:"Explain how water flow over the gills is maintained.",a:"Water enters the fish through the mouth. When the mouth closes, the operculum opens, forcing water over the gills. This creates a continuous unidirectional flow of water across the gas exchange surface, maintaining a concentration gradient.",tips:"Mouth opens then closes → operculum opens → unidirectional flow → gradient maintained."},
+    {marks:8,q:"Compare gas exchange in fish and mammals.",a:"Both fish and mammals use specialised gas exchange surfaces with large surface area, thin walls, and rich blood supply to maximise diffusion. Fish use gills with lamellae and countercurrent exchange, which allows efficient oxygen uptake from water. Mammals use lungs with alveoli and ventilation to maintain diffusion gradients in air. Countercurrent exchange in fish is highly efficient because it maintains a gradient along the entire gill surface, whereas mammalian lungs rely on tidal ventilation, which can be less efficient. However, mammalian systems are adapted for air, which contains more oxygen than water. Both systems are highly adapted to their environments, making them effective for their respective lifestyles.",tips:"Compare structure AND function + countercurrent vs tidal ventilation + efficiency differences + conclude adaptation to environment."}
+  ],
+  mistakes:[
+    {wrong:"Saying water flows in both directions over gills",right:"Water flow over fish gills is UNIDIRECTIONAL — one way only, from mouth through operculum."},
+    {wrong:"Confusing countercurrent with concurrent (parallel) flow",right:"COUNTERCURRENT = opposite directions = gradient maintained throughout. Concurrent = same direction = equilibrium reached = less efficient."},
+    {wrong:"Not linking structure to function in gill answers",right:"Always state WHY each feature is important — e.g. 'lamellae increase surface area, which increases diffusion rate'."}
+  ]
+},
+{
+  id:"4.4", title:"4.4 Transport in Multicellular Organisms",
+  tags:["Mass Transport","Circulatory Systems","SA:V"],
+  sections:["📖 Learn","🔬 Understand","💡 Remember","✏️ Apply"],
+  cards:[
+    [0,"Why do multicellular organisms need a mass transport system?","1. SA:V ratio is too low for diffusion to reach all cells\n2. Diffusion distances are too large\n3. Metabolic demands are high\n\nSpecialised transport systems rapidly move substances around the body.","Three reasons — state all three for explanation questions."],
+    [0,"What is a circulatory system?","A system of vessels and a pumping mechanism that transports substances around the body.\n\nKey components (closed system):\n• Heart (pump)\n• Blood vessels (arteries, veins, capillaries)\n• Blood (transport medium)","Heart + vessels + blood = circulatory system."],
+    [1,"What are the features of a closed circulatory system?","• Blood remains within vessels\n• Blood maintained at high pressure\n• Rapid, directed transport\n\nAdvantages:\n• Efficient delivery of O₂ and nutrients\n• Supports high metabolic rate","Closed = blood stays in vessels = high pressure = efficient."],
+    [1,"What are the features of an open circulatory system?","• Transport fluid (haemolymph) NOT always in vessels\n• Flows freely in body cavity\n\nDisadvantages:\n• Lower pressure\n• Slower transport\n• Less efficient O₂ delivery\n\nExample: insects","Open = haemolymph bathing tissues = lower pressure = slower."],
+    [1,"What substances does blood transport?","• Oxygen (via haemoglobin in red blood cells)\n• Carbon dioxide\n• Nutrients (glucose, amino acids)\n• Waste products (urea)\n• Hormones","Five categories — oxygen, CO₂, nutrients, waste, hormones."],
+    [2,"Define mass transport system.","A system that moves substances around a multicellular organism via bulk flow (not individual molecule diffusion).","Mass transport = bulk movement of fluid over large distances."],
+    [2,"Define closed circulatory system.","A circulatory system where blood is always contained within vessels.\n\nExample: mammals, fish","Closed = blood always in vessels = high pressure maintained."],
+    [3,"Explain why multicellular organisms require a circulatory system.","• Cells are far from external environment\n• Diffusion alone is too slow over large distances\n• Metabolic demands (O₂, glucose) are high\n• Circulatory system transports substances efficiently\n• Maintains supply of O₂ and nutrients to all cells\n• Removes waste products efficiently","State diffusion limitations + metabolic demand + transport function."]
+  ],
+  examQs:[
+    {marks:6,q:"Explain why multicellular organisms require a mass transport system.",a:"Multicellular organisms require a mass transport system because diffusion alone is insufficient to meet their metabolic demands. As organisms increase in size, their surface area to volume ratio decreases and diffusion distances become too large. A circulatory system allows substances such as oxygen, nutrients, and waste products to be transported rapidly around the body. In closed circulatory systems, blood is kept under pressure within vessels, allowing efficient and directed transport to tissues. This ensures that cells receive adequate oxygen and nutrients and can remove waste products effectively.",tips:"SA:V limitation + diffusion limitation + substances transported + closed system advantage (pressure)."},
+    {marks:4,q:"Describe the difference between open and closed circulatory systems.",a:"In a closed circulatory system, blood remains within vessels and is pumped under pressure. In an open circulatory system, the transport fluid is not always contained within vessels and flows freely in body cavities, resulting in lower pressure and slower transport.",tips:"Closed = in vessels + high pressure. Open = not in vessels + low pressure."},
+    {marks:5,q:"Explain the advantages of a closed circulatory system.",a:"A closed circulatory system maintains blood under high pressure, allowing faster transport of substances. It enables efficient delivery of oxygen and nutrients to tissues and rapid removal of waste products. The system is more effective at supporting high metabolic rates compared to an open system.",tips:"High pressure + faster transport + efficient delivery + supports high metabolic rate."},
+    {marks:8,q:"Evaluate the importance of circulatory systems in multicellular organisms.",a:"Circulatory systems are essential in multicellular organisms because they overcome the limitations of diffusion by transporting substances rapidly over long distances. Closed circulatory systems are particularly efficient due to high pressure and continuous flow within vessels. They allow delivery of oxygen, nutrients, and hormones to tissues and removal of waste products. However, they require energy to maintain heart contractions and pressure. Open circulatory systems are less efficient but require less energy and are simpler in structure. Overall, circulatory systems are vital for supporting the metabolic needs of large organisms, with closed systems being more effective in high-energy animals.",tips:"Compare system types + efficiency vs energy cost trade-off + link to metabolic demand + conclude clearly."}
+  ],
+  mistakes:[
+    {wrong:"Saying diffusion is sufficient in large organisms",right:"Diffusion is INSUFFICIENT in large organisms — low SA:V ratio and large diffusion distances make it too slow. Mass transport is essential."},
+    {wrong:"Confusing open and closed circulatory systems",right:"CLOSED = blood always stays within vessels (high pressure). OPEN = fluid not always in vessels, bathes tissues directly (low pressure)."},
+    {wrong:"Forgetting to mention metabolic demand",right:"Always link the need for transport systems to HIGH METABOLIC DEMAND — large organisms need rapid O₂ delivery and waste removal."}
+  ]
+},
+{
+  id:"4.5", title:"4.5 Human Heart: Structure & Cardiac Cycle",
+  tags:["Heart Structure","Cardiac Cycle","Valves"],
+  sections:["📖 Learn","🔬 Understand","💡 Remember","✏️ Apply"],
+  cards:[
+    [0,"What is double circulation and why is it important?","Humans have TWO separate circuits:\n1. Pulmonary circulation — heart ↔ lungs\n2. Systemic circulation — heart ↔ body\n\nAdvantage: maintains high pressure for body tissues while allowing low-pressure gas exchange at lungs.","Double circulation = blood passes through heart TWICE per full circuit."],
+    [0,"Name the four chambers of the heart and their functions.","• Right atrium — receives deoxygenated blood from body (vena cava)\n• Right ventricle — pumps to lungs (pulmonary artery)\n• Left atrium — receives oxygenated blood from lungs (pulmonary vein)\n• Left ventricle — pumps to body (aorta) [THICKEST WALL]","Right = deoxygenated; Left = oxygenated; Left ventricle = thickest."],
+    [0,"Name the four major blood vessels of the heart.","• Vena cava → returns deoxygenated blood TO right atrium\n• Pulmonary artery → deoxygenated blood FROM right ventricle TO lungs\n• Pulmonary vein → oxygenated blood FROM lungs TO left atrium\n• Aorta → oxygenated blood FROM left ventricle TO body","Pulmonary artery carries deoxygenated blood — common exam trick!"],
+    [1,"Describe the correct sequence of blood flow through the heart.","Body → vena cava → RIGHT ATRIUM → right ventricle → PULMONARY ARTERY → lungs → PULMONARY VEIN → left atrium → LEFT VENTRICLE → aorta → body","Learn this sequence exactly — often examined."],
+    [1,"Describe the three phases of the cardiac cycle.","1. DIASTOLE: heart relaxes, atria fill with blood, blood flows into ventricles\n2. ATRIAL SYSTOLE: atria contract, push remaining blood into ventricles\n3. VENTRICULAR SYSTOLE: ventricles contract, AV valves close, semilunar valves open, blood forced into arteries","Diastole → atrial systole → ventricular systole. In order."],
+    [1,"What are the two types of valves in the heart and their functions?","• Atrioventricular (AV) valves — between atria and ventricles; prevent backflow from ventricles to atria\n• Semilunar valves — at exits from ventricles; prevent backflow from arteries into ventricles\n\nBoth ensure ONE-WAY blood flow.","Valves = one-way flow only. State which prevents backflow where."],
+    [1,"Why does the left ventricle have a thicker wall than the right?","Left ventricle must pump blood around the ENTIRE BODY (systemic circulation) — requires much higher pressure.\n\nRight ventricle only pumps to the LUNGS (pulmonary circulation) — short distance, lower pressure.\n\nThicker wall = more muscle = greater force generated.","Always explain WHY: greater distance = higher pressure needed = thicker wall."],
+    [2,"Define diastole.","The phase of the cardiac cycle when heart muscle relaxes and chambers fill with blood.","Diastole = relaxation = filling."],
+    [2,"Define systole.","The phase of the cardiac cycle when heart muscle contracts and pumps blood out of the chambers.","Systole = contraction = pumping."],
+    [3,"Explain how the structure of the heart ensures efficient blood flow.","1. Four chambers — separate oxygenated and deoxygenated blood\n2. Valves — ensure one-way flow, prevent backflow\n3. Left ventricle thick wall — generates high pressure for systemic circulation\n4. Double circulation — maintains high pressure to body while allowing gas exchange at lungs\n5. Coronary arteries — supply O₂ to heart muscle itself","Five structural features — name and explain each."]
+  ],
+  examQs:[
+    {marks:6,q:"Explain how the structure of the heart ensures efficient blood flow.",a:"The heart is divided into four chambers, which prevents mixing of oxygenated and deoxygenated blood. Valves between the atria and ventricles and at the exits of the heart ensure one-way flow of blood and prevent backflow. The muscular walls of the ventricles are thick, particularly the left ventricle, allowing high pressure to be generated for systemic circulation. The double circulatory system ensures that blood passes through the heart twice per cycle, maintaining oxygen supply to tissues while allowing efficient gas exchange in the lungs.",tips:"Structural features (chambers, valves, muscle thickness) + function link (directional flow, pressure) + double circulation + oxygen separation."},
+    {marks:4,q:"Describe the role of valves in the heart.",a:"Valves in the heart ensure that blood flows in one direction only. Atrioventricular valves prevent backflow from ventricles to atria, while semilunar valves prevent backflow from arteries into the heart.",tips:"State both valve types + state what each prevents."},
+    {marks:5,q:"Explain the importance of double circulation in mammals.",a:"Double circulation allows blood to pass through the heart twice per complete circuit. This maintains high pressure in systemic circulation for efficient delivery of oxygen and nutrients. It also allows low pressure in pulmonary circulation to protect the lungs from damage while ensuring efficient gas exchange.",tips:"Two circuits + high pressure for body + low pressure for lungs + gas exchange efficiency."},
+    {marks:8,q:"Evaluate the efficiency of the mammalian circulatory system.",a:"The mammalian circulatory system is highly efficient due to its double circulation, which separates pulmonary and systemic pathways. This allows high pressure to be maintained for oxygen delivery to tissues while keeping lung pressure low for gas exchange. The four-chambered heart prevents mixing of oxygenated and deoxygenated blood. However, maintaining a high-pressure system requires significant energy for continuous cardiac contraction. Despite this, the system is highly effective in supporting the high metabolic demands of mammals.",tips:"Structural efficiency + pressure separation + energy cost + balanced judgement."}
+  ],
+  mistakes:[
+    {wrong:"Mixing up pulmonary artery and pulmonary vein",right:"Pulmonary ARTERY = deoxygenated blood FROM heart TO lungs. Pulmonary VEIN = oxygenated blood FROM lungs TO heart. (Exception to 'artery = oxygenated' rule!)"},
+    {wrong:"Forgetting the advantage of double circulation",right:"Double circulation = HIGH pressure maintained to body AND low pressure to lungs. Both points must be stated."},
+    {wrong:"Confusing systole and diastole",right:"SYSTOLE = contraction = pumping. DIASTOLE = relaxation = filling. Remember: Systole = Squeeze."}
+  ]
+},
+{
+  id:"4.6", title:"4.6 Blood Vessels: Arteries, Veins & Capillaries",
+  tags:["Arteries","Veins","Capillaries"],
+  sections:["📖 Learn","🔬 Understand","💡 Remember","✏️ Apply"],
+  cards:[
+    [0,"What are the three main types of blood vessel and their basic functions?","• Arteries — carry blood AWAY from heart at high pressure\n• Veins — carry blood TOWARDS heart at low pressure\n• Capillaries — site of EXCHANGE between blood and tissues","Away = Artery. Toward = vein. Exchange = capillary."],
+    [0,"Describe the structure of arteries.","• Thick muscular wall\n• Thick elastic layer (elastic tissue)\n• Narrow lumen\n• No valves (except near heart)\n\nFunction: withstand and maintain high blood pressure from heart.","Thick wall + narrow lumen = maintains HIGH pressure."],
+    [0,"Describe the structure of veins.","• Thinner walls (less muscle + less elastic tissue)\n• Larger lumen\n• VALVES — prevent backflow\n• Low blood pressure\n\nFunction: return blood to heart at low pressure.","Valves are unique to veins — essential feature."],
+    [0,"Describe the structure of capillaries.","• Walls ONE CELL thick (endothelium only)\n• Very narrow lumen (one RBC wide)\n• Extensive branching network\n• Slow blood flow\n\nFunction: exchange of gases, nutrients, and waste between blood and tissues.","One cell thick = short diffusion distance = efficient exchange."],
+    [1,"Why do arteries have thick elastic walls?","• Blood leaves heart at HIGH pressure during ventricular systole\n• Elastic tissue RECOILS during diastole to maintain pressure\n• Muscle layer allows regulation of artery diameter\n• Prevents vessel rupture","Elastic recoil = smooths blood flow between heartbeats."],
+    [1,"Why do veins contain valves?","• Blood in veins is at LOW pressure\n• Valves prevent BACKFLOW of blood\n• Blood flow assisted by skeletal muscle contractions squeezing veins\n• Ensures blood flows one-way towards heart","Veins = low pressure → need valves to prevent backflow."],
+    [1,"Why are capillaries efficient exchange vessels?","• One-cell-thick walls → SHORT diffusion distance\n• Large number → large TOTAL surface area\n• Slow blood flow → more TIME for exchange\n• Form networks around every cell → close to all cells","Three mechanisms: short distance + large SA + slow flow."],
+    [1,"What is the pressure gradient in the circulatory system?","Highest pressure: arteries (from heart)\nIntermediate: capillaries\nLowest: veins (returning to heart)\n\nPressure drops as blood flows through the network.","Pressure: arteries > capillaries > veins."],
+    [2,"Define capillary.","A microscopic blood vessel, one cell thick, where exchange of substances occurs between blood and surrounding tissues.","Capillary = exchange vessel. One cell thick = key feature."],
+    [3,"Compare the structure and function of arteries and veins.","ARTERIES:\n• Thick muscular + elastic walls → withstand high pressure\n• Narrow lumen → maintains pressure\n• No valves\n• Carry blood AWAY from heart\n\nVEINS:\n• Thinner walls → blood pressure is low\n• Wider lumen → easier flow at low pressure\n• Valves → prevent backflow\n• Carry blood TOWARDS heart","Contrast all features: wall thickness, lumen, valves, pressure, direction."]
+  ],
+  examQs:[
+    {marks:6,q:"Compare the structure and function of arteries and veins.",a:"Arteries have thick muscular and elastic walls to withstand high blood pressure from the heart. They have a narrow lumen to maintain this pressure and do not contain valves. Veins have thinner walls with less muscle and elastic tissue because blood pressure is lower. Veins have a wider lumen to allow easier blood flow at low pressure and contain valves to prevent backflow of blood. Therefore, arteries are adapted to carry blood away from the heart under high pressure, while veins are adapted to return blood to the heart at low pressure.",tips:"Clear structural comparison + correct pressure context + function linked to structure + mention of valves in veins."},
+    {marks:4,q:"Describe the structure of capillaries and explain their function.",a:"Capillaries have walls that are one cell thick, which allows short diffusion distances. They form extensive networks that increase surface area. Their narrow lumen allows red blood cells to pass close to the walls, facilitating exchange of gases, nutrients, and waste products.",tips:"One cell thick + short diffusion distance + extensive network + exchange function."},
+    {marks:5,q:"Explain why veins contain valves.",a:"Veins carry blood at low pressure, which is not sufficient to return blood efficiently to the heart. Valves prevent the backflow of blood, ensuring it flows in one direction. Skeletal muscle contraction also helps push blood towards the heart.",tips:"Low pressure + backflow prevention + skeletal muscle assistance."},
+    {marks:8,q:"Evaluate how the structure of blood vessels contributes to efficient transport in mammals.",a:"Blood vessels in mammals are highly specialised for their functions. Arteries have thick elastic and muscular walls to withstand and maintain high pressure, ensuring rapid delivery of blood to tissues. Veins have valves and wider lumens to facilitate low-pressure return of blood to the heart. Capillaries have thin walls and extensive networks that maximise diffusion of substances between blood and tissues. However, maintaining high pressure in arteries requires energy from the heart. Despite this, the structural specialisation of blood vessels ensures efficient transport and exchange, supporting the high metabolic demands of mammals.",tips:"Cover all vessel types + link structure→function clearly + mention energy/physiological cost + overall judgement."}
+  ],
+  mistakes:[
+    {wrong:"Saying veins carry oxygenated blood and arteries carry deoxygenated",right:"Arteries carry blood AWAY from heart (usually oxygenated). Veins carry blood TOWARD heart (usually deoxygenated). EXCEPTION: pulmonary artery = deoxygenated; pulmonary vein = oxygenated."},
+    {wrong:"Confusing artery and vein structure",right:"Arteries = THICK walls + NARROW lumen + HIGH pressure. Veins = THIN walls + WIDE lumen + VALVES + LOW pressure."},
+    {wrong:"Forgetting to mention the role of capillaries in exchange",right:"Capillaries are the ONLY site of exchange between blood and tissues. Always include their function in transport questions."}
+  ]
+},
+{
+  id:"4.8", title:"4.8 Transpiration & Cohesion–Tension Theory",
+  tags:["Transpiration","Cohesion-Tension","Xylem"],
+  sections:["📖 Learn","🔬 Understand","🌡 Factors","💡 Remember","✏️ Apply"],
+  cards:[
+    [0,"What is transpiration?","The loss of water vapour from plant leaves, mainly through stomata.\n\nIt drives water movement through the plant via the xylem.","Must say 'water vapour' not just 'water'. State it drives water movement."],
+    [0,"Describe the pathway of water loss during transpiration.","1. Water evaporates from mesophyll cells\n2. Water vapour diffuses into leaf air spaces\n3. Water vapour exits through stomata\n4. Water is replaced from xylem\n5. Water drawn up from roots by osmosis","Five steps — write them all in sequence."],
+    [0,"What are the four main functions of transpiration?","1. Pulls water (and minerals) up the plant\n2. Transports minerals from roots to leaves\n3. Cools the plant by evaporation\n4. Maintains cell turgor pressure","All four functions — partial answers lose marks."],
+    [1,"Name and explain the three components of the cohesion–tension theory.","1. COHESION — water molecules stick together via hydrogen bonding, forming a continuous column\n2. ADHESION — water sticks to xylem walls, helping support the column\n3. TENSION — transpiration creates a pulling force (negative pressure) at leaf surface, pulling water up","All three components must be named AND explained."],
+    [1,"Is water transport in xylem active or passive? Explain fully.","PASSIVE — no ATP is used.\n\nWater moves due to physical forces:\n• Cohesion (H-bonds between water molecules)\n• Tension (negative pressure from transpiration)\n• Adhesion (water to xylem walls)\n\nNo metabolic energy required.","Always state 'passive', 'no ATP', and 'no metabolic energy'."],
+    [1,"How does water enter root hair cells?","By OSMOSIS — water moves from soil solution (higher water potential) into root hair cells (lower water potential) across the partially permeable cell membrane.","Water into roots = osmosis. Minerals into roots = active transport."],
+    [2,"How does light intensity affect transpiration rate?","High light intensity → guard cells open stomata wider → more water vapour escapes → increased transpiration rate\n\nLow light → stomata close → transpiration decreases","State mechanism: stomata open wider, not just 'more light = more transpiration'."],
+    [2,"How does temperature affect transpiration rate?","High temperature → water molecules have more kinetic energy → faster evaporation from mesophyll → steeper gradient → increased transpiration rate","State 'kinetic energy' for full marks."],
+    [2,"How does humidity affect transpiration rate?","High humidity → water vapour concentration outside leaf approaches that inside → reduces concentration gradient → less diffusion → DECREASED transpiration rate\n\nLow humidity → steep gradient → increased transpiration","High humidity DECREASES transpiration — very common exam mistake!"],
+    [2,"How does wind speed affect transpiration rate?","High wind speed → removes water vapour from around the leaf → maintains a steep concentration gradient → increased transpiration rate\n\nStill air → water vapour builds up → gradient reduced → slower transpiration","Wind removes water vapour = maintains gradient = increases transpiration."],
+    [3,"Define transpiration.","The loss of water vapour from plant leaves, mainly through stomata.","Must say 'water vapour' — not just 'water'."],
+    [3,"Define cohesion.","The attraction between water molecules due to hydrogen bonding.","Cohesion = between water molecules (not water and xylem wall)."],
+    [3,"Define tension in plant water transport.","The pulling force (negative pressure) created in xylem vessels when water evaporates from leaves during transpiration.","Tension = pulling force = negative pressure = created by transpiration."],
+    [4,"Explain how water is transported from roots to leaves.","1. Water enters root hair cells by osmosis (soil → root)\n2. Water moves into xylem via apoplast or symplast pathways\n3. Transpiration in leaves creates tension (negative pressure) in xylem\n4. Tension transmitted down the continuous water column\n5. Cohesion (hydrogen bonds) keeps water column intact\n6. Water drawn upward from roots to replace water lost\n\nEntire process is PASSIVE — no ATP.","Six-point answer for 6-mark questions. Always conclude 'no ATP'."],
+    [4,"Why is the continuous water column essential?","If the column breaks (EMBOLISM — air bubble enters xylem), tension cannot be transmitted.\n\nWater cannot be pulled up from roots.\n\nCohesion (hydrogen bonding) maintains the continuous column and prevents embolism.","Embolism = column breaks = transport fails. Cohesion prevents this."]
+  ],
+  examQs:[
+    {marks:6,q:"Explain how the cohesion–tension theory explains water movement in xylem.",a:"The cohesion–tension theory explains water movement in xylem as a result of transpiration from the leaves. Water evaporates from mesophyll cells and diffuses out through stomata, creating tension in the leaf xylem. Water molecules are cohesive due to hydrogen bonding, forming a continuous column of water in the xylem. This cohesion allows the pulling force created by transpiration to be transmitted down the plant, drawing water up from the roots to replace water lost at the leaves.",tips:"Transpiration link + cohesion (hydrogen bonds) + tension mechanism + continuous column idea."},
+    {marks:4,q:"Describe the role of stomata in transpiration.",a:"Stomata are pores in the leaf surface that allow water vapour to diffuse out of the leaf. When stomata are open, transpiration increases because water vapour can escape more easily. Guard cells control the opening and closing of stomata.",tips:"Stomata = pores + water vapour diffusion + guard cell control."},
+    {marks:5,q:"Explain how environmental factors affect transpiration rate.",a:"High light intensity increases stomatal opening, increasing transpiration. High temperature increases evaporation of water. High humidity reduces the diffusion gradient, decreasing transpiration. High wind speed removes water vapour from around the leaf, increasing transpiration.",tips:"All four factors with mechanism and effect direction. Note humidity DECREASES transpiration."},
+    {marks:8,q:"Evaluate the importance of transpiration in plants.",a:"Transpiration is important because it drives the movement of water through the plant, enabling transport of minerals and maintaining turgor pressure. It also cools the plant by evaporation from leaf surfaces. The cohesion–tension mechanism allows efficient movement of water without metabolic energy. However, excessive transpiration can lead to water loss and wilting, especially in dry conditions. Plants must balance water loss with gas exchange through stomatal control. Despite these limitations, transpiration is essential for plant survival and function.",tips:"Multiple functions (transport, cooling, turgor) + limitation (water loss/wilting) + stomatal regulation + balance judgement."}
+  ],
+  mistakes:[
+    {wrong:"Saying water is actively pumped up the xylem",right:"Water movement in xylem is PASSIVE — no ATP is used. Cohesion–tension drives upward water movement."},
+    {wrong:"High humidity increases transpiration rate",right:"High humidity DECREASES transpiration — it reduces the water vapour concentration gradient between leaf and air."},
+    {wrong:"Forgetting cohesion when explaining water transport",right:"COHESION (hydrogen bonds between water molecules) is essential — it keeps the water column continuous and allows tension to be transmitted. Always include it."},
+    {wrong:"Saying water evaporates through stomata",right:"Water evaporates FROM MESOPHYLL CELLS → diffuses as vapour through air spaces → exits THROUGH stomata. Evaporation site ≠ exit site."}
+  ]
+},
+{
+  id:"4.9", title:"4.9 Potometer Practical Skills",
+  tags:["Potometer","Variables","Experimental Design"],
+  sections:["📖 Learn","🔬 Understand","📊 Variables","💡 Remember","✏️ Apply"],
+  cards:[
+    [0,"What is a potometer?","An apparatus used to ESTIMATE the rate of water uptake in a plant shoot.\n\nUsed as an INDIRECT measure of transpiration rate.\n\n(Water uptake ≈ transpiration, but not exactly equal)","Always say 'indirect measure' and 'estimate' — not 'directly measures transpiration'."],
+    [0,"Why is a potometer an indirect measure of transpiration?","Because it measures WATER UPTAKE, not water loss directly.\n\nNot all water taken up is lost through transpiration:\n• Some used in photosynthesis\n• Some used to maintain turgor pressure\n\nTherefore water uptake slightly overestimates transpiration.","State specific uses of water: photosynthesis + turgor."],
+    [0,"Describe the basic setup of a potometer.","• Leafy shoot attached to capillary tube\n• Air bubble introduced into capillary tube\n• Movement of bubble measured over set time period\n• Distance moved ÷ time = rate of water uptake","Four elements: shoot + tube + bubble + measurement."],
+    [1,"Why must the shoot be cut under water?","To prevent AIR from entering the xylem vessels.\n\nAn air bubble (EMBOLISM) would break the water column in the xylem.\n\nThis would stop water transport and give invalid results.","Cut under water = prevent embolism = essential step for valid results."],
+    [1,"Describe the full step-by-step potometer setup.","1. Cut shoot UNDER WATER (prevent air entry)\n2. Assemble apparatus UNDER WATER\n3. Ensure AIRTIGHT SEAL (petroleum jelly)\n4. Introduce air bubble into capillary tube\n5. Allow equilibration time\n6. Start timing as bubble moves\n7. Record distance moved over set time\n8. Repeat for reliability","Eight steps — all required for 'describe' questions."],
+    [1,"How is transpiration rate calculated from a potometer?","Rate = distance moved by bubble ÷ time\n\nOr for volume: Rate = distance × cross-sectional area of capillary tube ÷ time\n\nUnits: cm/min or mm³/min","Rate = distance ÷ time. State units."],
+    [1,"Why is an airtight seal essential?","If air leaks into the apparatus, the bubble movement is NOT caused solely by plant water uptake.\n\nResults would be INVALID — cannot be attributed to transpiration.\n\nPetroleum jelly is used to seal all connections.","No seal = air leaks = invalid results. Always use petroleum jelly."],
+    [2,"What is the independent variable in a potometer experiment on light intensity?","Light intensity — changed by adjusting lamp distance or brightness.","IV = what you deliberately change."],
+    [2,"What is the dependent variable in a potometer experiment?","The rate of bubble movement (cm/min) — used as a measure of water uptake (transpiration rate).","DV = what you measure."],
+    [2,"Name four control variables in a potometer experiment.","1. Leaf area (same plant or trim leaves to same size)\n2. Species of plant\n3. Temperature\n4. CO₂ concentration\n5. Water in reservoir","Control variables kept constant → fair test → valid results."],
+    [3,"Define potometer.","An apparatus used to estimate transpiration rate by measuring the rate of water uptake in a plant shoot.","'Estimate' and 'water uptake' are key words — examiners look for these."],
+    [3,"What are the four memory anchors for the potometer?","Bubble moves = water taken up\nWater uptake ≈ transpiration\nCut under water = no embolism\nSeal = no air leaks","Use these four anchors to structure your setup description."],
+    [4,"Calculate the transpiration rate if a bubble moves 6 cm in 3 minutes.","Rate = distance ÷ time\n     = 6 ÷ 3\n     = 2 cm/min\n\nIf capillary tube cross-section = 0.5 mm²:\nVolume rate = 2 cm/min × 0.5 mm²\n(convert units carefully)","Always show working and state units."],
+    [4,"Evaluate the use of potometers in measuring transpiration rate.","STRENGTHS:\n• Simple apparatus\n• Can investigate multiple environmental factors\n• Reproducible with care\n• Quantitative data\n\nLIMITATIONS:\n• Indirect measure (water uptake ≠ transpiration)\n• Air leaks give invalid results\n• Leaf area may change during experiment\n• Does not account for water used in photosynthesis\n\nCONCLUSION: Effective for comparative studies but not for absolute transpiration values.","Evaluation requires strengths + limitations + overall judgement."]
+  ],
+  examQs:[
+    {marks:6,q:"Describe how a potometer is used to estimate transpiration rate.",a:"A potometer is used by attaching a leafy shoot to a capillary tube filled with water, ensuring all connections are airtight using petroleum jelly. The shoot is cut under water to prevent air entering the xylem. An air bubble is introduced into the capillary tube. As the plant transpires, water is taken up, causing the bubble to move along the tube. The distance moved by the bubble is measured over a set time period, and this is used to calculate the rate of transpiration as distance divided by time.",tips:"Correct setup (airtight, cut under water) + bubble method + measurement method + rate calculation."},
+    {marks:4,q:"Explain why a potometer measures water uptake rather than transpiration directly.",a:"A potometer measures water uptake because it tracks the movement of water into the plant. However, not all water taken up is lost through transpiration, as some is used in photosynthesis and maintaining turgor. Therefore, it is an indirect measure of transpiration.",tips:"Water uptake ≠ transpiration + specific reasons (photosynthesis + turgor) + indirect/estimate."},
+    {marks:5,q:"Explain how to ensure valid results in a potometer experiment.",a:"Valid results are ensured by keeping all variables constant except the one being investigated. The apparatus must be airtight to prevent leaks. The shoot should be cut under water to prevent air entering the xylem. Repeats should be carried out and a mean calculated to improve reliability.",tips:"Control variables + airtight + cut under water + repeats + mean."},
+    {marks:8,q:"Evaluate the use of potometers in measuring transpiration rate.",a:"Potometers are useful for estimating transpiration rate because they allow controlled measurement of water uptake in relation to environmental factors. They are relatively simple and can show how factors such as light intensity or wind speed affect transpiration. However, they do not measure transpiration directly, as water may be used in other processes. Errors can also occur due to air leaks or changes in leaf area during the experiment. Despite these limitations, potometers are effective for comparative studies of transpiration under different conditions.",tips:"Indirect measurement limitation + experimental errors + reliability improvements + evaluate usefulness clearly."}
+  ],
+  mistakes:[
+    {wrong:"Saying potometer measures transpiration directly",right:"Potometer measures WATER UPTAKE — an indirect estimate. Always say 'indirect' or 'estimate'."},
+    {wrong:"Cutting the shoot in air before attaching to potometer",right:"ALWAYS cut the shoot UNDER WATER to prevent air entering the xylem (embolism). Air in xylem = broken water column = invalid results."},
+    {wrong:"Forgetting the airtight seal",right:"Must use petroleum jelly for an AIRTIGHT SEAL. Without it, air enters the system and bubble movement does not reflect water uptake."},
+    {wrong:"Saying water uptake equals transpiration exactly",right:"Water uptake is APPROXIMATELY equal to transpiration — some water is used in photosynthesis and maintaining turgor pressure."}
+  ]
+}
+];
+
+// ═══════════════════════════════
+// APP STATE
+// ═══════════════════════════════
+var curBlock=null,curSec=0,curIdx=0,shown=false,deck=[],ratings={},easy=0,hard=0,done=0;
+var curMode='flash',examIdx=0;
+
+// BUILD HOME
+function buildHome(){
+  var g=document.getElementById('blockGrid');
+  g.innerHTML='';
+  BLOCKS.forEach(function(b,i){
+    var tagHtml=b.tags.map(function(t,j){
+      var cls=['t1','t2','t3','t4'];
+      return '<span class="tag '+cls[j%4]+'">'+t+'</span>';
+    }).join('');
+    g.innerHTML+='<div class="bc" onclick="openBlock('+i+')">'
+      +'<h3>📗 Learning Block '+b.id+'</h3>'
+      +'<p>'+b.title.replace(/^\d+\.\d+\s*/,'')+'</p>'
+      +'<div class="bc-meta">'+tagHtml+'</div>'
+      +'<div class="open-btn">Open Flashcards →</div>'
+      +'</div>';
+  });
+}
+
+function openBlock(n){
+  curBlock=n;curSec=0;curIdx=0;shown=false;easy=0;hard=0;done=0;ratings={};examIdx=0;
+  document.getElementById('homeScreen').style.display='none';
+  document.getElementById('appScreen').style.display='block';
+  document.getElementById('appTitle').textContent='Block '+BLOCKS[n].id+' — '+BLOCKS[n].title.replace(/^\d+\.\d+\s*/,'').substring(0,40);
+  setMode('flash');
+}
+
+function goHome(){
+  document.getElementById('homeScreen').style.display='block';
+  document.getElementById('appScreen').style.display='none';
+}
+
+// ═══ MODE ═══
+function setMode(m){
+  curMode=m;
+  ['flash','exam','mistakes','github'].forEach(function(x){
+    document.getElementById(x+'Mode').classList.toggle('hide',x!==m);
+    document.getElementById('m'+x.charAt(0).toUpperCase()+x.slice(1)).classList.toggle('on',x===m);
+  });
+  if(m==='flash'){mkDeck();renderTabs();renderCard();}
+  else if(m==='exam'){examIdx=0;renderExam();}
+  else if(m==='mistakes'){renderMistakes();}
+  else if(m==='github'){/* static */}
+}
+
+// ═══ FLASH ═══
+function mkDeck(){
+  deck=[];
+  var cards=BLOCKS[curBlock].cards;
+  for(var i=0;i<cards.length;i++){if(cards[i][0]===curSec)deck.push(i);}
+}
+
+function renderTabs(){
+  var secs=BLOCKS[curBlock].sections;
+  var cards=BLOCKS[curBlock].cards;
+  var h='';
+  secs.forEach(function(s,i){
+    var cnt=0;cards.forEach(function(c){if(c[0]===i)cnt++;});
+    h+='<span class="stab'+(i===curSec?' on':'')+'" onclick="sw('+i+')">'+s+' ('+cnt+')</span>';
+  });
+  document.getElementById('stabs').innerHTML=h;
+}
+
+var secBadgeClass=['s0','s1','s2','s3','s4','s5','s6'];
+
+function renderCard(){
+  if(!deck.length)return;
+  var cards=BLOCKS[curBlock].cards;
+  var secs=BLOCKS[curBlock].sections;
+  var gi=deck[curIdx];
+  var c=cards[gi];
+  var secName=secs[c[0]];
+  var bc=secBadgeClass[c[0]]||'s0';
+
+  document.getElementById('CN').textContent=(curIdx+1)+' / '+deck.length;
+  ['badge','badge2'].forEach(function(id){
+    var el=document.getElementById(id);
+    el.textContent=secName;el.className='sbadge '+bc;
+  });
+  document.getElementById('QQ').textContent=c[1];
+  document.getElementById('AA').textContent=c[2];
+  var tip=document.getElementById('TIP');
+  if(c[3]&&c[3].length){tip.innerHTML='<b>🎯 Exam Tip:</b> '+c[3];tip.className='etip';}
+  else{tip.className='etip hide';}
+
+  document.getElementById('CD').className=shown?'card shown':'card';
+  document.getElementById('RB').className=shown?'rbs show':'rbs';
+  document.getElementById('rp').className=shown?'rprompt show':'rprompt';
+  document.getElementById('cardlbl').textContent='Card '+(curIdx+1)+' of '+deck.length;
+  document.getElementById('DN').style.display='none';
+  document.getElementById('MC').style.display='block';
+
+  var total=BLOCKS[curBlock].cards.length;
+  document.getElementById('sT').textContent=total;
+  document.getElementById('sD').textContent=done;
+  document.getElementById('sE').textContent=easy;
+  document.getElementById('sH').textContent=hard;
+  document.getElementById('plbl').textContent=done+' / '+total;
+  document.getElementById('pfill').style.width=Math.round(done/total*100)+'%';
+}
+
+function rev(){if(!shown){shown=true;renderCard();}}
+function go(d){shown=false;curIdx+=d;if(curIdx<0)curIdx=deck.length-1;if(curIdx>=deck.length)curIdx=0;renderCard();}
+function rt(r){
+  done++;if(r==='e'||r==='o')easy++;else hard++;
+  shown=false;curIdx++;
+  if(curIdx>=deck.length){
+    curIdx=0;
+    if(deck.every(function(gi){return ratings[gi];})){
+      document.getElementById('MC').style.display='none';
+      document.getElementById('DN').style.display='block';return;
+    }
+  }
+  ratings[deck[curIdx-1]]=r;renderCard();
+}
+function sw(n){curSec=n;curIdx=0;shown=false;mkDeck();renderTabs();document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function rst(){curIdx=0;shown=false;document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function shuf(){deck.sort(function(){return Math.random()-.5;});curIdx=0;shown=false;renderCard();}
+
+// ═══ EXAM MODE ═══
+function renderExam(){
+  var qs=BLOCKS[curBlock].examQs;
+  if(!qs||!qs.length){document.getElementById('examContent').innerHTML='<p style="color:#888;text-align:center;padding:20px">No exam questions for this block.</p>';return;}
+  document.getElementById('examCounter').textContent='Question '+(examIdx+1)+' of '+qs.length;
+  var q=qs[examIdx];
+  var id='eq'+examIdx;
+  document.getElementById('examContent').innerHTML=
+    '<div class="exam-card" id="'+id+'">'
+    +'<div class="marks-badge">'+q.marks+' marks</div>'
+    +'<div class="exam-q">'+q.q+'</div>'
+    +'<button class="reveal-answer-btn" onclick="revealExam(\''+id+'\')">👁 Show A★ Model Answer</button>'
+    +'<div class="model-ans">'
+    +'<div class="model-lbl">✅ A★ Model Answer</div>'
+    +'<div class="model-text">'+q.a+'</div>'
+    +'<div class="examiner-tips"><b>🎯 Examiner Tips:</b> '+q.tips+'</div>'
+    +'</div>'
+    +'</div>';
+}
+function revealExam(id){document.getElementById(id).classList.add('shown');}
+function examGo(d){
+  var qs=BLOCKS[curBlock].examQs;
+  examIdx+=d;
+  if(examIdx<0)examIdx=qs.length-1;
+  if(examIdx>=qs.length)examIdx=0;
+  renderExam();
+}
+
+// ═══ MISTAKES MODE ═══
+function renderMistakes(){
+  var ms=BLOCKS[curBlock].mistakes;
+  if(!ms||!ms.length){document.getElementById('mistakesContent').innerHTML='<p style="color:#888;text-align:center;padding:20px">No common mistakes listed.</p>';return;}
+  var h='<p style="font-size:12px;color:#888;margin-bottom:10px">Common mistakes students make — know these to avoid losing marks!</p>';
+  ms.forEach(function(m,i){
+    h+='<div class="mistake-card">'
+      +'<h4>❌ Mistake '+(i+1)+'</h4>'
+      +'<div class="wrong">❌ '+m.wrong+'</div>'
+      +'<div class="right">✅ '+m.right+'</div>'
+      +'</div>';
+  });
+  document.getElementById('mistakesContent').innerHTML=h;
+}
+
+// INIT
+buildHome();
+</script>
+</body>
+</html>
