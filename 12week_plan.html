@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edexcel A-Grade 12-Week Revision Plan</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#0d1117;color:#eee;font-family:Arial,sans-serif;padding:10px;font-size:15px;min-height:100vh}
+
+/* HOME */
+.home{max-width:540px;margin:0 auto;padding:10px 0 40px}
+.logo{text-align:center;margin-bottom:16px;padding:14px}
+.logo h1{color:#FFD700;font-size:19px;font-weight:bold;margin-bottom:6px;line-height:1.4}
+.logo p{color:#888;font-size:12px;line-height:1.6}
+
+.strategy-box{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:14px;margin-bottom:16px}
+.strategy-box h3{color:#FFD700;font-size:13px;margin-bottom:10px;text-align:center}
+.strat-item{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start}
+.strat-item:last-child{margin-bottom:0}
+.strat-icon{font-size:18px;flex-shrink:0}
+.strat-text b{color:#58a6ff;font-size:12px}
+.strat-text p{color:#aaa;font-size:11px;line-height:1.5;margin-top:2px}
+
+.phase-header{background:#1f3a5f;color:#fff;font-size:13px;font-weight:bold;padding:10px 14px;border-radius:10px;margin-bottom:10px;margin-top:18px}
+.phase-target{font-size:11px;color:#888;margin-bottom:10px;padding:0 4px;line-height:1.5}
+
+.week-card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer}
+.week-card:active{opacity:.8}
+.week-card.gold{border-color:#FFD700}
+.wc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.wc-week{color:#FFD700;font-size:14px;font-weight:bold}
+.wc-badge{font-size:9px;background:#3a2a0a;color:#ffa657;padding:2px 8px;border-radius:20px;font-weight:bold}
+.wc-topic{color:#eee;font-size:12px;margin-bottom:8px;line-height:1.4}
+.wc-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:bold}
+.t1{background:#1f3a5f;color:#58a6ff}
+.t2{background:#1a3a1a;color:#39d353}
+.t3{background:#2a1a3a;color:#d2a8ff}
+.open-btn{display:block;width:100%;padding:8px;border-radius:8px;border:none;font-size:12px;font-weight:bold;cursor:pointer;text-align:center;background:#FFD700;color:#000}
+
+/* APP */
+.app{display:none;max-width:600px;margin:0 auto}
+.topbar{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #30363d}
+.back{padding:5px 12px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:12px;cursor:pointer}
+.back:active{opacity:.7}
+.app-title{font-size:13px;font-weight:bold;color:#FFD700;flex:1;line-height:1.3}
+
+.stabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.stab{padding:5px 9px;background:#1c2333;border:1px solid #30363d;border-radius:20px;color:#aaa;cursor:pointer;font-size:11px}
+.stab.on{background:#FFD700;color:#000;border-color:#FFD700;font-weight:bold}
+
+.stats{display:flex;gap:5px;margin-bottom:8px}
+.chip{flex:1;background:#1c2333;border:1px solid #30363d;border-radius:8px;padding:5px 4px;text-align:center;font-size:10px;color:#888}
+.chip b{display:block;font-size:15px;font-weight:bold;color:#eee}
+.chip.g b{color:#39d353}.chip.r b{color:#f78166}.chip.y b{color:#FFD700}
+
+.prow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.plbl{font-size:11px;color:#888;white-space:nowrap}
+.pbar{flex:1;height:4px;background:#30363d;border-radius:99px;overflow:hidden}
+.pfill{height:100%;background:#FFD700;border-radius:99px;transition:width .3s}
+
+.card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:16px;min-height:180px;margin-bottom:10px;cursor:pointer;position:relative}
+.card.shown{background:#0a1a2a;border-color:#1a4a8a}
+.cnum{position:absolute;top:10px;right:12px;font-size:10px;color:#555}
+.sbadge{display:inline-block;font-size:9px;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-bottom:10px}
+.s0{background:#1f3a5f;color:#58a6ff}
+.s1{background:#1a3a1a;color:#39d353}
+.s2{background:#2a1a3a;color:#d2a8ff}
+.s3{background:#3a2a0a;color:#ffa657}
+.cq{font-size:15px;line-height:1.5;text-align:center;padding:10px 0;color:#eee}
+.chint{text-align:center;color:#555;font-size:12px;margin-top:10px}
+.asec{display:none}
+.card.shown .asec{display:block}
+.card.shown .qsec{display:none}
+.albl{font-size:10px;color:#39d353;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:bold}
+.ans{font-size:13px;line-height:1.78;white-space:pre-wrap;color:#eee}
+.etip{background:#0d1a0d;border-left:3px solid #FFD700;padding:8px 10px;margin-top:10px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0}
+.etip b{color:#FFD700}
+
+.nav{display:flex;gap:6px;margin-bottom:8px}
+.btn{flex:1;padding:10px;border-radius:8px;border:1px solid #30363d;background:#1c2333;color:#eee;font-size:12px;font-weight:bold;cursor:pointer}
+.btn:active{opacity:.7}
+.btn.gold{background:#FFD700;color:#000;border-color:#FFD700}
+
+.rbs{display:none;gap:5px;margin-bottom:8px}
+.rbs.show{display:flex}
+.rb{flex:1;padding:8px 2px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;border:1px solid;text-align:center}
+.rb:active{opacity:.7}
+.re{background:#0a2a0a;color:#39d353;border-color:#2a6a2a}
+.ro{background:#0a1a3a;color:#58a6ff;border-color:#1a3a6a}
+.rh{background:#2a1a0a;color:#ffa657;border-color:#5a3a1a}
+.rm{background:#2a0a0a;color:#f78166;border-color:#5a1a1a}
+.rprompt{font-size:11px;color:#888;text-align:center;margin-bottom:6px;display:none}
+.rprompt.show{display:block}
+
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.toolbar span{font-size:11px;color:#888}
+.shuf{padding:4px 10px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:11px;cursor:pointer}
+
+.done{text-align:center;padding:30px 16px;background:#1c2333;border:1px solid #30363d;border-radius:12px;display:none}
+.done h3{color:#FFD700;font-size:18px;margin-bottom:8px}
+.done p{color:#aaa;font-size:13px;margin-bottom:16px;line-height:1.5}
+.hide{display:none!important}
+
+.checklist-banner{background:#1a3a1a;border:1px solid #2a6a2a;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:#39d353;line-height:1.6}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="home" id="homeScreen">
+  <div class="logo">
+    <h1>🏆 12-Week A-Grade Revision Plan</h1>
+    <p>Edexcel A Level Biology B (AS)<br>Tap any week to study its flashcards</p>
+  </div>
+
+  <div class="strategy-box">
+    <h3>⭐ CORE STRATEGIES FOR A-GRADE SUCCESS</h3>
+    <div class="strat-item">
+      <span class="strat-icon">🏆</span>
+      <div class="strat-text"><b>KEYWORDS ARE KING</b><p>Focus on Mark Scheme specifics — e.g. enzyme denaturation must include: active site shape changed, no longer complementary to substrate, enzyme-substrate complexes cannot form.</p></div>
+    </div>
+    <div class="strat-item">
+      <span class="strat-icon">🔬</span>
+      <div class="strat-text"><b>CORE PRACTICALS (CP)</b><p>Master principles, methods, variables, errors & improvements for full marks.</p></div>
+    </div>
+    <div class="strat-item">
+      <span class="strat-icon">📚</span>
+      <div class="strat-text"><b>BOOK IS BIBLE</b><p>Stick closely to the Ann Fullick textbook, especially diagrams and Learning Tips.</p></div>
+    </div>
+  </div>
+
+  <div class="phase-header">PHASE 1: ESSENTIAL MOLECULES & CELL FOUNDATIONS (Weeks 1–4)</div>
+  <div id="phase1"></div>
+
+  <div class="phase-header">PHASE 2: GENETIC CODE, ENZYMES & BIODIVERSITY (Weeks 5–8)</div>
+  <div class="phase-target">Target: focus on biochemical mechanism deduction, experimental data analysis, and evolutionary ecology concepts.</div>
+  <div id="phase2"></div>
+
+  <div class="phase-header">PHASE 3: EXCHANGE, TRANSPORT & PRE-EXAM SIMULATION (Weeks 9–12)</div>
+  <div class="phase-target">Target: excel in physiology of major systems (Topic 4) & high-density mock exams with mark scheme revision.</div>
+  <div id="phase3"></div>
+</div>
+
+<!-- APP -->
+<div class="app" id="appScreen">
+  <div class="topbar">
+    <button class="back" onclick="goHome()">← All Weeks</button>
+    <div class="app-title" id="appTitle"></div>
+  </div>
+
+  <div class="stabs" id="stabs"></div>
+
+  <div class="stats">
+    <div class="chip"><b id="sT">0</b>Cards</div>
+    <div class="chip y"><b id="sD">0</b>Done</div>
+    <div class="chip g"><b id="sE">0</b>Easy</div>
+    <div class="chip r"><b id="sH">0</b>Hard</div>
+  </div>
+
+  <div class="prow">
+    <span class="plbl" id="plbl">0/0</span>
+    <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
+  </div>
+
+  <div id="MC">
+    <div class="toolbar">
+      <span id="cardlbl"></span>
+      <button class="shuf" onclick="shuf()">🔀 Shuffle</button>
+    </div>
+    <div class="card" id="CD" onclick="rev()">
+      <span class="cnum" id="CN"></span>
+      <div class="qsec">
+        <span class="sbadge" id="badge"></span>
+        <div class="cq" id="QQ"></div>
+        <div class="chint">👆 Tap to reveal answer</div>
+      </div>
+      <div class="asec">
+        <span class="sbadge" id="badge2"></span>
+        <div class="albl">✅ A-Grade Answer</div>
+        <div class="ans" id="AA"></div>
+        <div class="etip hide" id="TIP"></div>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="btn" onclick="go(-1)">← Prev</button>
+      <button class="btn gold" onclick="rev()">👁 Reveal</button>
+      <button class="btn" onclick="go(1)">Next →</button>
+    </div>
+    <div class="rprompt" id="rp">How well did you know this?</div>
+    <div class="rbs" id="RB">
+      <button class="rb re" onclick="rt('e')">✅ Easy</button>
+      <button class="rb ro" onclick="rt('o')">👍 Got it</button>
+      <button class="rb rh" onclick="rt('h')">⚠️ Hard</button>
+      <button class="rb rm" onclick="rt('m')">❌ Missed</button>
+    </div>
+  </div>
+
+  <div class="done" id="DN">
+    <h3>🎉 Week Complete!</h3>
+    <p>Great work! Move to the next week or review Hard/Missed cards.</p>
+    <button class="btn gold" style="max-width:200px;margin:0 auto;display:block" onclick="rst()">🔄 Review Again</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════
+// DATA: 12 weeks
+// card format: [sectionIdx, question, answer, examTip]
+// ═══════════════════════════════
+var WEEKS = [
+{
+  num:1, phase:1, gold:false, title:"Topic 1.1 & 1.2 — Chemistry of Life & Biological Molecules",
+  tags:["Water","Carbohydrates","Inorganic Ions"],
+  sections:["💧 Water","🧂 Ions","🍬 Carbs","🏆 A-Grade Focus"],
+  cards:[
+    [0,"Describe the dipole nature of a water molecule.","Water is a polar molecule. Oxygen is more electronegative than hydrogen, so it pulls electrons closer, giving oxygen a slight negative charge (δ−) and each hydrogen a slight positive charge (δ+).","Dipole = unequal charge distribution. Always mention electronegativity."],
+    [0,"How do hydrogen bonds form between water molecules?","The δ+ hydrogen of one water molecule is attracted to the δ− oxygen of a neighbouring water molecule, forming a hydrogen bond.","Hydrogen bonds are weak individually but numerous and strong collectively."],
+    [0,"Why does water have a high specific heat capacity?","Hydrogen bonds between water molecules must be broken before temperature can rise. This requires a lot of energy, so water resists rapid temperature changes.","High SHC → stable aquatic habitats and stable body temperature."],
+    [0,"What is cohesion in water and why is it important?","Cohesion is the attraction between water molecules via hydrogen bonding. It allows water to form a continuous column in the xylem and creates surface tension.","Cohesion = water molecules sticking together."],
+    [0,"What is adhesion in water and why is it important?","Adhesion is the attraction between water molecules and other polar surfaces (e.g. xylem walls). It helps water move up narrow vessels against gravity (capillary action).","Adhesion = water sticking to other surfaces (e.g. xylem wall)."],
+    [1,"State the functions of nitrate ions (NO3-) in plants.","Used to make amino acids, proteins, nucleic acids (DNA/RNA), and chlorophyll. Deficiency causes stunted growth.","Nitrate → amino acids/proteins/DNA. Common exam link question."],
+    [1,"State the function of phosphate ions (PO4^3-).","Used to make ATP, DNA, RNA and phospholipids in cell membranes.","Phosphate = energy molecules (ATP) + nucleic acids + membranes."],
+    [1,"State the function of calcium ions (Ca2+) in plants.","Used to make calcium pectate, which binds cells together in the middle lamella of plant cell walls.","Ca2+ specifically forms calcium PECTATE — name this exactly."],
+    [1,"State the function of hydrogencarbonate ions (HCO3-).","Important in buffering blood pH and in the transport of carbon dioxide in the blood (as part of the bicarbonate buffer system).","HCO3- = CO2 transport + pH buffering in blood."],
+    [1,"State functions of Na+, Cl-, H+ and Mg2+ ions.","Na+: nerve impulse transmission, co-transport of glucose.\nCl-: maintains electrical neutrality, involved in HCl production in stomach.\nH+: determines pH, involved in chemiosmosis.\nMg2+: component of chlorophyll molecule.","Mg2+ specifically = chlorophyll, not just 'photosynthesis'."],
+    [2,"Compare the structure of alpha-glucose and beta-glucose.","Alpha-glucose: -OH group on carbon 1 points DOWN (below the ring plane).\nBeta-glucose: -OH group on carbon 1 points UP (above the ring plane).","Alpha = starch/glycogen. Beta = cellulose. Structural difference determines function."],
+    [2,"What is a condensation reaction in carbohydrate formation?","Two monosaccharides join together with the formation of a glycosidic bond and the release of one water molecule.","Condensation = bond formed + water released."],
+    [2,"What is a hydrolysis reaction in carbohydrate breakdown?","A glycosidic bond is broken by the addition of one water molecule, releasing the two monosaccharide units.","Hydrolysis = bond broken + water added (opposite of condensation)."],
+    [2,"Describe the structure and function of starch.","Made of amylose (unbranched, helical) and amylopectin (branched) — both polymers of alpha-glucose. Function: energy storage in plants — compact, insoluble, easily hydrolysed.","Starch = storage molecule made of TWO components: amylose + amylopectin."],
+    [2,"Describe the structure and function of glycogen.","A highly branched polysaccharide of alpha-glucose. Function: energy storage in animals and fungi — more branched than starch, so faster hydrolysis for rapid energy release.","Glycogen = animal 'starch'; more branched = faster glucose release."],
+    [2,"Describe the structure and function of cellulose.","A polymer of beta-glucose forming straight, unbranched chains. Adjacent chains are linked by hydrogen bonds to form strong microfibrils. Function: structural component of plant cell walls.","Cellulose = structural; straight chains + H-bonds = high tensile strength."],
+    [3,"What does the Benedict's test detect and what is the procedure?","Tests for REDUCING SUGARS. Add Benedict's reagent to the sample and heat in a water bath. Positive result: colour changes from blue → green → yellow → orange → brick-red precipitate (depending on concentration).","Learn the FULL colour sequence — exam may ask for a specific colour at a specific concentration."],
+    [3,"What does the iodine test detect and what is the procedure?","Tests for STARCH. Add iodine/potassium iodide solution to the sample. Positive result: colour changes from orange-brown to blue-black.","Iodine test colour change: orange-brown → blue-black."]
+  ]
+},
+{
+  num:2, phase:1, gold:false, title:"Topic 1.2 — Lipids & Proteins",
+  tags:["Triglycerides","Phospholipids","Protein Structure"],
+  sections:["🫒 Lipids","🧬 Proteins","🏆 A-Grade Focus"],
+  cards:[
+    [0,"Describe the formation of a triglyceride.","One glycerol molecule combines with three fatty acid molecules via three condensation reactions, forming three ester bonds and releasing three water molecules.","Triglyceride = 1 glycerol + 3 fatty acids + 3 ester bonds (esterification)."],
+    [0,"What is an ester bond?","A covalent bond formed between a fatty acid's carboxyl group (-COOH) and glycerol's hydroxyl group (-OH), with the loss of water.","Ester bond formation = esterification = type of condensation reaction."],
+    [0,"Describe the structure of a phospholipid bilayer.","Each phospholipid has a hydrophilic phosphate head and two hydrophobic fatty acid tails. In water, phospholipids arrange into a bilayer with heads facing outward (toward water) and tails facing inward (away from water).","Amphipathic structure: hydrophilic head + hydrophobic tails."],
+    [0,"Why are hydrophilic heads on the outside of the membrane?","The phosphate heads are attracted to the water inside and outside the cell, while the fatty acid tails are repelled by water and orient away from it, forming the hydrophobic core.","Heads = water-loving (outside); tails = water-fearing (inside)."],
+    [1,"Describe the structure of an amino acid.","A central carbon atom bonded to: an amine group (-NH2), a carboxyl group (-COOH), a hydrogen atom (-H), and a variable R group (side chain) which differs between amino acids.","R group determines the amino acid's identity and properties."],
+    [1,"Describe the formation of a peptide bond.","A condensation reaction between the carboxyl group of one amino acid and the amine group of another, releasing a water molecule and forming a covalent peptide bond.","Peptide bond = covalent bond between amino acids; formed by condensation."],
+    [1,"Describe primary protein structure.","The specific sequence of amino acids joined by peptide bonds in a polypeptide chain.","Primary = sequence only; determines all higher levels of structure."],
+    [1,"Describe secondary protein structure.","The folding of the polypeptide chain into an alpha helix or beta-pleated sheet, stabilised by hydrogen bonds between -NH and -C=O groups along the chain.","Secondary = H-bonds → alpha helix OR beta-pleated sheet."],
+    [1,"Describe tertiary protein structure.","The further folding of the secondary structure into a unique 3D shape, stabilised by hydrogen bonds, ionic bonds, disulfide bridges and hydrophobic interactions between R groups.","Tertiary = 3D shape; FOUR types of bond: H-bonds, ionic, disulfide, hydrophobic."],
+    [1,"Describe quaternary protein structure.","The arrangement of two or more polypeptide chains (subunits) together to form a functional protein, sometimes with a non-protein prosthetic group (e.g. haem group in haemoglobin).","Quaternary = MULTIPLE polypeptide chains joined together."],
+    [1,"What causes enzyme/protein denaturation?","Excessive heat or extreme pH breaks the hydrogen bonds, ionic bonds and disulfide bridges holding the tertiary structure together. The protein's 3D shape (and active site, if an enzyme) changes permanently and irreversibly.","Denaturation = bonds broken → shape changed → IRREVERSIBLE."],
+    [1,"Compare fibrous and globular proteins, with examples.","Fibrous proteins (e.g. collagen): long, insoluble, structural role, repetitive amino acid sequence.\nGlobular proteins (e.g. haemoglobin): compact, spherical, soluble, functional role (e.g. transport, enzymes).","Fibrous = structure (collagen). Globular = function (haemoglobin, enzymes)."]
+  ]
+},
+{
+  num:3, phase:1, gold:true, title:"Topic 2.1 & 2.2 — Microscopy, Cell Structure & Protein Transport",
+  tags:["Microscopy","Organelles","CORE PRACTICAL 1"],
+  sections:["🔬 Microscopy","🧫 Eukaryotic Cells","📦 Protein Transport","🏆 Core Practical"],
+  cards:[
+    [0,"Define magnification and give the formula.","How many times bigger an image appears compared to the actual object.\nFormula: Magnification = Image size ÷ Actual size","Always convert units consistently before calculating (mm, μm, nm)."],
+    [0,"Define resolution.","The ability to distinguish between two separate points as distinct from one another; the minimum distance between two points that can still be seen as two points.","Resolution ≠ magnification. High magnification with low resolution = blurry image."],
+    [0,"Compare light and electron microscopes (advantages/limitations).","Light microscope: lower resolution (200nm), can view living/coloured specimens, simple/cheap.\nElectron microscope: much higher resolution (0.1-0.5nm), specimens must be dead (vacuum), more detail, expensive.","Electron = higher resolution but specimen must be dead."],
+    [0,"Compare TEM and SEM.","TEM (Transmission EM): electrons pass THROUGH the specimen, showing internal structure (2D image).\nSEM (Scanning EM): electrons bounce OFF the specimen surface, showing 3D surface detail.","TEM = internal (through); SEM = surface (scanning)."],
+    [1,"State the Fluid Mosaic Model of the cell membrane.","The membrane is a phospholipid bilayer (fluid) containing various proteins that can move laterally within it (mosaic), along with cholesterol and glycoproteins.","Fluid = phospholipids move; Mosaic = variety of embedded proteins."],
+    [1,"State four functions of membrane proteins.","1. Channel proteins — facilitated diffusion.\n2. Carrier proteins — active transport/facilitated diffusion.\n3. Receptor proteins — hormone/signal binding.\n4. Glycoproteins — cell recognition/adhesion.","Learn all four protein types and their functions."],
+    [1,"Describe the structure and function of the nucleus.","Surrounded by a double membrane (nuclear envelope) with pores; contains chromatin (DNA + protein) and a nucleolus (makes ribosomal RNA). Controls gene expression and cell activities.","Nucleus = control centre; nucleolus = makes rRNA."],
+    [1,"Describe the structure and function of mitochondria.","Double membrane; inner membrane folded into cristae (increases surface area). Contains matrix with own DNA and 70S ribosomes. Site of aerobic respiration — produces ATP.","Cristae = increased SA = more ATP synthase = more ATP."],
+    [1,"Describe the structure and function of the Golgi apparatus.","A stack of flattened membrane-bound sacs. Modifies, packages and sorts proteins and lipids into vesicles for transport (e.g. secretion or to lysosomes).","Golgi = modifies + packages (the 'post office')."],
+    [1,"Describe the structure and function of lysosomes.","Membrane-bound sacs containing hydrolytic (digestive) enzymes. Break down worn-out organelles, debris and pathogens.","Lysosomes = digestion/recycling centre of the cell."],
+    [2,"Describe the pathway of protein synthesis and secretion.","1. Ribosomes on rough ER synthesise the protein.\n2. Protein enters the RER lumen and is folded/processed.\n3. Protein transported in a vesicle to the Golgi apparatus.\n4. Golgi modifies the protein (e.g. adds carbohydrate to form glycoprotein).\n5. Modified protein packaged into a secretory vesicle.\n6. Vesicle moves to and fuses with the cell surface membrane.\n7. Protein released by exocytosis.","Learn this pathway in EXACT order: RER → vesicle → Golgi → vesicle → membrane → exocytosis."],
+    [2,"What is the role of the rough endoplasmic reticulum (RER)?","Ribosomes attached to its surface synthesise proteins, which then enter the RER for folding, processing and transport.","Rough ER = ribosomes present = protein synthesis site."],
+    [2,"What is the role of the smooth endoplasmic reticulum (SER)?","Synthesises and processes lipids and steroids (e.g. cholesterol); also involved in detoxification.","Smooth ER = no ribosomes = lipid synthesis (not protein)."],
+    [2,"Describe the ultrastructure of a prokaryotic cell.","No true nucleus (DNA free in cytoplasm as a nucleoid); 70S ribosomes; plasmids (extra circular DNA); cell wall made of murein (peptidoglycan); may have capsule, flagella and pili.","Prokaryote: no nucleus, no membrane-bound organelles, smaller 70S ribosomes."],
+    [2,"Compare the structure of viruses to prokaryotic and eukaryotic cells.","Viruses are NOT cells — no cytoplasm, no ribosomes, no metabolism of their own. They consist of genetic material (DNA or RNA) surrounded by a protein coat (capsid), sometimes with a lipid envelope.","Viruses are acellular — cannot reproduce without a host cell."],
+    [3,"CORE PRACTICAL 1: Describe the procedure for using an eyepiece graticule and stage micrometer to calibrate magnification.","1. Place stage micrometer (known scale) on stage; align with eyepiece graticule.\n2. Count how many graticule units = known stage micrometer units.\n3. Calculate calibration factor: actual distance per graticule unit.\n4. Remove stage micrometer; measure specimen using calibrated graticule.\n5. Repeat at each magnification used (graticule scale changes with objective lens).","Recalibrate at EVERY magnification — graticule scale changes."],
+    [3,"State the magnification formula with correct unit conversions.","Magnification = Image size ÷ Actual size\n\nUnit conversions:\n1 mm = 1000 μm\n1 μm = 1000 nm\n1 mm = 1,000,000 nm","Convert to SAME units before calculating. A common cause of lost marks."]
+  ]
+},
+{
+  num:4, phase:1, gold:true, title:"Topic 2.3 & 2.4 — Cell Division, Sexual Reproduction & Gametogenesis",
+  tags:["Mitosis","Meiosis","CORE PRACTICAL 5"],
+  sections:["🔄 Cell Cycle","🧬 Meiosis","🐣 Gametogenesis","🏆 Core Practical"],
+  cards:[
+    [0,"Describe the phases of the cell cycle.","Interphase (G1 — cell growth, S — DNA replication, G2 — further growth/preparation), followed by Mitosis (nuclear division) and Cytokinesis (cytoplasmic division).","G1, S, G2 = interphase. Learn the order and what happens in each."],
+    [0,"What happens during the G1, S and G2 phases of interphase?","G1: cell grows, organelles replicate, proteins synthesised.\nS: DNA replication occurs (chromosomes duplicated into sister chromatids).\nG2: further growth, checking DNA for errors, preparing for mitosis.","S phase = DNA replication specifically."],
+    [0,"List the four stages of mitosis and what happens in each.","Prophase: chromosomes condense, spindle forms, nuclear envelope breaks down.\nMetaphase: chromosomes align at the equator (metaphase plate).\nAnaphase: sister chromatids separate, pulled to opposite poles by spindle fibres.\nTelophase: chromosomes decondense, nuclear envelopes reform.","PMAT = Prophase, Metaphase, Anaphase, Telophase."],
+    [0,"What is the role of mitosis in growth and repair?","Mitosis produces two genetically identical diploid daughter cells, allowing tissue growth, replacement of damaged/dead cells and asexual reproduction.","Mitosis = identical diploid cells = growth and repair."],
+    [1,"What is the purpose of meiosis?","To produce four genetically non-identical haploid daughter cells (gametes) from one diploid parent cell, halving the chromosome number for sexual reproduction.","Meiosis = 4 haploid, genetically DIFFERENT cells (gametes)."],
+    [1,"Describe crossing over and its significance.","During prophase I, homologous chromosomes pair up and exchange sections of DNA at points called chiasmata. This creates new combinations of alleles, increasing genetic variation.","Crossing over happens in PROPHASE I — creates new allele combinations."],
+    [1,"Describe independent assortment and its significance.","During metaphase I, homologous chromosome pairs align randomly at the equator. The orientation of each pair is independent of the others, so different combinations of maternal/paternal chromosomes end up in each gamete.","Independent assortment = random orientation at metaphase I = genetic variation."],
+    [1,"What are the sources of genetic variation in sexual reproduction?","1. Crossing over (prophase I)\n2. Independent assortment (metaphase I)\n3. Random fertilisation (random fusion of any sperm with any egg)","Three sources — all must be stated for full marks."],
+    [2,"Describe gametogenesis in mammals.","Spermatogenesis (testes): produces 4 functional haploid sperm per meiosis.\nOogenesis (ovaries): produces 1 functional haploid egg + polar bodies (which degenerate) per meiosis.","Sperm: 4 functional. Egg: only 1 functional (rest become polar bodies)."],
+    [2,"Describe the acrosome reaction in mammalian fertilisation.","When sperm contacts the egg's zona pellucida, the acrosome (a vesicle on the sperm head) releases digestive enzymes that break down the zona pellucida, allowing the sperm to penetrate and fuse with the egg membrane.","Acrosome reaction = enzymes digest the egg's protective layer."],
+    [2,"Describe the cortical reaction in mammalian fertilisation.","After the first sperm fuses with the egg membrane, cortical granules release their contents, which modify the zona pellucida to prevent further sperm from entering (preventing polyspermy).","Cortical reaction prevents POLYSPERMY (more than one sperm fertilising)."],
+    [2,"Describe double fertilisation in plants.","One pollen nucleus fuses with the egg cell to form a diploid zygote. A second pollen nucleus fuses with two polar nuclei to form a triploid endosperm nucleus (which becomes nutritive tissue for the embryo).","Double fertilisation = 2 fusion events: zygote (2n) + endosperm (3n)."],
+    [3,"CORE PRACTICAL 5: Describe the procedure to observe mitosis in a plant root tip squash.","1. Cut root tip from germinating seed (e.g. onion/garlic).\n2. Place in hot dilute HCl (to soften cell walls/macerate tissue).\n3. Stain with a stain such as acetic orcein (stains chromosomes).\n4. Place on slide, cover with coverslip, squash gently with thumb to spread cells into a single layer.\n5. View under microscope; identify stages of mitosis by chromosome appearance.","HCl softens tissue; stain shows chromosomes; squash spreads to one cell layer thick."],
+    [3,"How would you calculate a mitotic index from root tip squash data?","Mitotic index = (number of cells showing any stage of mitosis) ÷ (total number of cells counted)\n\nThis estimates the proportion of cells actively dividing.","Mitotic index = dividing cells ÷ total cells observed."]
+  ]
+},
+{
+  num:5, phase:2, gold:false, title:"Topic 1.3 — Nucleic Acids, Protein Synthesis & Mutation",
+  tags:["DNA Replication","Transcription","Mutation"],
+  sections:["🧬 DNA Replication","📜 Protein Synthesis","⚠️ Mutation","🏆 A-Grade Focus"],
+  cards:[
+    [0,"Describe the steps of semi-conservative DNA replication.","1. DNA helicase unwinds and unzips the double helix, breaking hydrogen bonds between base pairs.\n2. Each original strand acts as a template.\n3. DNA polymerase adds complementary free nucleotides to each template strand.\n4. DNA ligase joins Okazaki fragments on the lagging strand.\n5. Two new DNA molecules formed, each with one original and one new strand.","Semi-conservative = each new molecule has ONE old strand + ONE new strand."],
+    [0,"What is the precise role of DNA helicase?","Unwinds the DNA double helix and breaks the hydrogen bonds between complementary base pairs, separating the two strands to expose the template.","Helicase = UNZIPS (breaks H-bonds), does not synthesise."],
+    [0,"What is the precise role of DNA polymerase?","Catalyses the addition of free DNA nucleotides to the exposed template strand, forming new phosphodiester bonds, synthesising the new strand in the 5' to 3' direction.","Polymerase = BUILDS the new strand using the template."],
+    [0,"What is the precise role of DNA ligase?","Joins the sugar-phosphate backbone of Okazaki fragments together (on the lagging strand) by forming phosphodiester bonds, sealing nicks in the new DNA strand.","Ligase = JOINS/SEALS fragments (especially on lagging strand)."],
+    [1,"What are the properties of the genetic code?","Triplet: 3 bases (a codon) code for one amino acid.\nDegenerate: more than one codon can code for the same amino acid.\nNon-overlapping: each base is only read as part of one codon.\nUniversal: the same codons code for the same amino acids in nearly all organisms.","Four properties: triplet, degenerate, non-overlapping, universal."],
+    [1,"Describe the process of transcription (occurs in the nucleus).","1. RNA polymerase binds to the promoter region and unwinds the DNA double helix.\n2. RNA polymerase moves along the template strand, adding complementary RNA nucleotides (using uracil instead of thymine).\n3. A pre-mRNA molecule is formed.\n4. Introns are removed and exons spliced together to form mature mRNA.\n5. mRNA leaves the nucleus through a nuclear pore.","Transcription = DNA → mRNA in the NUCLEUS."],
+    [1,"Describe the process of translation (occurs at the ribosome).","1. mRNA binds to a ribosome.\n2. tRNA molecules, each carrying a specific amino acid, bring their amino acid to the ribosome.\n3. The tRNA anticodon pairs with the complementary mRNA codon.\n4. Peptide bonds form between adjacent amino acids.\n5. The ribosome moves along the mRNA until a stop codon is reached, releasing the completed polypeptide.","Translation = mRNA → protein at the RIBOSOME."],
+    [1,"What is the role of mRNA in protein synthesis?","Carries the genetic code (as a sequence of codons) from the DNA in the nucleus to the ribosome in the cytoplasm.","mRNA = messenger; carries code from nucleus to ribosome."],
+    [2,"Describe a substitution mutation and its effect.","One base in the DNA sequence is replaced by a different base. This may change one codon, which may change one amino acid (missense), create a stop codon early (nonsense), or have no effect due to the degenerate code (silent).","Substitution = ONE base changed; 3 possible outcomes: missense, nonsense, silent."],
+    [2,"Describe a deletion mutation and its effect.","One or more bases are removed from the DNA sequence. This shifts the reading frame for all codons downstream of the mutation (frameshift), usually drastically changing the amino acid sequence and protein structure/function.","Deletion = frameshift = affects EVERYTHING after the mutation point."],
+    [2,"Describe an insertion mutation and its effect.","One or more bases are added into the DNA sequence. Like deletion, this causes a frameshift, altering all codons after the insertion point, usually drastically changing the protein produced.","Insertion = also causes frameshift, same severity as deletion."],
+    [2,"Explain how a mutation can cause sickle cell disease.","A substitution mutation in the gene coding for haemoglobin changes one codon, causing one amino acid (glutamic acid) to be replaced by valine in the beta-globin chain. This changes the tertiary structure of haemoglobin, causing red blood cells to become sickle-shaped under low oxygen conditions.","Sickle cell = SUBSTITUTION mutation → one amino acid changed → altered protein shape."],
+    [3,"Master the Meselson-Stahl experiment: describe the method and key results.","Bacteria grown in heavy nitrogen (15N) medium, then transferred to light nitrogen (14N) medium. DNA extracted after each generation and separated by density using centrifugation.\n\nGeneration 0: all DNA heavy (bottom band).\nGeneration 1: all DNA intermediate density (one band, midway) — supports semi-conservative replication (rules out conservative).\nGeneration 2: DNA shows TWO bands — one intermediate, one light — supports semi-conservative (rules out dispersive).","Gen 1 = ONE intermediate band. Gen 2 = TWO bands (intermediate + light). This combination proves semi-conservative replication."]
+  ]
+},
+{
+  num:6, phase:2, gold:false, title:"Topic 1.4 — Enzymology & Control Mechanisms",
+  tags:["Enzyme Kinetics","Inhibition","CORE PRACTICALS 3&4"],
+  sections:["🧪 Enzyme Action","🌡 Factors","🚫 Inhibition","🏆 Core Practicals"],
+  cards:[
+    [0,"What is an enzyme and how does it work as a biocatalyst?","A globular protein that speeds up the rate of a biological reaction without being used up. It lowers the activation energy required for a reaction by providing an alternative reaction pathway.","Biocatalyst = lowers activation energy; not used up in the reaction."],
+    [0,"Compare the lock and key model with the induced fit model.","Lock and key: substrate fits exactly into a rigid, pre-shaped active site (like a key into a lock).\nInduced fit: the active site changes shape slightly as the substrate binds, moulding around it for a tighter, more accurate fit and straining the substrate's bonds.","Induced fit is the MORE ACCURATE, modern model — active site is flexible."],
+    [0,"Compare intracellular and extracellular enzymes with examples.","Intracellular: function INSIDE the cell that produced them (e.g. catalase breaking down hydrogen peroxide in the cytoplasm).\nExtracellular: secreted OUTSIDE the cell to function (e.g. amylase secreted into the gut to digest starch).","Intra = inside; Extra = outside (secreted)."],
+    [1,"How does temperature affect enzyme activity (including Q10)?","As temperature increases, kinetic energy increases, leading to more frequent successful collisions between enzyme and substrate, increasing rate of reaction — up to the optimum temperature. Above optimum, the enzyme denatures (active site changes shape) and rate falls rapidly.\n\nQ10 = the factor by which rate of reaction increases for every 10°C rise in temperature (typically Q10 = 2, meaning rate doubles).","Q10 = 2 typically (rate doubles per 10°C) — only valid BELOW optimum temperature."],
+    [1,"How does pH affect enzyme activity?","Extreme pH (too high or too low) disrupts the hydrogen bonds and ionic bonds maintaining the enzyme's tertiary structure, altering the shape of the active site so the substrate can no longer bind (denaturation). Each enzyme has an optimum pH at which activity is highest.","Optimum pH varies by enzyme (e.g. pepsin = pH 2; trypsin = pH 8)."],
+    [1,"How does substrate concentration affect the initial rate of reaction (and what is the saturation point)?","As substrate concentration increases, rate of reaction increases (more frequent enzyme-substrate collisions) — up to the saturation point, where all enzyme active sites are occupied. Beyond this point, increasing substrate concentration has no further effect on rate, because enzyme concentration becomes the limiting factor.","Saturation point = all active sites occupied = enzyme conc. becomes limiting."],
+    [1,"How does enzyme concentration affect rate of reaction?","Increasing enzyme concentration increases the rate of reaction (more active sites available) provided substrate is in excess. If substrate becomes limiting, further increases in enzyme concentration have no effect.","Enzyme conc ↑ → rate ↑, ONLY if substrate is not limiting."],
+    [2,"Describe reversible competitive inhibition.","An inhibitor with a similar shape to the substrate binds to the enzyme's ACTIVE SITE, competing with the substrate. Effect can be reduced/overcome by increasing substrate concentration, since this increases the chance of substrate (rather than inhibitor) binding.","Competitive: active site; OVERCOME by more substrate; Vmax unchanged, Km increases."],
+    [2,"Describe reversible non-competitive inhibition.","An inhibitor binds to an ALLOSTERIC SITE (not the active site), causing a conformational change in the enzyme's tertiary structure that alters the shape of the active site so the substrate can no longer bind. Effect CANNOT be overcome by increasing substrate concentration.","Non-competitive: allosteric site; CANNOT be overcome by more substrate; Vmax decreases."],
+    [2,"Draw/describe the effect of competitive and non-competitive inhibition on Vmax and Km.","Competitive inhibition: Vmax UNCHANGED (can still be reached with enough substrate); Km INCREASES (more substrate needed to reach half-Vmax).\nNon-competitive inhibition: Vmax DECREASED (cannot be reached even with excess substrate); Km UNCHANGED.","Competitive = same Vmax, higher Km. Non-competitive = lower Vmax, same Km."],
+    [2,"Explain end-product inhibition and its role in regulating metabolism.","The final product of a metabolic pathway acts as a non-competitive (allosteric) inhibitor of an earlier enzyme in the same pathway. This is a form of negative feedback that prevents overproduction of the end product, conserving cellular resources.","End-product inhibition = negative feedback at the enzyme/metabolic level."],
+    [3,"CORE PRACTICALS 3 & 4: Describe how to measure the initial rate of an enzyme-catalysed reaction.","1. Set up reaction (e.g. enzyme + substrate) at controlled temperature/pH.\n2. Measure a quantifiable change over time (e.g. volume of gas produced, change in colour/absorbance, mass change).\n3. Record measurements at regular time intervals.\n4. Plot a graph of product formed/substrate used against time.\n5. Draw a tangent to the curve AT TIME = 0 to determine the INITIAL rate of reaction (steepest part of curve).","Initial rate = tangent drawn at t=0, where the curve is steepest."],
+    [3,"How do you calculate rate of reaction from a tangent on a graph?","Rate = gradient of the tangent = (change in y) ÷ (change in x)\n\nDraw the tangent at the specific time point, then calculate the gradient using two points on the tangent line.","Practice drawing accurate tangents — examiners check the precision of your line and calculation."]
+  ]
+},
+{
+  num:7, phase:2, gold:false, title:"Topic 3.1 & 3.2 — Biological Classification, Evolution & Natural Selection",
+  tags:["Classification","Natural Selection","Speciation"],
+  sections:["🌳 Classification","🧬 Evolution","🦠 Natural Selection"],
+  cards:[
+    [0,"Describe the hierarchical classification system.","Domain → Kingdom → Phylum → Class → Order → Family → Genus → Species\n\nEach level (taxon) contains organisms grouped by shared characteristics; species is the smallest/most specific group.","Mnemonic: 'Dear King Philip Came Over For Good Soup'."],
+    [0,"State the binomial naming system and an academic definition of species.","Binomial system: each organism given a two-part Latin name — Genus species (e.g. Homo sapiens), genus capitalised, species lowercase, both italicised.\n\nSpecies definition: a group of organisms with similar morphology, physiology and genetics, capable of interbreeding to produce fertile offspring.","Species = capable of producing FERTILE offspring — key phrase."],
+    [0,"How is new evidence (DNA sequencing, amino acid sequences) used in phylogenetic classification?","The degree of similarity in DNA base sequences or amino acid sequences between species indicates how closely related they are evolutionarily — more similarities suggest a more recent common ancestor. This evidence can reclassify species more accurately than morphology alone.","More sequence similarity = more closely related = more recent common ancestor."],
+    [0,"Compare the three-domain and five-kingdom classification systems.","Five-kingdom: Prokaryotae, Protoctista, Fungi, Plantae, Animalia (based on morphology).\nThree-domain: Archaea, Bacteria, Eukarya (based on molecular/genetic evidence — rRNA sequencing showed Archaea are as different from Bacteria as from Eukaryotes).","Three-domain system arose from molecular evidence revealing Archaea as a distinct group from Bacteria."],
+    [1,"Describe the three types of adaptation organisms can have.","Anatomical (structural): physical features (e.g. camouflage, body shape).\nPhysiological: internal processes (e.g. venom production, antibiotic resistance).\nBehavioural: actions/responses (e.g. migration, courtship displays).","Three types: anatomical, physiological, behavioural — give an example of each."],
+    [1,"Describe the steps of natural selection as a dynamic process.","1. Genetic variation exists within a population (due to mutation).\n2. Environmental selection pressure favours individuals with advantageous alleles.\n3. These individuals are more likely to survive and reproduce.\n4. Advantageous alleles are passed to offspring.\n5. Over many generations, the frequency of the advantageous allele increases in the population.","Five-step process — must show genetic variation → selection pressure → differential survival → inheritance → allele frequency change."],
+    [1,"Explain the evolution of antibiotic resistance in bacteria using natural selection.","Random mutation creates variation, including some bacteria with antibiotic-resistance alleles. When antibiotic is applied (selection pressure), resistant bacteria survive and reproduce while non-resistant bacteria die. Resistant alleles are passed on, increasing in frequency, leading to a population mostly/fully resistant to that antibiotic.","Classic exam example — apply the 5-step natural selection process specifically to antibiotic resistance."],
+    [2,"Define speciation and the two main isolation mechanisms.","Speciation: the formation of a new species when populations become reproductively isolated and accumulate sufficient genetic differences over time.\n\nGeographical isolation (allopatric speciation): a physical barrier separates populations, preventing gene flow.\nReproductive isolation (sympatric speciation): populations in the same area diverge due to behavioural, mechanical, or temporal barriers preventing interbreeding.","Allopatric = geographic barrier. Sympatric = same location, other isolating mechanism."],
+    [2,"Why does isolation lead to the formation of new species?","Isolated populations experience different mutations and different selection pressures (or genetic drift). Over time, the genetic differences accumulate to the point where the populations can no longer interbreed to produce fertile offspring, even if reunited — they have become separate species.","Key idea: genetic divergence over time → reproductive incompatibility → new species."]
+  ]
+},
+{
+  num:8, phase:2, gold:true, title:"Topic 3.3 — Biodiversity & Conservation",
+  tags:["Biodiversity","Conservation","Simpson's Index"],
+  sections:["🌍 Biodiversity","🛡 Conservation","🏆 A-Grade Focus"],
+  cards:[
+    [0,"Define biodiversity and its three levels.","The variety of life. Three levels:\n1. Habitat diversity — the range of different habitats in an area.\n2. Species diversity — the number of species and their relative abundance.\n3. Genetic diversity — the variety of alleles within a species.","Three levels: habitat, species, genetic — always state all three."],
+    [0,"What is genetic diversity within a species, and how is it measured?","The total variety of alleles present in the gene pool of a species/population.\n\nMeasured using:\n• Gene pool — all alleles present in a population.\nHeterozygosity proportion — the proportion of individuals in a population that are heterozygous (have two different alleles) for a particular gene.","Heterozygosity proportion = higher value = more genetic diversity."],
+    [0,"Why is biodiversity important? (Three reasons)","1. Ecosystem services — pollination, water purification, climate regulation, nutrient cycling.\n2. Medicines — many drugs derived from natural compounds found in diverse organisms.\n3. Ethical reasons — intrinsic value of species; moral responsibility to protect biodiversity.","Three categories: ecosystem services, medicine, ethics."],
+    [1,"Describe ex-situ conservation strategies with examples.","Conservation OUTSIDE an organism's natural habitat.\nExamples: seed banks (store seeds for future use/reintroduction), zoos (captive breeding programmes for endangered species).","Ex-situ = away from natural habitat (seed banks, zoos)."],
+    [1,"Describe in-situ conservation strategies with examples.","Conservation WITHIN an organism's natural habitat.\nExamples: nature reserves (protected areas for wildlife), national parks (large protected areas managing ecosystems and biodiversity).","In-situ = within natural habitat (nature reserves, national parks)."],
+    [1,"Evaluate the pros and cons of ex-situ vs in-situ conservation.","Ex-situ pros: controlled environment, protection from poaching/predation, can support critically endangered species directly.\nEx-situ cons: expensive, limited genetic diversity in small captive populations, animals may struggle to adapt if reintroduced.\n\nIn-situ pros: preserves natural behaviours and ecosystem relationships, larger gene pool maintained.\nIn-situ cons: harder to protect from poaching/habitat destruction, requires large areas of land, conflicts with human land use.","Always discuss BOTH pros and cons + a trade-off/judgement for evaluation questions."],
+    [2,"State Simpson's Index of Diversity (D) formula and explain it.","D = 1 - Σ(n/N)²\n\nWhere n = number of individuals of a particular species, N = total number of individuals of all species.\n\nA higher D value (closer to 1) indicates higher biodiversity. A lower D value (closer to 0) indicates lower biodiversity.","HIGHER D = HIGHER diversity. Memorise this relationship — it's often reversed by mistake in exams."],
+    [2,"Practice: Calculate D for a habitat with 3 species — Species A (n=10), Species B (n=5), Species C (n=5). Total N=20.","Σ(n/N)² = (10/20)² + (5/20)² + (5/20)²\n= 0.25 + 0.0625 + 0.0625\n= 0.375\n\nD = 1 - 0.375 = 0.625","Show full working: calculate each (n/N)² term separately before summing."]
+  ]
+},
+{
+  num:9, phase:3, gold:true, title:"Topic 4.1 & 4.2 — Cell Transport & Gas Exchange Systems",
+  tags:["Cell Transport","Gas Exchange","Core Practicals 2 & 10"],
+  sections:["💧 Cell Transport","🌬 Gas Exchange","🔬 Comparative Systems","🏆 Core Practicals"],
+  cards:[
+    [0,"Describe simple diffusion and facilitated diffusion (passive transport).","Simple diffusion: net movement of small, non-polar molecules directly across the phospholipid bilayer, from high to low concentration. No protein needed.\nFacilitated diffusion: net movement of larger/polar/charged molecules through specific channel or carrier proteins, from high to low concentration. Both require NO ATP (passive).","Simple = no protein; Facilitated = needs protein; BOTH passive (no ATP)."],
+    [0,"Define osmosis and water potential.","Osmosis: net movement of free water molecules from a region of higher water potential to lower water potential, across a partially permeable membrane.\nWater potential (Ψ): the tendency of water to move out of a solution; pure water = 0 kPa (highest possible value).","Water always moves from HIGH Ψ to LOW Ψ; pure water = 0 kPa."],
+    [0,"Describe active transport, endocytosis and exocytosis.","Active transport: movement of molecules AGAINST their concentration gradient using ATP and carrier proteins.\nEndocytosis: cell membrane engulfs material to form a vesicle, bringing substances INTO the cell (requires ATP).\nExocytosis: vesicles fuse with the cell membrane to release contents OUTSIDE the cell (requires ATP).","All three require ATP — contrast with passive transport (diffusion/osmosis = no ATP)."],
+    [1,"State the key features of efficient gas exchange surfaces.","1. Large surface area — more area for diffusion.\n2. Thin barrier — short diffusion distance.\n3. Maintain a steep concentration gradient — via good blood supply and/or ventilation.","Three key features — name all three for full marks."],
+    [2,"Describe the comparative gas exchange system in mammals.","Alveoli (lungs): large surface area, thin walls (one cell thick), surrounded by dense capillary network for efficient gas exchange via diffusion.","Mammals: alveoli + capillaries = the standard comparison point."],
+    [2,"Describe the comparative gas exchange system in insects.","Tracheae and spiracles: air enters through spiracles (pores) on the body surface, travels through a network of tracheae (and smaller tracheoles) directly to tissues. No blood involved in O2/CO2 transport.","Insects: tracheae/spiracles — gas exchange WITHOUT blood transport."],
+    [2,"Describe the comparative gas exchange system in fish.","Gills and gill lamellae: water flows over gill lamellae; countercurrent exchange (blood and water flow in OPPOSITE directions) maintains a steep concentration gradient along the entire gill surface, maximising O2 absorption. This is described as crucial to fish gas exchange efficiency.","Fish: countercurrent exchange = CRUCIAL adaptation — maintains gradient throughout."],
+    [2,"Describe the comparative gas exchange system in plants.","Leaf exchange and stomata: CO2 and O2 diffuse in/out through stomata (pores) in the leaf epidermis, controlled by guard cells; gases then diffuse through air spaces in the spongy mesophyll to reach cells.","Plants: stomata + guard cells + air spaces in spongy mesophyll."],
+    [3,"CORE PRACTICAL 2: Describe the beetroot membrane permeability practical.","1. Cut equal-sized beetroot discs/cylinders, rinse to remove surface pigment.\n2. Place into different concentrations of a variable (e.g. temperature or solvent).\n3. After a set time, measure the amount of pigment (betalain) released using a colorimeter (higher absorbance = more pigment released = more membrane damage).\n4. Plot absorbance against the independent variable (e.g. temperature).","Higher absorbance = more membrane damage = more pigment leaked out."],
+    [3,"CORE PRACTICAL 10: Describe the water potential investigation using plant tissue (e.g. potato).","1. Cut equal-sized potato cylinders, find initial mass.\n2. Place into a range of sucrose solutions of different concentrations (different water potentials).\n3. Leave for a set time, then remove, blot dry, and find final mass.\n4. Calculate percentage change in mass for each concentration.\n5. Plot percentage change in mass against sucrose concentration; the concentration at percentage change = 0 has the same water potential as the potato tissue.","Where the line crosses 0% change = the water potential of the potato cells equals the external solution."]
+  ]
+},
+{
+  num:10, phase:3, gold:false, title:"Topic 4.3 — Mammalian Circulation, Heart & CVD",
+  tags:["Circulation","Heart","Haemoglobin","Atherosclerosis"],
+  sections:["❤️ Circulation","🩸 Blood & Haemoglobin","💓 Heart & Cardiac Cycle","⚠️ Atherosclerosis"],
+  cards:[
+    [0,"Compare single and double circulatory systems, with an example of each.","Single circulation (e.g. fish): blood passes through the heart ONCE per full circuit of the body — blood goes heart → gills → body → heart.\nDouble circulation (e.g. mammals): blood passes through the heart TWICE per full circuit — pulmonary circuit (heart↔lungs) and systemic circuit (heart↔body) are separate.","Single = once through heart per circuit. Double = twice (two separate circuits)."],
+    [0,"Compare open and closed circulatory systems.","Open (e.g. insects): transport fluid (haemolymph) is not always contained in vessels; flows freely in body cavity at low pressure.\nClosed (e.g. mammals): blood always remains within vessels, maintained at high pressure.","Open = fluid in cavity (low pressure). Closed = fluid in vessels (high pressure)."],
+    [0,"Describe the components of blood and their functions.","Red blood cells (erythrocytes): carry oxygen via haemoglobin.\nPlasma: liquid component; transports dissolved substances (glucose, hormones, CO2, waste).\nWhite blood cells: immune defence.\nPlatelets: blood clotting.","Four components — RBC, plasma, WBC, platelets — with one function each."],
+    [1,"Explain the mechanism of oxygen binding to haemoglobin and the dissociation curve.","Haemoglobin has 4 polypeptide chains, each with a haem group containing Fe2+ that binds one O2 molecule (4 O2 max per haemoglobin). The oxyhaemoglobin dissociation curve is S-shaped (sigmoidal) because binding of the first O2 makes it easier for subsequent O2 molecules to bind (cooperative binding).","S-shape = cooperative binding; first O2 binding makes further binding easier."],
+    [1,"Explain the Bohr effect.","As CO2 concentration increases (e.g. in respiring tissues), pH decreases (more acidic). This causes haemoglobin to change shape, REDUCING its affinity for oxygen, so oxygen is released more readily to respiring tissues that need it most. On a graph, this shifts the dissociation curve to the RIGHT.","High CO2 → lower pH → Hb releases O2 more easily → curve shifts RIGHT."],
+    [2,"Describe the anatomy of the human heart (key structures).","4 chambers: right atrium, right ventricle, left atrium, left ventricle.\nMajor vessels: vena cava (in), pulmonary artery (out to lungs), pulmonary vein (in from lungs), aorta (out to body).\nValves: atrioventricular valves (between atria/ventricles) and semilunar valves (at vessel exits) — all prevent backflow.","Learn ALL structures and the direction of blood flow through each."],
+    [2,"Describe the stages of the cardiac cycle.","Diastole: heart relaxed, atria and ventricles fill with blood.\nAtrial systole: atria contract, push blood into ventricles.\nVentricular systole: ventricles contract, AV valves close, semilunar valves open, blood pushed into arteries.","Diastole → atrial systole → ventricular systole, in order."],
+    [2,"Describe pressure/volume changes in the heart during the cardiac cycle (relevant to pressure/volume graphs).","During diastole, pressure is low and volume increases as the ventricle fills. During ventricular systole, pressure rises sharply (AV valve closes when ventricular pressure exceeds atrial pressure) and volume decreases as blood is ejected (semilunar valve opens when ventricular pressure exceeds arterial pressure).","Valve opening/closing is determined by relative PRESSURE differences, not time."],
+    [3,"Describe the pathology of atherosclerosis (step by step).","1. Damage to the endothelium (inner lining) of an artery (e.g. due to high blood pressure).\n2. Inflammatory response — white blood cells move into the artery wall.\n3. White blood cells engulf lipids, becoming 'foam cells'.\n4. Foam cells accumulate to form a fatty streak, which develops into an atheroma (plaque).\n5. The atheroma narrows the lumen of the artery, restricting blood flow and increasing blood pressure.","Endothelial damage → inflammation → foam cells → atheroma → narrowed artery."],
+    [3,"State the risk factors for atherosclerosis/CVD.","Diet (high saturated fat/salt intake), smoking, lack of exercise, stress, high blood pressure, genetics/family history, age.","Diet, smoking, exercise, stress — the four most commonly examined factors."],
+    [3,"Describe the formation of tissue fluid and the role of hydrostatic/oncotic pressure.","Arterial end: high hydrostatic pressure forces water and small solutes out of capillaries into tissue spaces (tissue fluid), against a smaller oncotic pressure (pulling fluid in due to plasma proteins).\nVenous end: hydrostatic pressure has dropped (less fluid pushed out), so oncotic pressure now exceeds hydrostatic pressure, drawing most tissue fluid back into the capillary.","Arterial end: hydrostatic pressure WINS (fluid OUT). Venous end: oncotic pressure WINS (fluid IN)."]
+  ]
+},
+{
+  num:11, phase:3, gold:true, title:"Topic 4.4 — Plant Transport Systems",
+  tags:["Xylem & Phloem","Transpiration","CORE PRACTICAL 11","Maths Skills"],
+  sections:["🌿 Transport Tissues","💧 Water Movement","🍯 Translocation","🏆 Core Practical 11"],
+  cards:[
+    [0,"Describe the structure of xylem vessels.","Dead cells joined end to end forming a continuous hollow tube. Cell walls are thickened and strengthened with lignin (which also makes them waterproof). No end walls between cells, allowing unimpeded water flow.","Xylem = dead, lignified, hollow tube — for water transport."],
+    [0,"Describe the structure of phloem sieve tubes and companion cells.","Sieve tube elements: living cells with perforated end walls (sieve plates) allowing flow of sugars between cells; lack a nucleus and most organelles.\nCompanion cells: living cells adjacent to sieve tubes; contain a nucleus and many mitochondria; provide ATP for active loading of sucrose into sieve tubes.","Phloem = living tissue; companion cells provide ATP for active transport of sucrose."],
+    [1,"Describe root absorption of water via the apoplast and symplast pathways.","Apoplast pathway: water moves through cell walls and intercellular spaces (not crossing membranes) — fastest route.\nSymplast pathway: water moves through the cytoplasm of cells, crossing cell membranes and passing through plasmodesmata (channels connecting cytoplasm of adjacent cells).","Apoplast = via cell walls (fast). Symplast = via cytoplasm/plasmodesmata."],
+    [1,"What is the Casparian strip and what is its function?","A waterproof band of suberin (a waxy substance) found in the endodermis cell walls surrounding the vascular tissue of the root. It BLOCKS the apoplast pathway, forcing water (and dissolved minerals) to cross the cell membrane and enter the symplast pathway, allowing the plant to control which substances enter the xylem.","Casparian strip = forces water from apoplast → symplast (membrane-crossing) — allows selective uptake."],
+    [1,"Describe the cohesion-tension theory of water transport.","Water evaporates from leaf cells during transpiration, creating tension (negative pressure) that pulls water up through the xylem. Water molecules are cohesive (hydrogen bonds hold them together), so this creates a continuous, unbroken column of water that is pulled upward as a whole, from roots to leaves.","Tension created at the top (leaves) pulls the cohesive water column up the xylem."],
+    [2,"Describe the mechanism of sucrose transport (translocation) in the phloem.","Source: sucrose is actively loaded into companion cells then sieve tubes (using ATP, often via co-transport with H+ ions), lowering water potential in the sieve tube.\nWater follows by osmosis from the xylem into the sieve tube, increasing hydrostatic pressure at the source.\nSink: sucrose is removed from the sieve tube (used or stored), raising water potential, so water also leaves by osmosis, decreasing hydrostatic pressure at the sink.\nThis pressure difference (high at source, low at sink) drives a mass flow of sucrose solution from source to sink.","Pressure-flow hypothesis = mass flow driven by hydrostatic pressure gradient from source (high) to sink (low)."],
+    [2,"Define 'source' and 'sink' in the context of translocation.","Source: a region of the plant that PRODUCES or releases sucrose (e.g. photosynthesising leaves, or storage organs releasing sugar).\nSink: a region of the plant that USES or stores sucrose (e.g. growing roots, fruits, developing seeds).","Source = makes/releases sucrose. Sink = uses/stores sucrose. Direction of flow can vary by season."],
+    [2,"Describe the process of phloem loading at the source.","Companion cells actively transport H+ ions out of the cell using ATP (via H+ pumps), creating a concentration gradient. H+ ions then diffuse back into the companion cell via a co-transporter protein, bringing sucrose molecules with them (against sucrose's own gradient) — this is called co-transport.","Phloem loading = active transport (H+ pump) + co-transport (brings sucrose in alongside H+)."],
+    [3,"CORE PRACTICAL 11: Describe how to use a potometer to measure transpiration rate.","1. Cut a leafy shoot UNDER WATER (to prevent air entering xylem/embolism).\n2. Assemble the potometer underwater, ensuring an airtight seal (e.g. petroleum jelly at joints).\n3. Introduce a single air bubble into the capillary tube.\n4. Allow the plant to equilibrate to the test conditions.\n5. Measure the distance moved by the bubble in a fixed time.\n6. Calculate rate = distance ÷ time. Reset the bubble using the reservoir/syringe for repeats.","Cut under water + airtight seal — the two most commonly tested practical details."],
+    [3,"Identify and explain sources of error in the potometer practical, and how to control them.","Errors: air leaks (invalid bubble movement); the potometer measures water UPTAKE not transpiration directly (some water used for photosynthesis/turgor, so it's an estimate); leaf area not standardised across investigations affects comparability.\n\nControls: ensure airtight seal; keep leaf area, plant species, light intensity, humidity and temperature controlled, only changing the intended independent variable.","Always discuss BOTH the error AND a specific way to control/reduce it."],
+    [3,"MATHS SKILLS — How do you calculate percentage change?","Percentage change = [(final value − initial value) ÷ initial value] × 100\n\nA positive value = increase; a negative value = decrease (e.g. mass loss in a potato osmosis practical).","Always divide by the INITIAL (original) value, not the final value."],
+    [3,"MATHS SKILLS — Recap: Simpson's Index of Diversity formula and Q10.","Simpson's Index: D = 1 - Σ(n/N)² — higher D = higher diversity.\n\nQ10 = rate at higher temperature ÷ rate at temperature 10°C lower. (Typically Q10 ≈ 2, meaning the rate doubles for every 10°C rise, up to the optimum temperature.)","Both formulas frequently appear in maths-skills exam questions — practice substituting numbers."]
+  ]
+},
+{
+  num:12, phase:3, gold:true, title:"Pre-Exam Simulation & Keyword Revision",
+  tags:["Mock Exams","Mark Scheme","Final Review"],
+  sections:["⏱ Mock Exam Strategy","✍️ Keyword Correction","🔄 Weakness Revision","📋 Final Checklist"],
+  cards:[
+    [0,"What should you do to prepare for mock exams in Week 12?","Complete 2-3 past Edexcel A Level Biology B Paper 1 (AS level) papers under STRICT, timed conditions (1 hour 45 minutes), simulating real exam conditions as closely as possible (no notes, no distractions).","Strict timing is essential — practising under real exam pressure builds stamina and pacing."],
+    [0,"Why is it important to complete past papers under timed conditions rather than untimed?","It trains you to manage time effectively across all questions, identifies which question types take too long, and reduces exam-day anxiety by building familiarity with the real time pressure you will face.","Timing practice is as important as content revision in the final weeks."],
+    [1,"Explain the importance of keyword correction using the Mark Scheme, with the chlorophyll example.","Mark schemes reward PRECISE biological terminology, not vague answers. \n\nExample: for a question about chlorophyll synthesis, the mark scheme requires the specific answer 'Magnesium ions (Mg2+)', NOT the vague answer 'minerals'. Using the general term instead of the specific named ion would lose the mark.","Specificity matters: name the EXACT ion/molecule/process, not a general category."],
+    [1,"Describe the 'red pen keyword' method for exam practice.","After marking your own past paper against the mark scheme, use a RED PEN to write in the precise key term you missed or got wrong, next to your original answer. This visually highlights the specific vocabulary gaps you need to memorise before the real exam.","Visual correction in red pen helps identify and fix recurring keyword weaknesses."],
+    [2,"What should weakness revision in Week 12 focus on?","Re-reading Topic 1-4 sections specifically focusing on MECHANISM-based questions where errors commonly occur, such as: pressure/volume graphs (cardiac cycle), DNA replication steps, enzyme inhibition graphs, and the cohesion-tension theory.","Target mechanism questions specifically — these require precise sequential understanding, not just facts."],
+    [2,"What is a Core Practical (CP) quick review, and why complete one before the exam?","A rapid review covering ALL Core Practicals (CP1–CP11): for each one, recall the experimental design, key principles, the apparatus/method, the variables involved, and main sources of error.\n\nThis ensures you can answer practical-based exam questions quickly and accurately, since CP questions appear regularly on every paper.","Practicals are tested across multiple papers — a quick CP1-11 review consolidates this high-value content efficiently."],
+    [3,"What is a glossary review, and why is it useful in final exam preparation?","Reviewing the textbook glossary (e.g. page 306) and ensuring you can accurately DEFINE every key scientific term used throughout the course.\n\nThis is useful because many exam marks are awarded simply for correctly stating a definition using precise terminology.","Definitions are 'easy marks' if memorised precisely — don't lose them through vague wording."],
+    [3,"Summarise the complete Week 12 final checklist.","☐ Complete 2-3 timed mock exams (Paper 1, AS level)\n☐ Mark against the Mark Scheme and correct keywords in red pen\n☐ Re-read Topic 1-4 for mechanism-based weaknesses (e.g. pressure graphs, DNA replication)\n☐ Rapidly review all Core Practicals (CP1-CP11): design, principles, steps\n☐ Review the full glossary and define all key terms precisely","Five checklist items — work through all of them systematically in the final week before the exam."]
+  ]
+}
+];
+
+// ═══════════════════════════════
+// APP STATE
+// ═══════════════════════════════
+var curWeek=null,curSec=0,curIdx=0,shown=false,deck=[],ratings={},easy=0,hard=0,done=0;
+
+function buildHome(){
+  var p1=document.getElementById('phase1'), p2=document.getElementById('phase2'), p3=document.getElementById('phase3');
+  p1.innerHTML='';p2.innerHTML='';p3.innerHTML='';
+  WEEKS.forEach(function(w,i){
+    var tagHtml=w.tags.map(function(t,j){
+      var cls=['t1','t2','t3'];
+      return '<span class="tag '+cls[j%3]+'">'+t+'</span>';
+    }).join('');
+    var html='<div class="week-card'+(w.gold?' gold':'')+'" onclick="openWeek('+i+')">'
+      +'<div class="wc-top"><span class="wc-week">WEEK '+w.num+'</span>'+(w.gold?'<span class="wc-badge">🏆 A-GRADE FOCUS</span>':'')+'</div>'
+      +'<div class="wc-topic">'+w.title+'</div>'
+      +'<div class="wc-meta">'+tagHtml+'</div>'
+      +'<div class="open-btn">Open Flashcards →</div>'
+      +'</div>';
+    if(w.phase===1)p1.innerHTML+=html;
+    else if(w.phase===2)p2.innerHTML+=html;
+    else p3.innerHTML+=html;
+  });
+}
+
+function openWeek(n){
+  curWeek=n;curSec=0;curIdx=0;shown=false;easy=0;hard=0;done=0;ratings={};
+  document.getElementById('homeScreen').style.display='none';
+  document.getElementById('appScreen').style.display='block';
+  document.getElementById('appTitle').textContent='Week '+WEEKS[n].num+' — '+WEEKS[n].title;
+  document.getElementById('DN').style.display='none';
+  document.getElementById('MC').style.display='block';
+  mkDeck();renderTabs();renderCard();
+}
+
+function goHome(){
+  document.getElementById('homeScreen').style.display='block';
+  document.getElementById('appScreen').style.display='none';
+}
+
+function mkDeck(){
+  deck=[];
+  var cards=WEEKS[curWeek].cards;
+  for(var i=0;i<cards.length;i++){if(cards[i][0]===curSec)deck.push(i);}
+}
+
+function renderTabs(){
+  var secs=WEEKS[curWeek].sections;
+  var cards=WEEKS[curWeek].cards;
+  var h='';
+  secs.forEach(function(s,i){
+    var cnt=0;cards.forEach(function(c){if(c[0]===i)cnt++;});
+    h+='<span class="stab'+(i===curSec?' on':'')+'" onclick="sw('+i+')">'+s+' ('+cnt+')</span>';
+  });
+  document.getElementById('stabs').innerHTML=h;
+}
+
+var secBadgeClass=['s0','s1','s2','s3'];
+
+function renderCard(){
+  if(!deck.length)return;
+  var cards=WEEKS[curWeek].cards;
+  var secs=WEEKS[curWeek].sections;
+  var gi=deck[curIdx];
+  var c=cards[gi];
+  var secName=secs[c[0]];
+  var bc=secBadgeClass[c[0]]||'s0';
+
+  document.getElementById('CN').textContent=(curIdx+1)+' / '+deck.length;
+  ['badge','badge2'].forEach(function(id){
+    var el=document.getElementById(id);
+    el.textContent=secName;el.className='sbadge '+bc;
+  });
+  document.getElementById('QQ').textContent=c[1];
+  document.getElementById('AA').textContent=c[2];
+  var tip=document.getElementById('TIP');
+  if(c[3]&&c[3].length){tip.innerHTML='<b>🎯 Exam Tip:</b> '+c[3];tip.className='etip';}
+  else{tip.className='etip hide';}
+
+  document.getElementById('CD').className=shown?'card shown':'card';
+  document.getElementById('RB').className=shown?'rbs show':'rbs';
+  document.getElementById('rp').className=shown?'rprompt show':'rprompt';
+  document.getElementById('cardlbl').textContent='Card '+(curIdx+1)+' of '+deck.length;
+  document.getElementById('DN').style.display='none';
+  document.getElementById('MC').style.display='block';
+
+  var total=WEEKS[curWeek].cards.length;
+  document.getElementById('sT').textContent=total;
+  document.getElementById('sD').textContent=done;
+  document.getElementById('sE').textContent=easy;
+  document.getElementById('sH').textContent=hard;
+  document.getElementById('plbl').textContent=done+' / '+total;
+  document.getElementById('pfill').style.width=Math.round(done/total*100)+'%';
+}
+
+function rev(){if(!shown){shown=true;renderCard();}}
+function go(d){shown=false;curIdx+=d;if(curIdx<0)curIdx=deck.length-1;if(curIdx>=deck.length)curIdx=0;renderCard();}
+function rt(r){
+  done++;if(r==='e'||r==='o')easy++;else hard++;
+  shown=false;curIdx++;
+  if(curIdx>=deck.length){
+    curIdx=0;
+    if(deck.every(function(gi){return ratings[gi];})){
+      document.getElementById('MC').style.display='none';
+      document.getElementById('DN').style.display='block';return;
+    }
+  }
+  ratings[deck[curIdx-1]]=r;renderCard();
+}
+function sw(n){curSec=n;curIdx=0;shown=false;mkDeck();renderTabs();document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function rst(){curIdx=0;shown=false;document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function shuf(){deck.sort(function(){return Math.random()-.5;});curIdx=0;shown=false;renderCard();}
+
+buildHome();
+</script>
+</body>
+</html>
