@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Recall Study Method</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#0d1117;color:#eee;font-family:Arial,sans-serif;padding:10px;font-size:15px;min-height:100vh}
+
+/* HOME */
+.home{max-width:540px;margin:0 auto;padding:10px 0 40px}
+.logo{text-align:center;margin-bottom:16px;padding:16px;background:linear-gradient(135deg,#1c2333,#0d1117);border-radius:14px;border:1px solid #30363d}
+.logo h1{color:#FFD700;font-size:20px;font-weight:bold;margin-bottom:4px}
+.logo p{color:#aaa;font-size:12px;line-height:1.6}
+.logo .sub{color:#58a6ff;font-size:12px;font-weight:bold;margin-top:6px}
+
+/* MIND SHIFT BANNER */
+.mindshift{background:linear-gradient(135deg,#1a2a3a,#0d1a0d);border:1px solid #FFD700;border-radius:12px;padding:14px;margin-bottom:16px;text-align:center}
+.mindshift p{font-size:12px;color:#aaa;margin-bottom:8px}
+.ms-row{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.ms-from{background:#2a0a0a;color:#f78166;padding:7px 12px;border-radius:8px;font-size:13px;font-weight:bold}
+.ms-arrow{color:#FFD700;font-size:18px;font-weight:bold}
+.ms-to{background:#0a2a0a;color:#39d353;padding:7px 12px;border-radius:8px;font-size:13px;font-weight:bold}
+
+/* SECTION CARDS */
+.sec-header{color:#FFD700;font-size:13px;font-weight:bold;padding:9px 12px;border-radius:10px;margin-bottom:10px;margin-top:16px}
+.sh1{background:#1f3a5f}
+.sh2{background:#1a3a1a}
+.sh3{background:#3a1a1a}
+.sh4{background:#2a1a3a}
+.sh5{background:#1a2a3a}
+
+.deck-card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer}
+.deck-card:active{opacity:.8}
+.deck-card h3{font-size:14px;margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.deck-card p{color:#aaa;font-size:11px;line-height:1.5;margin-bottom:8px}
+.deck-meta{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:9px;padding:2px 8px;border-radius:20px;font-weight:bold}
+.t1{background:#1f3a5f;color:#58a6ff}
+.t2{background:#1a3a1a;color:#39d353}
+.t3{background:#3a1a1a;color:#f78166}
+.t4{background:#2a1a3a;color:#d2a8ff}
+.t5{background:#3a2a0a;color:#ffa657}
+.open-btn{display:block;width:100%;padding:8px;border-radius:8px;border:none;font-size:12px;font-weight:bold;cursor:pointer;text-align:center}
+.ob1{background:#FFD700;color:#000}
+.ob2{background:#39d353;color:#000}
+.ob3{background:#58a6ff;color:#000}
+.ob4{background:#d2a8ff;color:#000}
+.ob5{background:#ffa657;color:#000}
+
+/* APP */
+.app{display:none;max-width:600px;margin:0 auto}
+.topbar{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #30363d}
+.back{padding:5px 12px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:12px;cursor:pointer}
+.back:active{opacity:.7}
+.app-title{font-size:13px;font-weight:bold;color:#FFD700;flex:1;line-height:1.3}
+
+.stabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.stab{padding:5px 9px;background:#1c2333;border:1px solid #30363d;border-radius:20px;color:#aaa;cursor:pointer;font-size:11px}
+.stab.on{background:#FFD700;color:#000;border-color:#FFD700;font-weight:bold}
+
+.stats{display:flex;gap:5px;margin-bottom:8px}
+.chip{flex:1;background:#1c2333;border:1px solid #30363d;border-radius:8px;padding:5px 4px;text-align:center;font-size:10px;color:#888}
+.chip b{display:block;font-size:15px;font-weight:bold;color:#eee}
+.chip.g b{color:#39d353}.chip.r b{color:#f78166}.chip.y b{color:#FFD700}
+
+.prow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.plbl{font-size:11px;color:#888;white-space:nowrap}
+.pbar{flex:1;height:4px;background:#30363d;border-radius:99px;overflow:hidden}
+.pfill{height:100%;border-radius:99px;transition:width .3s}
+
+/* CARD */
+.card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:16px;min-height:190px;margin-bottom:10px;cursor:pointer;position:relative}
+.card.shown{border-color:#1a4a8a}
+.cnum{position:absolute;top:10px;right:12px;font-size:10px;color:#555}
+.sbadge{display:inline-block;font-size:9px;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-bottom:10px}
+.cq{font-size:16px;line-height:1.5;text-align:center;padding:10px 0;color:#eee}
+.chint{text-align:center;color:#555;font-size:12px;margin-top:10px}
+.asec{display:none}
+.card.shown .asec{display:block}
+.card.shown .qsec{display:none}
+.albl{font-size:10px;color:#39d353;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:bold}
+.ans{font-size:13px;line-height:1.78;white-space:pre-wrap;color:#eee}
+.etip{border-left:3px solid #FFD700;padding:8px 10px;margin-top:10px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0;background:#0d1a0d}
+.etip b{color:#FFD700}
+.warn-box{background:#1a0a0a;border-left:3px solid #f78166;padding:8px 10px;margin-top:8px;font-size:12px;color:#f78166;border-radius:0 6px 6px 0}
+.good-box{background:#0a1a0a;border-left:3px solid #39d353;padding:8px 10px;margin-top:8px;font-size:12px;color:#39d353;border-radius:0 6px 6px 0}
+
+.nav{display:flex;gap:6px;margin-bottom:8px}
+.btn{flex:1;padding:10px;border-radius:8px;border:1px solid #30363d;background:#1c2333;color:#eee;font-size:12px;font-weight:bold;cursor:pointer}
+.btn:active{opacity:.7}
+.btn.gold{background:#FFD700;color:#000;border-color:#FFD700}
+
+.rbs{display:none;gap:5px;margin-bottom:8px}
+.rbs.show{display:flex}
+.rb{flex:1;padding:8px 2px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;border:1px solid;text-align:center}
+.rb:active{opacity:.7}
+.re{background:#0a2a0a;color:#39d353;border-color:#2a6a2a}
+.ro{background:#0a1a3a;color:#58a6ff;border-color:#1a3a6a}
+.rh{background:#2a1a0a;color:#ffa657;border-color:#5a3a1a}
+.rm{background:#2a0a0a;color:#f78166;border-color:#5a1a1a}
+.rprompt{font-size:11px;color:#888;text-align:center;margin-bottom:6px;display:none}
+.rprompt.show{display:block}
+
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.toolbar span{font-size:11px;color:#888}
+.shuf{padding:4px 10px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:11px;cursor:pointer}
+.done{text-align:center;padding:30px 16px;background:#1c2333;border:1px solid #30363d;border-radius:12px;display:none}
+.done h3{color:#FFD700;font-size:18px;margin-bottom:8px}
+.done p{color:#aaa;font-size:13px;margin-bottom:16px;line-height:1.5}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="home" id="homeScreen">
+  <div class="logo">
+    <h1>🧠 Active Recall Study Method</h1>
+    <p>How to apply it to Biology, Chemistry & Maths<br>to boost grades and long-term memory</p>
+    <div class="sub">Tap any section to start flashcards</div>
+  </div>
+
+  <div class="mindshift">
+    <p style="color:#FFD700;font-weight:bold;margin-bottom:8px">7. THE MOST IMPORTANT MINDSET SHIFT</p>
+    <div class="ms-row">
+      <div class="ms-from">❌ "I understand it."</div>
+      <div class="ms-arrow">→</div>
+      <div class="ms-to">✅ "I can recall &amp; write it in an exam."</div>
+    </div>
+    <p style="margin-top:8px;font-size:11px;color:#888">Active Recall is not about reading more — it's about remembering more!</p>
+  </div>
+
+  <div class="sec-header sh1">1–3 · What is Active Recall &amp; Why It Works</div>
+  <div class="deck-card" onclick="openDeck(0)">
+    <h3><span>🧠</span> What is Active Recall?</h3>
+    <p>Understand the definition, why it beats passive study, and the 5 core principles that make it work.</p>
+    <div class="deck-meta">
+      <span class="tag t1">Definition</span>
+      <span class="tag t2">Passive vs Active</span>
+      <span class="tag t3">5 Principles</span>
+    </div>
+    <div class="open-btn ob1">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-header sh2">4A · Active Recall for Biology</div>
+  <div class="deck-card" onclick="openDeck(1)">
+    <h3><span>🌿</span> Biology — Master Content &amp; Keywords</h3>
+    <p>Three biology-specific recall methods: transcription recall, keyword flashcards, and teaching method.</p>
+    <div class="deck-meta">
+      <span class="tag t1">Transcription Recall</span>
+      <span class="tag t2">Flashcards</span>
+      <span class="tag t2">Teaching Method</span>
+    </div>
+    <div class="open-btn ob2">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-header sh3">4B · Active Recall for Chemistry</div>
+  <div class="deck-card" onclick="openDeck(2)">
+    <h3><span>⚗️</span> Chemistry — Build Conceptual Links</h3>
+    <p>Question-led recall, error notebooks, and reaction pathway recall to replace rote memorisation.</p>
+    <div class="deck-meta">
+      <span class="tag t1">Question-Led</span>
+      <span class="tag t3">Error Notebook</span>
+      <span class="tag t4">Reaction Pathways</span>
+    </div>
+    <div class="open-btn ob3">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-header sh4">4C · Active Recall for Maths</div>
+  <div class="deck-card" onclick="openDeck(3)">
+    <h3><span>📐</span> Maths — Recall Method, Not Formulas</h3>
+    <p>Timed recall drills, verbal explanation of steps, and targeted weak-topic practice.</p>
+    <div class="deck-meta">
+      <span class="tag t1">Timed Drills</span>
+      <span class="tag t2">Verbal Reasoning</span>
+      <span class="tag t4">Weak Topics</span>
+    </div>
+    <div class="open-btn ob4">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-header sh5">5–6 · Daily Routine &amp; Study Tips</div>
+  <div class="deck-card" onclick="openDeck(4)">
+    <h3><span>📅</span> Daily Flow &amp; Practical Study Tips</h3>
+    <p>The recommended daily active recall routine, spaced repetition schedule, and 5 practical study tips.</p>
+    <div class="deck-meta">
+      <span class="tag t1">Daily Routine</span>
+      <span class="tag t5">Spaced Repetition</span>
+      <span class="tag t2">Top Tips</span>
+    </div>
+    <div class="open-btn ob5">Open Flashcards →</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="appScreen">
+  <div class="topbar">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div class="app-title" id="appTitle"></div>
+  </div>
+
+  <div class="stabs" id="stabs"></div>
+
+  <div class="stats">
+    <div class="chip"><b id="sT">0</b>Cards</div>
+    <div class="chip y"><b id="sD">0</b>Done</div>
+    <div class="chip g"><b id="sE">0</b>Easy</div>
+    <div class="chip r"><b id="sH">0</b>Hard</div>
+  </div>
+
+  <div class="prow">
+    <span class="plbl" id="plbl">0/0</span>
+    <div class="pbar"><div class="pfill" id="pfill" style="width:0%;background:#FFD700"></div></div>
+  </div>
+
+  <div id="MC">
+    <div class="toolbar">
+      <span id="cardlbl"></span>
+      <button class="shuf" onclick="shuf()">🔀 Shuffle</button>
+    </div>
+    <div class="card" id="CD" onclick="rev()">
+      <span class="cnum" id="CN"></span>
+      <div class="qsec">
+        <span class="sbadge" id="badge"></span>
+        <div class="cq" id="QQ"></div>
+        <div class="chint">👆 Tap to reveal answer</div>
+      </div>
+      <div class="asec">
+        <span class="sbadge" id="badge2"></span>
+        <div class="albl">✅ Answer</div>
+        <div class="ans" id="AA"></div>
+        <div class="etip hide" id="TIP"></div>
+        <div class="warn-box hide" id="WARN"></div>
+        <div class="good-box hide" id="GOOD"></div>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="btn" onclick="go(-1)">← Prev</button>
+      <button class="btn gold" onclick="rev()">👁 Reveal</button>
+      <button class="btn" onclick="go(1)">Next →</button>
+    </div>
+    <div class="rprompt" id="rp">How well did you know this?</div>
+    <div class="rbs" id="RB">
+      <button class="rb re" onclick="rt('e')">✅ Easy</button>
+      <button class="rb ro" onclick="rt('o')">👍 Got it</button>
+      <button class="rb rh" onclick="rt('h')">⚠️ Hard</button>
+      <button class="rb rm" onclick="rt('m')">❌ Missed</button>
+    </div>
+  </div>
+  <div class="done" id="DN">
+    <h3>🎉 Section Complete!</h3>
+    <p>You're building stronger memory pathways. Keep going — consistency is everything!</p>
+    <button class="btn gold" style="max-width:200px;margin:0 auto;display:block" onclick="rst()">🔄 Review Again</button>
+  </div>
+</div>
+
+<script>
+// card format: [sectionIndex, question, answer, tip, warn, good]
+// tip = exam/study tip; warn = ❌ wrong approach; good = ✅ right approach
+var DECKS = [
+// ═══════ DECK 0: What is Active Recall ═══════
+{
+  title:"🧠 What is Active Recall?",
+  accentBg:"#0d1117", accentBorder:"#FFD700", pfill:"#FFD700",
+  sections:["🧠 Definition","❓ Why It Works","5️⃣ 5 Principles"],
+  cards:[
+    [0,"What is active recall?","Active recall is the process of actively retrieving (recalling) information from your brain without looking at notes or resources.\n\nYou force your brain to actively produce information — not just recognise it when you see it.","Think of it as a 'memory workout' — the harder you have to work to retrieve it, the stronger that memory becomes.","",""],
+    [0,"What is the key difference between active recall and passive study?","Passive study (reading, highlighting, re-reading notes): creates a feeling of familiarity — you recognise the content when you see it, but cannot produce it on your own.\n\nActive recall (writing from memory, flashcards, self-testing): forces retrieval — you build durable, long-term memory that you can produce independently in an exam.","The exam requires PRODUCTION, not recognition. If you can only recognise it when you see it, you're not exam-ready.","Passive study (❌): Reading / Re-highlighting / Looking at answers → Feels familiar, but easy to forget.","Active Recall (✅): Recall / Write from memory / Explain / Solve → Harder now, but builds lasting memory."],
+    [0,"Why is feeling difficulty a good sign during active recall?","When you struggle to recall something, your brain works harder to retrieve it. This effort strengthens the neural pathway for that memory.\n\n⭐ Key insight: If it feels hard, your brain is learning. The more challenging the retrieval, the stronger the long-term memory formed.","'Desirable difficulty' — the struggle during active recall is precisely what makes it so effective for long-term retention.","",""],
+    [1,"Why does active recall strengthen long-term memory?","Active recall forces the brain to strengthen memory pathways (neural connections) each time you retrieve information.\n\nEach retrieval makes the memory easier to access in the future.\n\nPassive re-reading does NOT trigger this strengthening process.","Retrieval practice = the single most research-supported study technique for long-term retention (the 'Testing Effect').","",""],
+    [1,"How does active recall improve exam speed?","By repeatedly retrieving information actively, your brain builds fast, automatic access to that knowledge.\n\nThis means in an exam, you can recall answers more quickly and accurately — you don't have to 'hunt' for the information.","Regular active recall → faster, more confident recall in exams → more time per question → higher marks.","",""],
+    [1,"How does active recall reveal genuine weaknesses?","Active recall exposes exactly which concepts you cannot yet produce independently — not just which ones you 'recognise' when prompted.\n\nPassive study hides weaknesses (everything feels familiar). Active recall reveals them honestly.","After a recall attempt, the gaps you cannot fill = your genuine revision priorities. This is more honest than feeling 'I've read this, so I know it'.","",""],
+    [1,"What does research say about active recall compared to other study methods?","Academic research consistently ranks active recall (retrieval practice) among the highest-efficiency study strategies — especially for complex, conceptual subjects like A Level Biology.\n\nIt outperforms re-reading, summarising, and highlighting in multiple studies.","Strategy efficiency ranking: Active Recall > Practice testing > Spaced practice > Interleaving > Elaborative interrogation > Re-reading (least effective).","",""],
+    [2,"State the 5 principles of active recall in order.","1. Study a small amount at a time (don't overload).\n2. Close your book or notes.\n3. Try to recall everything you know about the topic.\n4. Check and correct your answer.\n5. Review regularly with spaced repetition (Day 1 → Day 3 → Day 7 → Day 14).","The 5 principles work together as a system. Skipping any one (especially spaced repetition) reduces effectiveness significantly.","",""],
+    [2,"Why should you study a small amount at a time (Principle 1)?","The brain consolidates memories most effectively when information is processed in focused, manageable chunks.\n\nTrying to recall too much at once leads to cognitive overload, where nothing is retained properly.","Study one sub-topic → master it → move on. Don't try to 'cover everything' in one sitting.","",""],
+    [2,"Why must you close your book before recalling (Principle 2)?","If your notes are visible, your brain has no need to retrieve the information from memory — it simply reads it.\n\nRecall only occurs when your brain is forced to generate the information without a visible prompt.","Eyes on notes = recognition (passive). Eyes closed / book shut = retrieval (active recall). Only the latter strengthens memory.","",""],
+    [2,"Why is checking and correcting your answer (Principle 4) essential?","Active recall without feedback is incomplete — you need to know what you got wrong and what the correct answer is.\n\nFailing to check means you may consolidate incorrect information.","Check against notes/mark scheme immediately after recall. Red-pen the gaps/errors so you know exactly what to target next time.","",""],
+    [2,"What is spaced repetition (Principle 5) and why is it more effective than massed practice?","Spaced repetition = reviewing information at increasing time intervals: e.g. Day 1 → Day 3 → Day 7 → Day 14.\n\nThis is more effective because each review happens just as the memory is beginning to fade, forcing the brain to strengthen it again at the optimal moment.\n\nMassed practice ('cramming') builds only short-term memory.","Spaced repetition schedule: review on Day 1, 3, 7, 14 after first learning. Miss any review → memory fades faster.","",""]
+  ]
+},
+// ═══════ DECK 1: Biology ═══════
+{
+  title:"🌿 Biology — Master Content & Keywords",
+  accentBg:"#0a1a0a", accentBorder:"#39d353", pfill:"#39d353",
+  sections:["📝 Transcription Recall","🃏 Keyword Flashcards","👨‍🏫 Teaching Method","✅ Bio Summary"],
+  cards:[
+    [0,"What is Transcription Recall for Biology and why is it the most recommended method?","Step 1: Study one sub-topic (e.g. immune system, photosynthesis) from your textbook.\nStep 2: Close the book completely.\nStep 3: Write on a blank sheet of paper everything you can recall about that topic.\nStep 4: Compare what you wrote against your notes and identify what you missed.\n\nThis is the most recommended method for Biology because the subject requires producing detailed mechanisms, sequences, and key terms from memory — not just recognising them.","Aim to fill an entire blank page. The act of writing from scratch strengthens memory far more than re-reading or annotating.","",""],
+    [0,"How do you apply Transcription Recall to a Biology topic (e.g. the immune system)?","1. Read the 'Immune System' chapter carefully.\n2. Close book and notes.\n3. Write everything you remember: types of white blood cells, antibody structure, stages of the immune response, specific and non-specific response, memory cells...\n4. Re-open notes. Highlight (in red) everything you missed or got wrong.\n5. Focus the next study session specifically on those red gaps.","The red-highlighted gaps are your revision list for that topic. This method makes revision maximally efficient — you only study what you actually need to.","",""],
+    [0,"Give examples of Biology topics best suited to Transcription Recall.","• Immune system (specific and non-specific responses)\n• Photosynthesis (light-dependent and light-independent reactions)\n• Respiration (glycolysis, Krebs cycle, oxidative phosphorylation)\n• DNA replication steps\n• Cardiac cycle stages\n• Gene expression and protein synthesis","Any process with multiple linked steps in sequence is ideal for Transcription Recall — you must know the steps in order, not just recognise them.","",""],
+    [1,"How do Biology Keyword Flashcards work?","FRONT of card: a biological term, concept, or diagram label (e.g. 'Cohesion').\nBACK of card: a complete, precise definition or explanation (e.g. 'The attraction between water molecules due to hydrogen bonding, forming a continuous column in the xylem.').\n\nMethod:\n1. Look at the question/term on the front.\n2. Answer in full from memory — do NOT flip until you've attempted.\n3. Flip and check.\n4. If incorrect, note it. Do NOT count it as known until you can recall it correctly 3 times in a row.","For A Level Biology, the definition on the back must use PRECISE mark-scheme language, not your own vague paraphrase. Examiners mark keywords.","",""],
+    [1,"What makes a Biology flashcard effective vs ineffective?","Effective Biology flashcard:\n• Front: 'What is the role of the SAN in the cardiac cycle?'\n• Back: 'The SAN (sinoatrial node) in the wall of the right atrium initiates the electrical impulse that spreads across both atria, causing atrial systole.'\n\nIneffective Biology flashcard:\n• Front: 'SAN'\n• Back: 'Starts heartbeat' (too vague — would not gain full marks in an exam)","Always write the answer using FULL BIOLOGICAL LANGUAGE as you would in the exam. Vague flashcard answers = vague exam answers = lost marks.","",""],
+    [1,"Why is it important not to flip the flashcard immediately?","If you flip immediately, you are reading the answer — which is passive study, not active recall.\n\nMake a genuine attempt to produce the answer from memory, even if it's incomplete.\n\nOnly then flip and compare — the retrieval attempt is what builds the memory, not reading the answer.","Even a partially correct or incorrect retrieval attempt is more effective than no attempt. The effort of retrieval is the learning.","",""],
+    [2,"What is the Teaching Method (Feynman Technique) for Biology?","Explain the concept out loud as if you are teaching it to someone else who has no Biology knowledge.\n\nIf you cannot explain it simply and clearly — you do not yet understand it deeply enough.\n\nIf your explanation sounds vague, circular, or relies on copying from notes → go back and study that section again.","The Teaching Method is one of the most powerful active recall techniques because explaining forces you to organise, connect, and produce knowledge — far beyond simple recall.","❌ 'I explained it by reading from my notes' — this is NOT the teaching method.","✅ 'I closed my notes and explained it in my own words from memory' — this reveals genuine understanding vs surface familiarity."],
+    [2,"Apply the Teaching Method: explain 'enzyme denaturation' as if teaching it.","Example model explanation:\n'When temperature rises above an enzyme's optimum, the increased kinetic energy causes the hydrogen bonds and ionic bonds in the enzyme's tertiary structure to break. This changes the 3D shape of the active site, so the substrate can no longer fit and form an enzyme-substrate complex. The enzyme is now permanently denatured — it cannot return to its original shape.'\n\nIf you couldn't say this — that's the gap to fix.","After teaching, ask yourself: Could I draw it? Could I describe a real example? Could I answer an exam question on it? If yes → you genuinely understand it.","",""],
+    [3,"What are the three Biology-specific Active Recall key principles?","1. Recall DEFINITIONS, PROCESSES, and EXAMPLES (not just individual facts).\n2. Use PRECISE biological keyword and terminology in your recall — not vague descriptions.\n3. Practise with exam-style questions regularly to develop the skill of writing under exam conditions.","Knowing the content is not enough — you must also know how to WRITE it in the exam. Exam-style practice bridges the gap between knowing and performing.","",""]
+  ]
+},
+// ═══════ DECK 2: Chemistry ═══════
+{
+  title:"⚗️ Chemistry — Build Conceptual Links",
+  accentBg:"#0d1a2a", accentBorder:"#58a6ff", pfill:"#58a6ff",
+  sections:["❓ Question-Led Recall","📓 Error Notebook","🔄 Reaction Pathways","✅ Chem Summary"],
+  cards:[
+    [0,"What is Question-Led Recall for Chemistry and why is it better than rote memorisation?","Instead of trying to memorise facts in isolation (e.g. memorising reagents without context), use a QUESTION as the anchor:\n\n• Predict: 'Which reagents are needed to convert benzene to bromobenzene?'\n• Explain: 'Why does the Bohr model fail to explain atomic spectra?'\n• Calculate: 'Calculate the equilibrium constant Kc given these concentrations.'\n• Draw: 'Draw the mechanism for the nucleophilic addition of HCN to ethanal.'\n\nThe question gives context — chemistry is about explaining and predicting, not just stating.","Chemistry understanding is demonstrated through explanation and prediction — not isolated fact recall. Always learn chemistry WITH a question that requires you to USE the knowledge.","❌ 'I memorised the reagents for halogenation.' (Isolated fact — no context)","✅ 'I can answer: What reagents and conditions are needed? Why those conditions? What mechanism operates? Draw it.' (Full understanding)"],
+    [0,"What types of questions should you use for Chemistry Question-Led Recall?","• Predict: 'What direction will equilibrium shift if pressure increases?'\n• Explain: 'Why does a nucleophile attack the δ+ carbon in a carbonyl compound?'\n• Calculate: 'Calculate the pH of a 0.1 mol/dm³ solution of ethanoic acid (Ka = 1.8×10⁻⁵).'\n• Draw mechanism: 'Draw the full mechanism for electrophilic addition of HBr to propene, including curly arrows.'\n• Compare: 'Why does fluorine have a higher electronegativity than chlorine?'","Cover all question types — predict, explain, calculate, draw, compare. The exam uses all of these. If you only practise one type, the others will feel unfamiliar.","",""],
+    [1,"What is an Error Notebook for Chemistry and how should it be structured?","Each time you make a mistake in Chemistry (in a practice question, past paper, or flashcard), record it in your Error Notebook with THREE columns:\n\nColumn 1: ERROR REASON — Why did I make this mistake? (e.g. 'Mixed up nucleophilic substitution with elimination mechanism')\nColumn 2: CORRECT CONCEPT — What is the right answer/concept? (e.g. 'In SN2, the nucleophile attacks in one concerted step from the back')\nColumn 3: HOW TO AVOID — What will I do differently? (e.g. 'Draw the mechanism fully — I can see the backside attack in the diagram')","The Error Notebook is only useful if you REVIEW it regularly — re-read it at the start of every Chemistry study session before starting new work.","",""],
+    [1,"How often should you review your Chemistry Error Notebook?","Review your full Error Notebook at the start of every Chemistry study session — before you begin any new problems.\n\nThis ensures:\n1. You do not repeat the same mistakes.\n2. Old errors stay fresh in your memory.\n3. You can track whether your understanding of past errors has genuinely improved.\n\nIf you make the same error again — study that concept first before continuing.","The goal of the Error Notebook: every error is made once and then NEVER AGAIN. This is realistic only if you review it consistently.","",""],
+    [1,"Give an example of a well-completed Error Notebook entry for Chemistry.","Topic: Electrophilic Aromatic Substitution\n\nError reason: 'I drew the halogen carrier (FeBr₃) regenerated at the start of the mechanism, not at the end.'\n\nCorrect concept: 'FeBr₃ is a catalyst. It is regenerated AFTER the H⁺ is lost from the ring in the final step, not at the beginning.'\n\nHow to avoid: 'Remember: catalyst is regenerated in the last step. Draw the full mechanism in order and check the catalyst appears at the end.'","Specific, detailed Error Notebook entries are far more useful than vague ones like 'got mechanism wrong'. Always explain exactly what was wrong and what is correct.","",""],
+    [2,"What is Reaction Pathway Recall for Chemistry?","Close your book and draw the FULL reaction pathway from memory — starting material, reagents/conditions, intermediate, and product — for an entire area of organic chemistry.\n\nExample (A Level Organic Chemistry pathway):\nAlkene → (HBr) → Halogenoalkane → (NaOH/ethanol) → Alkene (elimination) → (KMnO₄) → Carboxylic acid\n\nYou must recall: what reagents are needed, what conditions apply (temperature, solvent, catalyst), and what mechanism operates at each step.","Draw full reaction pathways as maps — not lists. A visual map allows you to see how ALL the organic chemistry links together as a single connected system, not isolated reactions.","❌ 'I memorised individual reactions in isolation'","✅ 'I can draw the full interconnected pathway from memory, linking functional groups, reagents, and conditions'"],
+    [2,"Why is drawing reaction pathways more effective than memorising individual reactions?","Individual reactions are disconnected facts — hard to recall without context.\n\nA reaction pathway is a connected system — each step contextualises the next.\n\nIn a Chemistry exam, multi-step synthesis questions require you to navigate a pathway, not recall isolated reactions. Pathway recall directly trains the exact skill the exam tests.","Organic chemistry exam questions often say 'outline a synthesis of compound X from starting material Y in 3 steps'. This requires pathway knowledge — not isolated reaction recall.","",""],
+    [3,"What are the three Chemistry Active Recall key principles?","1. Recall CONCEPTS and BUILD KNOWLEDGE CONNECTIONS — not isolated facts.\n2. PRACTISE applying knowledge — don't just memorise it passively.\n3. REVIEW the Error Notebook regularly — and target weak topic areas systematically.","The exam tests application of chemistry, not memorisation of facts. Chemistry revision without practice questions is incomplete preparation.","",""]
+  ]
+},
+// ═══════ DECK 3: Maths ═══════
+{
+  title:"📐 Maths — Recall Method, Not Formulas",
+  accentBg:"#1a0a2a", accentBorder:"#d2a8ff", pfill:"#d2a8ff",
+  sections:["⏱ Timed Recall Drills","🗣 Verbal Explanation","🎯 Weak Topic Practice","✅ Maths Summary"],
+  cards:[
+    [0,"What is Timed Recall Drill for Maths and how does it work?","Step 1: Look at a Maths problem (without the solution visible).\nStep 2: Do NOT look at any worked examples or notes.\nStep 3: Solve the problem from memory — choosing the correct method and executing it yourself.\nStep 4: Start with a short, comfortable time limit and gradually reduce it over time.\n\nThis builds two skills simultaneously: method recall AND speed under time pressure — both critical for exam performance.","Start with generous time limits (e.g. 10 minutes for a 5-mark question). Reduce the limit as competence builds. The goal is to match or beat real exam timings.","",""],
+    [0,"Why should you start with shorter time limits in timed Maths drill?","Starting with a time limit that feels achievable builds confidence and allows you to practise the correct method without panic.\n\nGradually reducing the time limit trains your brain to work faster under pressure — simulating real exam conditions.\n\nCramming complex Maths under extreme time pressure from the start is counterproductive — it builds anxiety, not skill.","Exam pacing is a learnable skill. Timed drill trains it specifically, rather than discovering poor time management for the first time in the actual exam.","",""],
+    [0,"How does timed Maths drill differ from just doing past papers?","Past papers test a broad range of topics and are best used as final practice.\n\nTimed drill specifically targets individual problem types you are still developing competence in — drilling them repeatedly until the method becomes automatic.\n\nUse timed drill for specific weak question types first. Then use past papers to test the full range under real exam conditions.","Past papers = assess overall readiness. Timed drill = build competence in specific weak areas. Both are necessary.","",""],
+    [1,"What is the Verbal Explanation Method for Maths?","When solving a problem, explain EVERY STEP OUT LOUD:\n• 'Why am I using this method?' (e.g. 'I'm using integration by parts because the integrand is a product of two different types of function')\n• 'Why does this step work?' (e.g. 'I differentiate u and integrate dv/dx because this reduces the complexity of the integrand')\n• 'What is the final goal?' (e.g. 'I'm trying to express the integral in a form I can evaluate directly')\n\nIf you cannot explain a step clearly → you do not understand it yet.","The Verbal Explanation Method forces you to understand your own reasoning — not just follow memorised procedures. Examiners can tell the difference in 'show that' and 'explain' mark scheme questions.","",""],
+    [1,"Why does verbal explanation improve Maths performance beyond just practising calculations?","Maths exams include 'show that', 'prove', 'explain why', and 'justify' questions — which require explaining your reasoning, not just computing an answer.\n\nIf you practise only calculation without verbal reasoning, you may solve problems mechanically but be unable to explain why each step works — losing marks on explanation questions.","Practise verbal explanation specifically for topics where you currently work on 'autopilot' — topics you can calculate but couldn't explain if asked.","❌ 'I can solve it but I don't know why it works'","✅ 'I can explain every step and why it leads to the correct answer'"],
+    [2,"What is Weak Topic Practice in Maths and how should it be structured?","1. List your weak question types explicitly (e.g. 'Mechanics — resolving forces on inclined planes', 'Core — binomial expansion when n is a fraction', 'Statistics — conditional probability').\n2. Practice ONLY those weak topics in focused sessions — not mixed problem sets.\n3. Continue drilling each weak topic until you can solve every problem type accurately and quickly, without reference to examples.\n4. Review regularly — weak topics that become strong should still be revisited periodically.","Be specific: 'I need to practise binomial expansion where n is a fraction' is actionable. 'I need to practise Maths' is not. Identify the exact question type, not just the broad topic.","",""],
+    [2,"How do you decide which question types count as 'weak' in Maths?","A question type is 'weak' if any of the following apply:\n• You cannot start it without looking at an example.\n• You make errors more than 1 in 3 attempts.\n• You can solve it slowly but cannot do it reliably within the exam time limit.\n• You feel uncertain about which method to use when you first read the question.","Track weak topics in a written list — add to it every time you encounter a question you couldn't confidently solve. This list IS your revision priority list.","",""],
+    [3,"What are the three Maths Active Recall key principles?","1. RAPIDLY RECOGNISE the question type from the problem statement — this skill must be automatic.\n2. RECALL the correct method and execute it accurately from memory — not by copying a worked example.\n3. ELIMINATE careless errors — check every line of working; most marks are lost to execution errors, not conceptual misunderstanding.","The biggest mark gains in Maths come from eliminating careless errors. After practising method recall, focus deliberate effort on checking and accuracy habits.","",""]
+  ]
+},
+// ═══════ DECK 4: Daily Routine & Tips ═══════
+{
+  title:"📅 Daily Flow & Practical Study Tips",
+  accentBg:"#1a1a0d", accentBorder:"#ffa657", pfill:"#ffa657",
+  sections:["📅 Daily Routine","🗓 Spaced Repetition","💡 Top 5 Tips"],
+  cards:[
+    [0,"Describe the recommended Active Recall daily study routine (5 steps).","Step 1 — STUDY/READ: Read one sub-topic from the textbook or notes carefully.\nStep 2 — CLOSE notes: Close your book or notes completely.\nStep 3 — ACTIVE RECALL: Write, say, or draw everything you can remember (do NOT look).\nStep 4 — CHECK & CORRECT: Re-open notes; identify and mark every gap or error.\nStep 5 — REVIEW SCHEDULE: Add this sub-topic to your spaced repetition schedule (Day 1 → 3 → 7 → 14).","Short sessions with HIGH FOCUS are more effective than long sessions with low concentration. 25–45 minutes of intense active recall beats 3 hours of passive reading.","",""],
+    [0,"Why is it important to check and correct your recall immediately (Step 4)?","Checking immediately after recall:\n1. Corrects errors before they can be consolidated into long-term memory as incorrect information.\n2. Reveals exactly which specific details you missed — creating a targeted revision list.\n3. Provides a sense of progress and closure for each study session.\n\nDelaying the check (e.g. checking the next day) reduces the effectiveness of the correction process.","Check immediately after recall — not later. The brain consolidates the corrected information more effectively when the check follows directly after the recall attempt.","",""],
+    [0,"What does 'short sessions, high focus, consistent practice = best learning outcome' mean in practice?","Three 30-minute focused active recall sessions > One 90-minute passive reading session.\n\nThis is because:\n• Shorter sessions maintain concentration at a higher level throughout.\n• Multiple sessions allow spaced repetition to occur naturally.\n• Consistent daily practice (even 30 minutes) compounds significantly over a term.\n\nConsistency over time beats intensity in any single session.","A daily 30-minute active recall habit, maintained for 12 weeks, will outperform last-minute cramming in a single week before the exam.","",""],
+    [1,"What is the recommended spaced repetition schedule for Active Recall?","After first studying a topic, review it on:\n• Day 1 (same day)\n• Day 3 (2 days later)\n• Day 7 (one week later)\n• Day 14 (two weeks later)\n\nEach review consists of active recall first (close notes → attempt → check), not passive re-reading.\n\nIf you recall correctly at Day 14 → extend the gap further (e.g. Day 30). If you cannot recall at Day 7 → restart the schedule for that topic.","Use a calendar or revision planner to schedule reviews in advance. Without a schedule, spaced repetition does not happen consistently.","",""],
+    [1,"Why is spaced repetition more effective than cramming?","Cramming creates SHORT-TERM memory only — information fades within days because memories are not consolidated properly.\n\nSpaced repetition involves reviewing information just as the memory is beginning to fade — this forces the brain to reconstruct and strengthen the memory at the optimal moment.\n\nResult: memories formed through spaced repetition last months to years, not days.","The 'forgetting curve' (Ebbinghaus): without review, you forget ~50% of new information within 24 hours, and ~70% within a week. Spaced repetition directly counteracts this.","❌ 'I'll do everything the week before the exam' (cramming = short-term only)","✅ 'I'll review on Day 1, 3, 7, 14 — small sessions, long-term memory' (spaced repetition)"],
+    [2,"Tip 1: Why start early and study in short sessions rather than cramming at the last minute?","Short daily sessions throughout the term:\n• Allow spaced repetition to occur naturally.\n• Build genuine long-term memory.\n• Reduce exam anxiety (you are continuously prepared).\n• Are sustainable without burnout.\n\nLast-minute cramming:\n• Produces only short-term, surface memory.\n• Causes high stress and poor sleep.\n• Collapses under the pressure of a real exam.","Start revising from the beginning of the course. Even 20–30 minutes of active recall per day, every day, will produce far better results than intensive cramming in the final week.","",""],
+    [2,"Tip 2: Why mix subjects and topics rather than studying only one subject for extended periods?","Interleaving (mixing topics/subjects) is more effective than blocked practice (studying one topic exhaustively before moving to the next) because:\n1. It forces your brain to retrieve the correct method/knowledge for each new problem — strengthening recall pathways.\n2. It prevents the illusion of competence that comes from repeatedly answering similar questions in sequence.\n3. It better reflects exam conditions, where questions on different topics appear in random order.","Practical approach: in a 2-hour study session, spend 40 minutes on Biology (active recall), 40 minutes on Chemistry (problem practice), 40 minutes on Maths (timed drill) — rather than 2 hours on one subject.","",""],
+    [2,"Tip 3: How to implement spaced repetition practically (Day 1, 3, 7, 14)?","Use a physical or digital planner:\n1. When you study a new topic, immediately write 'Review [topic]' on Day 1, Day 3, Day 7, and Day 14 in your planner.\n2. On each review date: close notes → attempt full recall → check → mark gaps.\n3. If you fail a review → restart the schedule for that topic.\n4. If you succeed at Day 14 → add a Day 30 review and reduce future review frequency.\n\nSystem: the better you recall → the longer you can safely wait between reviews.","The schedule only works if you actually do the review sessions on the scheduled days. One missed review disrupts the entire system for that topic.","",""],
+    [2,"Tip 4: Why self-test rather than wait for exams to test yourself?","Waiting for exams to test yourself means your first feedback on genuine weaknesses comes when it is too late to act on it.\n\nSelf-testing throughout the course:\n• Reveals weaknesses early, when there is still time to fix them.\n• Builds exam-condition confidence through repeated practice.\n• Normalises the feeling of being tested — reducing exam anxiety.\n• Directly strengthens memory (the testing effect).","Self-test weekly: one 20-minute timed recall session per subject per week, treating it like a mini exam (no notes, timed, written answers). Mark it honestly afterwards.","",""],
+    [2,"Tip 5: Why track and compare your progress over time?","Tracking progress:\n1. Shows you objectively which topics have improved and which still need work.\n2. Maintains motivation by making progress visible — seeing improvement is a powerful motivator.\n3. Identifies persistent weak topics that need a different study approach.\n4. Prevents the common mistake of repeatedly studying comfortable topics while avoiding difficult ones.\n\nSimple tracking: score your recall attempts (e.g. '7/10 key points recalled'). Compare scores over time for each topic.","Keep a simple score record: after each recall attempt, note what percentage of key points you recalled. Aim for consistent improvement across all topics, not just your favourites.","",""]
+  ]
+}
+];
+
+// ═══ APP STATE ═══
+var curDeck=null,curSec=0,curIdx=0,shown=false,deck=[],ratings={},easy=0,hard=0,done=0;
+
+function openDeck(n){
+  curDeck=n;curSec=0;curIdx=0;shown=false;easy=0;hard=0;done=0;ratings={};
+  document.getElementById('homeScreen').style.display='none';
+  document.getElementById('appScreen').style.display='block';
+  document.getElementById('appTitle').textContent=DECKS[n].title;
+  document.getElementById('pfill').style.background=DECKS[n].pfill;
+  document.getElementById('DN').style.display='none';
+  document.getElementById('MC').style.display='block';
+  mkDeck();renderTabs();renderCard();
+}
+function goHome(){
+  document.getElementById('homeScreen').style.display='block';
+  document.getElementById('appScreen').style.display='none';
+}
+function mkDeck(){
+  deck=[];
+  var cards=DECKS[curDeck].cards;
+  for(var i=0;i<cards.length;i++){if(cards[i][0]===curSec)deck.push(i);}
+}
+function renderTabs(){
+  var secs=DECKS[curDeck].sections;
+  var cards=DECKS[curDeck].cards;
+  var h='';
+  secs.forEach(function(s,i){
+    var cnt=0;cards.forEach(function(c){if(c[0]===i)cnt++;});
+    h+='<span class="stab'+(i===curSec?' on':'')+'" onclick="sw('+i+')">'+s+' ('+cnt+')</span>';
+  });
+  document.getElementById('stabs').innerHTML=h;
+}
+var SBCLS=['s0','s1','s2','s3'];
+function renderCard(){
+  if(!deck.length)return;
+  var cards=DECKS[curDeck].cards;
+  var secs=DECKS[curDeck].sections;
+  var gi=deck[curIdx];
+  var c=cards[gi];
+  document.getElementById('CN').textContent=(curIdx+1)+' / '+deck.length;
+  ['badge','badge2'].forEach(function(id){
+    var el=document.getElementById(id);
+    el.textContent=secs[c[0]];
+    el.className='sbadge '+SBCLS[c[0]%4];
+    el.style.background=DECKS[curDeck].accentBg;
+    el.style.border='1px solid '+DECKS[curDeck].accentBorder;
+    el.style.color=DECKS[curDeck].pfill;
+  });
+  document.getElementById('QQ').textContent=c[1];
+  document.getElementById('AA').textContent=c[2];
+  var tip=document.getElementById('TIP');
+  if(c[3]&&c[3].length){tip.innerHTML='<b>💡 Study Tip:</b> '+c[3];tip.className='etip';}
+  else{tip.className='etip hide';}
+  var warn=document.getElementById('WARN');
+  if(c[4]&&c[4].length){warn.innerHTML='<b>❌ Wrong approach:</b> '+c[4];warn.className='warn-box';}
+  else{warn.className='warn-box hide';}
+  var good=document.getElementById('GOOD');
+  if(c[5]&&c[5].length){good.innerHTML='<b>✅ Right approach:</b> '+c[5];good.className='good-box';}
+  else{good.className='good-box hide';}
+
+  document.getElementById('CD').className=shown?'card shown':'card';
+  if(shown){document.getElementById('CD').style.borderColor=DECKS[curDeck].accentBorder;}
+  else{document.getElementById('CD').style.borderColor='#30363d';}
+  document.getElementById('RB').className=shown?'rbs show':'rbs';
+  document.getElementById('rp').className=shown?'rprompt show':'rprompt';
+  document.getElementById('cardlbl').textContent='Card '+(curIdx+1)+' of '+deck.length;
+  document.getElementById('DN').style.display='none';
+  document.getElementById('MC').style.display='block';
+  var total=DECKS[curDeck].cards.length;
+  document.getElementById('sT').textContent=total;
+  document.getElementById('sD').textContent=done;
+  document.getElementById('sE').textContent=easy;
+  document.getElementById('sH').textContent=hard;
+  document.getElementById('plbl').textContent=done+' / '+total;
+  document.getElementById('pfill').style.width=Math.round(done/total*100)+'%';
+}
+function rev(){if(!shown){shown=true;renderCard();}}
+function go(d){shown=false;curIdx+=d;if(curIdx<0)curIdx=deck.length-1;if(curIdx>=deck.length)curIdx=0;renderCard();}
+function rt(r){
+  done++;if(r==='e'||r==='o')easy++;else hard++;
+  shown=false;curIdx++;
+  if(curIdx>=deck.length){
+    curIdx=0;
+    if(deck.every(function(gi){return ratings[gi];})){
+      document.getElementById('MC').style.display='none';
+      document.getElementById('DN').style.display='block';return;
+    }
+  }
+  ratings[deck[curIdx-1]]=r;renderCard();
+}
+function sw(n){curSec=n;curIdx=0;shown=false;mkDeck();renderTabs();document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function rst(){curIdx=0;shown=false;document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function shuf(){deck.sort(function(){return Math.random()-.5;});curIdx=0;shown=false;renderCard();}
+</script>
+</body>
+</html>
