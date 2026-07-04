@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maximise Predicted Grades — 10–12 Week Plan</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#0d1117;color:#eee;font-family:Arial,sans-serif;padding:10px;font-size:15px;min-height:100vh}
+
+/* HOME */
+.home{max-width:540px;margin:0 auto;padding:10px 0 40px}
+
+.logo{text-align:center;margin-bottom:14px;padding:18px 14px;background:linear-gradient(135deg,#1c2333,#0d1117);border-radius:14px;border:1px solid #FFD700}
+.logo h1{color:#FFD700;font-size:19px;font-weight:bold;margin-bottom:5px;line-height:1.35}
+.logo p{color:#aaa;font-size:12px;line-height:1.6}
+
+/* KEY INSIGHT BANNER */
+.insight{background:#1a2a1a;border:1px solid #39d353;border-radius:12px;padding:14px;margin-bottom:14px;text-align:center}
+.insight .label{font-size:10px;color:#39d353;text-transform:uppercase;letter-spacing:.1em;font-weight:bold;margin-bottom:8px}
+.insight .from{background:#2a0a0a;color:#f78166;padding:7px 10px;border-radius:8px;font-size:12px;margin-bottom:6px;line-height:1.4}
+.insight .arrow{color:#FFD700;font-size:16px;font-weight:bold;margin:4px 0}
+.insight .to{background:#0a2a0a;color:#39d353;padding:7px 10px;border-radius:8px;font-size:12px;font-weight:bold;line-height:1.4}
+
+/* STOP DOING BANNER */
+.stop-banner{background:#1a0a0a;border:1px solid #f78166;border-radius:12px;padding:12px 14px;margin-bottom:14px}
+.stop-banner h4{color:#f78166;font-size:12px;font-weight:bold;margin-bottom:8px}
+.stop-item{font-size:11px;color:#ccc;padding:3px 0;display:flex;gap:6px;align-items:flex-start}
+.stop-item span{color:#f78166;font-size:13px;flex-shrink:0}
+
+/* SECTION HEADER */
+.sec-hdr{font-size:13px;font-weight:bold;padding:9px 12px;border-radius:10px;margin-bottom:10px;margin-top:16px}
+.sh0{background:#3a2a0a;color:#FFD700}
+.sh1{background:#1f3a5f;color:#58a6ff}
+.sh2{background:#1a3a1a;color:#39d353}
+.sh3{background:#2a0a2a;color:#d2a8ff}
+.sh4{background:#1a2a3a;color:#58a6ff}
+.sh5{background:#2a1a0a;color:#ffa657}
+
+/* DECK CARDS */
+.dc{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer}
+.dc:active{opacity:.8}
+.dc h3{font-size:14px;margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.dc p{color:#aaa;font-size:11px;line-height:1.5;margin-bottom:9px}
+.dc-meta{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px}
+.tag{font-size:9px;padding:2px 8px;border-radius:20px;font-weight:bold}
+.t1{background:#3a2a0a;color:#FFD700}
+.t2{background:#1f3a5f;color:#58a6ff}
+.t3{background:#1a3a1a;color:#39d353}
+.t4{background:#2a0a2a;color:#d2a8ff}
+.t5{background:#3a1a0a;color:#ffa657}
+.t6{background:#2a0a0a;color:#f78166}
+.ob{display:block;width:100%;padding:9px;border-radius:8px;border:none;font-size:12px;font-weight:bold;cursor:pointer;text-align:center}
+.ob0{background:#FFD700;color:#000}
+.ob1{background:#58a6ff;color:#000}
+.ob2{background:#39d353;color:#000}
+.ob3{background:#d2a8ff;color:#000}
+.ob4{background:#ffa657;color:#000}
+.ob5{background:#f78166;color:#000}
+
+/* APP */
+.app{display:none;max-width:600px;margin:0 auto}
+.topbar{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #30363d}
+.back{padding:5px 12px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:12px;cursor:pointer}
+.back:active{opacity:.7}
+.app-title{font-size:12px;font-weight:bold;color:#FFD700;flex:1;line-height:1.3}
+
+.stabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.stab{padding:5px 9px;background:#1c2333;border:1px solid #30363d;border-radius:20px;color:#aaa;cursor:pointer;font-size:11px}
+.stab.on{background:#FFD700;color:#000;border-color:#FFD700;font-weight:bold}
+
+.stats{display:flex;gap:5px;margin-bottom:8px}
+.chip{flex:1;background:#1c2333;border:1px solid #30363d;border-radius:8px;padding:5px 4px;text-align:center;font-size:10px;color:#888}
+.chip b{display:block;font-size:15px;font-weight:bold;color:#eee}
+.chip.g b{color:#39d353}.chip.r b{color:#f78166}.chip.y b{color:#FFD700}
+
+.prow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.plbl{font-size:11px;color:#888;white-space:nowrap}
+.pbar{flex:1;height:4px;background:#30363d;border-radius:99px;overflow:hidden}
+.pfill{height:100%;border-radius:99px;transition:width .3s;background:#FFD700}
+
+/* CARD */
+.card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:16px;min-height:190px;margin-bottom:10px;cursor:pointer;position:relative}
+.card.shown{border-color:#FFD700}
+.cnum{position:absolute;top:10px;right:12px;font-size:10px;color:#555}
+.sbadge{display:inline-block;font-size:9px;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:20px;margin-bottom:10px;border:1px solid}
+.cq{font-size:16px;line-height:1.5;text-align:center;padding:10px 0;color:#eee}
+.chint{text-align:center;color:#555;font-size:12px;margin-top:10px}
+.asec{display:none}
+.card.shown .asec{display:block}
+.card.shown .qsec{display:none}
+.albl{font-size:10px;color:#39d353;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:bold}
+.ans{font-size:13px;line-height:1.78;white-space:pre-wrap;color:#eee}
+.tip-box{border-left:3px solid #FFD700;padding:8px 10px;margin-top:10px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0;background:#0d1a0d}
+.tip-box b{color:#FFD700}
+.stop-box{background:#1a0a0a;border-left:3px solid #f78166;padding:8px 10px;margin-top:8px;font-size:12px;border-radius:0 6px 6px 0}
+.stop-box b{color:#f78166}
+.go-box{background:#0a1a0a;border-left:3px solid #39d353;padding:8px 10px;margin-top:8px;font-size:12px;border-radius:0 6px 6px 0}
+.go-box b{color:#39d353}
+
+/* NAV */
+.nav{display:flex;gap:6px;margin-bottom:8px}
+.btn{flex:1;padding:10px;border-radius:8px;border:1px solid #30363d;background:#1c2333;color:#eee;font-size:12px;font-weight:bold;cursor:pointer}
+.btn:active{opacity:.7}
+.btn.gold{background:#FFD700;color:#000;border-color:#FFD700}
+
+.rbs{display:none;gap:5px;margin-bottom:8px}
+.rbs.show{display:flex}
+.rb{flex:1;padding:8px 2px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;border:1px solid;text-align:center}
+.rb:active{opacity:.7}
+.re{background:#0a2a0a;color:#39d353;border-color:#2a6a2a}
+.ro{background:#0a1a3a;color:#58a6ff;border-color:#1a3a6a}
+.rh{background:#2a1a0a;color:#ffa657;border-color:#5a3a1a}
+.rm{background:#2a0a0a;color:#f78166;border-color:#5a1a1a}
+.rprompt{font-size:11px;color:#888;text-align:center;margin-bottom:6px;display:none}
+.rprompt.show{display:block}
+
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.toolbar span{font-size:11px;color:#888}
+.shuf{padding:4px 10px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:11px;cursor:pointer}
+.done{text-align:center;padding:30px 16px;background:#1c2333;border:1px solid #30363d;border-radius:12px;display:none}
+.done h3{color:#FFD700;font-size:18px;margin-bottom:8px}
+.done p{color:#aaa;font-size:13px;margin-bottom:16px;line-height:1.5}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="home" id="homeScreen">
+  <div class="logo">
+    <h1>🏆 Maximise Predicted Grades<br>in 10–12 Weeks</h1>
+    <p>A* strategy guide for Maths, Biology & Chemistry<br>Tap any section to study the flashcards</p>
+  </div>
+
+  <div class="insight">
+    <div class="label">⭐ The Core Mindset Shift</div>
+    <div class="from">❌ "Read everything slowly and thoroughly"</div>
+    <div class="arrow">↓</div>
+    <div class="to">✅ "Show the teacher you are consistently at A-grade standard — through high-quality output, every session."</div>
+  </div>
+
+  <div class="stop-banner">
+    <h4>🚫 Stop These 5 Low-Efficiency Habits NOW</h4>
+    <div class="stop-item"><span>❌</span><span>Endlessly re-copying notes (passive, no recall)</span></div>
+    <div class="stop-item"><span>❌</span><span>Long passive reading sessions (feels productive, isn't)</span></div>
+    <div class="stop-item"><span>❌</span><span>Just looking at solutions and thinking "I get it"</span></div>
+    <div class="stop-item"><span>❌</span><span>Not reviewing and organising your mistakes</span></div>
+    <div class="stop-item"><span>❌</span><span>Leaving everything to one final cramming session</span></div>
+  </div>
+
+  <div class="sec-hdr sh0">🎯 Section 1 — Strategy & Mindset</div>
+  <div class="dc" onclick="openDeck(0)">
+    <h3><span>🎯</span> What Predicted Grades Really Measure</h3>
+    <p>Understand what teachers actually look for, why output matters more than input, and the key risks to fix right now.</p>
+    <div class="dc-meta">
+      <span class="tag t1">Predicted Grade Logic</span>
+      <span class="tag t2">Output vs Input</span>
+      <span class="tag t6">Key Risks</span>
+    </div>
+    <div class="ob ob0">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh1">📐 Section 2 — Maths Strategy</div>
+  <div class="dc" onclick="openDeck(1)">
+    <h3><span>📐</span> Maths — Lock In the A First</h3>
+    <p>Why Maths is Priority #1, how to eliminate careless errors, and the daily practice system for fast grade improvement.</p>
+    <div class="dc-meta">
+      <span class="tag t2">Priority #1</span>
+      <span class="tag t1">Zero Careless Errors</span>
+      <span class="tag t3">Daily System</span>
+    </div>
+    <div class="ob ob1">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh2">🌿 Section 3 — Biology Strategy</div>
+  <div class="dc" onclick="openDeck(2)">
+    <h3><span>🌿</span> Biology — Fastest Subject to Improve</h3>
+    <p>Why Biology is the quickest grade gain, how to master mark scheme language, and the examiner thinking approach.</p>
+    <div class="dc-meta">
+      <span class="tag t3">Fastest Gain</span>
+      <span class="tag t1">Mark Scheme Language</span>
+      <span class="tag t2">Examiner Thinking</span>
+    </div>
+    <div class="ob ob2">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh3">⚗️ Section 4 — Chemistry Strategy</div>
+  <div class="dc" onclick="openDeck(3)">
+    <h3><span>⚗️</span> Chemistry — Build the System</h3>
+    <p>Why Chemistry needs a structured system, how to use mixed-topic revision, and the Error & Concept Book method.</p>
+    <div class="dc-meta">
+      <span class="tag t4">Needs System</span>
+      <span class="tag t2">Mixed Topics</span>
+      <span class="tag t5">Error Book</span>
+    </div>
+    <div class="ob ob3">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh4">📅 Section 5 — Daily Schedule & Exam Simulation</div>
+  <div class="dc" onclick="openDeck(4)">
+    <h3><span>📅</span> Weekly Plan & Exam Simulation Mode</h3>
+    <p>The daily time allocation, consistency as the key to predicted grades, and the exam simulation schedule for July–August.</p>
+    <div class="dc-meta">
+      <span class="tag t2">Daily Schedule</span>
+      <span class="tag t1">Consistency</span>
+      <span class="tag t5">Exam Simulation</span>
+    </div>
+    <div class="ob ob4">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh5">🔑 Section 6 — The One Most Important Insight</div>
+  <div class="dc" onclick="openDeck(5)">
+    <h3><span>🔑</span> The Single Most Important Truth</h3>
+    <p>What the teacher's feedback actually reveals, the real gap between current and A-grade, and the two things that matter most.</p>
+    <div class="dc-meta">
+      <span class="tag t1">Teacher Feedback</span>
+      <span class="tag t3">Consistency</span>
+      <span class="tag t5">Execution</span>
+    </div>
+    <div class="ob ob5">Open Flashcards →</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="appScreen">
+  <div class="topbar">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div class="app-title" id="appTitle"></div>
+  </div>
+  <div class="stabs" id="stabs"></div>
+  <div class="stats">
+    <div class="chip"><b id="sT">0</b>Cards</div>
+    <div class="chip y"><b id="sD">0</b>Done</div>
+    <div class="chip g"><b id="sE">0</b>Easy</div>
+    <div class="chip r"><b id="sH">0</b>Hard</div>
+  </div>
+  <div class="prow">
+    <span class="plbl" id="plbl">0/0</span>
+    <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
+  </div>
+  <div id="MC">
+    <div class="toolbar">
+      <span id="cardlbl"></span>
+      <button class="shuf" onclick="shuf()">🔀 Shuffle</button>
+    </div>
+    <div class="card" id="CD" onclick="rev()">
+      <span class="cnum" id="CN"></span>
+      <div class="qsec">
+        <span class="sbadge" id="badge"></span>
+        <div class="cq" id="QQ"></div>
+        <div class="chint">👆 Tap to reveal answer</div>
+      </div>
+      <div class="asec">
+        <span class="sbadge" id="badge2"></span>
+        <div class="albl">✅ Answer</div>
+        <div class="ans" id="AA"></div>
+        <div id="TIP" class="tip-box hide"></div>
+        <div id="STOP" class="stop-box hide"></div>
+        <div id="GO" class="go-box hide"></div>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="btn" onclick="go(-1)">← Prev</button>
+      <button class="btn gold" onclick="rev()">👁 Reveal</button>
+      <button class="btn" onclick="go(1)">Next →</button>
+    </div>
+    <div class="rprompt" id="rp">How well did you know this?</div>
+    <div class="rbs" id="RB">
+      <button class="rb re" onclick="rt('e')">✅ Easy</button>
+      <button class="rb ro" onclick="rt('o')">👍 Got it</button>
+      <button class="rb rh" onclick="rt('h')">⚠️ Hard</button>
+      <button class="rb rm" onclick="rt('m')">❌ Missed</button>
+    </div>
+  </div>
+  <div class="done" id="DN">
+    <h3>🎉 Section Complete!</h3>
+    <p>Consistency + execution = A grade. Keep going!</p>
+    <button class="btn gold" style="max-width:200px;margin:0 auto;display:block" onclick="rst()">🔄 Review Again</button>
+  </div>
+</div>
+
+<script>
+// card: [secIdx, question, answer, tip, stop(❌), go(✅)]
+var DECKS=[
+{
+  title:"🎯 Strategy & Mindset",
+  accent:"#FFD700",
+  sections:["📊 Predicted Grade Logic","⚠️ Key Risks","🔄 The Shift"],
+  cards:[
+    [0,"What do predicted grades actually measure?","Predicted grades are NOT a measurement of your final ability.\n\nThey are your teacher's judgement — based on:\n• Your most recent assessment results\n• Your attitude and engagement in class\n• Your trend of improvement over time\n• How stable and consistent your performance is\n\nIn short: the teacher is predicting where you are headed — not where you started.","The teacher is watching your TREND and CONSISTENCY, not just individual scores. A single strong assessment won't move a predicted grade — a pattern of strong performances will.","",""],
+    [0,"What is the core goal for the next 10–12 weeks?","The goal is NOT to re-learn everything from scratch.\n\nThe goal is:\n\nTo show the teacher — through high-quality, consistent output — that you are already operating at A-grade standard.\n\nThis means every piece of homework, every class question, every test, and every correction must reflect A-grade quality and consistency.","Think of it as an ongoing audition. Every interaction with your teacher is evidence for or against an A-grade prediction.","",""],
+    [0,"Why is 'learning content' no longer the primary strategy?","If predictions are finalised in September, there is not enough time to learn everything slowly from scratch.\n\nThe bottleneck is NO LONGER content knowledge — it is:\n• Quality of output in assessments\n• Consistency across performances\n• Ability to write exam-standard answers reliably\n\nThe shift must be from input (reading/learning) to output (writing/performing/producing).","Content knowledge is necessary but not sufficient. The exam rewards students who can PRODUCE knowledge clearly and accurately under pressure — not just those who possess it.","❌ Spending 2 hours passively re-reading your textbook","✅ Spending 45 minutes on past paper questions + mark scheme comparison"],
+    [1,"What are the four main risks that prevent an A-grade right now?","1. OUTPUT INSTABILITY — you know the material but cannot reliably produce it in exam-quality writing.\n2. CARELESS MISTAKES — losing marks on questions you know how to do (especially Maths).\n3. WEAK INTEGRATION — difficulty connecting ideas across topics (especially Chemistry).\n4. CONFIDENCE NOT REFLECTED — ability is there but assessment performance underrepresents it.","The gap between 'knowing it' and 'performing it reliably in exams' is the exact problem to solve in the next 12 weeks.","",""],
+    [1,"Why is output instability the most dangerous risk?","Because it means your knowledge does not translate reliably into marks.\n\nOutput instability means:\n• One strong assessment, one weak one\n• Unable to explain the same concept consistently\n• Answers missing key mark-scheme terms\n• Performance varies with time pressure or stress\n\nThe teacher SEES this instability and cannot confidently predict an A — even if you understand the material.","Stable output = predictable A. Unstable output = cannot be predicted at A — even if the teacher believes in your potential.","",""],
+    [1,"Why do careless mistakes prevent a B→A grade jump in Maths?","In Maths, the gap between a B and an A is very often NOT a difference in ability or understanding.\n\nIt is caused by:\n• Sign errors in algebra\n• Arithmetic slips when working quickly\n• Rushing through final steps\n• Losing track of negatives\n\nA student who understands all the methods but makes 3–4 careless errors per paper can lose 10–15 marks — the exact size of the B→A gap.","Build a 'zero careless errors' habit: always check every line of working before moving on. One minute of checking per question saves multiple marks per paper.","",""],
+    [2,"What is the fundamental shift required in study approach?","BEFORE: Study driven by covering content.\n→ Reading chapters, making notes, completing exercises.\n\nAFTER: Study driven by exam output.\n→ Past paper questions, timed conditions, mark scheme comparison, error analysis.\n\nThe shift is from: 'How much have I read?' to: 'How well can I perform this under exam conditions?'","The only thing that counts in an A Level exam is what you write on the paper in the allotted time. All revision must build towards that specific output.","❌ 'I've read Chapters 4–7 this week'","✅ 'I've completed 8 past paper questions this week, marked them, and identified 3 recurring errors to fix'"],
+    [2,"What is Past Paper Driven Learning and why is it the best strategy now?","Past Paper Driven Learning means:\n1. Use past paper questions as your PRIMARY revision tool — not textbooks.\n2. Attempt each question under exam conditions (timed, no notes).\n3. Mark strictly against the mark scheme.\n4. Identify EXACTLY which marks you lost and why.\n5. Revisit only the specific concepts behind those lost marks.\n\nThis ensures every minute of revision is targeted at what the exam actually rewards — not what feels comfortable to study.","80% of your study time should be on past papers and mark scheme analysis. 20% on revisiting content gaps identified by those papers.","",""]
+  ]
+},
+{
+  title:"📐 Maths — Lock In the A",
+  accent:"#58a6ff",
+  sections:["🥇 Why Priority #1","💡 Daily Method","🎯 Weak Areas","✅ Zero Errors"],
+  cards:[
+    [0,"Why is Maths the highest-priority subject for the next 12 weeks?","Three reasons make Maths Priority #1:\n\n1. CLOSEST TO A — the teacher has indicated you are already close to A-grade in Maths.\n2. FASTEST IMPROVEMENT — Maths grades respond quickly to targeted practice and error correction.\n3. HIGHEST RETURN ON TIME — fixing careless errors and targeting 2–3 weak topics can move you from B to A without learning new material.\n\nPriority does NOT mean spending the most time — it means being most strategic.","Don't try to learn new difficult Maths. The goal is to SECURE the A you're already close to — by fixing errors and stabilising performance.","",""],
+    [0,"What is the Maths target for the next 12 weeks?","Target: STABILISE the A grade — not push for harder material.\n\nThis means:\n• Consistently scoring in the A-grade range across ALL practice papers\n• Zero loss of marks to careless errors\n• Reliable performance on weak topic areas (mechanics, binomial, particle motion)\n• No variance between 'good days' and 'bad days'\n\nAn A is already within reach — the task is to make it consistent, not occasionally brilliant.","'Stable A' beats 'occasional A*'. The teacher needs to see reliable A-grade performance to predict it confidently.","",""],
+    [1,"Describe the ideal daily Maths practice routine (1–1.5 hours).","DAILY MATHS ROUTINE (1–1.5 hours):\n\n1. TIMED PRACTICE (40–50 mins)\n   → Attempt past paper questions under timed conditions\n   → No notes, no solutions visible\n   → One topic or mixed paper depending on the week\n\n2. ERROR CORRECTION (20–25 mins)\n   → Mark every question strictly against the mark scheme\n   → Write down every error in your error log\n   → Identify: was it a concept error or a careless error?\n\n3. WEAK TOPIC TARGETING (10–15 mins)\n   → Drill 3–5 questions specifically on your current weakest topic\n   → Aim for accuracy, then speed","Never skip error correction. Finding and understanding your errors IS the learning — not the initial attempt.","❌ 'I did 2 hours of Maths exercises but didn't check my answers'","✅ 'I did 1 hour: 40 mins timed questions, 20 mins error correction, noting exact mistakes'"],
+    [2,"What are the three priority weak areas to target in Maths?","1. MECHANICS WEAK AREAS\n   → Forces on inclined planes, connected particles, Newton's laws under complex conditions\n   → Drill these specifically until automatic\n\n2. ALGEBRA ACCURACY\n   → Sign errors, fraction manipulation, expanding brackets carefully\n   → Check every algebraic line before moving on\n\n3. BINOMIAL / PULLEY / PARTICLE MOTION PROBLEMS\n   → Common exam question types where errors are frequent\n   → Practise each type until method selection is immediate and execution is clean","Target one weak area per week. Master it fully before moving on. Do not spread attention across all weak areas simultaneously.","",""],
+    [3,"What does 'zero careless errors' mean and how do you build this habit?","Zero careless errors means: NEVER losing marks on questions you know how to do.\n\nCommon careless errors to eliminate:\n• Sign errors: (-) × (-) = (+) mistakes\n• Algebra slips: wrong coefficient when expanding\n• Rushing: skipping steps to save time and making arithmetic mistakes\n• Not reading the question: answering a different version of the question\n\nHow to build the habit:\n→ After every step: read it back before moving to the next\n→ At the end of each question: spend 60 seconds re-checking the whole solution\n→ Circle any step involving negatives or fractions — check these twice","One minute of checking per question. In a 1h 45min Maths paper with ~10 questions, this costs 10 minutes and saves far more in marks.","",""],
+    [3,"How do you distinguish a concept error from a careless error in Maths?","CONCEPT ERROR: You used the wrong method, applied a formula incorrectly, or did not know how to approach the question.\n→ Fix: re-study that topic; redo similar questions from scratch.\n\nCARELESS ERROR: You used the right method but made an arithmetic or algebraic slip during execution.\n→ Fix: build checking habits; slow down execution steps; always verify the final answer makes sense.\n\nTracking the type of error tells you whether to study harder or check more carefully — two very different solutions.","Keep a log of your errors and label each as 'concept' or 'careless'. If more than 30% of your errors are careless — the problem is habits, not knowledge.","",""]
+  ]
+},
+{
+  title:"🌿 Biology — Fastest to Improve",
+  accent:"#39d353",
+  sections:["📈 Why Fastest","📝 Daily Method","🔍 Examiner Thinking","⚠️ Key Warning"],
+  cards:[
+    [0,"Why is Biology the fastest subject to improve grade in?","The teacher has identified that Biology performance is limited primarily by:\n\n1. EXAM WORDING — not using the precise biological language the mark scheme requires\n2. PRECISION — answers that are conceptually correct but too vague to gain marks\n3. QUESTION INTERPRETATION — not responding to command words correctly\n\nThese are NOT knowledge problems.\n\nThey are COMMUNICATION and EXAM TECHNIQUE problems — which are much faster to fix than content gaps.","Biology knowledge is largely there. The grade gap is in HOW answers are written, not WHAT is known. Fix the writing → fix the grade.","",""],
+    [0,"What is the ideal daily Biology study routine?","DAILY BIOLOGY ROUTINE (45 mins – 1 hour):\n\n30–45 MINUTES — Active Recall:\n• Blurting: write everything you remember about a topic on a blank page\n• Flashcards: keyword definitions and mechanisms\n• Keyword recall: produce precise biological terms from memory\n\n+ 2–3 TIMES PER WEEK — Past Paper Questions:\n• Attempt exam questions under timed conditions\n• Mark STRICTLY against the mark scheme\n• Circle every mark-scheme term you missed\n• Do NOT accept 'close enough' — if it's not the exact term, it's a lost mark","The mark scheme is the most important document in Biology revision. Read it more carefully than the textbook.","❌ 'I read my notes on the immune system and I think I understand it'","✅ 'I wrote out the immune response from memory, marked it against the mark scheme, and identified 3 missing key terms'"],
+    [1,"What are the three Biology command words and what does each require?","1. DESCRIBE — state what happens, in sequence, with accurate biological terms. No explanation of why needed.\n   Example: 'Describe the cardiac cycle' → list the stages in order with specific terms.\n\n2. EXPLAIN — state what happens AND give the reason why. Link structure to function or cause to effect.\n   Example: 'Explain why the left ventricle has a thicker wall' → state the fact + give the mechanistic reason.\n\n3. EVALUATE — give evidence/arguments FOR and AGAINST, then make a reasoned judgement.\n   Example: 'Evaluate the use of statins' → benefits + limitations + overall conclusion.","Every Biology question must be read for its command word FIRST. Answering 'describe' with an explanation, or 'explain' without a reason, loses marks immediately.","",""],
+    [1,"What does 'examiner thinking' mean in Biology and how do you develop it?","Examiner thinking means approaching every answer by asking:\n'What specific words and phrases is the mark scheme looking for in this answer?'\n\nInstead of asking: 'Do I understand this topic?'\n\nTo develop it:\n1. Regularly read mark schemes BEFORE looking at model answers\n2. Identify the specific biological terms rewarded\n3. Note which terms appear repeatedly across different papers\n4. Build a 'mark scheme vocabulary' for each major topic\n5. Always write answers using those exact terms","The Biology examiner marks what IS written on the paper against the mark scheme — not what the student intended to write. Precision in language = marks.","",""],
+    [2,"What is the single most important Biology habit to build?","STOP thinking: 'I know this topic.'\nSTART proving it: 'I can write a complete, mark-scheme-accurate answer without looking at my notes.'\n\nThe three-step proof:\n1. WRITE IT OUT — produce a full answer to a past paper question from memory\n2. COMPARE TO MARK SCHEME — mark it strictly, mark for mark\n3. IDENTIFY LOST MARKS — find exactly which terms or points you missed\n\nRepeat this cycle for every major topic until you consistently score full marks.","The feeling of 'knowing it' and the ability to 'write it precisely in an exam' are two different skills. Build the second one explicitly.","❌ 'I feel confident about photosynthesis — I've read it several times'","✅ 'I wrote out the light-dependent reactions from memory and scored 7/9 marks against the mark scheme. I missed phosphorylation and the role of plastocyanin.'"],
+    [3,"What are the most commonly lost Biology marks and how to prevent them?","MOST COMMONLY LOST BIOLOGY MARKS:\n\n1. Using vague language instead of specific biological terms\n   Fix: build a mark-scheme vocabulary for every topic\n\n2. Missing a point in a describe/explain sequence\n   Fix: practise writing EVERY step from memory; use numbered lists in recall sessions\n\n3. Wrong command word response (e.g. describing when asked to explain)\n   Fix: read the command word first, before reading the rest of the question\n\n4. Incomplete evaluations (only one side argued)\n   Fix: always write points FOR and AGAINST, then a conclusion","Keep a 'lost marks log' for Biology. After every past paper, write down every mark you lost and why. Review this log weekly.","",""]
+  ]
+},
+{
+  title:"⚗️ Chemistry — Build the System",
+  accent:"#d2a8ff",
+  sections:["🏗 Why Needs System","🔄 Mixed Topic Revision","📓 Error & Concept Book","✅ High Score Habit"],
+  cards:[
+    [0,"Why does Chemistry require a structured system more than the other subjects?","Chemistry underperformance is almost always caused by three interconnected problems:\n\n1. CONSOLIDATION — individual topics feel understood but don't stay in memory\n2. INTEGRATION — difficulty connecting related chemistry concepts across topics\n3. RETENTION — learning something, then finding it gone a week later\n\nThese problems cannot be solved by studying harder within one topic.\n\nThey require a SYSTEM that builds connections and reinforces retention over time.","Chemistry at A Level is not a collection of separate topics. It is one large, interconnected system. You must revise it as a system.","",""],
+    [0,"Why is mixed-topic revision essential for Chemistry (not single-topic revision)?","A Level Chemistry examination questions routinely combine concepts from multiple topics in a single question — this tests integration, not isolation.\n\nStudying one topic in isolation prepares you for that topic in isolation — but not for how the exam uses it.\n\nMixed-topic revision (e.g. combining rates, equilibrium, and thermodynamics in one session) trains the integration skill that the exam actually tests.\n\nExample: an exam question on industrial processes may require rates, equilibrium, enthalpy, and atom economy — all in one answer.","After every 4 weeks of topic-by-topic study, run 2 weeks of mixed-topic revision sessions to build integration. Do not skip this.","❌ 'Monday: acids only. Tuesday: kinetics only. Wednesday: organic only.'","✅ 'Each session includes 2–3 connected topics, or a mixed past paper covering multiple areas.'"],
+    [1,"Describe the ideal Chemistry Error & Concept Book system.","THE ERROR & CONCEPT BOOK:\n\nEvery time you make a Chemistry mistake (in a practice question, past paper, or flashcard):\n\nWrite a new entry with THREE parts:\n\n1. ERROR REASON (Why did I get this wrong?)\n   → 'I used the wrong sign in the enthalpy calculation for the reverse reaction'\n\n2. CORRECT CONCEPT (What is actually correct?)\n   → 'Reversing a reaction changes the sign of ΔH: if forward = −285 kJ/mol, reverse = +285 kJ/mol'\n\n3. HOW TO AVOID (What will I do differently?)\n   → 'When reversing a reaction, immediately write ΔH(rev) = −ΔH(fwd) as a first step'","The Error Book only works if you read it before EVERY Chemistry session. It takes 5 minutes at the start. This 5 minutes prevents hours of repeating the same mistakes.","",""],
+    [1,"How do you use the Error & Concept Book in practice?","WEEKLY ERROR BOOK ROUTINE:\n\n1. START OF EVERY SESSION (5 mins)\n   → Read your last 5–10 entries before beginning any new work\n   → This keeps recent errors fresh in memory\n\n2. AFTER EVERY PRACTICE QUESTION SET\n   → Add new entries for every mistake made\n   → Do not add vague entries: be specific about what went wrong and the exact correction\n\n3. WEEKLY FULL REVIEW (15 mins)\n   → Read all entries from the past week\n   → Mark any that you are now confident about with a tick\n   → Focus extra attention on any entry that appeared more than once","If the same error appears in your book twice → this is your highest-priority revision topic until it is fully resolved.","",""],
+    [2,"What is the key difference between high-scoring and average Chemistry students?","THE SINGLE BIGGEST DIFFERENCE:\n\nHigh-scoring Chemistry students do NOT make the same mistake twice.\n\nAverage students:\n• Make an error → feel frustrated → move on\n• Make the same error again in the next paper\n• Never systematically address it\n\nHigh-scoring students:\n• Make an error → record it with full analysis → create a specific action to fix it\n• Review that error repeatedly until it is gone\n• Rarely make that error again\n\nThe Error & Concept Book is the tool that creates this difference in practice.","You are allowed to make every mistake once. You are not allowed to make it twice if you are serious about an A.","",""],
+    [2,"What should a Chemistry weekly revision session look like?","CHEMISTRY WEEKLY STRUCTURE (1–1.25 hrs daily):\n\nMONDAY/WEDNESDAY: TOPIC REVISION\n→ Specific topic (e.g. electrode potentials)\n→ Active recall → past paper questions on that topic → mark scheme\n\nTUESDAY/THURSDAY: MIXED REVISION\n→ 2–3 connected topics combined\n→ Practise questions that require integration\n\nFRIDAY: ERROR REVIEW + WEAK SPOT DRILL\n→ Full Error Book review\n→ Target the 2–3 weakest areas identified during the week\n\nWEEKEND: PAST PAPER (timed)\n→ Full or half paper under exam conditions\n→ Mark scheme comparison + new Error Book entries","Never have two consecutive sessions on the same isolated topic. Chemistry's connections are what the exam tests.","",""]
+  ]
+},
+{
+  title:"📅 Schedule & Exam Simulation",
+  accent:"#ffa657",
+  sections:["🕐 Daily Schedule","📈 Consistency First","🎮 Exam Simulation"],
+  cards:[
+    [0,"What is the recommended daily time allocation for the three subjects?","DAILY STUDY SCHEDULE (weekdays):\n\n📐 MATHS: 1 – 1.5 hours\n→ Timed practice → error correction → weak topic drill\n\n⚗️ CHEMISTRY: 1 – 1.25 hours\n→ Mixed-topic revision → past paper questions → Error Book update\n\n🌿 BIOLOGY: 45 mins – 1 hour\n→ Active recall (blurting/flashcards) → 2-3× per week: past paper questions + mark scheme\n\nTOTAL: approximately 3 – 3.75 hours per weekday\n\nKEY PRINCIPLE: Short but maximally focused sessions.\nLong, unfocused study sessions are especially dangerous in STEM subjects.","If concentration drops, STOP. A 90-minute focused session outperforms a 3-hour unfocused session. Quality of attention is the variable that matters most.","",""],
+    [0,"Why is 'short but focused' better than 'long but unfocused' for STEM?","STEM subjects require active problem-solving and working memory at full capacity.\n\nWhen concentration drops:\n• Errors go unnoticed (reinforcing wrong methods)\n• Connections between concepts fail to form\n• Recall during revision becomes inaccurate\n• Study feels productive but produces no real learning\n\nA 45-minute session with full focus:\n✓ All errors noticed and corrected\n✓ Concepts actively connected\n✓ Real progress per unit of time\n\nA 3-hour session with low focus:\n✗ Errors reinforced\n✗ False sense of productivity\n✗ Poor return on time invested","Use the Pomodoro technique: 25 minutes focused → 5 minute break → repeat. After 4 cycles, take a 20–30 minute break.","",""],
+    [1,"Why is consistency more important than occasional brilliance for predicted grades?","Teachers making predicted grade decisions are most worried by INCONSISTENCY:\n• One excellent assessment, one very poor one\n• Strong performance when engaged, weak when tired\n• Fluctuating homework quality\n\nThis inconsistency signals to the teacher that the student is not yet reliably operating at A-grade standard.\n\nThe goal is NOT to produce one outstanding performance.\n\nThe goal is to demonstrate A-grade standard behaviour EVERY TIME — in homework, questions, corrections, and assessments.","Think of it as 'A-grade mode' — a consistent state you maintain, not a peak you occasionally reach.","",""],
+    [1,"What does A-grade behaviour look like in day-to-day school life?","A-GRADE BEHAVIOUR (every day, not just assessments):\n\n✅ HOMEWORK QUALITY — every piece of homework submitted at the highest standard you can produce\n✅ ASKING QUESTIONS — engaging visibly in class; asking specific, thoughtful questions\n✅ CORRECTIONS — returning corrected work promptly, with genuine errors addressed\n✅ ASSESSMENT STABILITY — no variance between strong and weak papers\n✅ CLASS ENGAGEMENT — actively participating; the teacher can see you are switched on\n\nEvery one of these creates positive evidence for a predicted A.","The teacher's predicted grade is a holistic impression built over months. Control every dimension you can — don't just focus on test scores.","",""],
+    [2,"What is the Exam Simulation Schedule and when should it begin?","EXAM SIMULATION SCHEDULE (begin in July–August):\n\nFREQUENCY: One full timed paper per week, per subject where possible\n\nCONDITIONS:\n• Strict timing — no extra time beyond the allocated paper time\n• No notes, no textbook, no phone\n• Full exam pressure simulated\n• Written on paper (not typed), using the same format as the real exam\n\nAFTER EACH SIMULATION:\n• Mark strictly against the mark scheme\n• Log every lost mark with reason\n• Add Chemistry errors to Error Book\n• Log Biology missed key terms\n• Log Maths careless vs concept errors\n\nThis builds exam stamina, time management, and comfort under pressure.","Exam day should feel familiar — like the 12th time you've sat that paper, not the first. Simulation makes the real exam feel routine.","",""],
+    [2,"What does 'recent evidence' mean in the context of predicted grades?","When teachers finalise predicted grades, they give the most weight to RECENT evidence — your most recent assessments, most recent homework, and most recent classroom engagement.\n\nThis means:\n• A strong performance in July carries more weight than a poor March result\n• Consistent improvement trend is more valuable than one early high score\n• Recent corrections and homework quality will be visible and noted\n\nTherefore: the final 4–6 weeks before predictions are finalised are DISPROPORTIONATELY important.","The most valuable thing you can do RIGHT NOW is make the next 4–6 weeks of evidence consistently A-grade. Recent = highest weight.","",""]
+  ]
+},
+{
+  title:"🔑 The One Most Important Truth",
+  accent:"#f78166",
+  sections:["💪 What The Feedback Says","🎯 The Real Gap","🏆 The Final Message"],
+  cards:[
+    [0,"What does the teacher's feedback actually reveal about your position?","Looking at the teacher's feedback across all three subjects, three facts are clear:\n\n1. FOUNDATION IS THERE — you have the fundamental knowledge in all three subjects\n2. POTENTIAL IS REAL — all three teachers see capability and believe improvement is possible\n3. TEACHER CONFIDENCE EXISTS — none of the teachers have written you off; they see progress\n\nThis means: you are NOT starting from zero.\n\nYou are already close to the grade you need — in all three subjects.","The teacher feedback is not a criticism of ability. It is a precise diagnostic of what is missing between current performance and A-grade performance. The gap is smaller than it feels.","",""],
+    [0,"What are the only two things separating current performance from an A grade?","Across all three subjects, the teacher's feedback points to exactly two things:\n\n1. CONSISTENCY — reliable, stable performance across every assessment, homework, and class interaction; not just occasional good results\n\n2. EXECUTION — the ability to produce high-quality, mark-scheme-accurate output reliably, under timed exam conditions, on any topic\n\nThat is the entire gap.\n\nNot ability. Not content knowledge. Not intelligence.\n\nConsistency + execution.","This is the most important insight: the A grade is not far away. What stands between you and it is consistency and execution — both of which are learnable habits, not fixed traits.","",""],
+    [1,"Why is it important to understand that the gap is 'consistency + execution' and NOT ability?","Because it changes what you do next.\n\nIf the gap were ABILITY → the solution would be to study more content for longer.\n\nBut since the gap is CONSISTENCY + EXECUTION → the solution is:\n• Past paper practice (not textbook reading)\n• Error analysis (not content revision)\n• Exam simulation (not note-taking)\n• Checking habits in Maths (not learning new methods)\n• Mark-scheme language in Biology (not re-reading theory)\n• Error Book in Chemistry (not studying new topics)\n\nKnowing the real problem ensures you solve the right problem.","The most common student mistake: working harder on the wrong thing. Consistency and execution problems require practice and habit-building — not more content input.","",""],
+    [1,"What does the most efficient use of the next 12 weeks look like?","THE MOST EFFICIENT 12-WEEK PLAN:\n\nWeeks 1–4: BUILD THE SYSTEM\n→ Establish daily routines for all three subjects\n→ Start Error Book for Chemistry\n→ Begin past paper practice for Biology with mark scheme comparison\n→ Daily timed Maths with error correction\n\nWeeks 5–8: DEEPEN AND STABILISE\n→ Identify remaining weak areas through past paper evidence\n→ Target weak areas systematically (one per week, per subject)\n→ Build consistency in homework and class quality\n\nWeeks 9–12: SIMULATE AND SECURE\n→ Full weekly timed past papers under exam conditions\n→ Focus on zero careless errors (Maths), precise language (Biology), concept integration (Chemistry)\n→ Make every piece of evidence in the final 4 weeks A-grade quality","The system is not complicated. The challenge is executing it consistently, every day, for 12 weeks. That consistency IS the qualification for the A.","",""],
+    [2,"What is the single most important thing to prove to the teacher — and how?","THE ONE THING TO PROVE:\n\n'I am now consistently working at A-grade standard.'\n\nHow to prove it:\n• Every homework submitted: highest possible quality\n• Every assessment: stable, strong performance with minimal errors\n• Every class: visible engagement and specific questions\n• Every correction: returned promptly with genuine understanding\n• Every past paper: improving marks, shrinking error count\n\nThe teacher does not need to hear that you are trying hard.\n\nThe teacher needs to SEE — in writing, in assessments, and in class — that you have already arrived at A-grade standard.","'Trying hard' and 'performing at A-grade standard' are two different things. Only the second one influences a predicted grade. Show results, not effort.","",""],
+    [2,"What is the final message — one sentence that captures everything?","The teacher's feedback shows that across all three subjects:\n\n• The foundation is there\n• The potential is real\n• The teacher believes in the capability\n\nThe only thing missing is:\n\nConsistency + execution\n\nSo the strategy is simple:\n\nUse the most efficient methods — past papers, error analysis, active recall, exam simulation — to demonstrate A-grade output consistently, across all three subjects, for the next 12 weeks.\n\nNot to prove how hard you work.\n\nBut to make it undeniable that you already belong at A-grade.","This is not about proving intelligence or working endless hours. It is about making A-grade behaviour so visible and consistent that the teacher has no choice but to predict it.","",""]
+  ]
+}
+];
+
+// ═══ STATE ═══
+var curDeck=null,curSec=0,curIdx=0,shown=false,deck=[],ratings={},easy=0,hard=0,done=0;
+
+function openDeck(n){
+  curDeck=n;curSec=0;curIdx=0;shown=false;easy=0;hard=0;done=0;ratings={};
+  document.getElementById('homeScreen').style.display='none';
+  document.getElementById('appScreen').style.display='block';
+  document.getElementById('appTitle').textContent=DECKS[n].title;
+  document.getElementById('pfill').style.background=DECKS[n].accent;
+  document.getElementById('DN').style.display='none';
+  document.getElementById('MC').style.display='block';
+  mkDeck();renderTabs();renderCard();
+}
+function goHome(){
+  document.getElementById('homeScreen').style.display='block';
+  document.getElementById('appScreen').style.display='none';
+}
+function mkDeck(){
+  deck=[];
+  DECKS[curDeck].cards.forEach(function(c,i){if(c[0]===curSec)deck.push(i);});
+}
+function renderTabs(){
+  var secs=DECKS[curDeck].sections;
+  var cards=DECKS[curDeck].cards;
+  var h='';
+  secs.forEach(function(s,i){
+    var cnt=0;cards.forEach(function(c){if(c[0]===i)cnt++;});
+    h+='<span class="stab'+(i===curSec?' on':'')+'" onclick="sw('+i+')">'+s+' ('+cnt+')</span>';
+  });
+  document.getElementById('stabs').innerHTML=h;
+}
+function renderCard(){
+  if(!deck.length)return;
+  var cards=DECKS[curDeck].cards;
+  var secs=DECKS[curDeck].sections;
+  var gi=deck[curIdx];
+  var c=cards[gi];
+  var acc=DECKS[curDeck].accent;
+  document.getElementById('CN').textContent=(curIdx+1)+' / '+deck.length;
+  ['badge','badge2'].forEach(function(id){
+    var el=document.getElementById(id);
+    el.textContent=secs[c[0]];
+    el.style.cssText='background:#1c2333;border-color:'+acc+';color:'+acc;
+  });
+  document.getElementById('QQ').textContent=c[1];
+  document.getElementById('AA').textContent=c[2];
+  var tip=document.getElementById('TIP');
+  if(c[3]&&c[3].length){tip.innerHTML='<b>💡 Key Insight:</b> '+c[3];tip.className='tip-box';}else{tip.className='tip-box hide';}
+  var stop=document.getElementById('STOP');
+  if(c[4]&&c[4].length){stop.innerHTML='<b>❌ Wrong approach:</b> '+c[4];stop.className='stop-box';}else{stop.className='stop-box hide';}
+  var go=document.getElementById('GO');
+  if(c[5]&&c[5].length){go.innerHTML='<b>✅ Right approach:</b> '+c[5];go.className='go-box';}else{go.className='go-box hide';}
+
+  var cd=document.getElementById('CD');
+  cd.className=shown?'card shown':'card';
+  cd.style.borderColor=shown?acc:'#30363d';
+  document.getElementById('RB').className=shown?'rbs show':'rbs';
+  document.getElementById('rp').className=shown?'rprompt show':'rprompt';
+  document.getElementById('cardlbl').textContent='Card '+(curIdx+1)+' of '+deck.length;
+  document.getElementById('DN').style.display='none';
+  document.getElementById('MC').style.display='block';
+  var total=DECKS[curDeck].cards.length;
+  document.getElementById('sT').textContent=total;
+  document.getElementById('sD').textContent=done;
+  document.getElementById('sE').textContent=easy;
+  document.getElementById('sH').textContent=hard;
+  document.getElementById('plbl').textContent=done+' / '+total;
+  document.getElementById('pfill').style.width=Math.round(done/total*100)+'%';
+}
+function rev(){if(!shown){shown=true;renderCard();}}
+function go(d){shown=false;curIdx+=d;if(curIdx<0)curIdx=deck.length-1;if(curIdx>=deck.length)curIdx=0;renderCard();}
+function rt(r){
+  done++;if(r==='e'||r==='o')easy++;else hard++;
+  shown=false;curIdx++;
+  if(curIdx>=deck.length){
+    curIdx=0;
+    if(deck.every(function(gi){return ratings[gi];})){
+      document.getElementById('MC').style.display='none';
+      document.getElementById('DN').style.display='block';return;
+    }
+  }
+  ratings[deck[curIdx-1]]=r;renderCard();
+}
+function sw(n){curSec=n;curIdx=0;shown=false;mkDeck();renderTabs();document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function rst(){curIdx=0;shown=false;document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function shuf(){deck.sort(function(){return Math.random()-.5;});curIdx=0;shown=false;renderCard();}
+</script>
+</body>
+</html>
