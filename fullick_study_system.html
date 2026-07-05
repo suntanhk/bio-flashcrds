@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fullick Biology B — Study System</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#0d1117;color:#eee;font-family:Arial,sans-serif;padding:10px;font-size:15px;min-height:100vh}
+
+/* HOME */
+.home{max-width:540px;margin:0 auto;padding:10px 0 40px}
+.logo{text-align:center;margin-bottom:14px;padding:18px 14px;background:linear-gradient(135deg,#1c2333,#0d1117);border-radius:14px;border:1px solid #58a6ff}
+.logo h1{color:#58a6ff;font-size:18px;font-weight:bold;margin-bottom:5px;line-height:1.4}
+.logo .sub{color:#FFD700;font-size:12px;font-weight:bold;margin-top:4px}
+.logo p{color:#888;font-size:11px;line-height:1.6;margin-top:4px}
+
+/* KEY INSIGHT BANNER */
+.insight{background:#0d1a2a;border:1px solid #58a6ff;border-radius:12px;padding:13px;margin-bottom:13px}
+.insight .label{font-size:10px;color:#58a6ff;text-transform:uppercase;letter-spacing:.1em;font-weight:bold;margin-bottom:8px}
+.insight .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.insight .from{background:#2a0a0a;color:#f78166;padding:6px 10px;border-radius:8px;font-size:11px;flex:1;min-width:130px;line-height:1.4}
+.insight .arrow{color:#FFD700;font-size:15px;font-weight:bold;flex-shrink:0}
+.insight .to{background:#0a1a2a;color:#58a6ff;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:bold;flex:1;min-width:130px;line-height:1.4}
+
+/* TOPIC MAP */
+.topicmap{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:12px;margin-bottom:14px}
+.topicmap h4{color:#FFD700;font-size:12px;margin-bottom:8px;font-weight:bold}
+.tm-row{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+.tm-chip{font-size:10px;padding:4px 8px;border-radius:6px;line-height:1.4;flex:1;min-width:100px}
+.tm-core{background:#1f3a5f;color:#58a6ff;border:1px solid #2a4a7f}
+.tm-imp{background:#1a3a1a;color:#39d353;border:1px solid #2a5a2a}
+.tm-base{background:#2a2a1a;color:#ffa657;border:1px solid #4a3a1a}
+
+/* SECTION HEADERS */
+.sec-hdr{font-size:12px;font-weight:bold;padding:8px 12px;border-radius:10px;margin-bottom:10px;margin-top:14px}
+.sh0{background:#1f3a5f;color:#58a6ff}
+.sh1{background:#1a3a1a;color:#39d353}
+.sh2{background:#2a1a3a;color:#d2a8ff}
+.sh3{background:#3a2a0a;color:#FFD700}
+.sh4{background:#2a0a1a;color:#f78166}
+.sh5{background:#1a2a1a;color:#39d353}
+
+/* DECK CARDS */
+.dc{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:13px;margin-bottom:10px;cursor:pointer}
+.dc:active{opacity:.8}
+.dc h3{font-size:13px;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.dc p{color:#aaa;font-size:11px;line-height:1.5;margin-bottom:8px}
+.dc-meta{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:bold}
+.t1{background:#1f3a5f;color:#58a6ff}
+.t2{background:#1a3a1a;color:#39d353}
+.t3{background:#3a2a0a;color:#FFD700}
+.t4{background:#2a1a3a;color:#d2a8ff}
+.t5{background:#2a0a0a;color:#f78166}
+.t6{background:#3a1a0a;color:#ffa657}
+.ob{display:block;width:100%;padding:8px;border-radius:8px;border:none;font-size:12px;font-weight:bold;cursor:pointer;text-align:center}
+.ob0{background:#58a6ff;color:#000}
+.ob1{background:#39d353;color:#000}
+.ob2{background:#d2a8ff;color:#000}
+.ob3{background:#FFD700;color:#000}
+.ob4{background:#f78166;color:#000}
+.ob5{background:#ffa657;color:#000}
+
+/* APP */
+.app{display:none;max-width:600px;margin:0 auto}
+.topbar{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #30363d}
+.back{padding:5px 12px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:12px;cursor:pointer}
+.back:active{opacity:.7}
+.app-title{font-size:12px;font-weight:bold;color:#FFD700;flex:1;line-height:1.3}
+
+.stabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.stab{padding:5px 9px;background:#1c2333;border:1px solid #30363d;border-radius:20px;color:#aaa;cursor:pointer;font-size:11px}
+.stab.on{background:#FFD700;color:#000;border-color:#FFD700;font-weight:bold}
+
+.stats{display:flex;gap:5px;margin-bottom:8px}
+.chip{flex:1;background:#1c2333;border:1px solid #30363d;border-radius:8px;padding:5px 4px;text-align:center;font-size:10px;color:#888}
+.chip b{display:block;font-size:15px;font-weight:bold;color:#eee}
+.chip.g b{color:#39d353}.chip.r b{color:#f78166}.chip.y b{color:#FFD700}
+
+.prow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.plbl{font-size:11px;color:#888;white-space:nowrap}
+.pbar{flex:1;height:4px;background:#30363d;border-radius:99px;overflow:hidden}
+.pfill{height:100%;border-radius:99px;transition:width .3s;background:#58a6ff}
+
+.card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:16px;min-height:190px;margin-bottom:10px;cursor:pointer;position:relative}
+.card.shown{border-color:#58a6ff}
+.cnum{position:absolute;top:10px;right:12px;font-size:10px;color:#555}
+.sbadge{display:inline-block;font-size:9px;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:20px;margin-bottom:10px;border:1px solid}
+.cq{font-size:15px;line-height:1.5;text-align:center;padding:10px 0;color:#eee}
+.chint{text-align:center;color:#555;font-size:12px;margin-top:10px}
+.asec{display:none}
+.card.shown .asec{display:block}
+.card.shown .qsec{display:none}
+.albl{font-size:10px;color:#39d353;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:bold}
+.ans{font-size:13px;line-height:1.78;white-space:pre-wrap;color:#eee}
+.tip-box{border-left:3px solid #FFD700;padding:8px 10px;margin-top:10px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0;background:#0d1a0d}
+.tip-box b{color:#FFD700}
+.exam-box{border-left:3px solid #f78166;padding:8px 10px;margin-top:8px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0;background:#1a0a0a}
+.exam-box b{color:#f78166}
+.prompt-box{border-left:3px solid #d2a8ff;padding:8px 10px;margin-top:8px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0;background:#1a0a2a;font-family:monospace;line-height:1.7}
+.prompt-box b{color:#d2a8ff}
+
+.nav{display:flex;gap:6px;margin-bottom:8px}
+.btn{flex:1;padding:10px;border-radius:8px;border:1px solid #30363d;background:#1c2333;color:#eee;font-size:12px;font-weight:bold;cursor:pointer}
+.btn:active{opacity:.7}
+.btn.gold{background:#FFD700;color:#000;border-color:#FFD700}
+.rbs{display:none;gap:5px;margin-bottom:8px}
+.rbs.show{display:flex}
+.rb{flex:1;padding:8px 2px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;border:1px solid;text-align:center}
+.rb:active{opacity:.7}
+.re{background:#0a2a0a;color:#39d353;border-color:#2a6a2a}
+.ro{background:#0a1a3a;color:#58a6ff;border-color:#1a3a6a}
+.rh{background:#2a1a0a;color:#ffa657;border-color:#5a3a1a}
+.rm{background:#2a0a0a;color:#f78166;border-color:#5a1a1a}
+.rprompt{font-size:11px;color:#888;text-align:center;margin-bottom:6px;display:none}
+.rprompt.show{display:block}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.toolbar span{font-size:11px;color:#888}
+.shuf{padding:4px 10px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:11px;cursor:pointer}
+.done{text-align:center;padding:30px 16px;background:#1c2333;border:1px solid #30363d;border-radius:12px;display:none}
+.done h3{color:#FFD700;font-size:18px;margin-bottom:8px}
+.done p{color:#aaa;font-size:13px;margin-bottom:16px;line-height:1.5}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="home" id="homeScreen">
+  <div class="logo">
+    <h1>📖 Edexcel AS Biology B<br>Fullick Student Book 1 — Study System</h1>
+    <div class="sub">Ann Fullick (2015) · 318 pages · 4 Topics · 10 Core Practicals</div>
+    <p>Master the book structure, pre-reading system, Claude prompts, and key exam content</p>
+  </div>
+
+  <div class="insight">
+    <div class="label">⭐ The Most Important Discovery</div>
+    <div class="row">
+      <div class="from">❌ Reading from line 1 to the last line (slow, inefficient)</div>
+      <div class="arrow">→</div>
+      <div class="to">✅ Read BACKWARDS: goal → exam Qs → headings → diagrams → text (2× faster)</div>
+    </div>
+  </div>
+
+  <!-- TOPIC MAP -->
+  <div class="topicmap">
+    <h4>📚 Fullick Book 1 — 4 Topics at a Glance</h4>
+    <div class="tm-row">
+      <div class="tm-chip tm-core">Topic 1 · Biological Molecules (pp.8–66) AS + A2</div>
+      <div class="tm-chip tm-core">Topic 2 · Cells & Viruses (pp.68–148) January exam focus</div>
+    </div>
+    <div class="tm-row">
+      <div class="tm-chip tm-imp">Topic 3 · Classification (pp.150–208) Spring exam</div>
+      <div class="tm-chip tm-core">Topic 4 · Exchange & Transport (pp.210–292) Largest unit</div>
+    </div>
+    <div style="font-size:10px;color:#888;margin-top:6px">🔴 Core = must-exam every year · 🟢 Important = commonly tested · 🟡 Foundation = occasional</div>
+  </div>
+
+  <div class="sec-hdr sh0">📖 Section 1 — Fullick Page Structure</div>
+  <div class="dc" onclick="openDeck(0)">
+    <h3><span>📖</span> Know the Book — 6 Fixed Elements</h3>
+    <p>Every section of Fullick has the same 6 structural elements. Master these and you know exactly where to look — and what to skip.</p>
+    <div class="dc-meta">
+      <span class="tag t1">Learning Objectives</span>
+      <span class="tag t2">Section Headings</span>
+      <span class="tag t3">Learning Tips</span>
+      <span class="tag t4">Bold Terms</span>
+    </div>
+    <div class="ob ob0">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh1">⚡ Section 2 — 5-Step Pre-Reading System</div>
+  <div class="dc" onclick="openDeck(1)">
+    <h3><span>⚡</span> 12-Minute Pre-Reading Protocol (5 Steps)</h3>
+    <p>Read any Fullick section in 15–20 mins instead of 35–40. This 5-step system builds your knowledge skeleton before reading a single line of body text.</p>
+    <div class="dc-meta">
+      <span class="tag t2">Step-by-Step</span>
+      <span class="tag t1">12 Minutes Total</span>
+      <span class="tag t3">Pre-Reading Checklist</span>
+    </div>
+    <div class="ob ob1">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh2">🤖 Section 3 — Claude Prompt Templates</div>
+  <div class="dc" onclick="openDeck(2)">
+    <h3><span>🤖</span> Claude Prompts for Every Study Scenario</h3>
+    <p>4 ready-to-use prompt templates for pre-reading, vocabulary, exam-type preview, and cross-topic linking. Copy and use immediately.</p>
+    <div class="dc-meta">
+      <span class="tag t4">Prompt Templates</span>
+      <span class="tag t1">4 Scenarios</span>
+      <span class="tag t2">Copy & Use</span>
+    </div>
+    <div class="ob ob2">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh3">🧬 Section 4 — Protein Structure (Core Exam Content)</div>
+  <div class="dc" onclick="openDeck(3)">
+    <h3><span>🧬</span> Protein Structure — 4 Levels Deep (pp.28–30)</h3>
+    <p>Primary, secondary, tertiary, quaternary — with analogies, bond types, and the #1 Edexcel exam trap that most students fall into.</p>
+    <div class="dc-meta">
+      <span class="tag t3">核心必考 CORE</span>
+      <span class="tag t2">4 Levels</span>
+      <span class="tag t5">Exam Traps</span>
+    </div>
+    <div class="ob ob3">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh4">🩸 Section 5 — Sickle Cell Disease (Applied Genetics)</div>
+  <div class="dc" onclick="openDeck(4)">
+    <h3><span>🩸</span> Sickle Cell Disease — Complete Causal Chain (pp.50–51)</h3>
+    <p>How one DNA base substitution changes protein structure and destroys function. The complete 5-step causal chain every Edexcel student must master.</p>
+    <div class="dc-meta">
+      <span class="tag t5">Gene Mutation</span>
+      <span class="tag t3">Causal Chain</span>
+      <span class="tag t4">Glu → Val</span>
+    </div>
+    <div class="ob ob4">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh5">📋 Section 6 — Pre-Reading Checklist</div>
+  <div class="dc" onclick="openDeck(5)">
+    <h3><span>📋</span> Pre-Reading Checklist — 12 Minutes, 9 Steps</h3>
+    <p>The complete tick-list to complete before reading any Fullick section. All 9 steps in order — Part 1: Book (8 mins) + Part 2: Claude (4 mins).</p>
+    <div class="dc-meta">
+      <span class="tag t2">8 min Book Prep</span>
+      <span class="tag t4">4 min Claude</span>
+      <span class="tag t3">Tick Every Step</span>
+    </div>
+    <div class="ob ob5">Open Flashcards →</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="appScreen">
+  <div class="topbar">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div class="app-title" id="appTitle"></div>
+  </div>
+  <div class="stabs" id="stabs"></div>
+  <div class="stats">
+    <div class="chip"><b id="sT">0</b>Cards</div>
+    <div class="chip y"><b id="sD">0</b>Done</div>
+    <div class="chip g"><b id="sE">0</b>Easy</div>
+    <div class="chip r"><b id="sH">0</b>Hard</div>
+  </div>
+  <div class="prow">
+    <span class="plbl" id="plbl">0/0</span>
+    <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
+  </div>
+  <div id="MC">
+    <div class="toolbar">
+      <span id="cardlbl"></span>
+      <button class="shuf" onclick="shuf()">🔀 Shuffle</button>
+    </div>
+    <div class="card" id="CD" onclick="rev()">
+      <span class="cnum" id="CN"></span>
+      <div class="qsec">
+        <span class="sbadge" id="badge"></span>
+        <div class="cq" id="QQ"></div>
+        <div class="chint">👆 Tap to reveal answer</div>
+      </div>
+      <div class="asec">
+        <span class="sbadge" id="badge2"></span>
+        <div class="albl">✅ Answer</div>
+        <div class="ans" id="AA"></div>
+        <div id="TIP" class="tip-box hide"></div>
+        <div id="EXAM" class="exam-box hide"></div>
+        <div id="PROMPT" class="prompt-box hide"></div>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="btn" onclick="go(-1)">← Prev</button>
+      <button class="btn gold" onclick="rev()">👁 Reveal</button>
+      <button class="btn" onclick="go(1)">Next →</button>
+    </div>
+    <div class="rprompt" id="rp">How well did you know this?</div>
+    <div class="rbs" id="RB">
+      <button class="rb re" onclick="rt('e')">✅ Easy</button>
+      <button class="rb ro" onclick="rt('o')">👍 Got it</button>
+      <button class="rb rh" onclick="rt('h')">⚠️ Hard</button>
+      <button class="rb rm" onclick="rt('m')">❌ Missed</button>
+    </div>
+  </div>
+  <div class="done" id="DN">
+    <h3>🎉 Section Complete!</h3>
+    <p>Great work! Move to the next section or review your Hard/Missed cards.</p>
+    <button class="btn gold" style="max-width:200px;margin:0 auto;display:block" onclick="rst()">🔄 Review Again</button>
+  </div>
+</div>
+
+<script>
+// card: [secIdx, question, answer, tip(💡), exam(🎯), prompt(🤖)]
+var DECKS=[
+
+// ═══ DECK 0: Fullick Page Structure ═══
+{
+  title:"📖 Fullick Book Structure — 6 Fixed Elements",
+  accent:"#58a6ff",
+  sections:["🎯 Learning Objectives","📊 Diagrams & Headings","💡 Learning Tips & Bold Terms","📝 Exam Questions"],
+  cards:[
+    [0,"What are the 6 fixed structural elements in EVERY Fullick section?","Every section of Fullick has exactly these 6 elements in a predictable location:\n\n1. 🎯 LEARNING OBJECTIVE BOX — top of first page, blue box: 'By the end of this section, you should be able to...'\n2. 🔵 COLOURED SECTION HEADINGS — blue/teal bold subheadings dividing content into chunks\n3. 📊 DIAGRAMS + fig captions — highly condensed summaries beneath each figure\n4. 📝 BOLD TERMS — key vocabulary in bold the first time they appear\n5. 💡 LEARNING TIP BOXES — orange-bordered boxes with Fullick's own exam warnings\n6. ❓ EXAM-STYLE QUESTIONS — at the end of each section","Most students read from line 1 to the last line. This is the most inefficient way to use Fullick. The 6 elements tell you exactly where to look — and what to skip.","",""],
+    [0,"What is the Learning Objective Box and how should you use it?","LOCATION: Top of the first page of every section — a blue bordered box.\n\nCONTENT: Lists 2–4 specific outcomes: 'By the end of this section, you should be able to...'\n\nHOW TO USE:\n1. Read ONLY this box (30 seconds)\n2. Convert each outcome into a question:\n   → 'explain how enzymes act as catalysts' becomes\n   → 'How do enzymes act as catalysts? What are the key steps?'\n3. These questions guide your reading — your brain automatically hunts for the answers","The learning objective box IS the examiner's specification point. Every item in it is examinable. If you can answer all items as questions after reading, you are exam-ready for that section.","",""],
+    [1,"What are the coloured section headings and why scan them before reading?","WHAT: Blue/teal bold subheadings within each section that divide the content into 4–8 named chunks.\n\nEXAMPLES (from 1.4 Enzymes):\n• 'What is an enzyme?'\n• 'How enzymes work'\n• 'Activation energy'\n• 'Induced fit'\n• 'Factors affecting rate'\n\nWHY SCAN FIRST:\nAfter scanning all headings (takes 30 seconds), you can state:\n'This section has 5 parts — enzyme definition, mechanism, activation energy, induced fit, and rate factors.'\n\nThis is the KNOWLEDGE SKELETON. When you then read the body text, you're filling flesh onto a bone structure — not reading blind.","Scan headings, then say the structure out loud: 'This section has X parts: [list them].' If you can do this, you have the skeleton. Reading becomes filling, not exploring.","",""],
+    [1,"What are fig captions and why are they more efficient than body text?","WHAT: The descriptive text beneath every figure (fig A, fig B, fig C...) in Fullick.\n\nWHY MORE EFFICIENT:\nFullick writes fig captions as highly compressed summaries. Each caption often contains the entire mechanism or process that the body text spends a paragraph explaining.\n\nEXAMPLE: fig A in the enzyme section (p.56) describes the entire enzyme-substrate interaction process — active site, substrate binding, product release — in 3 lines, what the body text takes a full page to explain.\n\nPRE-READING RULE: Look at EVERY figure + read its caption. Skip the body text. In 3 minutes you get the equivalent of 15 minutes of body text reading.","Fullick diagrams are not decoration — they ARE the core content. The body text explains the diagram. Read diagram → read caption → read body text only for details you still don't understand.","",""],
+    [2,"What are Learning Tip boxes and why are they the most important element to read?","WHAT: Orange-bordered boxes scattered throughout the text, written personally by Ann Fullick.\n\nWHAT THEY CONTAIN:\n• Common exam mistakes that students make\n• Points that the examiner specifically looks for\n• Warnings about confusing similar terms\n• Clarifications of concepts that are frequently misunderstood\n\nKEY EXAMPLE (p.30):\n'Peptide bonds hold the primary structure together, but the THREE-DIMENSIONAL structure is maintained by hydrogen bonds, disulfide bridges and ionic bonds — NOT peptide bonds.'\n\nWHY MOST IMPORTANT:\nThis is Fullick saying directly: 'Exam candidates lose marks here. Here is the correct answer.' It is more valuable than any other element on the page.","READ EVERY LEARNING TIP first, before the body text. Fullick has already done the exam analysis and marked where students fail. Use this. Never skip orange boxes.","",""],
+    [2,"What are bold terms and how should you use them during pre-reading?","WHAT: Key biological vocabulary printed in bold the first time they appear in the body text.\n\nEXAMPLES:\npeptide bond, denatured, active site, induced fit, substrate, enzyme-substrate complex\n\nPRE-READING METHOD:\n1. Scan through the section looking ONLY for bold words\n2. Write down any you do not know yet (your 'unknown terms list')\n3. Do NOT stop to understand them during the scan\n4. Send the list to Claude for one-sentence explanations\n5. When you read the body text, you already know what these terms mean — so each sentence is instantly understandable\n\nThe unknown bold terms list IS your vocabulary gap list for that section.","3 or more unknown bold terms in one section = send the whole list to Claude before reading. Pre-loading vocabulary means the body text makes sense the first time — no re-reading needed.","",""],
+    [3,"What are the Exam-Style Questions at the end of each section and how to use them?","WHAT: Each Fullick section ends with multiple-choice (MCQ), short answer, and extended writing questions directly modelled on Edexcel's exam format.\n\nHOW TO USE THEM (pre-reading approach):\n1. Flip to the END of the section before reading\n2. Read all the question stems (30 seconds) — do NOT answer them\n3. Note what the questions are asking about\n\nWHAT THIS DOES:\nYour brain enters 'material collection mode' during reading — when you encounter content relevant to an exam question, you automatically flag it: 'This is the answer to that last question!'\n\nThis is more efficient than reading without a target. You collect exam-relevant information automatically, rather than hoping to remember everything equally.","Pre-viewing exam questions BEFORE reading is one of the highest-impact techniques. It takes 30 seconds and doubles the relevance of everything you read afterwards.","",""]
+  ]
+},
+
+// ═══ DECK 1: 5-Step Pre-Reading ═══
+{
+  title:"⚡ 5-Step Pre-Reading System (12 Minutes)",
+  accent:"#39d353",
+  sections:["📋 Overview","📖 Steps 1–3 (Book)","🔍 Steps 4–5 (Deep & Claude)","✅ The Key Principle"],
+  cards:[
+    [0,"What is the 5-step pre-reading system and what is its core purpose?","The 5-step pre-reading system is a 12-minute protocol to complete BEFORE reading any Fullick section body text.\n\nCORE PURPOSE:\nReading body text without pre-reading is like building a house without a floor plan — you place bricks without knowing where they belong.\n\nPre-reading builds the FLOOR PLAN (knowledge skeleton) first. When you then read body text, every sentence has a clear place to go.\n\nRESULT:\n• Reading time per section: 35–40 min → 15–20 min\n• Comprehension on first read: significantly higher\n• Retention after reading: much stronger (skeleton + flesh = durable memory)\n\nTIME BREAKDOWN:\n1' Steps 1–2 | 3' Step 3 | 5' Step 4 | 3' Step 5 (Claude)","The pre-reading system does not add time — it REMOVES reading time. 12 minutes of pre-reading saves 15–25 minutes of re-reading and confusion.","",""],
+    [1,"Describe Step 1 of the pre-reading system (30 seconds).","STEP 1: READ THE LEARNING OBJECTIVES — Set your destination\n\nTIME: 30 seconds\n\nACTION:\n1. Open to the first page of the section\n2. Find the blue 'By the end of this section...' box\n3. Read every item in the box\n4. Convert each item into a question in your head\n\nEXAMPLE:\nObjective: 'explain how enzymes act as catalysts'\n→ Mental question: 'How do enzymes act as catalysts? What is the mechanism? Do I know this already?'\n\nWHY IT WORKS:\nThe question you generate creates a 'cognitive slot' in your brain for the answer. When you encounter the answer in the text, it fits perfectly into the slot — rather than entering as disconnected information.","Create genuine questions, not just restatements. 'How?' and 'Why?' questions are more powerful than 'What?' questions for driving comprehension.","",""],
+    [1,"Describe Step 2 of the pre-reading system (30 seconds).","STEP 2: PREVIEW THE EXAM QUESTIONS — Know your destination\n\nTIME: 30 seconds\n\nACTION:\n1. Flip immediately to the last page of the section\n2. Read only the QUESTION STEMS — not the answer choices for MCQ, not the blank answer boxes\n3. Do NOT attempt to answer — just read what is being asked\n4. Return to the start and begin pre-reading\n\nWHAT THIS DOES:\nYour brain enters 'evidence collection mode' for the rest of the pre-reading and body text reading. When you encounter content that answers an exam question, your brain automatically recognises it and flags it as high-priority information.\n\nEXAMPLE: If a question asks 'Describe the induced fit model', your brain will immediately recognise and capture that content when you encounter it in the text.","This takes 30 seconds and increases the density of exam-relevant information you collect during reading. It costs nothing and pays dividends throughout the session.","",""],
+    [1,"Describe Step 3 of the pre-reading system (3 minutes).","STEP 3: SCAN HEADINGS + DIAGRAM CAPTIONS — Build the skeleton\n\nTIME: 3 minutes\n\nACTION:\nFlip through the ENTIRE section without reading body text. Look ONLY at:\n① Every coloured section subheading\n② Every figure caption (fig A, fig B, fig C...)\n\nNO BODY TEXT. Not one sentence.\n\nSUCCESS CRITERION:\nAfter completing Step 3, you should be able to state from memory:\n'This section has [X] parts. Part 1 is about [topic]. Part 2 is about [topic]...'\n\nEXAMPLE (after scanning 1.4 Enzymes):\n'This section has: enzyme definition → how they work → activation energy → induced fit model → factors affecting rate.'\n\nThis IS the knowledge skeleton. The body text only fills it in.","If you cannot state the structure from memory after Step 3, you went too fast — slow down the heading and caption scan. The skeleton must be clear before proceeding.","",""],
+    [2,"Describe Step 4 of the pre-reading system (5 minutes).","STEP 4: MARK BOLD TERMS + READ ALL LEARNING TIPS — Find difficulties\n\nTIME: 5 minutes\n\nACTION — pass through the section a second time, looking ONLY for:\n\n① BOLD TERMS (key vocabulary in bold)\n→ Write down every term you do not recognise or cannot define\n→ This is your 'unknown terms list' — do not stop to understand yet\n\n② ORANGE LEARNING TIP BOXES\n→ READ EVERY ONE FULLY — these are Fullick's personal exam warnings\n→ Do not skim these — treat them as the most important text on the page\n\nAFTER STEP 4:\n• Unknown terms list → send to Claude (Step 5)\n• Learning tips → already absorbed\n• You now know WHERE the difficult content is before encountering it in the body text","Never skip a Learning Tip. Fullick wrote these after years of marking. 'This is where candidates lose marks' is exactly the information you need before reading.","",""],
+    [2,"Describe Step 5 of the pre-reading system (3 minutes).","STEP 5: USE CLAUDE TO WARM UP BACKGROUND KNOWLEDGE — Prime the brain\n\nTIME: 3 minutes\n\nACTION:\nBefore reading body text, send Claude two prompts using what you found in Steps 3–4:\n\nPROMPT A (background):\n'I'm about to read [section name]. Give me 5 sentences of background knowledge and tell me the most difficult concept.'\n\nPROMPT B (vocabulary):\n'These bold terms appeared in the section: [your unknown terms list]. Define each in one sentence for a pre-reading warm-up.'\n\nWHY THIS WORKS:\nNew knowledge requires 'hooks' in existing knowledge to attach to. If you have no prior hooks, new content is processed as isolated disconnected facts — which are forgotten quickly.\n\nClaude's 3-minute overview creates the hooks. The body text then attaches to them.","The analogy: pre-reading without Claude warm-up is like trying to hang pictures with no hooks on the wall. They fall immediately. Claude installs the hooks. Fullick text is the pictures.","",""],
+    [3,"What is the single most important principle of the entire pre-reading system?","THE CORE PRINCIPLE:\n\nRead BACKWARDS through a Fullick section:\n\n1. GOAL first (learning objectives) — know the destination\n2. EXAM QUESTIONS second — know what success looks like\n3. HEADINGS + DIAGRAMS third — build the structure\n4. BOLD TERMS + LEARNING TIPS fourth — identify difficulty points\n5. CLAUDE warm-up fifth — install knowledge hooks\n6. BODY TEXT last — fill in the details\n\nThis is the OPPOSITE of what most students do (body text first).\n\nWhy reading body text last is more efficient:\nWhen you finally read body text, you have:\n• A clear goal (from objectives)\n• A known endpoint (from exam questions)\n• A structure to place information into (from headings)\n• Pre-loaded vocabulary (from bold terms + Claude)\n• Flagged difficulty points (from learning tips)\n\nEvery sentence in the body text makes sense immediately, on first reading.","This protocol reduces average reading time per Fullick section from 35–40 minutes to 15–20 minutes — a saving of 15–25 minutes per section, across 50+ sections in the book.","",""]
+  ]
+},
+
+// ═══ DECK 2: Claude Prompt Templates ═══
+{
+  title:"🤖 Claude Prompt Templates — 4 Scenarios",
+  accent:"#d2a8ff",
+  sections:["📌 Scenario A — Pre-Reading","📌 Scenario B — Objectives","📌 Scenario C — Exam Preview","📌 Scenario D — Cross-Topic Link"],
+  cards:[
+    [0,"What is the universal pre-reading prompt for Scenario A?","SCENARIO A: Before reading any Fullick section (most commonly used)\n\nUSE THIS EXACT PROMPT:\n'I am about to read [section name]. Please give me 5 sentences of background knowledge and tell me the hardest concept to understand in this section.'\n\nEXAMPLE:\n'I am about to read 1.4 Enzymes (pp.54-66) from Fullick Biology B. Please give me 5 sentences of background knowledge and tell me the hardest concept to understand in this section.'\n\nWHAT YOU RECEIVE:\n• A brief conceptual overview of the section content\n• Identification of the most difficult concept to watch for\n• Enough background to make the body text immediately understandable\n\nTIME REQUIRED: 3 minutes including reading Claude's response","Always include the exact Fullick section name and page numbers. This allows Claude to be specific rather than generic. Specificity = better response.","","I am about to read [SECTION NAME AND PAGES] from Fullick Biology B. Please give me 5 sentences of background knowledge and tell me the hardest concept to understand in this section."],
+    [0,"What is the vocabulary pre-loading prompt for Scenario A?","SCENARIO A (vocabulary variant):\n\nUSE THIS PROMPT:\n'I scanned these bold terms in the Fullick section: [your list of unknown terms]. Please define each in one sentence for a pre-reading warm-up.'\n\nEXAMPLE:\n'I scanned these bold terms in the Fullick 1.4 Enzymes section: enzyme, catalyst, activation energy, active site, enzyme-substrate complex, induced fit, denatured. Please define each in one sentence for a pre-reading warm-up.'\n\nWHAT YOU RECEIVE:\nOne-sentence definitions for each term, calibrated for A Level Biology — precise enough to be useful, simple enough to absorb in one reading.\n\nUSE WHEN: You have 3 or more unknown bold terms. Fewer than 3 — look them up in the glossary (p.306).","Send the FULL list of unknown terms in one prompt. Do not send one at a time — combined definitions take 60 seconds to read and give you all vocabulary at once.","","I scanned these bold terms in the Fullick [SECTION NAME] section: [LIST OF TERMS]. Please define each in one sentence for a pre-reading warm-up."],
+    [0,"What is the diagram pre-loading prompt for Scenario A?","SCENARIO A (diagram variant):\n\nUSE THIS PROMPT:\n'Fullick has a figure about [diagram content]. Please explain what it is showing before I read the section, so I can understand it immediately when I see it.'\n\nEXAMPLE:\n'Fullick has a figure showing the induced fit model of enzyme action (1.4 Enzymes, fig C). Please explain what it is showing before I read the section, so I can understand it immediately when I see it.'\n\nUSE WHEN: You cannot interpret a fig caption during the pre-reading scan — the diagram content is completely unfamiliar.\n\nHOW TO IDENTIFY WHICH FIGURES TO QUERY: During the Step 3 heading/caption scan, flag any caption where you cannot understand what the diagram is showing even after reading it carefully.","Do not query every figure — only those whose caption is genuinely unclear. Most Fullick fig captions are self-explanatory once you know the section topic.","","Fullick has a figure about [DESCRIBE THE FIGURE CONTENT from the caption]. Please explain what it is showing before I read the section, so I can understand it immediately when I see it."],
+    [1,"What is the learning objective conversion prompt for Scenario B?","SCENARIO B: Converting learning objectives into exam-style questions\n\nUSE THIS PROMPT:\n'Fullick's learning objectives for this section are: [copy the full objective list]. Please convert every objective into a question I should be able to answer after reading.'\n\nEXAMPLE:\n'Fullick's learning objectives for 1.4 Enzymes are: explain how enzymes act as biological catalysts; describe the lock and key and induced fit models; explain the effects of temperature, pH and substrate concentration on enzyme activity. Please convert every objective into a question I should be able to answer after reading.'\n\nWHAT YOU RECEIVE:\nA set of precise exam-style questions based directly on the specification objectives — telling you exactly what your reading session must produce.","This prompt transforms the learning objective list into a personal exam. After reading, attempt to answer each question without notes. Any you cannot answer = specific revision gap.","","Fullick's learning objectives for [SECTION NAME] are: [COPY OBJECTIVES]. Please convert every objective into a question I should be able to answer after reading."],
+    [2,"What is the exam-type preview prompt for Scenario C?","SCENARIO C: Previewing what exam question types will test this section\n\nUSE THIS PROMPT:\n'I am about to read [section name]. Tell me what question types Edexcel uses to test this topic and what specific details I need to notice while reading.'\n\nEXAMPLE:\n'I am about to read 1.3 Nucleic Acids from Fullick Biology B. Tell me what question types Edexcel uses to test this topic and what specific details I need to notice while reading.'\n\nWHAT YOU RECEIVE:\n• The most common Edexcel question formats for this topic (describe, explain, calculate, draw, evaluate)\n• Specific details that frequently appear in mark schemes\n• Warning about common traps or frequently missed points\n\nUSE WHEN: You are reading a core section (核心必考) where every detail could be examined.","Use Scenario C for all 核心 (core) sections. This aligns your reading attention with what the mark scheme actually rewards — rather than what seems interesting.","","I am about to read [SECTION NAME] from Fullick Biology B. Tell me what question types Edexcel uses to test this topic and what specific details I need to notice while reading."],
+    [3,"What is the cross-topic linking prompt for Scenario D (the most powerful pre-reading prompt)?","SCENARIO D: Connecting new sections to previously studied content\n\nUSE THIS PROMPT:\n'I have just finished studying [previous section]. I am now about to read [next section]. What are the connections between these two topics? What knowledge from the first section does the new section build on or use?'\n\nEXAMPLE:\n'I have just finished studying 1.2 Proteins (pp.28–30) on protein structure. I am now about to read 1.4 Enzymes (pp.54–66). What are the connections? What knowledge about protein structure does the enzyme section build on?'\n\nWHAT YOU RECEIVE:\nSpecific conceptual links between topics — e.g. enzyme active site shape is determined by tertiary structure; denaturation destroys active site because it changes tertiary structure; both depend on 1.2 protein content.\n\nWHY THIS IS THE MOST POWERFUL PROMPT:\nConnected knowledge is retained much longer than isolated knowledge. This prompt explicitly builds the connections before reading — so new content enters an already-prepared context.","BEST COMBINATION: Scenario A (background) + Scenario D (connection) = fastest reading speed and highest retention. Always use both together for core sections.","","I have just finished [PREVIOUS SECTION]. I am now about to read [NEXT SECTION]. What are the conceptual connections? What knowledge from the previous section does the new section build on?"]
+  ]
+},
+
+// ═══ DECK 3: Protein Structure ═══
+{
+  title:"🧬 Protein Structure — 4 Levels (pp.28–30)",
+  accent:"#FFD700",
+  sections:["1° Primary","2° Secondary","3° Tertiary","4° Quaternary","⚠️ Exam Traps"],
+  cards:[
+    [0,"Define primary protein structure and state which bond holds it together.","PRIMARY STRUCTURE — the amino acid sequence\n\nDEFINITION:\nThe specific linear sequence of amino acids in a polypeptide chain, joined end-to-end.\n\nBOND: Peptide bonds — covalent bonds formed by condensation reactions between the carboxyl group (-COOH) of one amino acid and the amine group (-NH₂) of the next, releasing one water molecule per bond.\n\nANALOGY: A string of beads.\nEach bead = one amino acid\nThe sequence (order) of beads = primary structure\nChanging one bead (gene mutation) → changes the whole string's final shape\n\nKEY EXAM LINK:\nPrimary structure is determined by DNA base sequence.\nGene mutation → codon change → amino acid change → primary structure change → protein shape change → function lost.","The entire chain of consequences from gene mutation to protein dysfunction depends on primary structure. This cause-effect chain (DNA → primary → tertiary → function) is tested very frequently by Edexcel.","Edexcel frequently tests: 'Explain how a change in DNA base sequence can affect the function of a protein.' (4–6 marks). Answer must include: mutation → codon change → amino acid change → primary structure change → 3D shape change → active site altered → function lost.",""],
+    [1,"Define secondary protein structure and state which bonds hold it together.","SECONDARY STRUCTURE — local folding patterns\n\nDEFINITION:\nThe folding of the polypeptide chain into regular repeated patterns, formed due to hydrogen bonding between the backbone atoms.\n\nTWO FORMS:\n• Alpha helix: chain coils into a right-handed spiral (like a spring)\n• Beta-pleated sheet: chain folds back and forth in a flat, pleated arrangement\n\nBOND: Hydrogen bonds — between the -C=O and -N-H groups of the BACKBONE (not the R groups).\n\nFULLICK ANALOGY (p.28): Hair structure.\n• Straight hair: hydrogen bonds intact, forming secondary structure\n• Wet hair (temporary curl): hydrogen bonds broken by water, reformed in curl — temporary change\n• Perm (permanent curl): disulfide bonds broken and reformed in new position — permanent change\n\nKEY POINT: Hydrogen bonds are WEAK individually but collectively numerous enough to maintain structure under normal conditions.","The hair analogy distinguishes hydrogen bonds (broken by water/heat = temporary) from disulfide bonds (broken by strong chemicals = permanent). Use this analogy in exam answers about denaturation.","",""],
+    [2,"Define tertiary protein structure and state ALL four bond types.","TERTIARY STRUCTURE — the full 3D shape\n\nDEFINITION:\nThe complete three-dimensional folding of the polypeptide chain, created by interactions between the R groups (side chains) of different amino acids.\n\nFOUR TYPES OF INTERACTION (must know all four):\n\n1. HYDROGEN BONDS — between polar R groups; weak but numerous\n2. IONIC BONDS — between charged R groups (e.g. -NH₃⁺ and -COO⁻); can be broken by extreme pH\n3. DISULFIDE BRIDGES — covalent bonds between two cysteine R groups (-SH → -S-S-); strongest bond; broken only by strong reducing agents\n4. HYDROPHOBIC INTERACTIONS — non-polar R groups cluster together away from water in the protein interior\n\nIMPORTANCE:\nTertiary structure determines the protein's specific 3D shape — including the ACTIVE SITE of enzymes and the BINDING SITES of receptors and carrier proteins.","Tertiary structure is the most examined protein structure level. All four bond types must be named in full for 4+ mark questions. Hydrophobic interactions are the most commonly forgotten.","Edexcel trap: 'What bonds maintain the tertiary structure?' WRONG answer: 'peptide bonds' (these only maintain primary structure). CORRECT: hydrogen bonds + ionic bonds + disulfide bridges + hydrophobic interactions.",""],
+    [3,"Define quaternary protein structure and give two examples.","QUATERNARY STRUCTURE — multiple polypeptide chains\n\nDEFINITION:\nThe arrangement of two or more polypeptide chains (subunits) that combine to form a single functional protein complex.\nSome quaternary proteins also contain non-protein prosthetic groups.\n\nEXAMPLE 1 — HAEMOGLOBIN:\n• 4 polypeptide chains: 2 alpha (α) chains + 2 beta (β) chains\n• Each chain contains 1 haem group (prosthetic group containing Fe²⁺)\n• Fe²⁺ binds one O₂ molecule → total 4 O₂ molecules per haemoglobin\n• Quaternary structure enables cooperative binding (sigmoidal dissociation curve)\n\nEXAMPLE 2 — COLLAGEN:\n• 3 polypeptide chains wound into a triple helix\n• Cross-linked by covalent bonds → extremely high tensile strength\n• Function: structural support in tendons, bone, skin, blood vessels\n\nKEY DISTINCTION:\nNot all proteins have quaternary structure. Only proteins made of multiple polypeptide chains have quaternary structure.","Haemoglobin is the standard Edexcel example. Always name: 4 subunits (2α + 2β) + 4 haem groups + Fe²⁺ + maximum 4 O₂. The prosthetic group is frequently tested.","",""],
+    [4,"What is the most common Edexcel exam trap about protein structure bonds?","THE FULLICK LEARNING TIP (p.30) — THE MOST IMPORTANT FACT:\n\n'Peptide bonds hold the primary structure together (the sequence of amino acids). BUT the three-dimensional shape of the protein (secondary, tertiary and quaternary structure) is maintained by hydrogen bonds, disulfide bridges, ionic bonds and hydrophobic interactions — NOT by peptide bonds.'\n\nTHE TRAP:\n❌ WRONG: 'The shape of the enzyme active site is maintained by peptide bonds.'\n✅ CORRECT: 'The shape of the enzyme active site is maintained by hydrogen bonds, ionic bonds, disulfide bridges and hydrophobic interactions. Peptide bonds only link amino acids in the primary sequence.'\n\nWHY THIS MATTERS:\nDenaturation of enzymes (by heat or extreme pH) involves breaking the bonds that maintain TERTIARY structure (H-bonds, ionic bonds, disulfide bridges) — NOT peptide bonds. Peptide bonds are covalent and very strong.","Denaturation = breaking H-bonds and ionic bonds (and sometimes disulfide bridges) in tertiary structure → active site changes shape → substrate no longer complementary → enzyme non-functional. Peptide bonds are NOT broken during normal denaturation.","Exam question type: 'Explain why increasing temperature above the optimum denatures an enzyme.' (3-4 marks). MUST include: breaks hydrogen bonds and ionic bonds in tertiary structure → active site shape changes → substrate no longer complementary to active site → enzyme-substrate complex cannot form → reaction cannot proceed.",""],
+    [4,"What is the causal chain linking protein structure to function, and how does mutation disrupt it?","THE FULL CAUSAL CHAIN — must know every step:\n\nSTEP 1: DNA base sequence determines mRNA codon sequence\nSTEP 2: mRNA codon sequence determines amino acid sequence during translation\nSTEP 3: Amino acid sequence (primary structure) determines where R groups are positioned along the chain\nSTEP 4: R group positions determine which R groups interact → determines folding → determines tertiary structure\nSTEP 5: Tertiary structure determines the exact 3D shape of the active site\nSTEP 6: Active site shape determines which substrate can bind (complementary shape)\nSTEP 7: Substrate binding enables the reaction to proceed\n\nHOW MUTATION DISRUPTS:\nMutation at Step 1 → cascade of changes through every step → Step 5 (active site) has wrong shape → Step 6 (substrate cannot bind) → Step 7 (reaction cannot proceed) → enzyme non-functional\n\nSickle cell disease is the classic example of Steps 1–7 in a structural protein (haemoglobin) rather than an enzyme.","This 7-step chain is the backbone of all 'explain how mutation affects protein function' questions. Every step must appear in order for full marks on extended writing.","",""]
+  ]
+},
+
+// ═══ DECK 4: Sickle Cell Disease ═══
+{
+  title:"🩸 Sickle Cell Disease — Causal Chain (pp.50–51)",
+  accent:"#f78166",
+  sections:["🧬 The Mutation","🔴 Structural Changes","😷 Effects on RBCs","📝 Exam Answers"],
+  cards:[
+    [0,"What is the DNA mutation that causes sickle cell disease?","THE MUTATION: A single DNA base SUBSTITUTION\n\nLOCATION: The β-globin gene (which codes for the beta chain of haemoglobin)\n\nSPECIFIC CHANGE:\n• Normal DNA codon: GAG\n• Mutant DNA codon: GTG\n• Only ONE base changes: A → T at position 6 of the beta chain gene\n\nSCALE OF CHANGE:\nThe beta chain contains 147 amino acids.\nONLY position 6 is changed — 146 remain identical.\n\nTYPE OF MUTATION: Base substitution (missense)\n→ Not a frameshift (no insertion or deletion)\n→ Only affects the ONE codon at position 6\n→ All subsequent codons are unaffected\n\nMEMORY AID: GAG → GTG (A replaced by T in the DNA template)","This is a point mutation (single base change). Contrast with frameshift mutations (insertion/deletion) which shift ALL subsequent codons. The limited scope (one position only) makes sickle cell a precise example of how tiny changes cause massive effects.","",""],
+    [0,"How does the DNA mutation change the mRNA and which amino acid does it affect?","FROM DNA TO mRNA CODON:\n\nNORMAL:\n• DNA template: GAG\n• Transcribed mRNA codon: CUC → codes for Glutamic acid (Glu)\n\nWAIT — corrected version:\n• DNA coding strand: GAG → mRNA: GAG → codes for Glutamic acid (Glu)\n• DNA coding strand: GTG → mRNA: GUG → codes for Valine (Val)\n\nTHE AMINO ACID CHANGE:\n• Normal position 6: Glutamic acid (Glu)\n• Sickle cell position 6: Valine (Val)\n\nKEY DIFFERENCE BETWEEN GLU AND VAL:\n• Glutamic acid (Glu): HYDROPHILIC, negatively charged R group → sits on protein surface, repels other Hb molecules\n• Valine (Val): HYDROPHOBIC, non-polar R group → exposed on surface, STICKS to other Hb molecules in low O₂ conditions\n\nThe chemical difference between these two R groups is the root cause of all subsequent structural changes.","The exam often asks: 'Explain why Glu→Val causes Hb molecules to stick together.' Answer: Glu is charged/hydrophilic (repels); Val is hydrophobic (attracts other hydrophobic groups) → Hb molecules aggregate in low O₂.","",""],
+    [1,"How does the amino acid change affect haemoglobin's tertiary and quaternary structure?","FROM PRIMARY STRUCTURE CHANGE TO 3D STRUCTURE CHANGE:\n\nNORMAL Haemoglobin:\n• Position 6 = Glu (charged, hydrophilic)\n• Glu sits on the surface of the beta chain\n• Glu's negative charge REPELS neighbouring Hb molecules\n• Hb molecules remain soluble and separate in the red blood cell\n\nSICKLE CELL Haemoglobin (HbS):\n• Position 6 = Val (hydrophobic, non-polar)\n• Val is exposed on the surface of the beta chain\n• Under LOW OXYGEN conditions, Val on one HbS molecule interacts with a hydrophobic pocket on another HbS molecule\n• HbS molecules STICK TOGETHER, forming long rigid fibres (polymers)\n\nTHE AGGREGATE:\nThese long fibres are called rigid rods. Multiple fibres bundle together within the red blood cell, physically deforming it from the normal biconcave disc shape into the characteristic sickle (crescent) shape.\n\nThis structural change (soluble → rigid fibres) only occurs under LOW OXYGEN — explaining why symptoms are triggered by low-oxygen conditions (exercise, altitude, illness).","The key phrase is 'under low oxygen conditions'. Sickle Hb behaves normally in high oxygen (lungs). The conformational change that exposes the Val hydrophobic pocket only occurs when O₂ leaves the haem group.","",""],
+    [2,"What are the consequences of red blood cells becoming sickle-shaped?","THREE MAJOR CONSEQUENCES:\n\n1. REDUCED OXYGEN-CARRYING CAPACITY\n• Sickle-shaped cells cannot carry and release O₂ as efficiently as normal biconcave cells\n• Haemoglobin inside sickled cells is polymerised (rigid fibres) → less able to bind and release O₂\n• Results in anaemia (chronically low O₂ delivery to tissues)\n\n2. CAPILLARY BLOCKAGE\n• Sickle-shaped cells are rigid and non-deformable\n• Normal RBCs are flexible and squeeze through narrow capillaries\n• Sickle cells get STUCK in narrow capillaries, blocking blood flow\n• Tissues downstream receive NO oxygen (vaso-occlusive crisis)\n• Causes: severe pain, organ damage (spleen, kidney, brain), stroke\n\n3. INCREASED RED BLOOD CELL DESTRUCTION\n• Sickle cells are fragile and break apart prematurely\n• Lifespan: normal RBC = 120 days; sickle RBC = 10–20 days\n• Bone marrow cannot compensate → chronic haemolytic anaemia","Two separate problems: (1) O₂ not carried effectively → anaemia; (2) cells physically block vessels → pain crises and organ damage. Both must be explained for full marks.","",""],
+    [3,"Write the complete exam answer for: 'Explain how a mutation in the β-globin gene causes sickle cell disease.' (6 marks)","A-GRADE MODEL ANSWER (6 marks):\n\n1. A base substitution mutation in the β-globin gene changes codon 6 from GAG to GTG. [1]\n\n2. This changes the mRNA codon from GAG to GUG during transcription. [1]\n\n3. During translation, GUG codes for valine instead of glutamic acid, changing the amino acid at position 6 of the beta chain (primary structure change). [1]\n\n4. Valine has a hydrophobic, non-polar R group, whereas glutamic acid has a charged, hydrophilic R group. Under low oxygen conditions, the exposed valine residue interacts with hydrophobic pockets on adjacent haemoglobin molecules. [1]\n\n5. HbS molecules polymerise, forming long rigid fibres that deform red blood cells into the sickle shape. [1]\n\n6. Sickle-shaped cells block narrow capillaries and carry oxygen less efficiently, causing pain crises, tissue damage, and anaemia. [1]","Six marking points, one sentence each. Each sentence adds a NEW fact — no repetition. This is the Edexcel extended writing pattern: sequential causal chain, one mark per link.","6-mark extended writing: aim for 6 distinct factual sentences in causal order. NEVER repeat a point in different words — you will not get a second mark for the same idea.",""],
+    [3,"What is the Edexcel exam mark scheme language for sickle cell and protein structure questions?","KEY MARK SCHEME LANGUAGE TO MEMORISE:\n\nFor DNA → amino acid chain:\n• 'base substitution' (NOT 'mutation' alone)\n• 'mRNA codon changes from GAG to GUG'\n• 'valine instead of glutamic acid at position 6'\n• 'primary structure of the beta chain changes'\n\nFor structural change:\n• 'hydrophobic R group of valine exposed on surface'\n• 'HbS molecules polymerise / aggregate'\n• 'long rigid fibres / rods form'\n• 'under low oxygen conditions'\n• 'red blood cells become sickle-shaped'\n\nFor consequences:\n• 'sickle cells block capillaries'\n• 'oxygen delivery to tissues is reduced'\n• 'haemolytic anaemia'\n• 'vaso-occlusive crisis'\n\nFor protein structure generally:\n• 'active site shape changes'\n• 'substrate no longer complementary to active site'\n• 'enzyme-substrate complex cannot form'\n• 'protein is denatured'","Edexcel mark schemes award marks for SPECIFIC TERMINOLOGY. 'The shape changes' without 'active site' or 'complementary' is commonly awarded 0. Precision in biological language is not optional — it IS the mark.","",""]
+  ]
+},
+
+// ═══ DECK 5: Pre-Reading Checklist ═══
+{
+  title:"📋 Pre-Reading Checklist — 9 Steps in 12 Minutes",
+  accent:"#ffa657",
+  sections:["📖 Part 1: Book (8 mins)","🤖 Part 2: Claude (4 mins)","✅ How to Use the Checklist"],
+  cards:[
+    [0,"What are the 6 book-based pre-reading steps (Part 1, 8 minutes)?","PART 1: BOOK PRE-READING (8 minutes total)\n\n✓ STEP 1 (30s): Read the 'By the end of this section...' learning objective box completely. Convert each objective into a question in your head.\n\n✓ STEP 2 (30s): Flip to the last page. Read all exam-style question STEMS only (not answers). Return to the start.\n\n✓ STEP 3 (3 min): Scan all coloured section subheadings. After completing, state the section structure from memory: 'This section has X parts: [list them].'\n\n✓ STEP 4 (3 min): Look at every figure caption (fig A, fig B...). Do NOT read body text.\n\n✓ STEP 5 (1 min): Find all bold terms. Write down any you cannot define. This is your unknown terms list.\n\n✓ STEP 6 (1 min): Read every orange Learning Tip box IN FULL. These are Fullick's personal exam warnings.\n\nDO NOT begin reading body text until all 6 steps are complete.","The order matters. Steps 1–2 set your goals. Steps 3–4 build the structure. Steps 5–6 identify your difficulty points. Skipping or reordering reduces effectiveness.","",""],
+    [1,"What are the 3 Claude-based pre-reading steps (Part 2, 4 minutes)?","PART 2: CLAUDE PRE-READING (4 minutes total)\n\n✓ STEP 7 (1.5 min): Send this prompt:\n'I am about to read [section name and pages]. Give me 5 sentences of background knowledge and tell me the most difficult concept in this section.'\n→ Read Claude's response carefully.\n\n✓ STEP 8 (1 min): If you have 3+ unknown bold terms, send this prompt:\n'These bold terms appeared in the Fullick [section] section: [your list]. Define each in one sentence for a pre-reading warm-up.'\n→ Read definitions quickly.\n\n✓ STEP 9 (1.5 min): Send this prompt:\n'I just studied [previous section]. I'm now about to read [this section]. What is the connection between them? What knowledge from the previous section does this section build on?'\n→ Note the connections Claude identifies.\n\nNOW YOU MAY BEGIN READING THE BODY TEXT.\n\nEXPECTED READING TIME AFTER COMPLETE CHECKLIST: 15–20 minutes (vs 35–40 without checklist).","Steps 7–9 install the knowledge hooks (background, vocabulary, connections) that allow body text to be understood on first reading rather than requiring re-reading.","",""],
+    [2,"How should you use the pre-reading checklist in practice?","PRACTICAL CHECKLIST USAGE:\n\n1. BEFORE EACH SECTION:\nOpen this checklist. Do not begin reading Fullick until all 9 steps are ticked.\n\n2. TIMING TARGET:\nComplete all 9 steps in 12 minutes or less. If consistently taking longer, you are reading body text during Steps 3–5 (stop doing this).\n\n3. READING TIME AFTER CHECKLIST:\nTarget: 15–20 minutes of focused body text reading. If taking 30+ minutes, the pre-reading scaffold is not yet complete — return to uncompleted steps.\n\n4. AFTER READING:\nAttempt to answer the exam questions at the end of the section WITHOUT notes. Compare to mark scheme. Questions you cannot answer = the content to review.\n\n5. EFFICIENCY COMPARISON:\nWithout checklist: 35–40 min reading + poor comprehension + re-reading needed\nWith checklist: 12 min pre-reading + 15–20 min reading + high comprehension on first pass = 27–32 min TOTAL vs 35–40 min without (and much better retention).","The checklist is a habit, not a one-time technique. After 2–3 sections, each step becomes automatic and total time reduces. After 5–10 sections, the entire pre-reading takes 8–10 minutes.","",""],
+    [2,"Why is it important to complete ALL steps before reading body text?","REASON 1: COGNITIVE LOAD\nReading body text without the skeleton (steps 3–4) means processing every sentence as isolated information. This uses maximum cognitive capacity and produces minimum retention.\n\nREASON 2: VOCABULARY BARRIER\nEncountering unfamiliar bold terms during body text reading forces you to stop, look them up, lose the thread of the argument, and start the sentence again. Steps 5+8 eliminate this completely.\n\nREASON 3: GOAL ABSENCE\nWithout the learning objectives (step 1) and exam questions (step 2), reading lacks direction. You do not know which details matter and which are background. Everything feels equally important (and therefore nothing is prioritised).\n\nREASON 4: MISSING CONNECTIONS\nWithout the cross-topic link (step 9), new content enters as isolated facts rather than connected knowledge. Isolated facts have a half-life of hours. Connected knowledge has a half-life of weeks.\n\nSKIPPING ANY STEP causes disproportionate harm to the overall system efficiency.","Think of it like a GPS: you can drive without it (body text without checklist) but you will take wrong turns, backtrack, and arrive much later. The checklist IS your GPS for reading Fullick.","",""]
+  ]
+}
+];
+
+// ═══ STATE ═══
+var curDeck=null,curSec=0,curIdx=0,shown=false,deck=[],ratings={},easy=0,hard=0,done=0;
+
+function openDeck(n){
+  curDeck=n;curSec=0;curIdx=0;shown=false;easy=0;hard=0;done=0;ratings={};
+  document.getElementById('homeScreen').style.display='none';
+  document.getElementById('appScreen').style.display='block';
+  document.getElementById('appTitle').textContent=DECKS[n].title;
+  document.getElementById('pfill').style.background=DECKS[n].accent;
+  document.getElementById('DN').style.display='none';
+  document.getElementById('MC').style.display='block';
+  mkDeck();renderTabs();renderCard();
+}
+function goHome(){
+  document.getElementById('homeScreen').style.display='block';
+  document.getElementById('appScreen').style.display='none';
+}
+function mkDeck(){
+  deck=[];
+  DECKS[curDeck].cards.forEach(function(c,i){if(c[0]===curSec)deck.push(i);});
+}
+function renderTabs(){
+  var secs=DECKS[curDeck].sections;
+  var cards=DECKS[curDeck].cards;
+  var h='';
+  secs.forEach(function(s,i){
+    var cnt=0;cards.forEach(function(c){if(c[0]===i)cnt++;});
+    h+='<span class="stab'+(i===curSec?' on':'')+'" onclick="sw('+i+')">'+s+' ('+cnt+')</span>';
+  });
+  document.getElementById('stabs').innerHTML=h;
+}
+function renderCard(){
+  if(!deck.length)return;
+  var cards=DECKS[curDeck].cards;
+  var secs=DECKS[curDeck].sections;
+  var gi=deck[curIdx];
+  var c=cards[gi];
+  var acc=DECKS[curDeck].accent;
+  document.getElementById('CN').textContent=(curIdx+1)+' / '+deck.length;
+  ['badge','badge2'].forEach(function(id){
+    var el=document.getElementById(id);
+    el.textContent=secs[c[0]];
+    el.style.cssText='background:#1c2333;border-color:'+acc+';color:'+acc;
+  });
+  document.getElementById('QQ').textContent=c[1];
+  document.getElementById('AA').textContent=c[2];
+  var tip=document.getElementById('TIP');
+  if(c[3]&&c[3].length){tip.innerHTML='<b>💡 Key Insight:</b> '+c[3];tip.className='tip-box';}else{tip.className='tip-box hide';}
+  var exam=document.getElementById('EXAM');
+  if(c[4]&&c[4].length){exam.innerHTML='<b>🎯 Exam Application:</b> '+c[4];exam.className='exam-box';}else{exam.className='exam-box hide';}
+  var prompt=document.getElementById('PROMPT');
+  if(c[5]&&c[5].length){prompt.innerHTML='<b>🤖 Claude Prompt Template:</b><br><br>'+c[5];prompt.className='prompt-box';}else{prompt.className='prompt-box hide';}
+
+  var cd=document.getElementById('CD');
+  cd.className=shown?'card shown':'card';
+  cd.style.borderColor=shown?acc:'#30363d';
+  document.getElementById('RB').className=shown?'rbs show':'rbs';
+  document.getElementById('rp').className=shown?'rprompt show':'rprompt';
+  document.getElementById('cardlbl').textContent='Card '+(curIdx+1)+' of '+deck.length;
+  document.getElementById('DN').style.display='none';
+  document.getElementById('MC').style.display='block';
+  var total=DECKS[curDeck].cards.length;
+  document.getElementById('sT').textContent=total;
+  document.getElementById('sD').textContent=done;
+  document.getElementById('sE').textContent=easy;
+  document.getElementById('sH').textContent=hard;
+  document.getElementById('plbl').textContent=done+' / '+total;
+  document.getElementById('pfill').style.width=Math.round(done/total*100)+'%';
+}
+function rev(){if(!shown){shown=true;renderCard();}}
+function go(d){shown=false;curIdx+=d;if(curIdx<0)curIdx=deck.length-1;if(curIdx>=deck.length)curIdx=0;renderCard();}
+function rt(r){
+  done++;if(r==='e'||r==='o')easy++;else hard++;
+  shown=false;curIdx++;
+  if(curIdx>=deck.length){
+    curIdx=0;
+    if(deck.every(function(gi){return ratings[gi];})){
+      document.getElementById('MC').style.display='none';
+      document.getElementById('DN').style.display='block';return;
+    }
+  }
+  ratings[deck[curIdx-1]]=r;renderCard();
+}
+function sw(n){curSec=n;curIdx=0;shown=false;mkDeck();renderTabs();document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function rst(){curIdx=0;shown=false;document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function shuf(){deck.sort(function(){return Math.random()-.5;});curIdx=0;shown=false;renderCard();}
+</script>
+</body>
+</html>
