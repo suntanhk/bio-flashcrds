@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A★ Master Checklist — Biology B Flashcards</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#0d1117;color:#eee;font-family:Arial,sans-serif;padding:10px;font-size:15px;min-height:100vh}
+.home{max-width:540px;margin:0 auto;padding:10px 0 40px}
+.logo{text-align:center;margin-bottom:14px;padding:16px;background:linear-gradient(135deg,#1c2333,#0d1117);border-radius:14px;border:1px solid #FFD700}
+.logo h1{color:#FFD700;font-size:19px;font-weight:bold;margin-bottom:4px;line-height:1.4}
+.logo p{color:#888;font-size:11px;line-height:1.6;margin-top:4px}
+.insight{background:#1a2a0a;border:1px solid #39d353;border-radius:12px;padding:12px;margin-bottom:13px;font-size:12px;color:#aaa;line-height:1.6}
+.insight b{color:#39d353}
+.sec-hdr{font-size:12px;font-weight:bold;padding:8px 12px;border-radius:10px;margin-bottom:10px;margin-top:14px}
+.sh0{background:#1f3a5f;color:#58a6ff}
+.sh1{background:#1a3a1a;color:#39d353}
+.sh2{background:#3a2a0a;color:#FFD700}
+.sh3{background:#2a1a3a;color:#d2a8ff}
+.sh4{background:#2a0a1a;color:#f78166}
+.sh5{background:#1a2a3a;color:#58a6ff}
+.sh6{background:#0a2a2a;color:#39d3d3}
+.dc{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:13px;margin-bottom:10px;cursor:pointer}
+.dc:active{opacity:.8}
+.dc h3{font-size:13px;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.dc p{color:#aaa;font-size:11px;line-height:1.5;margin-bottom:8px}
+.dc-meta{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:bold}
+.t1{background:#1f3a5f;color:#58a6ff}.t2{background:#1a3a1a;color:#39d353}.t3{background:#3a2a0a;color:#FFD700}
+.t4{background:#2a1a3a;color:#d2a8ff}.t5{background:#2a0a0a;color:#f78166}.t6{background:#3a1a0a;color:#ffa657}
+.ob{display:block;width:100%;padding:9px;border-radius:8px;border:none;font-size:12px;font-weight:bold;cursor:pointer;text-align:center}
+.ob0{background:#58a6ff;color:#000}.ob1{background:#39d353;color:#000}.ob2{background:#FFD700;color:#000}
+.ob3{background:#d2a8ff;color:#000}.ob4{background:#f78166;color:#000}.ob5{background:#39d3d3;color:#000}.ob6{background:#ffa657;color:#000}
+.app{display:none;max-width:600px;margin:0 auto}
+.topbar{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #30363d}
+.back{padding:5px 12px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:12px;cursor:pointer}
+.app-title{font-size:12px;font-weight:bold;color:#FFD700;flex:1;line-height:1.3}
+.stabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.stab{padding:5px 9px;background:#1c2333;border:1px solid #30363d;border-radius:20px;color:#aaa;cursor:pointer;font-size:11px}
+.stab.on{background:#FFD700;color:#000;border-color:#FFD700;font-weight:bold}
+.stats{display:flex;gap:5px;margin-bottom:8px}
+.chip{flex:1;background:#1c2333;border:1px solid #30363d;border-radius:8px;padding:5px 4px;text-align:center;font-size:10px;color:#888}
+.chip b{display:block;font-size:15px;font-weight:bold;color:#eee}
+.chip.g b{color:#39d353}.chip.r b{color:#f78166}.chip.y b{color:#FFD700}
+.prow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.plbl{font-size:11px;color:#888;white-space:nowrap}
+.pbar{flex:1;height:4px;background:#30363d;border-radius:99px;overflow:hidden}
+.pfill{height:100%;border-radius:99px;transition:width .3s}
+.card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:16px;min-height:190px;margin-bottom:10px;cursor:pointer;position:relative}
+.card.shown{border-color:#FFD700}
+.cnum{position:absolute;top:10px;right:12px;font-size:10px;color:#555}
+.sbadge{display:inline-block;font-size:9px;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:20px;margin-bottom:10px;border:1px solid}
+.cq{font-size:15px;line-height:1.5;text-align:center;padding:10px 0;color:#eee}
+.chint{text-align:center;color:#555;font-size:12px;margin-top:10px}
+.asec{display:none}
+.card.shown .asec{display:block}
+.card.shown .qsec{display:none}
+.albl{font-size:10px;color:#39d353;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:bold}
+.ans{font-size:13px;line-height:1.78;white-space:pre-wrap;color:#eee}
+.tip-box{border-left:3px solid #FFD700;padding:8px 10px;margin-top:10px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0;background:#0d1a0d}
+.tip-box b{color:#FFD700}
+.exam-box{border-left:3px solid #f78166;padding:8px 10px;margin-top:8px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0;background:#1a0a0a}
+.exam-box b{color:#f78166}
+.nav{display:flex;gap:6px;margin-bottom:8px}
+.btn{flex:1;padding:10px;border-radius:8px;border:1px solid #30363d;background:#1c2333;color:#eee;font-size:12px;font-weight:bold;cursor:pointer}
+.btn:active{opacity:.7}
+.btn.gold{background:#FFD700;color:#000;border-color:#FFD700}
+.rbs{display:none;gap:5px;margin-bottom:8px}
+.rbs.show{display:flex}
+.rb{flex:1;padding:8px 2px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;border:1px solid;text-align:center}
+.rb:active{opacity:.7}
+.re{background:#0a2a0a;color:#39d353;border-color:#2a6a2a}
+.ro{background:#0a1a3a;color:#58a6ff;border-color:#1a3a6a}
+.rh{background:#2a1a0a;color:#ffa657;border-color:#5a3a1a}
+.rm{background:#2a0a0a;color:#f78166;border-color:#5a1a1a}
+.rprompt{font-size:11px;color:#888;text-align:center;margin-bottom:6px;display:none}
+.rprompt.show{display:block}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.toolbar span{font-size:11px;color:#888}
+.shuf{padding:4px 10px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:11px;cursor:pointer}
+.done{text-align:center;padding:30px 16px;background:#1c2333;border:1px solid #30363d;border-radius:12px;display:none}
+.done h3{color:#FFD700;font-size:18px;margin-bottom:8px}
+.done p{color:#aaa;font-size:13px;margin-bottom:16px;line-height:1.5}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="home" id="homeScreen">
+  <div class="logo">
+    <h1>⭐ A★ Master Checklist<br>Edexcel AS Biology B (9BI0)</h1>
+    <p>Topics 1.1 – 1.4 · Carbon, Molecules, DNA, Enzymes<br>Complete exam-ready Q&amp;A flashcard system</p>
+  </div>
+  <div class="insight">
+    <b>⭐ How to use these flashcards:</b> Each card = one exam-style question. Tap to reveal the A★ answer. Rate yourself honestly — focus your time on Hard and Missed cards. Every answer uses precise mark-scheme language.
+  </div>
+
+  <div class="sec-hdr sh0">🔬 Topic 1.1 — Carbon &amp; Water</div>
+  <div class="dc" onclick="openDeck(0)">
+    <h3><span>🔬</span> Carbon, Water &amp; Inorganic Ions</h3>
+    <p>Why carbon forms complex molecules, all 6 properties of water with biological examples, and the roles of key inorganic ions.</p>
+    <div class="dc-meta"><span class="tag t1">Carbon Tetravalency</span><span class="tag t2">Water Properties</span><span class="tag t3">Inorganic Ions</span></div>
+    <div class="ob ob0">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh1">🍬 Topic 1.2.1 — Carbohydrates I</div>
+  <div class="dc" onclick="openDeck(1)">
+    <h3><span>🍬</span> Monosaccharides &amp; Disaccharides</h3>
+    <p>Alpha vs beta glucose, condensation and hydrolysis reactions, glycosidic bonds, Benedict's test including non-reducing sugars.</p>
+    <div class="dc-meta"><span class="tag t2">α vs β Glucose</span><span class="tag t1">Glycosidic Bonds</span><span class="tag t3">Benedict's Test</span></div>
+    <div class="ob ob1">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh2">🌾 Topic 1.2.2 — Polysaccharides</div>
+  <div class="dc" onclick="openDeck(2)">
+    <h3><span>🌾</span> Starch, Glycogen &amp; Cellulose</h3>
+    <p>Structural differences between amylose, amylopectin, glycogen and cellulose — and why each is ideal for its function.</p>
+    <div class="dc-meta"><span class="tag t3">Amylose vs Amylopectin</span><span class="tag t2">Cellulose Structure</span><span class="tag t1">Iodine Test</span></div>
+    <div class="ob ob2">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh3">🫒 Topic 1.2.3 — Lipids</div>
+  <div class="dc" onclick="openDeck(3)">
+    <h3><span>🫒</span> Triglycerides, Phospholipids &amp; Cholesterol</h3>
+    <p>Ester bond formation, saturated vs unsaturated fatty acids, why lipids are ideal energy stores, phospholipid bilayers.</p>
+    <div class="dc-meta"><span class="tag t4">Ester Bonds</span><span class="tag t2">Phospholipid Bilayer</span><span class="tag t6">Cholesterol</span></div>
+    <div class="ob ob3">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh4">🧬 Topic 1.2.4 — Proteins</div>
+  <div class="dc" onclick="openDeck(4)">
+    <h3><span>🧬</span> Amino Acids, Protein Structure &amp; Sickle Cell</h3>
+    <p>4 levels of protein structure with bonds, fibrous vs globular proteins, denaturation, and the complete sickle cell causal chain.</p>
+    <div class="dc-meta"><span class="tag t5">4 Levels of Structure</span><span class="tag t3">Denaturation</span><span class="tag t4">Sickle Cell</span></div>
+    <div class="ob ob4">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh5">⚡ Topic 1.3 — Nucleotides, DNA &amp; Protein Synthesis</div>
+  <div class="dc" onclick="openDeck(5)">
+    <h3><span>⚡</span> ATP, DNA, RNA &amp; Protein Synthesis</h3>
+    <p>ATP hydrolysis and phosphorylation, DNA vs RNA comparison, semi-conservative replication, transcription and translation stages, mutation types.</p>
+    <div class="dc-meta"><span class="tag t1">ATP Energy Currency</span><span class="tag t2">DNA Replication</span><span class="tag t5">Mutations</span></div>
+    <div class="ob ob5">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh6">🔩 Topic 1.4 — Enzymes</div>
+  <div class="dc" onclick="openDeck(6)">
+    <h3><span>🔩</span> Enzymes — Mechanism, Factors &amp; Inhibition</h3>
+    <p>Activation energy, induced-fit model, all factors affecting enzyme activity, competitive vs non-competitive inhibition, immobilised enzymes.</p>
+    <div class="dc-meta"><span class="tag t2">Induced Fit</span><span class="tag t3">Inhibition Types</span><span class="tag t6">Immobilised Enzymes</span></div>
+    <div class="ob ob6">Open Flashcards →</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="appScreen">
+  <div class="topbar">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div class="app-title" id="appTitle"></div>
+  </div>
+  <div class="stabs" id="stabs"></div>
+  <div class="stats">
+    <div class="chip"><b id="sT">0</b>Cards</div>
+    <div class="chip y"><b id="sD">0</b>Done</div>
+    <div class="chip g"><b id="sE">0</b>Easy</div>
+    <div class="chip r"><b id="sH">0</b>Hard</div>
+  </div>
+  <div class="prow">
+    <span class="plbl" id="plbl">0/0</span>
+    <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
+  </div>
+  <div id="MC">
+    <div class="toolbar"><span id="cardlbl"></span><button class="shuf" onclick="shuf()">🔀 Shuffle</button></div>
+    <div class="card" id="CD" onclick="rev()">
+      <span class="cnum" id="CN"></span>
+      <div class="qsec">
+        <span class="sbadge" id="badge"></span>
+        <div class="cq" id="QQ"></div>
+        <div class="chint">👆 Tap to reveal A★ answer</div>
+      </div>
+      <div class="asec">
+        <span class="sbadge" id="badge2"></span>
+        <div class="albl">✅ A★ Answer</div>
+        <div class="ans" id="AA"></div>
+        <div id="TIP" class="tip-box hide"></div>
+        <div id="EXAM" class="exam-box hide"></div>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="btn" onclick="go(-1)">← Prev</button>
+      <button class="btn gold" onclick="rev()">👁 Reveal</button>
+      <button class="btn" onclick="go(1)">Next →</button>
+    </div>
+    <div class="rprompt" id="rp">How well did you know this?</div>
+    <div class="rbs" id="RB">
+      <button class="rb re" onclick="rt('e')">✅ Easy</button>
+      <button class="rb ro" onclick="rt('o')">👍 Got it</button>
+      <button class="rb rh" onclick="rt('h')">⚠️ Hard</button>
+      <button class="rb rm" onclick="rt('m')">❌ Missed</button>
+    </div>
+  </div>
+  <div class="done" id="DN">
+    <h3>🎉 Section Complete!</h3>
+    <p>Outstanding! Keep reviewing Hard and Missed cards until every answer is instant and precise.</p>
+    <button class="btn gold" style="max-width:200px;margin:0 auto;display:block" onclick="rst()">🔄 Review Again</button>
+  </div>
+</div>
+
+<script>
+// card: [secIdx, question, answer, tip, examTrap]
+var DECKS=[
+
+// ══════════════════════════════════════════
+// DECK 0: Carbon, Water & Ions
+// ══════════════════════════════════════════
+{title:"🔬 Topic 1.1 — Carbon, Water & Ions", accent:"#58a6ff",
+sections:["⚛️ Carbon","💧 Water","🧂 Inorganic Ions"],
+cards:[
+[0,"Why does carbon form complex biological molecules?","Carbon has 4 electrons in its outer shell, allowing it to form up to 4 strong, stable covalent bonds (tetravalency).\n\nThis enables carbon atoms to bond with each other and with H, O, and N atoms to produce:\n• Long straight chains\n• Branched chains\n• Ring structures\n• Large three-dimensional molecules\n\nResult: carbon forms the stable backbone of all major biological macromolecules — carbohydrates, lipids, proteins, and nucleic acids.","Tetravalency = 4 bonds. Always state the consequence: enables large, complex, stable molecules essential for life.",""],
+[0,"Distinguish between covalent bonds and hydrogen bonds.","COVALENT BONDS:\n• Strong intramolecular bonds\n• Formed by sharing of electrons between atoms (e.g. C–C, C–H, O–H)\n• Require significant energy to break\n• Join atoms within the same molecule\n\nHYDROGEN BONDS:\n• Weak intermolecular attractions\n• Form between a δ+ hydrogen and a δ– electronegative atom (N, O, or F)\n• Act between molecules or between different parts of the same large molecule\n• Important in: water structure, DNA base pairing, protein secondary/tertiary structure\n\nKEY DISTINCTION: Covalent = within a molecule; Hydrogen = between molecules.","Hydrogen bonds are weak individually but numerous — their collective strength maintains important biological structures (DNA, proteins, water).","Exam trap: Hydrogen bonds do NOT join the bases — they are attractions between bases. Covalent bonds form the backbone (phosphodiester bonds) and peptide bonds."],
+[1,"Explain all six key properties of water and give one biological example for each.","1. EXCELLENT SOLVENT — polarity allows water to dissolve ions and polar molecules (glucose, amino acids, mineral ions) → essential for blood plasma, xylem, and phloem transport.\n\n2. HIGH SPECIFIC HEAT CAPACITY — large energy input needed to raise temperature → maintains stable body temperature and aquatic environments, preventing enzyme denaturation.\n\n3. HIGH LATENT HEAT OF VAPORISATION — evaporation removes large amounts of heat → effective cooling in sweating (mammals) and transpiration (plants).\n\n4. COHESION — hydrogen bonds hold water molecules together → continuous water columns in xylem (cohesion-tension theory).\n\n5. ADHESION — water molecules stick to polar surfaces → capillary action helps water rise in narrow xylem vessels.\n\n6. ICE IS LESS DENSE THAN LIQUID WATER — hydrogen bonds form an open lattice in ice → ice floats, insulating water below, allowing aquatic organisms to survive winter.","All 6 properties must be linked to a specific biological function — stating the property alone does NOT gain marks. Structure: property → reason → biological advantage.","Exam trap: 'Water is a good solvent' alone = 0 marks. Must state WHY (polar/hydrogen bonding) and the biological consequence (transport)."],
+[1,"Explain why water has a high specific heat capacity.","Water has a high specific heat capacity because a large amount of energy is needed to break the many hydrogen bonds between water molecules before the kinetic energy (temperature) of the molecules can increase.\n\nBiological significance:\n• Maintains a stable temperature in cells and body fluids\n• Prevents rapid temperature fluctuations that would denature enzymes\n• Creates stable aquatic habitats for organisms","High SHC = many H-bonds must be broken = much energy needed = temperature is slow to change = biological stability.",""],
+[1,"Explain why ice floats and its biological significance.","When water freezes, water molecules form a regular lattice held together by hydrogen bonds. This lattice structure is more open and less dense than liquid water (where H-bonds are constantly forming and breaking).\n\nBecause ice is less dense than liquid water, ice floats on the surface.\n\nBiological significance:\n• Ice layer acts as an insulator, preventing lakes and ponds from freezing solid\n• Liquid water remains below the ice throughout winter\n• Aquatic organisms can survive and maintain metabolic processes","The key concept is that ice's lattice structure takes up MORE SPACE per molecule than liquid water — so it is less dense. This is a unique property — most solids are denser than their liquid form.",""],
+[2,"State the roles of Ca²⁺, PO₄³⁻, H⁺, Fe²⁺, Na⁺ and K⁺ in living organisms.","Ca²⁺ (Calcium ions):\n• Component of calcium pectate in plant cell walls\n• Essential for muscle contraction and nerve impulse transmission\n• Activates enzymes involved in blood clotting\n\nPO₄³⁻ (Phosphate ions):\n• Component of ATP, ADP, and AMP (energy transfer)\n• Forms the phosphate-sugar backbone of DNA and RNA\n• Found in phospholipids of cell membranes\n\nH⁺ (Hydrogen ions):\n• Determines pH (acidity/alkalinity)\n• Essential in chemiosmosis during respiration and photosynthesis\n• Important in proton gradients across membranes\n\nFe²⁺ (Iron ions):\n• Central component of the haem group in haemoglobin and myoglobin\n• Essential for oxygen binding and transport\n\nNa⁺ (Sodium ions):\n• Maintains electrochemical gradient for nerve impulse transmission\n• Co-transported with glucose in the gut epithelium\n\nK⁺ (Potassium ions):\n• Essential for membrane potential in nerve and muscle cells\n• Causes guard cells to open stomata (water enters by osmosis)","Always link ion to its specific biological role — not just 'important for life'. Name the molecule it is part of (e.g. Fe²⁺ in haem group of haemoglobin) or the specific process it enables.",""]
+]},
+
+// ══════════════════════════════════════════
+// DECK 1: Carbohydrates I
+// ══════════════════════════════════════════
+{title:"🍬 Topic 1.2.1 — Monosaccharides & Disaccharides", accent:"#39d353",
+sections:["🍬 Monosaccharides","🔗 Bonds & Reactions","🧪 Benedict's Test"],
+cards:[
+[0,"Define monosaccharide and disaccharide accurately.","MONOSACCHARIDE:\nThe simplest form of carbohydrate. A single sugar unit that cannot be hydrolysed to form a smaller carbohydrate.\nExamples: glucose, fructose, galactose, ribose.\n\nDISACCHARIDE:\nA carbohydrate formed when TWO monosaccharides are joined together by a glycosidic bond via a condensation reaction with the removal of one water molecule.\nExamples: maltose, sucrose, lactose.","Monosaccharide = cannot be hydrolysed further. Disaccharide = exactly two monosaccharide units joined by one glycosidic bond.",""],
+[0,"Distinguish α-glucose from β-glucose precisely.","Both α-glucose and β-glucose:\n• Have the molecular formula C₆H₁₂O₆\n• Are hexose sugars (6 carbons)\n• Are identical except for ONE structural difference\n\nDIFFERENCE — the position of the –OH group on carbon 1:\n• α-glucose: –OH group is BELOW the ring plane\n• β-glucose: –OH group is ABOVE the ring plane\n\nWHY THIS MATTERS:\n• α-glucose → forms starch (amylose/amylopectin) and glycogen (storage)\n• β-glucose → forms cellulose (structural) — due to the 180° rotation needed, producing straight unbranched chains","The ONLY structural difference between α and β-glucose is the orientation of the –OH on C1. This tiny difference determines whether a polysaccharide is for storage (starch) or structure (cellulose).",  "Exam trap: Do NOT say they have different molecular formulae — both are C₆H₁₂O₆. They are structural isomers (same formula, different 3D arrangement)."],
+[0,"State the monosaccharide components of maltose, sucrose and lactose.","MALTOSE:\nα-glucose + α-glucose\n(joined by an α-1,4 glycosidic bond)\n\nSUCROSE:\nα-glucose + fructose\n(joined by an α-1,2 glycosidic bond)\n\nLACTOSE:\nα-glucose + galactose\n(joined by a β-1,4 glycosidic bond)\n\nNOTE: Sucrose is the only non-reducing sugar of the three — it cannot reduce Benedict's reagent because the glycosidic bond blocks the reducing end.","Memorise all three pairs. Sucrose = non-reducing sugar (important for Benedict's test). The bond position numbers tell you which carbons are joined.",""],
+[1,"Explain condensation and hydrolysis reactions using correct terminology.","CONDENSATION REACTION:\n• Two molecules are joined together\n• ONE molecule of water is REMOVED\n• A new covalent bond is formed (a glycosidic bond in carbohydrates)\n• Example: two α-glucose → maltose + H₂O\n\nHYDROLYSIS REACTION:\n• A molecule is broken into two smaller molecules\n• ONE molecule of water is ADDED\n• The covalent bond is broken\n• Example: maltose + H₂O → two α-glucose\n\nKEY PRINCIPLE: These are opposite reactions. Condensation builds (polymerises), hydrolysis breaks down (depolymerises).","Condensation = water OUT = bond formed. Hydrolysis = water IN = bond broken. This applies to ALL biological polymers (carbs, proteins, lipids, nucleic acids).","Exam trap: 'Water is produced' in condensation — always say ONE molecule of water is REMOVED per bond formed. Do not say 'water is used up' in hydrolysis — say 'water is ADDED to break the bond'."],
+[1,"Define a glycosidic bond and state how it forms.","A glycosidic bond is the COVALENT bond formed between two monosaccharide units during a condensation reaction.\n\nSpecifically:\n• The –OH group on carbon 1 of one monosaccharide reacts with the –OH group on a carbon of another monosaccharide\n• One water molecule is released\n• A –C–O–C– linkage (the glycosidic bond) is formed\n\nThe bond is named by the carbons it links:\n• α-1,4 glycosidic bond: links C1 of one glucose to C4 of the next (starch, glycogen)\n• α-1,6 glycosidic bond: forms branch points in amylopectin and glycogen\n• β-1,4 glycosidic bond: links β-glucose units in cellulose","The name of the glycosidic bond tells you the carbons involved (e.g. 1,4 = C1 to C4) and the type of glucose (α or β). This determines the shape of the resulting polysaccharide.",""],
+[2,"Describe the Benedict's test procedure and interpret results for reducing sugars.","BENEDICT'S TEST — REDUCING SUGARS:\n\nPROCEDURE:\n1. Add Benedict's reagent (blue) to the sample in a test tube\n2. Heat in a water bath at 75–80°C for 5 minutes\n\nRESULTS (colour changes with increasing concentration):\nBlue → Green → Yellow → Orange → Brick-red precipitate\n\nInterpretation:\n• Blue = no reducing sugar present\n• Green = very low concentration\n• Brick-red = high concentration\n\nREDUCING SUGARS include: glucose, fructose, galactose, maltose, lactose\nNON-REDUCING SUGAR: sucrose (cannot reduce Benedict's directly)","The colour change is a GRADIENT — the deeper the colour, the higher the sugar concentration. Use this for semi-quantitative comparisons.","Exam trap: The colour brick-red refers to the PRECIPITATE, not a colour change in the solution. Always state 'brick-red precipitate' not just 'brick-red colour'."],
+[2,"Describe the test for non-reducing sugars (e.g. sucrose) step by step.","TESTING FOR NON-REDUCING SUGARS:\n\nStep 1: Perform Benedict's test first → NEGATIVE result (stays blue) confirms no reducing sugars are present.\n\nStep 2: Take a new sample. Add DILUTE HYDROCHLORIC ACID and boil — this HYDROLYSES the glycosidic bond, breaking sucrose into glucose + fructose.\n\nStep 3: NEUTRALISE with sodium hydrogencarbonate solution (required because Benedict's reagent does not work in acid conditions).\n\nStep 4: Add Benedict's reagent and heat → POSITIVE result (brick-red precipitate) NOW confirms that a non-reducing sugar was originally present.\n\nCONCLUSION: Positive result ONLY after hydrolysis = non-reducing sugar present.","The neutralisation step is critical and frequently missed. Acid conditions prevent Benedict's from working — you MUST neutralise first.","Exam trap: If you skip neutralisation, the acid prevents Benedict's from reacting — you get a false negative. Always state 'neutralise with sodium hydrogencarbonate' as a separate named step."]
+]},
+
+// ══════════════════════════════════════════
+// DECK 2: Polysaccharides
+// ══════════════════════════════════════════
+{title:"🌾 Topic 1.2.2 — Polysaccharides", accent:"#FFD700",
+sections:["🏗 Structure Comparison","🔋 Storage Molecules","🧱 Cellulose","🧪 Iodine Test"],
+cards:[
+[0,"Compare the structures of amylose, amylopectin, glycogen and cellulose.","AMYLOSE (part of starch):\n• Unbranched chain of α-glucose\n• Joined by α-1,4 glycosidic bonds only\n• Coils into a HELIX\n• Compact structure → good for storage\n\nAMYLOPECTIN (part of starch):\n• Branched chain of α-glucose\n• α-1,4 bonds in main chain + α-1,6 bonds at branch points\n• Many free ends → rapid hydrolysis when glucose needed\n\nGLYCOGEN:\n• Highly branched α-glucose polymer\n• More branches than amylopectin\n• Found in liver and muscle cells of animals\n• Very rapid glucose release due to numerous free ends\n\nCELLULOSE:\n• Straight, unbranched chains of β-glucose\n• β-1,4 glycosidic bonds\n• Alternate glucose molecules rotated 180° → STRAIGHT chains\n• Adjacent chains linked by hydrogen bonds → MICROFIBRILS\n• High tensile strength → structural role in plant cell walls","The key comparison: α-glucose → coiled/branched (storage). β-glucose → straight chains (structural). The bond type (α vs β) determines the shape, which determines the function.","Exam trap: Do NOT say glycogen is 'the same as starch' — glycogen is MORE branched than amylopectin. State the specific differences in branching frequency."],
+[1,"Explain why starch and glycogen are effective storage molecules.","Both starch and glycogen are effective storage molecules because:\n\n1. INSOLUBLE → no osmotic effect on the cell; does not draw water in or affect water potential\n\n2. LARGE MOLECULES → cannot diffuse out of cells through the cell membrane\n\n3. COMPACT STRUCTURE → the helical coiling of amylose and extensive branching of amylopectin/glycogen allow large amounts of glucose to be stored in a small volume\n\n4. EASILY HYDROLYSED → the many branch points (free ends) mean glycogen hydrolase enzymes can attack multiple sites simultaneously, releasing glucose rapidly when energy is needed\n\n5. CHEMICALLY INERT → do not react with other cell components during storage","The most commonly missed point is explaining WHY branching is an advantage: more free ends = faster hydrolysis = faster glucose release = faster energy supply.",""],
+[2,"Explain why cellulose is an ideal structural material for plant cell walls.","CELLULOSE STRUCTURE → FUNCTION LINK:\n\n1. β-glucose units: the –OH on C1 is above the ring, so alternate glucose units must be ROTATED 180° to form the β-1,4 glycosidic bonds → this produces LONG, STRAIGHT, UNBRANCHED chains (unlike the coiled chains of starch)\n\n2. Straight chains run PARALLEL to each other and form hydrogen bonds between adjacent chains → creates strong microfibrils\n\n3. Microfibrils are bundled into fibres → very HIGH TENSILE STRENGTH\n\n4. This strength allows plant cells to withstand TURGOR PRESSURE without bursting, providing structural rigidity to the plant\n\nSUMMARY: β-1,4 bonds → straight chains → H-bonding between chains → microfibrils → tensile strength → withstands turgor","The critical link: β-glucose bonds produce STRAIGHT chains (not coiled), which can align in parallel and H-bond to form microfibrils. Starch cannot do this because α-glucose bonds produce coiled chains.","Exam trap: 'Cellulose is strong because it has lots of bonds' is too vague. Must state: β-1,4 bonds → straight chains → parallel alignment → hydrogen bonds between chains → microfibrils → tensile strength."],
+[3,"Describe the iodine test for starch.","REAGENT: Iodine solution (iodine dissolved in potassium iodide solution)\n\nPROCEDURE:\n• Add a few drops of iodine solution directly to the sample\n• No heating required\n\nRESULTS:\n• POSITIVE: Colour changes from orange-brown to BLUE-BLACK\n• NEGATIVE: Remains orange-brown\n\nWHY BLUE-BLACK OCCURS:\nThe iodine molecules become trapped inside the helical coils of the AMYLOSE component of starch. This trapping changes the way light is absorbed by the iodine, producing the blue-black colour.\n\nNOTE: Glycogen and cellulose do NOT produce a blue-black colour with iodine (different structures — no helix to trap iodine).","The helical structure of amylose is the reason iodine gives a blue-black colour with starch. Cellulose and glycogen do not have this helix → no colour change.",""]
+]},
+
+// ══════════════════════════════════════════
+// DECK 3: Lipids
+// ══════════════════════════════════════════
+{title:"🫒 Topic 1.2.3 — Lipids", accent:"#d2a8ff",
+sections:["🫒 Triglycerides","🔗 Ester Bonds","🏗 Phospholipids","💊 Cholesterol"],
+cards:[
+[0,"Describe the structure of a triglyceride and how it forms.","A triglyceride consists of:\n• ONE glycerol molecule\n• THREE fatty acid molecules\n• Joined by THREE ester bonds\n\nFORMATION:\n• Three condensation reactions occur simultaneously\n• Each –OH group on glycerol reacts with the –COOH (carboxyl) group of one fatty acid\n• ONE water molecule is released per ester bond formed (3 water molecules total)\n• This forms the ester bond (–COO–) linking each fatty acid to the glycerol\n\nSTRUCTURE: The three fatty acid tails extend from the glycerol backbone, making the molecule largely hydrophobic (non-polar).","Triglyceride = glycerol + 3 fatty acids + 3 ester bonds + 3 water molecules released. All three components must be stated for full marks.",""],
+[1,"Distinguish saturated from unsaturated fatty acids and explain their properties.","SATURATED FATTY ACIDS:\n• NO carbon-carbon double bonds (C=C) in the hydrocarbon chain\n• Chains are straight and can PACK CLOSELY TOGETHER\n• Strong van der Waals forces between tightly packed chains\n• HIGH melting point → SOLID at room temperature\n• Example: animal fats (butter, lard)\n\nUNSATURATED FATTY ACIDS:\n• ONE or MORE C=C double bonds in the hydrocarbon chain\n• Double bonds create KINKS (bends) in the chain\n• Chains CANNOT pack as closely together\n• Weaker van der Waals forces between loosely packed chains\n• LOW melting point → LIQUID at room temperature\n• Example: plant oils (olive oil, sunflower oil)\n\nPolyunsaturated = more than one C=C double bond","The C=C double bond creates a kink → prevents close packing → fewer van der Waals forces → lower melting point → liquid at room temperature. This is the complete mechanistic chain.","Exam trap: Do not say unsaturated fats 'have more energy' — saturated and unsaturated fats have similar energy content per gram. The difference is in physical state (solid vs liquid) and health effects."],
+[1,"Explain why lipids are more effective long-term energy stores than carbohydrates.","LIPIDS ARE BETTER LONG-TERM ENERGY STORES BECAUSE:\n\n1. MORE ENERGY PER GRAM — lipids contain more than TWICE the energy per gram compared to carbohydrates (approximately 37 kJ/g vs 17 kJ/g) due to the higher proportion of C–H bonds, which release more energy when oxidised\n\n2. HYDROPHOBIC AND INSOLUBLE — do not dissolve in water → no osmotic effect on cells → do not raise water potential → can be stored without drawing in water\n\n3. COMPACT STORAGE — lipids do not associate with water molecules (unlike glycogen, which is hydrated) → more mass of fuel stored per unit volume\n\n4. METABOLIC WATER — oxidation of lipids during respiration produces water as a by-product → useful for desert animals (e.g. camels) as an additional water source","Two most important points: (1) twice the energy per gram AND (2) insoluble so no osmotic effect. Both must appear in longer answers.",""],
+[2,"Describe the structure of a phospholipid and explain how a bilayer forms.","PHOSPHOLIPID STRUCTURE:\n• ONE glycerol molecule\n• TWO fatty acid tails (hydrophobic, non-polar)\n• ONE phosphate group (hydrophilic, polar/charged)\n• The phosphate group is attached to the glycerol\n• The molecule is AMPHIPATHIC (has both hydrophilic and hydrophobic regions)\n\nBILAYER FORMATION:\n• In an aqueous environment, phospholipids SPONTANEOUSLY arrange into a bilayer\n• The HYDROPHILIC phosphate heads face OUTWARDS towards the water (inside and outside the cell)\n• The HYDROPHOBIC fatty acid tails face INWARDS, away from water\n• This creates a stable, self-sealing barrier\n\nFUNCTION: The bilayer forms a selectively permeable barrier — hydrophobic core prevents passage of polar/charged molecules without transport proteins.","'Spontaneously' is a key word — the bilayer forms without energy input because this arrangement is thermodynamically stable (hydrophobic effect drives the assembly).",""],
+[3,"State the biological roles of cholesterol.","ROLES OF CHOLESTEROL:\n\n1. MEMBRANE FLUIDITY REGULATION:\n• Cholesterol molecules insert between phospholipid tails in the membrane\n• At HIGH temperatures: cholesterol reduces fluidity by restricting phospholipid movement\n• At LOW temperatures: cholesterol prevents the membrane from becoming too rigid by preventing close packing\n• Overall: cholesterol stabilises membrane fluidity across a range of temperatures\n\n2. PRECURSOR FOR STEROID HORMONES:\n• Cholesterol is the starting molecule from which all steroid hormones are synthesised (e.g. oestrogen, testosterone, cortisol)\n\n3. PRECURSOR FOR VITAMIN D:\n• Cholesterol in the skin is converted to Vitamin D by UV light\n\n4. HEALTH LINK:\n• Elevated LDL cholesterol levels are associated with atherosclerosis and increased risk of cardiovascular disease (CVD)","Cholesterol is not simply 'bad' — it has essential biological roles. High LDL specifically (not total cholesterol) is linked to CVD. This distinction is commonly examined.",""]
+]},
+
+// ══════════════════════════════════════════
+// DECK 4: Proteins
+// ══════════════════════════════════════════
+{title:"🧬 Topic 1.2.4 — Amino Acids & Protein Structure", accent:"#f78166",
+sections:["🔤 Amino Acids","🧬 4 Levels of Structure","⚡ Denaturation","🩸 Sickle Cell"],
+cards:[
+[0,"Describe the structure of an amino acid and explain the role of the R group.","An amino acid has a central α-carbon (C) bonded to FOUR groups:\n\n1. AMINO GROUP (–NH₂) — basic, involved in peptide bond formation\n2. CARBOXYL GROUP (–COOH) — acidic, involved in peptide bond formation\n3. HYDROGEN ATOM (–H)\n4. R GROUP (variable side chain) — different for each of the 20 amino acids\n\nROLE OF R GROUP:\n• Determines the chemical properties of the amino acid (charged, polar, non-polar, acidic, basic)\n• Determines how the amino acid interacts with others → determines folding\n• R groups form the bonds that maintain TERTIARY structure (H-bonds, ionic bonds, disulfide bridges, hydrophobic interactions)\n• R group interactions ultimately determine the 3D shape and therefore the function of the protein","The R group is the key to all protein diversity. Different R groups → different properties → different folding → different functions. This is why 20 amino acids can produce millions of different proteins.",""],
+[0,"Describe peptide bond formation with correct terminology.","A peptide bond forms by a CONDENSATION REACTION between two amino acids:\n\n• The CARBOXYL GROUP (–COOH) of one amino acid reacts with the AMINO GROUP (–NH₂) of the next amino acid\n• ONE MOLECULE OF WATER is eliminated (removed)\n• A PEPTIDE BOND (–CO–NH–) is formed between the two amino acids\n\nThis reaction is repeated to form:\n• Dipeptide = 2 amino acids joined by 1 peptide bond\n• Polypeptide = many amino acids joined by many peptide bonds\n\nHYDROLYSIS (reverse): adding water to break peptide bonds releases individual amino acids (this occurs during digestion).","The peptide bond is a covalent bond. It links amino acids in the PRIMARY structure. It is NOT broken during denaturation — only H-bonds, ionic bonds, disulfide bridges, and hydrophobic interactions are disrupted.",""],
+[1,"Describe all four levels of protein structure, naming the bonds at each level.","PRIMARY STRUCTURE:\n• The specific sequence of amino acids in the polypeptide chain\n• Held together by: PEPTIDE BONDS (covalent)\n• Determined by: the DNA base sequence (via mRNA)\n\nSECONDARY STRUCTURE:\n• Local folding of the polypeptide chain into α-helices or β-pleated sheets\n• Held together by: HYDROGEN BONDS (between backbone –C=O and –N–H groups)\n\nTERTIARY STRUCTURE:\n• Complete 3D folding of the entire polypeptide chain\n• Held together by interactions between R groups:\n  – Hydrogen bonds\n  – Ionic bonds (between charged R groups)\n  – Disulfide bridges (covalent bonds between –SH groups of cysteine residues)\n  – Hydrophobic interactions (non-polar R groups cluster away from water)\n\nQUATERNARY STRUCTURE:\n• Two or more polypeptide chains (subunits) assembled together\n• May include non-protein prosthetic groups (e.g. haem group in haemoglobin)\n• Held together by: same bond types as tertiary structure","Primary = sequence (peptide bonds only). Secondary = local folding (H-bonds in backbone). Tertiary = full 3D shape (R group interactions: H-bonds + ionic + disulfide + hydrophobic). Quaternary = multiple chains.","Exam trap: 'Peptide bonds maintain the 3D structure' = WRONG. Peptide bonds ONLY link amino acids in the primary sequence. The 3D shape is maintained by R group interactions (H-bonds, ionic, disulfide, hydrophobic)."],
+[1,"Compare fibrous and globular proteins with examples.","FIBROUS PROTEINS:\n• Long, elongated, insoluble structure\n• Repetitive amino acid sequences → regular secondary structure\n• Very stable and strong\n• Function: STRUCTURAL roles\n• Example: COLLAGEN (in tendons, bones, skin, blood vessel walls) — triple helix, extremely high tensile strength\n• Example: KERATIN (in hair, nails, skin)\n\nGLOBULAR PROTEINS:\n• Compact, spherical, usually SOLUBLE in water\n• Complex 3D folding → specific active/binding sites\n• Function: FUNCTIONAL/METABOLIC roles\n• Examples: ENZYMES (e.g. amylase), ANTIBODIES (immune system), HAEMOGLOBIN (oxygen transport), HORMONES (e.g. insulin)\n\nKEY DISTINCTION: Fibrous = structural + insoluble. Globular = functional + soluble.","The hydrophilic R groups of globular proteins face outwards towards water (making them soluble). Fibrous proteins have repetitive sequences producing regular structures (e.g. every 3rd amino acid in collagen is glycine).",""],
+[2,"Explain protein denaturation and which bonds are broken.","DENATURATION:\nThe permanent disruption of the secondary, tertiary, and quaternary structure of a protein due to extreme conditions.\n\nCAUSES:\n• High temperature — increases kinetic energy → hydrogen bonds and ionic bonds broken more frequently than they reform → active site loses its specific shape\n• Extreme pH — excess H⁺ or OH⁻ ions interfere with ionic bonds between charged R groups → tertiary structure disrupted\n\nBONDS BROKEN:\n✓ Hydrogen bonds (in secondary and tertiary structure)\n✓ Ionic bonds (in tertiary structure)\n✓ Disulfide bridges (in severe denaturation by strong reducing agents)\n✓ Hydrophobic interactions\n\nBONDS NOT BROKEN:\n✗ Peptide bonds (primary structure remains intact — amino acid sequence is unchanged)\n\nEFFECT ON ENZYMES:\nActive site changes shape → substrate no longer complementary → enzyme-substrate complex cannot form → catalysis stops.","Denaturation = shape changes but PRIMARY structure (amino acid sequence/peptide bonds) REMAINS. Always state which bonds ARE broken and which are NOT.","Exam trap: 'Denaturation destroys the enzyme' is too vague. Must specify: (1) H-bonds and ionic bonds disrupted → (2) tertiary structure changes → (3) active site shape changes → (4) substrate no longer complementary → (5) enzyme-substrate complex cannot form."],
+[3,"Describe the complete causal chain from gene mutation to sickle cell disease symptoms.","COMPLETE CAUSAL CHAIN — 6 STEPS:\n\n1. BASE SUBSTITUTION MUTATION: A single base substitution in the β-globin gene changes the DNA codon from GAG to GTG\n\n2. CODON CHANGE: The mRNA codon changes from GAG (glutamic acid) to GUG (valine) during transcription\n\n3. AMINO ACID CHANGE: During translation, valine is incorporated at position 6 of the β-globin chain instead of glutamic acid → PRIMARY STRUCTURE CHANGES\n\n4. TERTIARY STRUCTURE CHANGE: Valine has a hydrophobic R group (unlike the charged hydrophilic R group of glutamic acid). Under low oxygen conditions, the hydrophobic valine residues cause HbS molecules to POLYMERISE (stick together), forming rigid fibres\n\n5. RBC SHAPE CHANGE: The rigid fibres deform red blood cells from the normal biconcave disc shape into a SICKLE (crescent) shape\n\n6. PHYSIOLOGICAL CONSEQUENCES:\n• Sickle cells BLOCK narrow capillaries → pain crises, organ damage\n• Sickle cells carry oxygen LESS EFFICIENTLY → anaemia (chronic low oxygen supply to tissues)\n• Sickle cells are fragile → rapid destruction → haemolytic anaemia","Six steps in order: mutation → codon → amino acid → tertiary structure → RBC shape → symptoms. Every link in the chain is a potential exam question. The hydrophobic vs hydrophilic R group difference (Val vs Glu) is the molecular mechanism.",""]
+]},
+
+// ══════════════════════════════════════════
+// DECK 5: Nucleotides, DNA & Protein Synthesis
+// ══════════════════════════════════════════
+{title:"⚡ Topic 1.3 — ATP, DNA, RNA & Protein Synthesis", accent:"#39d3d3",
+sections:["⚡ ATP","🧬 DNA & RNA","🔄 DNA Replication","📜 Protein Synthesis"],
+cards:[
+[0,"Describe the structure of a nucleotide and distinguish ATP, ADP and AMP.","NUCLEOTIDE STRUCTURE — three components:\n1. PHOSPHATE GROUP (one or more)\n2. PENTOSE SUGAR:\n   • Ribose → in ATP, RNA\n   • Deoxyribose → in DNA\n3. NITROGENOUS BASE (attached to C1 of sugar)\n\nPHOSPHATE NOMENCLATURE:\n• AMP = Adenosine MONOphosphate (1 phosphate group)\n• ADP = Adenosine DIphosphate (2 phosphate groups)\n• ATP = Adenosine TRIphosphate (3 phosphate groups)\n\nThe phosphate groups are linked by high-energy bonds. Breaking the bond between the second and third phosphate releases energy (hydrolysis).","AMP→ADP→ATP: each adds one phosphate group. The terminal (third) phosphate bond contains the most energy — this is the bond broken during ATP hydrolysis.",""],
+[0,"Explain ATP hydrolysis and phosphorylation with equations and explain why ATP is an effective immediate energy source.","HYDROLYSIS (releases energy):\nATP + H₂O → ADP + Pᵢ + Energy released\n(catalysed by ATPase)\n\nPHOSPHORYLATION (stores energy):\nADP + Pᵢ + Energy → ATP\n(catalysed by ATP synthase; energy from respiration or photosynthesis)\n\nWHY ATP IS AN EFFECTIVE IMMEDIATE ENERGY SOURCE:\n1. Releases energy in SMALL, MANAGEABLE amounts in ONE reaction step\n2. Small, soluble molecule → diffuses rapidly to wherever energy is needed\n3. Easily and rapidly REGENERATED from ADP + Pᵢ — continuously recycled\n4. No digestion required → energy immediately available when bond is hydrolysed\n5. UNIVERSAL energy currency — used in all living cells\n\nList of cellular processes requiring ATP:\nActive transport, muscle contraction, protein synthesis, DNA replication, nerve impulse (Na⁺/K⁺ pump), endocytosis/exocytosis, Calvin cycle (photosynthesis), cell division.","ATP is NOT a long-term energy store — that is the role of glycogen, starch, and fats. ATP is the IMMEDIATE, universal energy currency. It is continuously recycled (not stored in large amounts).","Exam trap: 'ATP stores energy for a long time' = WRONG. ATP is used and regenerated continuously. For long-term storage: glycogen (animals), starch (plants), triglycerides (both)."],
+[1,"Compare DNA and RNA accurately across all key features.","COMPARISON TABLE:\n\nSUGAR:\n• DNA: deoxyribose (no –OH on C2)\n• RNA: ribose (–OH on C2)\n\nSTRANDS:\n• DNA: double-stranded helix\n• RNA: usually single-stranded\n\nBASES:\n• DNA: Adenine (A), Thymine (T), Cytosine (C), Guanine (G)\n• RNA: Adenine (A), URACIL (U), Cytosine (C), Guanine (G)\n• (Uracil replaces Thymine in RNA)\n\nSTABILITY:\n• DNA: more stable (deoxyribose more stable; double strand protects bases)\n• RNA: less stable (ribose slightly less stable; single strand)\n\nLOCATION:\n• DNA: mainly in nucleus (also mitochondria and chloroplasts)\n• RNA: nucleus AND cytoplasm\n\nFUNCTION:\n• DNA: stores and transmits genetic information\n• RNA: involved in protein synthesis (mRNA, tRNA, rRNA)","Uracil in RNA replaces Thymine in DNA. The complementary base pairing rules change: in RNA it is A–U (not A–T). This frequently appears in transcription questions.",""],
+[1,"State the complementary base pairing rules for DNA and explain why CG pairs are more stable than AT pairs.","DNA BASE PAIRING RULES:\n• Adenine (A) pairs with Thymine (T) — held by 2 hydrogen bonds\n• Cytosine (C) pairs with Guanine (G) — held by 3 hydrogen bonds\n\nRNA TRANSCRIPTION BASE PAIRING:\n• Adenine (A) pairs with Uracil (U)\n• Cytosine (C) pairs with Guanine (G)\n\nWHY C–G PAIRS ARE MORE STABLE:\n• C–G pairs form 3 hydrogen bonds\n• A–T (or A–U) pairs form only 2 hydrogen bonds\n• Therefore, C–G pairs require MORE ENERGY to separate\n• DNA regions with high C–G content have a higher melting temperature\n\nFUNCTIONAL SIGNIFICANCE:\n• The base pairing rules ensure ACCURATE DNA replication (each strand provides an exact template)\n• The rules also ensure accurate transcription during gene expression","A–T = 2 H-bonds; C–G = 3 H-bonds. More C–G = more stable = higher melting temperature. This is why scientists can calculate DNA stability from base composition.",""],
+[2,"Describe semi-conservative DNA replication in full detail.","SEMI-CONSERVATIVE REPLICATION — 5 steps:\n\n1. DNA HELICASE unwinds the double helix and breaks the hydrogen bonds between complementary base pairs → two template strands are exposed\n\n2. Each ORIGINAL STRAND acts as a template → antiparallel orientation is maintained (one strand is 3'→5', the new strand is synthesised 5'→3')\n\n3. FREE NUCLEOTIDES in the nucleus align alongside each template strand according to COMPLEMENTARY BASE PAIRING RULES (A–T, C–G)\n\n4. DNA POLYMERASE catalyses the formation of PHOSPHODIESTER BONDS between adjacent nucleotides → new strand is synthesised\n\n5. RESULT: Two identical double-stranded DNA molecules, each containing ONE original (parental) strand + ONE newly synthesised strand → 'semi-conservative' (half the original is conserved in each daughter molecule)\n\nWHY ACCURACY IS ESSENTIAL:\nEnsures genetic information is passed correctly to daughter cells. Errors (mutations) may produce faulty proteins or cause diseases such as cancer.","Semi-conservative = each daughter molecule has one old strand + one new strand. The Meselson-Stahl experiment (using ¹⁵N and ¹⁴N isotopes) provided experimental proof of semi-conservative replication.","Exam trap: Do not say 'the DNA unzips itself' — DNA HELICASE is the enzyme that unwinds and separates the strands by breaking hydrogen bonds. DNA POLYMERASE builds the new strand (it does not unzip)."],
+[3,"Describe the stages of transcription and translation precisely.","TRANSCRIPTION (in nucleus): DNA → mRNA\n\n1. RNA polymerase binds to the promoter region of the gene\n2. DNA double helix unwinds and the two strands separate\n3. RNA polymerase moves along the TEMPLATE STRAND (3'→5')\n4. Free RNA nucleotides align by complementary base pairing (A–U, T–A, C–G, G–C)\n5. Phosphodiester bonds form between ribonucleotides → mRNA strand synthesised (5'→3')\n6. mRNA detaches and leaves the nucleus through a nuclear pore\n\nTRANSLATION (at ribosome): mRNA → polypeptide\n\n1. mRNA attaches to a RIBOSOME\n2. tRNA molecules carry specific amino acids — each tRNA has an ANTICODON complementary to an mRNA CODON\n3. The ribosome moves along the mRNA codon by codon (5'→3')\n4. The ribosome catalyses PEPTIDE BOND formation between adjacent amino acids (condensation reaction)\n5. Polypeptide chain grows until a STOP CODON is reached\n6. Polypeptide is released and folds into its functional 3D shape","KEY TERMS: template strand, codon (on mRNA), anticodon (on tRNA), ribosome, peptide bond, stop codon. All must appear in extended writing answers about protein synthesis.","Exam trap: Transcription uses the TEMPLATE strand to make mRNA. The CODING strand has the same sequence as the mRNA (with T instead of U). Students often confuse which strand is read."],
+[3,"Describe and explain the four types of gene mutation.","1. SILENT MUTATION:\n• A base substitution that changes the codon but codes for the SAME amino acid\n• No change in protein structure or function\n• Possible due to the DEGENERATE genetic code (multiple codons per amino acid)\n\n2. MISSENSE MUTATION:\n• A base substitution that changes the codon to code for a DIFFERENT amino acid\n• Changes primary structure → may alter tertiary structure and function\n• Example: sickle cell anaemia (Glu → Val at position 6 of β-globin)\n\n3. NONSENSE MUTATION:\n• A base substitution produces a PREMATURE STOP CODON\n• Translation terminates early → shorter, usually non-functional polypeptide\n• Typically severe effect on protein function\n\n4. FRAMESHIFT MUTATION:\n• INSERTION or DELETION of one or more bases (not in multiples of 3)\n• Shifts the READING FRAME of all subsequent codons\n• Changes ALL amino acids after the mutation point\n• Usually produces a completely non-functional protein\n• Most severe type of mutation","Severity order (least to most severe): Silent < Missense < Nonsense < Frameshift. Frameshift is most severe because it alters ALL codons after the mutation point, not just one.",""]
+]},
+
+// ══════════════════════════════════════════
+// DECK 6: Enzymes
+// ══════════════════════════════════════════
+{title:"🔩 Topic 1.4 — Enzymes", accent:"#ffa657",
+sections:["🔩 Mechanism","🌡 Factors","🚫 Inhibition","🔬 Immobilised Enzymes"],
+cards:[
+[0,"Define an enzyme precisely and explain activation energy.","ENZYME DEFINITION:\nAn enzyme is a GLOBULAR PROTEIN that acts as a BIOLOGICAL CATALYST. It speeds up the rate of a chemical reaction without being permanently changed or consumed.\n\nACTIVATION ENERGY:\nThe minimum energy that reactant molecules must possess before a reaction can occur.\n\nHOW ENZYMES LOWER ACTIVATION ENERGY:\n• The enzyme binds the substrate(s) at its ACTIVE SITE, forming an ENZYME-SUBSTRATE COMPLEX\n• The active site provides a favourable chemical environment that stabilises the TRANSITION STATE of the reaction\n• This lowers the energy barrier → more molecules have sufficient energy to react → reaction proceeds faster at the same temperature\n\nSIGNIFICANCE:\nWithout enzymes, metabolic reactions would occur too slowly to sustain life at body temperature.","Lowering activation energy means MORE molecules have enough energy to react at normal body temperature — so the reaction is faster without needing to increase temperature (which would denature proteins).","Exam trap: Enzymes do NOT change the overall energy change (ΔG) of the reaction — they only lower the activation energy. The products have the same energy content whether or not an enzyme is used."],
+[0,"Compare the lock-and-key and induced-fit models of enzyme action.","LOCK-AND-KEY MODEL (historical):\n• Active site has a RIGID, fixed shape\n• Substrate fits exactly into the complementary active site like a key into a lock\n• No change in active site shape occurs during binding\n• Limitation: cannot explain why some enzymes can bind closely related substrates\n\nINDUCED-FIT MODEL (currently accepted):\n• Active site is FLEXIBLE, not rigid\n• When a complementary substrate approaches, the active site CHANGES SHAPE slightly to fit the substrate more closely\n• This induced change creates a tighter fit and strains the substrate's bonds → lowers activation energy more effectively\n• Better explains enzyme specificity and the ability to bind closely related molecules\n\nWHY INDUCED FIT IS ACCEPTED:\nExperimental evidence (e.g. X-ray crystallography) shows that enzyme active sites do change conformation upon substrate binding.","Induced-fit is the accepted model. In exams, ALWAYS use induced-fit language unless the question specifically asks about lock-and-key. Key difference: lock-and-key = rigid active site; induced-fit = flexible active site that moulds around substrate.",""],
+[1,"Explain how temperature affects enzyme activity with full biological reasoning.","LOW TEMPERATURE (below optimum):\n• Enzyme and substrate molecules have LOW kinetic energy\n• Less frequent collisions between enzyme and substrate\n• Less frequent formation of enzyme-substrate complexes\n• Rate of reaction is LOW\n\nAS TEMPERATURE INCREASES (towards optimum):\n• Kinetic energy INCREASES\n• More frequent collisions between enzyme and substrate\n• More frequent enzyme-substrate complex formation\n• Rate of reaction INCREASES\n\nAT OPTIMUM TEMPERATURE:\n• Maximum rate of reaction achieved\n• Active site perfectly complementary to substrate\n\nABOVE OPTIMUM TEMPERATURE (denaturation):\n• Excessive kinetic energy breaks HYDROGEN BONDS and IONIC BONDS in tertiary structure\n• Active site CHANGES SHAPE → no longer complementary to substrate\n• Enzyme-substrate complex cannot form\n• Enzyme is DENATURED — irreversible loss of function\n• Rate of reaction FALLS sharply to zero","The optimum temperature is NOT the highest possible temperature — it is the temperature at which the rate of reaction is greatest. Above optimum, denaturation causes rapid loss of activity.","Exam trap: Do NOT say 'enzymes are killed by heat' — enzymes are proteins, not organisms. Say 'the enzyme is denatured — the active site changes shape and the enzyme-substrate complex can no longer form'."],
+[1,"Explain how substrate concentration affects enzyme activity (including Vmax and saturation).","LOW SUBSTRATE CONCENTRATION:\n• Few substrate molecules relative to available active sites\n• Many active sites are unoccupied\n• Rate of reaction is LOW and directly proportional to substrate concentration\n\nAS SUBSTRATE CONCENTRATION INCREASES:\n• More substrate molecules available to bind active sites\n• Frequency of enzyme-substrate complex formation increases\n• Rate of reaction INCREASES\n\nAT SATURATION POINT (Vmax):\n• All active sites are OCCUPIED by substrate molecules at any given moment\n• Adding more substrate has NO further effect on rate\n• Rate reaches a MAXIMUM (Vmax) and plateaus\n• At this point, enzyme concentration becomes the limiting factor\n\nVmax = the maximum rate of reaction at a given enzyme concentration when all active sites are saturated.","At Vmax, the enzyme is working as fast as it can — every active site is always occupied. The only way to increase rate beyond Vmax is to increase enzyme concentration (add more enzyme).","Exam trap: The rate does not 'stop' at Vmax — it reaches a PLATEAU (levels off/becomes constant). The graph shows a curve that flattens out horizontally."],
+[2,"Compare competitive and non-competitive inhibition across all key features.","COMPETITIVE INHIBITION:\n• Inhibitor has a similar shape to the substrate\n• Binds to the ACTIVE SITE\n• Competes directly with substrate for active site\n• Forms a reversible enzyme-inhibitor complex\n• Effect on Vmax: UNCHANGED (can still be reached with excess substrate)\n• Effect on Km: INCREASED (more substrate needed to displace the inhibitor)\n• Can be OVERCOME by increasing substrate concentration\n• Example: malonate inhibits succinate dehydrogenase\n\nNON-COMPETITIVE INHIBITION:\n• Inhibitor does NOT resemble the substrate\n• Binds to ALLOSTERIC SITE (a different site from the active site)\n• Causes a conformational change in the enzyme → active site changes shape\n• Substrate cannot bind effectively even if present in excess\n• Effect on Vmax: REDUCED (cannot be reached even with excess substrate)\n• Effect on Km: UNCHANGED\n• CANNOT be overcome by increasing substrate concentration\n• Example: cyanide inhibits cytochrome c oxidase (ETC)","Competitive: same active site, affected by substrate concentration, Vmax unchanged. Non-competitive: allosteric site, NOT affected by substrate concentration, Vmax reduced. These are the two critical differences.","Exam trap: NEVER say a competitive inhibitor 'permanently blocks' the active site — competitive inhibition is REVERSIBLE. The inhibitor and substrate constantly compete. More substrate = more chance for substrate to bind."],
+[2,"Explain feedback inhibition and give a biological example.","FEEDBACK INHIBITION:\nA form of metabolic regulation where the END PRODUCT of a metabolic pathway acts as a NON-COMPETITIVE INHIBITOR of an enzyme early in the same pathway.\n\nMECHANISM:\n• As the end product accumulates, it binds to an allosteric site on an early enzyme\n• This changes the enzyme's active site shape → enzyme activity is reduced\n• Less substrate is converted → less end product is produced\n• As end product is used up, inhibition decreases → enzyme activity resumes\n\nEXAMPLE:\nIn cellular respiration: high ATP levels inhibit phosphofructokinase (PFK), an early enzyme in glycolysis. When ATP is high, glycolysis slows. When ATP is used up (ADP rises), PFK is no longer inhibited and glycolysis accelerates.\n\nBIOLOGICAL IMPORTANCE:\n• Prevents overproduction of products\n• Maintains metabolic homeostasis\n• Extremely energy efficient — regulates pathways automatically","Feedback inhibition is ALWAYS non-competitive — the end product binds to an ALLOSTERIC SITE, not the active site (because its shape is different from the substrate). This is a key exam distinction.",""],
+[3,"Describe immobilised enzymes, their advantages and disadvantages.","IMMOBILISED ENZYMES:\nEnzymes that are attached to or enclosed within an inert support material, allowing them to function while being physically retained.\n\nMETHODS OF IMMOBILISATION:\n• Adsorption — enzyme adheres to surface of support material\n• Covalent bonding — enzyme covalently bonded to support\n• Entrapment — enzyme enclosed within a gel matrix (e.g. alginate beads)\n• Cross-linking — enzyme molecules cross-linked to each other\n\nADVANTAGES:\n1. REUSABLE — enzyme can be used repeatedly as it is retained on the support\n2. EASY PRODUCT SEPARATION — product flows away from the enzyme without contamination\n3. MORE STABLE — immobilised enzymes are often more thermostable and resistant to pH changes\n4. CONTINUOUS PROCESSING — substrate can flow over enzymes continuously\n\nDISADVANTAGES:\n1. HIGHER INITIAL COST — more expensive to set up\n2. POSSIBLE REDUCED ACTIVITY — some active sites may be blocked or altered by immobilisation\n3. DIFFUSION LIMITATIONS — substrate must diffuse to enzyme → may reduce rate","Industrial use of immobilised enzymes: lactase (lactose-free milk production), glucose isomerase (fructose syrup production). The main advantage is REUSABILITY — the enzyme does not contaminate the product and can be used repeatedly.",""]
+]}
+];
+
+// ═══ STATE ═══
+var curDeck=null,curSec=0,curIdx=0,shown=false,deck=[],ratings={},easy=0,hard=0,done=0;
+function openDeck(n){
+  curDeck=n;curSec=0;curIdx=0;shown=false;easy=0;hard=0;done=0;ratings={};
+  document.getElementById('homeScreen').style.display='none';
+  document.getElementById('appScreen').style.display='block';
+  document.getElementById('appTitle').textContent=DECKS[n].title;
+  document.getElementById('pfill').style.background=DECKS[n].accent;
+  document.getElementById('DN').style.display='none';
+  document.getElementById('MC').style.display='block';
+  mkDeck();renderTabs();renderCard();
+}
+function goHome(){document.getElementById('homeScreen').style.display='block';document.getElementById('appScreen').style.display='none';}
+function mkDeck(){deck=[];DECKS[curDeck].cards.forEach(function(c,i){if(c[0]===curSec)deck.push(i);});}
+function renderTabs(){
+  var secs=DECKS[curDeck].sections,cards=DECKS[curDeck].cards,h='';
+  secs.forEach(function(s,i){var cnt=0;cards.forEach(function(c){if(c[0]===i)cnt++;});h+='<span class="stab'+(i===curSec?' on':'')+'" onclick="sw('+i+')">'+s+' ('+cnt+')</span>';});
+  document.getElementById('stabs').innerHTML=h;
+}
+function renderCard(){
+  if(!deck.length)return;
+  var cards=DECKS[curDeck].cards,secs=DECKS[curDeck].sections,gi=deck[curIdx],c=cards[gi],acc=DECKS[curDeck].accent;
+  document.getElementById('CN').textContent=(curIdx+1)+' / '+deck.length;
+  ['badge','badge2'].forEach(function(id){var el=document.getElementById(id);el.textContent=secs[c[0]];el.style.cssText='background:#1c2333;border-color:'+acc+';color:'+acc;});
+  document.getElementById('QQ').textContent=c[1];
+  document.getElementById('AA').textContent=c[2];
+  var tip=document.getElementById('TIP');
+  if(c[3]&&c[3].length){tip.innerHTML='<b>💡 Key Insight:</b> '+c[3];tip.className='tip-box';}else{tip.className='tip-box hide';}
+  var exam=document.getElementById('EXAM');
+  if(c[4]&&c[4].length){exam.innerHTML='<b>🎯 Exam Trap:</b> '+c[4];exam.className='exam-box';}else{exam.className='exam-box hide';}
+  var cd=document.getElementById('CD');
+  cd.className=shown?'card shown':'card';cd.style.borderColor=shown?acc:'#30363d';
+  document.getElementById('RB').className=shown?'rbs show':'rbs';
+  document.getElementById('rp').className=shown?'rprompt show':'rprompt';
+  document.getElementById('cardlbl').textContent='Card '+(curIdx+1)+' of '+deck.length;
+  document.getElementById('DN').style.display='none';document.getElementById('MC').style.display='block';
+  var total=DECKS[curDeck].cards.length;
+  document.getElementById('sT').textContent=total;document.getElementById('sD').textContent=done;
+  document.getElementById('sE').textContent=easy;document.getElementById('sH').textContent=hard;
+  document.getElementById('plbl').textContent=done+' / '+total;
+  document.getElementById('pfill').style.width=Math.round(done/total*100)+'%';
+}
+function rev(){if(!shown){shown=true;renderCard();}}
+function go(d){shown=false;curIdx+=d;if(curIdx<0)curIdx=deck.length-1;if(curIdx>=deck.length)curIdx=0;renderCard();}
+function rt(r){
+  done++;if(r==='e'||r==='o')easy++;else hard++;shown=false;curIdx++;
+  if(curIdx>=deck.length){curIdx=0;if(deck.every(function(gi){return ratings[gi];})){document.getElementById('MC').style.display='none';document.getElementById('DN').style.display='block';return;}}
+  ratings[deck[curIdx-1]]=r;renderCard();
+}
+function sw(n){curSec=n;curIdx=0;shown=false;mkDeck();renderTabs();document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function rst(){curIdx=0;shown=false;document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function shuf(){deck.sort(function(){return Math.random()-.5;});curIdx=0;shown=false;renderCard();}
+</script>
+</body>
+</html>
