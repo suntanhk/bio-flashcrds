@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 4.2 — Transport in Mammals</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#0d1117;color:#eee;font-family:Arial,sans-serif;padding:10px;font-size:15px;min-height:100vh}
+.home{max-width:540px;margin:0 auto;padding:10px 0 40px}
+.logo{text-align:center;margin-bottom:14px;padding:16px;background:linear-gradient(135deg,#1c2333,#0d1117);border-radius:14px;border:1px solid #f78166}
+.logo h1{color:#f78166;font-size:19px;font-weight:bold;margin-bottom:4px;line-height:1.4}
+.logo p{color:#888;font-size:11px;line-height:1.6;margin-top:4px}
+.insight{background:#1a0a0a;border:1px solid #f78166;border-radius:12px;padding:12px;margin-bottom:13px;font-size:12px;color:#aaa;line-height:1.6}
+.insight b{color:#f78166}
+.sec-hdr{font-size:12px;font-weight:bold;padding:8px 12px;border-radius:10px;margin-bottom:10px;margin-top:14px}
+.sh0{background:#3a1a0a;color:#f78166}
+.sh1{background:#1f3a5f;color:#58a6ff}
+.sh2{background:#1a3a1a;color:#39d353}
+.dc{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:13px;margin-bottom:10px;cursor:pointer}
+.dc:active{opacity:.8}
+.dc h3{font-size:13px;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.dc p{color:#aaa;font-size:11px;line-height:1.5;margin-bottom:8px}
+.dc-meta{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:bold}
+.t1{background:#3a1a0a;color:#f78166}.t2{background:#1f3a5f;color:#58a6ff}.t3{background:#1a3a1a;color:#39d353}
+.t4{background:#3a2a0a;color:#FFD700}.t5{background:#2a1a3a;color:#d2a8ff}
+.ob{display:block;width:100%;padding:9px;border-radius:8px;border:none;font-size:12px;font-weight:bold;cursor:pointer;text-align:center}
+.ob0{background:#f78166;color:#000}.ob1{background:#58a6ff;color:#000}.ob2{background:#39d353;color:#000}
+
+/* APP */
+.app{display:none;max-width:600px;margin:0 auto}
+.topbar{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #30363d}
+.back{padding:5px 12px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:12px;cursor:pointer}
+.app-title{font-size:12px;font-weight:bold;color:#FFD700;flex:1;line-height:1.3}
+.modes{display:flex;gap:4px;margin-bottom:10px}
+.modebt{flex:1;padding:7px 4px;background:#1c2333;border:1px solid #30363d;border-radius:8px;color:#aaa;cursor:pointer;font-size:11px;font-weight:bold;text-align:center}
+.modebt.on{background:#FFD700;color:#000;border-color:#FFD700}
+.stabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.stab{padding:5px 9px;background:#1c2333;border:1px solid #30363d;border-radius:20px;color:#aaa;cursor:pointer;font-size:11px}
+.stab.on{background:#FFD700;color:#000;border-color:#FFD700;font-weight:bold}
+.stats{display:flex;gap:5px;margin-bottom:8px}
+.chip{flex:1;background:#1c2333;border:1px solid #30363d;border-radius:8px;padding:5px 4px;text-align:center;font-size:10px;color:#888}
+.chip b{display:block;font-size:15px;font-weight:bold;color:#eee}
+.chip.g b{color:#39d353}.chip.r b{color:#f78166}.chip.y b{color:#FFD700}
+.prow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.plbl{font-size:11px;color:#888;white-space:nowrap}
+.pbar{flex:1;height:4px;background:#30363d;border-radius:99px;overflow:hidden}
+.pfill{height:100%;border-radius:99px;transition:width .3s}
+
+/* FLASHCARD */
+.card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:16px;min-height:190px;margin-bottom:10px;cursor:pointer;position:relative}
+.card.shown{border-color:#f78166}
+.cnum{position:absolute;top:10px;right:12px;font-size:10px;color:#555}
+.sbadge{display:inline-block;font-size:9px;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:20px;margin-bottom:10px;border:1px solid}
+.cq{font-size:15px;line-height:1.5;text-align:center;padding:10px 0;color:#eee}
+.chint{text-align:center;color:#555;font-size:12px;margin-top:10px}
+.asec{display:none}
+.card.shown .asec{display:block}
+.card.shown .qsec{display:none}
+.albl{font-size:10px;color:#39d353;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:bold}
+.ans{font-size:13px;line-height:1.78;white-space:pre-wrap;color:#eee}
+.tip-box{border-left:3px solid #FFD700;padding:8px 10px;margin-top:10px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0;background:#0d1a0d}
+.tip-box b{color:#FFD700}
+.exam-box{border-left:3px solid #f78166;padding:8px 10px;margin-top:8px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0;background:#1a0a0a}
+.exam-box b{color:#f78166}
+
+/* EXAM MODE */
+.eq-card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:16px;margin-bottom:10px;position:relative}
+.eq-card.shown{background:#0a1a0a;border-color:#39d353}
+.marks-badge{display:inline-block;font-size:10px;font-weight:bold;padding:3px 10px;border-radius:20px;background:#3a2a0a;color:#FFD700;margin-bottom:10px}
+.eq-q{font-size:15px;line-height:1.55;color:#eee;margin-bottom:12px;white-space:pre-wrap}
+.reveal-btn{width:100%;padding:9px;border-radius:8px;border:none;background:#1f3a5f;color:#58a6ff;font-size:13px;font-weight:bold;cursor:pointer;margin-bottom:0}
+.reveal-btn:active{opacity:.7}
+.model-ans{display:none;margin-top:12px}
+.eq-card.shown .model-ans{display:block}
+.model-lbl{font-size:10px;color:#39d353;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:bold}
+.model-text{font-size:13px;line-height:1.75;color:#eee;white-space:pre-wrap}
+.examiner-tips{background:#0a1a0a;border-left:3px solid #39d353;padding:8px 10px;margin-top:10px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0}
+.examiner-tips b{color:#39d353}
+.eq-counter{font-size:12px;color:#888;text-align:center;margin-bottom:8px}
+.eq-nav{display:flex;gap:8px;margin-top:10px}
+.eq-nav button{flex:1;padding:9px;border-radius:8px;border:1px solid #30363d;background:#1c2333;color:#eee;font-size:12px;font-weight:bold;cursor:pointer}
+.eq-nav button:active{opacity:.7}
+
+/* MISTAKES MODE */
+.mk-card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:14px;margin-bottom:10px}
+.mk-card h4{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.wrong-box{background:#2a0a0a;border-radius:8px;padding:10px;margin-bottom:8px;font-size:13px;color:#f78166;line-height:1.6}
+.right-box{background:#0a2a0a;border-radius:8px;padding:10px;font-size:13px;color:#39d353;line-height:1.6}
+
+/* NAV */
+.nav{display:flex;gap:6px;margin-bottom:8px}
+.btn{flex:1;padding:10px;border-radius:8px;border:1px solid #30363d;background:#1c2333;color:#eee;font-size:12px;font-weight:bold;cursor:pointer}
+.btn:active{opacity:.7}
+.btn.gold{background:#FFD700;color:#000;border-color:#FFD700}
+.rbs{display:none;gap:5px;margin-bottom:8px}
+.rbs.show{display:flex}
+.rb{flex:1;padding:8px 2px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;border:1px solid;text-align:center}
+.rb:active{opacity:.7}
+.re{background:#0a2a0a;color:#39d353;border-color:#2a6a2a}
+.ro{background:#0a1a3a;color:#58a6ff;border-color:#1a3a6a}
+.rh{background:#2a1a0a;color:#ffa657;border-color:#5a3a1a}
+.rm{background:#2a0a0a;color:#f78166;border-color:#5a1a1a}
+.rprompt{font-size:11px;color:#888;text-align:center;margin-bottom:6px;display:none}
+.rprompt.show{display:block}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.toolbar span{font-size:11px;color:#888}
+.shuf{padding:4px 10px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:11px;cursor:pointer}
+.done{text-align:center;padding:30px 16px;background:#1c2333;border:1px solid #30363d;border-radius:12px;display:none}
+.done h3{color:#FFD700;font-size:18px;margin-bottom:8px}
+.done p{color:#aaa;font-size:13px;margin-bottom:16px;line-height:1.5}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="home" id="homeScreen">
+  <div class="logo">
+    <h1>❤️ Topic 4.2<br>Transport in Mammals</h1>
+    <p>Pearson Edexcel A Level Biology B (9BI0)<br>Exam Questions · Model Answers · Common Mistakes</p>
+  </div>
+  <div class="insight">
+    <b>📝 How to use:</b> Each deck has 3 modes — <b>🃏 Flashcards</b> for core knowledge, <b>📝 Exam Qs</b> for mark-scheme practice, and <b>⚠️ Mistakes</b> for the most common errors. Master all three before your exam.
+  </div>
+
+  <div class="sec-hdr sh0">❤️ 4.2.1 — The Heart &amp; Double Circulation</div>
+  <div class="dc" onclick="openDeck(0)">
+    <h3><span>❤️</span> The Heart &amp; Double Circulation</h3>
+    <p>Heart structure, cardiac cycle, cardiac output calculation, valves, the SAN/AVN conduction system, and double circulation advantages.</p>
+    <div class="dc-meta">
+      <span class="tag t1">Heart Structure</span>
+      <span class="tag t2">Cardiac Cycle</span>
+      <span class="tag t3">Cardiac Output</span>
+      <span class="tag t4">Double Circulation</span>
+    </div>
+    <div class="ob ob0">Open →</div>
+  </div>
+
+  <div class="sec-hdr sh1">🩸 4.2.2 — Blood Vessels, Tissue Fluid &amp; Lymph</div>
+  <div class="dc" onclick="openDeck(1)">
+    <h3><span>🩸</span> Blood Vessels, Tissue Fluid &amp; Lymphatic System</h3>
+    <p>Artery, vein and capillary structure-function comparison, tissue fluid formation, hydrostatic vs oncotic pressure, lymphatic system functions.</p>
+    <div class="dc-meta">
+      <span class="tag t2">Arteries vs Veins</span>
+      <span class="tag t1">Tissue Fluid</span>
+      <span class="tag t3">Lymphatic System</span>
+      <span class="tag t5">Pressure Gradients</span>
+    </div>
+    <div class="ob ob1">Open →</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="appScreen">
+  <div class="topbar">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div class="app-title" id="appTitle"></div>
+  </div>
+  <div class="modes">
+    <div class="modebt on" id="mFlash" onclick="setMode('flash')">🃏 Flashcards</div>
+    <div class="modebt" id="mExam" onclick="setMode('exam')">📝 Exam Qs</div>
+    <div class="modebt" id="mMistakes" onclick="setMode('mistakes')">⚠️ Mistakes</div>
+  </div>
+
+  <!-- FLASH MODE -->
+  <div id="flashMode">
+    <div class="stabs" id="stabs"></div>
+    <div class="stats">
+      <div class="chip"><b id="sT">0</b>Cards</div>
+      <div class="chip y"><b id="sD">0</b>Done</div>
+      <div class="chip g"><b id="sE">0</b>Easy</div>
+      <div class="chip r"><b id="sH">0</b>Hard</div>
+    </div>
+    <div class="prow">
+      <span class="plbl" id="plbl">0/0</span>
+      <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
+    </div>
+    <div id="MC">
+      <div class="toolbar"><span id="cardlbl"></span><button class="shuf" onclick="shuf()">🔀 Shuffle</button></div>
+      <div class="card" id="CD" onclick="rev()">
+        <span class="cnum" id="CN"></span>
+        <div class="qsec">
+          <span class="sbadge" id="badge"></span>
+          <div class="cq" id="QQ"></div>
+          <div class="chint">👆 Tap to reveal A★ answer</div>
+        </div>
+        <div class="asec">
+          <span class="sbadge" id="badge2"></span>
+          <div class="albl">✅ A★ Answer</div>
+          <div class="ans" id="AA"></div>
+          <div id="TIP" class="tip-box hide"></div>
+          <div id="EXAM" class="exam-box hide"></div>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="btn" onclick="go(-1)">← Prev</button>
+        <button class="btn gold" onclick="rev()">👁 Reveal</button>
+        <button class="btn" onclick="go(1)">Next →</button>
+      </div>
+      <div class="rprompt" id="rp">How well did you know this?</div>
+      <div class="rbs" id="RB">
+        <button class="rb re" onclick="rt('e')">✅ Easy</button>
+        <button class="rb ro" onclick="rt('o')">👍 Got it</button>
+        <button class="rb rh" onclick="rt('h')">⚠️ Hard</button>
+        <button class="rb rm" onclick="rt('m')">❌ Missed</button>
+      </div>
+    </div>
+    <div class="done" id="DN">
+      <h3>🎉 Section Complete!</h3>
+      <p>Now switch to Exam Qs mode to practise full mark-scheme answers.</p>
+      <button class="btn gold" style="max-width:200px;margin:0 auto;display:block" onclick="rst()">🔄 Review Again</button>
+    </div>
+  </div>
+
+  <!-- EXAM MODE -->
+  <div id="examMode" class="hide">
+    <div class="eq-counter" id="eqCounter"></div>
+    <div id="examContent"></div>
+    <div class="eq-nav">
+      <button onclick="eqGo(-1)">← Prev</button>
+      <button onclick="eqGo(1)">Next →</button>
+    </div>
+  </div>
+
+  <!-- MISTAKES MODE -->
+  <div id="mistakesMode" class="hide">
+    <div id="mistakesContent"></div>
+  </div>
+</div>
+
+<script>
+var DECKS = [
+// ════════════════════════════════════════
+// DECK 0: Heart & Double Circulation
+// ════════════════════════════════════════
+{
+  title:"❤️ 4.2.1 — Heart & Double Circulation",
+  accent:"#f78166",
+  sections:["❤️ Heart Structure","🔄 Cardiac Cycle","📊 Cardiac Output","🔀 Double Circulation"],
+  cards:[
+    // Heart Structure
+    [0,"Name the four chambers of the heart and their functions.","RIGHT ATRIUM: Receives deoxygenated blood returning from the body via the vena cava.\n\nRIGHT VENTRICLE: Pumps deoxygenated blood to the lungs via the pulmonary artery.\n\nLEFT ATRIUM: Receives oxygenated blood returning from the lungs via the pulmonary veins.\n\nLEFT VENTRICLE: Pumps oxygenated blood to the rest of the body via the aorta. Has the THICKEST wall of all four chambers.","Right side = deoxygenated. Left side = oxygenated. Atria receive; ventricles pump. Left ventricle thickest — pumps furthest.","Exam trap: The pulmonary ARTERY carries DEOXYGENATED blood. The pulmonary VEIN carries OXYGENATED blood. These are the opposite of what most students expect."],
+    [0,"Explain why the left ventricle has a thicker wall than the right ventricle.","The LEFT VENTRICLE pumps oxygenated blood around the ENTIRE BODY (systemic circulation), a much greater distance requiring HIGH PRESSURE.\n\nIts thicker muscular wall generates GREATER FORCE during contraction to maintain this high pressure.\n\nThe RIGHT VENTRICLE pumps blood only to the LUNGS (pulmonary circulation), a shorter distance. Lower pressure is needed — and high pressure would damage the delicate alveolar walls.","Three points: (1) left pumps around entire body (2) needs higher pressure (3) right pumps only to lungs at lower pressure to protect alveoli. All three must appear in a 5-mark answer.","Exam trap: 'The left ventricle is BIGGER' = WRONG. It has a THICKER MUSCULAR WALL, not a larger chamber. The chamber size is similar."],
+    [0,"Name the four valves of the heart and state their locations and functions.","ATRIOVENTRICULAR (AV) VALVES:\n• Tricuspid valve — between right atrium and right ventricle\n• Bicuspid (mitral) valve — between left atrium and left ventricle\n• FUNCTION: Prevent backflow of blood from ventricles into atria during ventricular systole\n\nSEMILUNAR VALVES:\n• Pulmonary valve — at exit of right ventricle into pulmonary artery\n• Aortic valve — at exit of left ventricle into aorta\n• FUNCTION: Prevent backflow of blood from arteries into ventricles after systole\n\nKEY PRINCIPLE: All valves prevent backflow and ensure one-way flow of blood.","Valves open and close due to PRESSURE DIFFERENCES — not by muscular contraction. They open when pressure behind them exceeds pressure in front; they close when the reverse is true.","Exam trap: 'Valves pump blood' = WRONG. Valves do NOT pump — they PREVENT BACKFLOW and ensure blood flows in one direction only."],
+    [0,"Name the major blood vessels entering and leaving the heart.","ENTERING THE HEART:\n• Vena cava (superior + inferior) → RIGHT ATRIUM (deoxygenated blood from body)\n• Pulmonary veins (×4) → LEFT ATRIUM (oxygenated blood from lungs)\n\nLEAVING THE HEART:\n• Pulmonary artery → RIGHT VENTRICLE to lungs (deoxygenated)\n• Aorta → LEFT VENTRICLE to body (oxygenated)\n\nMEMORY RULE:\n• Veins always bring blood TO the heart\n• Arteries always carry blood AWAY from the heart\n• This applies regardless of whether blood is oxygenated or deoxygenated","The pulmonary artery/vein pair is the most commonly confused vessel pair in examinations. Remember: pulmonary ARTERY = away from heart = deoxygenated (right ventricle to lungs).",""],
+    [0,"Describe the cardiac conduction system (SAN, AVN, Bundle of His, Purkinje fibres).","1. SAN (Sinoatrial Node) — located in the wall of the RIGHT ATRIUM; acts as the PACEMAKER; generates electrical impulses spontaneously.\n\n2. Impulse spreads across BOTH ATRIA → atria contract (atrial systole).\n\n3. Impulse reaches the AVN (Atrioventricular Node) — located between atria and ventricles; introduces a DELAY allowing atria to finish contracting before ventricles begin.\n\n4. Impulse travels down the BUNDLE OF HIS (in the interventricular septum) to the apex of the heart.\n\n5. PURKINJE FIBRES spread the impulse through the ventricular walls from the APEX UPWARDS → ventricles contract from the bottom up, efficiently pushing blood into the arteries.\n\nThe heart is described as MYOGENIC — the impulse originates from within the cardiac muscle itself, not from the nervous system.","The AVN delay is crucial — it ensures atria have completely emptied blood into the ventricles BEFORE the ventricles contract. Without this delay, timing would be incorrect and cardiac output would fall.",""],
+
+    // Cardiac Cycle
+    [1,"Describe the three phases of the cardiac cycle in correct sequence.","1. DIASTOLE (relaxation/filling):\n• All chambers relax\n• Blood flows from vena cava and pulmonary veins into atria\n• AV valves open (atrial pressure > ventricular pressure)\n• Blood flows passively from atria into ventricles\n• Semilunar valves closed (ventricular pressure < arterial pressure)\n\n2. ATRIAL SYSTOLE (atrial contraction):\n• Atria contract\n• Remaining blood pushed into ventricles\n• AV valves remain open\n• Ventricles complete filling\n\n3. VENTRICULAR SYSTOLE (ventricular contraction):\n• Ventricles contract\n• Pressure rises → AV valves CLOSE (prevents backflow into atria) → 'lubb' sound\n• Pressure exceeds arterial pressure → semilunar valves OPEN\n• Blood forced into pulmonary artery and aorta\n• Semilunar valves close as ventricles relax → 'dupp' sound","The 'lubb-dupp' heart sounds: LUBB = AV valves closing at start of ventricular systole. DUPP = semilunar valves closing at end of ventricular systole. Valves closing causes sounds, not valves opening.","Exam trap: Valves open and close due to PRESSURE DIFFERENCES between adjacent chambers/vessels — not due to muscular action. Always explain in terms of pressure: 'When ventricular pressure exceeds atrial pressure, the AV valves close.'"],
+    [1,"Explain how pressure changes control valve opening and closing.","VALVES OPEN when pressure BEHIND the valve EXCEEDS pressure IN FRONT:\n• AV valves open when atrial pressure > ventricular pressure (during diastole)\n• Semilunar valves open when ventricular pressure > arterial pressure (during ventricular systole)\n\nVALVES CLOSE when pressure IN FRONT exceeds pressure BEHIND:\n• AV valves close when ventricular pressure > atrial pressure (start of ventricular systole)\n• Semilunar valves close when arterial pressure > ventricular pressure (end of ventricular systole → diastole)\n\nKEY PRINCIPLE: Valves are passive structures — they respond to pressure differences. No muscular action required.","Think of valves as one-way doors that blow open in one direction only. High pressure behind = door opens; high pressure in front = door slams shut.",""],
+
+    // Cardiac Output
+    [2,"State the cardiac output formula and calculate for heart rate 68 bpm, stroke volume 75 cm³.","FORMULA:\nCardiac Output = Heart Rate × Stroke Volume\n\nDEFINITIONS:\n• Heart Rate = number of heartbeats per minute (bpm)\n• Stroke Volume = volume of blood pumped by one ventricle per heartbeat (cm³)\n• Cardiac Output = total volume of blood pumped per minute (cm³ min⁻¹ or dm³ min⁻¹)\n\nCALCULATION:\nCardiac Output = 68 × 75\n= 5100 cm³ min⁻¹\n= 5.10 dm³ min⁻¹\n\n(Conversion: divide by 1000 to convert cm³ to dm³)","Always show the formula, substitution, and calculation as separate steps. State units clearly — cm³ min⁻¹ OR dm³ min⁻¹ (1 dm³ = 1000 cm³). Both are accepted if correct.","Exam trap: Forgetting to convert units when asked for answer in dm³ min⁻¹. 5100 cm³ min⁻¹ = 5.10 dm³ min⁻¹ (divide by 1000). Always check which unit the question requires."],
+    [2,"Explain how cardiac output changes during exercise and why.","DURING EXERCISE:\n• Heart rate INCREASES — sympathetic nervous system and adrenaline stimulate SAN to generate impulses more rapidly\n• Stroke volume INCREASES — greater venous return stretches ventricles more; increased contraction force (Starling's Law)\n• Cardiac output INCREASES significantly\n\nWHY:\n• Skeletal muscles demand more O₂ and produce more CO₂\n• Increased cardiac output delivers more O₂ and removes CO₂ more rapidly\n• Blood is redistributed from less active organs to working muscles via vasoconstriction/vasodilation\n\nEXAMPLE:\nResting: 68 bpm × 75 cm³ = 5100 cm³ min⁻¹\nExercise: 150 bpm × 120 cm³ = 18000 cm³ min⁻¹ (×3.5 increase)","Cardiac output = heart rate × stroke volume. Both components increase during exercise. Trained athletes have larger stroke volumes at rest (lower resting heart rate) because their hearts are more efficient.",""],
+
+    // Double Circulation
+    [3,"Explain the advantages of a double circulatory system over a single circulatory system.","DOUBLE CIRCULATORY SYSTEM (mammals):\nBlood passes through the heart TWICE per complete circuit:\n1. Pulmonary circulation: heart → lungs → heart\n2. Systemic circulation: heart → body → heart\n\nADVANTAGES:\n1. SEPARATION OF OXYGENATED AND DEOXYGENATED BLOOD — oxygenated and deoxygenated blood never mix; body tissues always receive fully oxygenated blood\n\n2. HIGH PRESSURE DELIVERY TO TISSUES — blood is re-pressurised in the heart after passing through the lungs; high pressure in systemic circulation ensures rapid, efficient delivery of O₂ and nutrients\n\n3. LOW PRESSURE TO LUNGS — protects the delicate alveolar walls and capillaries from damage; optimises gas exchange (thin walls + low pressure = efficient diffusion)\n\n4. SUPPORTS HIGH METABOLIC RATE — essential for warm-blooded (endothermic) mammals with high continuous energy demands\n\nSINGLE CIRCULATORY SYSTEM (fish):\nBlood loses pressure after passing through gill capillaries → lower pressure delivery to body → less efficient → acceptable for ectothermic fish with lower metabolic demands.","The most important point is that blood is RE-PRESSURISED after passing through the lungs. Without this, blood would reach body tissues at dangerously low pressure. This re-pressurisation is the key advantage over single circulation.",""],
+    [3,"Distinguish between the pulmonary and systemic circulations.","PULMONARY CIRCULATION:\n• Route: Right ventricle → pulmonary artery → lungs → pulmonary veins → left atrium\n• Purpose: Gas exchange at the alveoli (O₂ absorbed, CO₂ removed)\n• Pressure: LOWER (right ventricle generates less force)\n• Blood: Starts deoxygenated, becomes oxygenated\n\nSYSTEMIC CIRCULATION:\n• Route: Left ventricle → aorta → body tissues → vena cava → right atrium\n• Purpose: Delivery of O₂ and nutrients to all body tissues; removal of CO₂ and waste\n• Pressure: HIGHER (left ventricle generates greater force)\n• Blood: Starts oxygenated, becomes deoxygenated\n\nKEY FACT: The left and right ventricles contract simultaneously but generate different pressures due to different wall thicknesses.","Pulmonary = lungs; Systemic = body/system. The LEFT side of the heart always handles oxygenated blood; RIGHT side handles deoxygenated blood. Learn these as fixed rules.",""]
+  ],
+  examQs:[
+    {marks:5, q:"Explain why the left ventricle has a thicker wall than the right ventricle.", a:"The left ventricle pumps oxygenated blood around the entire body (systemic circulation), which requires a much greater force than pumping blood to the lungs.\n\nIts thicker muscular wall generates a higher pressure during contraction to push blood through the long systemic circuit.\n\nThe right ventricle only pumps blood to the lungs (pulmonary circulation), which is a shorter distance requiring lower pressure.\n\nLow pressure in the pulmonary circulation is also necessary to protect the delicate alveolar walls from damage.", tips:"5 key points: (1) left pumps to entire body (2) needs high pressure (3) thicker wall = greater force (4) right pumps only to lungs (5) low pressure protects alveoli. All five must appear."},
+    {marks:6, q:"Explain the advantages of a double circulatory system.", a:"Blood passes through the heart twice in one complete circuit, once through the pulmonary circulation (heart → lungs → heart) and once through the systemic circulation (heart → body → heart).\n\nOxygenated and deoxygenated blood remain completely separated, so body tissues always receive blood with a high oxygen concentration.\n\nBlood is re-pressurised in the left ventricle after passing through the lungs, ensuring high-pressure delivery of oxygen and nutrients to all body tissues.\n\nBlood is pumped to the lungs at lower pressure to protect the thin alveolar walls from damage and to optimise gas exchange.", tips:"Two circuits + separation of blood types + high pressure to body + low pressure to lungs. Four distinct points required for 6 marks (plus one for clear explanation of mechanism)."},
+    {marks:4, q:"A person has a heart rate of 68 beats min⁻¹ and a stroke volume of 75 cm³. Calculate the cardiac output in dm³ min⁻¹. Show your working.", a:"Cardiac output = Heart rate × Stroke volume\n\n= 68 × 75\n\n= 5100 cm³ min⁻¹\n\n= 5.10 dm³ min⁻¹", tips:"Always: (1) state the formula (2) substitute values (3) calculate (4) convert units and state dm³ min⁻¹. All four steps must be shown for full marks."},
+    {marks:6, q:"Describe the cardiac cycle, including the role of valves.", a:"During diastole, the heart muscle relaxes and blood flows from the vena cava and pulmonary veins into the atria. The AV valves open as atrial pressure exceeds ventricular pressure, allowing blood to flow into the ventricles.\n\nDuring atrial systole, the atria contract, pushing the remaining blood into the ventricles.\n\nDuring ventricular systole, the ventricles contract. Ventricular pressure exceeds atrial pressure, causing the AV valves to close (preventing backflow). When ventricular pressure exceeds arterial pressure, the semilunar valves open and blood is forced into the pulmonary artery and aorta.\n\nAs the ventricles relax, arterial pressure exceeds ventricular pressure, closing the semilunar valves.", tips:"Cover all three phases in order. Valves must be explained in terms of PRESSURE DIFFERENCES (not muscular action). Name each valve type and state when it opens/closes and why."}
+  ],
+  mistakes:[
+    {wrong:"'The pulmonary artery carries oxygenated blood.'",right:"The pulmonary artery carries DEOXYGENATED blood from the right ventricle to the lungs. It is an artery (carries blood away from heart) but unusually carries deoxygenated blood."},
+    {wrong:"'Veins always carry deoxygenated blood.'",right:"Veins carry blood TOWARDS the heart. The pulmonary veins carry OXYGENATED blood from the lungs back to the left atrium."},
+    {wrong:"'The left ventricle is bigger than the right.'",right:"The left ventricle has a THICKER MUSCULAR WALL, not a larger chamber. The size of the chamber is similar — it is the wall thickness that differs."},
+    {wrong:"'Valves pump blood around the heart.'",right:"Valves do NOT pump blood. Valves are passive structures that PREVENT BACKFLOW and ensure blood moves in one direction only. They open and close due to pressure differences."},
+    {wrong:"'The heart beat is initiated by nerve impulses from the brain.'",right:"The heart is MYOGENIC — it initiates its own contractions. The SAN generates the impulse from within the cardiac muscle itself. The nervous system modulates rate but does not initiate the beat."},
+    {wrong:"'Cardiac output = heart rate only.'",right:"Cardiac output = HEART RATE × STROKE VOLUME. Both components contribute. During exercise, BOTH heart rate AND stroke volume increase, multiplying the effect on cardiac output."}
+  ]
+},
+
+// ════════════════════════════════════════
+// DECK 1: Blood Vessels, Tissue Fluid & Lymph
+// ════════════════════════════════════════
+{
+  title:"🩸 4.2.2 — Blood Vessels, Tissue Fluid & Lymph",
+  accent:"#58a6ff",
+  sections:["🩸 Blood Vessels","💧 Tissue Fluid","🌿 Lymphatic System","📊 Pressure Gradients"],
+  cards:[
+    // Blood Vessels
+    [0,"Describe the structure of arteries and explain how this relates to their function.","STRUCTURE OF ARTERIES:\n• Thick MUSCULAR wall (smooth muscle layer)\n• Thick ELASTIC layer (elastic fibres in wall)\n• NARROW LUMEN relative to vessel size\n• NO valves (except semilunar valves at heart exits)\n\nFUNCTION LINKS:\n• Thick muscular wall → can withstand HIGH BLOOD PRESSURE from ventricular systole without bursting\n• Elastic tissue → stretches during systole, RECOILS during diastole → maintains continuous blood pressure between heartbeats (prevents pulse from becoming dangerously high)\n• Narrow lumen → maintains HIGH PRESSURE as blood flows\n\nARTERIOLES:\n• Smaller arteries with more smooth muscle relative to elastic tissue\n• Can constrict (vasoconstriction) or dilate (vasodilation) to regulate blood flow to different tissues","Arteries must be near the heart (under HIGH pressure). Elastic recoil is the key structural adaptation — it smooths out the pulse and maintains pressure between beats.","Exam trap: 'Arteries carry oxygenated blood' = almost always true but NOT the definition. Arteries carry blood AWAY from the heart. The pulmonary artery carries deoxygenated blood."],
+    [0,"Describe the structure of veins and explain how this relates to their function.","STRUCTURE OF VEINS:\n• THIN walls (less muscle, less elastic tissue than arteries)\n• WIDE lumen relative to vessel size\n• VALVES present throughout\n• Low blood pressure\n\nFUNCTION LINKS:\n• Thin walls → blood pressure is LOW in veins; thick walls are unnecessary and would waste resources\n• Wide lumen → reduces resistance to blood flow at low pressure; allows large volumes to return\n• VALVES → prevent backflow of blood; essential because low pressure means blood could easily flow backwards\n\nHOW BLOOD RETURNS IN VEINS (three mechanisms):\n1. Valves prevent backflow → ensures net forward movement\n2. Skeletal muscle contractions compress veins → squeezes blood towards heart\n3. Breathing movements create pressure changes in thorax → assists venous return","Veins are sometimes called 'capacitance vessels' — they hold a large volume of blood (approximately 60-70% of total blood volume) as a reservoir.","Exam trap: 'Veins have thick walls' = WRONG. Veins have THIN walls because blood pressure is low. Arteries have thick walls. Never confuse these."],
+    [0,"Describe the structure of capillaries and explain how this relates to their function.","STRUCTURE OF CAPILLARIES:\n• Walls ONE ENDOTHELIAL CELL thick (one cell = ~0.5 μm thick)\n• Very NARROW LUMEN (approximately 8 μm — just wide enough for one red blood cell)\n• EXTENSIVE BRANCHING network reaching every tissue\n• Slow blood flow\n\nFUNCTION LINKS:\n• One-cell-thick walls → EXTREMELY SHORT diffusion distance for gases, nutrients, and waste products\n• Narrow lumen → red blood cells travel in single file, pressed against wall → maximises O₂ exchange surface\n• Extensive network → every cell is close to a capillary (no cell more than ~25 μm from a capillary)\n• Slow blood flow → more time for exchange of substances\n\nCAPILLARY BED: the network of capillaries within a tissue. Blood enters from arterioles, exchanges substances, and exits into venules.","Capillaries are the ONLY site of exchange between blood and tissues. Arteries and veins are purely transport vessels. All exchange (O₂, CO₂, glucose, waste) happens at capillaries.",""],
+    [0,"Compare arteries, veins and capillaries in a structured comparison.","FEATURE | ARTERIES | VEINS | CAPILLARIES\n\nWall thickness: Thick | Thin | One cell thick\nLumen size: Narrow | Wide | Very narrow\nValves: No | Yes | No\nMuscle layer: Thick | Thin | None\nElastic layer: Thick | Thin | None\nBlood pressure: High | Low | Low (decreasing)\nFunction: Carry blood FROM heart | Carry blood TO heart | Exchange substances\nBlood type: Usually oxygenated | Usually deoxygenated | Both\n\nKEY DIFFERENCES:\n• Arteries: thick walls + narrow lumen = withstands HIGH pressure\n• Veins: valves + wide lumen = returns blood at LOW pressure\n• Capillaries: one-cell-thick walls = EFFICIENT EXCHANGE","For comparison questions: always state the feature AND explain the functional significance. 'Veins have thin walls' alone scores 1 mark. 'Veins have thin walls because blood pressure is low, so thick walls are unnecessary' scores 2.",""],
+
+    // Tissue Fluid
+    [1,"Explain the formation of tissue fluid at the arterial end of capillaries.","At the ARTERIAL END of capillaries:\n\n1. Blood enters the capillary bed at RELATIVELY HIGH HYDROSTATIC PRESSURE (pressure from the pumping action of the heart)\n\n2. This hydrostatic pressure EXCEEDS the opposing ONCOTIC PRESSURE (the osmotic pressure created by plasma proteins in the blood drawing water in)\n\n3. Net result: fluid is FORCED OUT of the capillary through the thin walls into the INTERSTITIAL SPACE (tissue fluid)\n\n4. WHAT LEAVES: water, glucose, amino acids, oxygen, mineral ions (small molecules that can fit through capillary walls)\n\n5. WHAT STAYS: plasma proteins, red blood cells, white blood cells (too large to pass through)\n\n6. TISSUE FLUID: the fluid that bathes cells — provides O₂ and nutrients, and receives CO₂ and waste products from cells via diffusion","Tissue fluid composition: similar to plasma but with very little protein (plasma proteins are retained in the blood). Cells are surrounded by tissue fluid — NOT by blood directly.","Exam trap: 'Red blood cells enter tissue fluid' = WRONG. Red blood cells and plasma proteins are too large to pass through capillary walls and remain in the blood. Only small molecules and water form tissue fluid."],
+    [1,"Explain how tissue fluid returns to the blood at the venous end of capillaries.","At the VENOUS END of capillaries:\n\n1. Blood has LOST fluid along the capillary → HYDROSTATIC PRESSURE has fallen significantly\n\n2. The ONCOTIC PRESSURE (osmotic pressure from plasma proteins) REMAINS HIGH throughout — proteins were never lost\n\n3. NET EFFECT: Oncotic pressure now EXCEEDS hydrostatic pressure\n\n4. Water moves back INTO the capillary by OSMOSIS (down the water potential gradient, from tissue fluid into blood)\n\n5. Substances: water, CO₂, urea, and other waste products return to the blood\n\nNET BALANCE:\n• More fluid forced out at arterial end than returns at venous end\n• The EXCESS tissue fluid (approximately 10%) must be drained by the LYMPHATIC system","The key to understanding this: plasma proteins are never lost from the blood (too large). So oncotic pressure is constant throughout the capillary, but hydrostatic pressure FALLS along the length. Hydrostatic wins at arterial end; oncotic wins at venous end.","Exam trap: Tissue fluid returns by OSMOSIS, not by pressure. At the venous end, water moves down its water potential gradient (from tissue fluid into blood because plasma proteins make blood have a lower water potential)."],
+    [1,"Define and distinguish hydrostatic pressure and oncotic pressure.","HYDROSTATIC PRESSURE:\n• The physical PRESSURE exerted by the blood on the capillary walls\n• Generated by the pumping action of the heart\n• HIGHEST at the arterial end of capillaries\n• DECREASES along the length of the capillary as fluid is lost and distance from heart increases\n• Effect: pushes fluid OUT of capillaries into tissue spaces\n\nONCOTIC PRESSURE (Osmotic Pressure):\n• The osmotic PULLING FORCE created by the presence of plasma proteins in the blood\n• Proteins lower the water potential of the blood\n• CONSTANT along the length of the capillary (proteins are not lost)\n• Effect: draws water INTO the capillary by osmosis\n\nBALANCE:\n• Arterial end: Hydrostatic > Oncotic → net flow OUT → tissue fluid forms\n• Venous end: Oncotic > Hydrostatic → net flow IN → tissue fluid returns","Hydrostatic = pushing force (from heart). Oncotic = pulling force (from proteins). At arterial end, push > pull. At venous end, pull > push. This balance determines net fluid movement.",""],
+
+    // Lymphatic
+    [2,"Describe the structure and functions of the lymphatic system.","STRUCTURE:\n• Network of LYMPHATIC CAPILLARIES throughout tissues — blind-ended, thin-walled, highly permeable\n• Larger LYMPHATIC VESSELS that drain into two main ducts returning to the bloodstream (thoracic duct and right lymphatic duct → subclavian veins)\n• LYMPH NODES — contain lymphocytes; filter lymph\n• VALVES in lymphatic vessels — prevent backflow (like veins)\n\nFUNCTIONS:\n1. RETURN EXCESS TISSUE FLUID — approximately 10% of tissue fluid not reabsorbed at venous end is collected and returned to bloodstream as lymph\n\n2. RETURN PLASMA PROTEINS — any proteins that leak from capillaries are returned to the blood via lymphatic system (prevents fall in oncotic pressure)\n\n3. TRANSPORT DIETARY LIPIDS — absorbed fat from the small intestine enters lacteals (lymphatic vessels in villi) and travels as chylomicrons in lymph\n\n4. IMMUNE DEFENCE — lymphocytes in lymph nodes detect and destroy pathogens; lymph is filtered as it passes through nodes","Lymph is similar to tissue fluid composition (low protein, no red blood cells). It travels slowly, assisted by skeletal muscle contractions and breathing movements — no pump (unlike the circulatory system).",""],
+    [2,"What happens if the lymphatic system is blocked or damaged?","If lymphatic drainage is BLOCKED or DAMAGED:\n\n1. Excess tissue fluid ACCUMULATES in the interstitial spaces because it cannot be returned to the bloodstream\n\n2. Tissues become SWOLLEN — this condition is called OEDEMA (or lymphoedema if specifically due to lymph vessel damage)\n\n3. The swelling occurs because fluid accumulates faster than it can be reabsorbed at the venous end of capillaries\n\nCAUSES OF OEDEMA:\n• Lymphatic vessel blockage (e.g. by parasites in elephantiasis/lymphatic filariasis)\n• Low plasma protein levels (e.g. malnutrition, liver disease) → reduced oncotic pressure → less water drawn back into blood at venous end\n• Heart failure → increased venous pressure → hydrostatic pressure remains high at venous end → less fluid returns\n• Local inflammation → increased capillary permeability → more fluid leaks out","Oedema explains why low plasma protein (from malnutrition or liver disease) causes swelling — without oncotic pressure pulling water back in, tissue fluid accumulates. This is a common exam application question.",""],
+
+    // Pressure Gradients
+    [3,"Explain the pressure changes along the length of the circulatory system.","PRESSURE GRADIENT along the circulation:\n\nHIGHEST PRESSURE: Aorta (approximately 120 mmHg systolic / 80 mmHg diastolic)\n↓ pressure drops through arterial tree\nARTERIOLES: ~40–60 mmHg (significant pressure drop here due to resistance)\n↓ pressure drops through capillary bed\nCAPILLARIES: ~15–35 mmHg\n↓\nVENULES: ~10 mmHg\n↓\nVEINS: ~5 mmHg\n↓\nVENA CAVA: ~2 mmHg\n\nKEY REASONS FOR PRESSURE DROP:\n• Friction between blood and vessel walls reduces pressure\n• Blood spreads into increasingly wider total cross-sectional area (capillary beds)\n• Distance from the heart increases\n\nWHY THIS MATTERS FOR TISSUE FLUID:\nThe pressure at the ARTERIAL end of capillaries is sufficient to force fluid out.\nThe pressure at the VENOUS end has dropped enough that oncotic pressure dominates → fluid returns.","The largest pressure drop occurs across the arterioles, which act as 'resistance vessels' — this is where vasodilation/vasoconstriction occurs to regulate blood flow to different organs.",""]
+  ],
+  examQs:[
+    {marks:6, q:"Compare the structure of arteries, veins and capillaries.", a:"Arteries have thick muscular and elastic walls with a narrow lumen to withstand and maintain high blood pressure. The elastic tissue allows recoil between heartbeats to maintain a continuous pressure.\n\nVeins have thinner walls with less muscle and elastic tissue because blood pressure is low. They have a wider lumen to reduce resistance to flow and valves to prevent backflow, assisted by skeletal muscle contractions.\n\nCapillaries have walls one endothelial cell thick with a very narrow lumen, allowing efficient exchange of substances such as oxygen, glucose, and carbon dioxide between blood and surrounding tissues.", tips:"Six marking points: for each vessel type, state at least (1) wall thickness, (2) lumen size, (3) a unique feature, and (4) link to function. Capillary walls = one cell thick is a crucial specific detail."},
+    {marks:5, q:"Explain how tissue fluid is formed and returned to the blood.", a:"At the arterial end of capillaries, hydrostatic pressure is high. This forces water and small dissolved substances such as glucose and oxygen through the capillary wall into the interstitial space, forming tissue fluid.\n\nBlood cells and plasma proteins remain in the capillaries because they are too large to pass through the capillary walls.\n\nAt the venous end, hydrostatic pressure has fallen. The oncotic pressure (from plasma proteins) now exceeds hydrostatic pressure, drawing water back into the capillary by osmosis.\n\nExcess tissue fluid that is not reabsorbed is returned to the bloodstream via the lymphatic system.", tips:"Arterial end: hydrostatic > oncotic → fluid OUT. Venous end: oncotic > hydrostatic → fluid IN by osmosis. What stays in blood (proteins, cells) must be stated. Lymphatic system for excess."},
+    {marks:4, q:"State three functions of the lymphatic system and explain one in detail.", a:"The lymphatic system returns excess tissue fluid to the bloodstream. It also transports absorbed dietary lipids from the small intestine via lacteals, and contains lymphocytes that provide immune defence.\n\nExcess tissue fluid that is not reabsorbed at the venous end of capillaries enters blind-ended lymphatic capillaries. This fluid (now called lymph) travels along lymphatic vessels, through lymph nodes, and is returned to the blood via the subclavian veins.", tips:"Three functions stated clearly + one explained in mechanistic detail. The explanation must include: mechanism of entry into lymphatics, route through lymph nodes, return to bloodstream."},
+    {marks:6, q:"Explain what would happen to tissue fluid formation if plasma protein levels fell significantly.", a:"Plasma proteins are responsible for the oncotic pressure of the blood — they lower the water potential of the blood, drawing water back into the capillaries by osmosis at the venous end.\n\nIf plasma protein levels fell, the oncotic pressure would decrease. At the venous end of capillaries, oncotic pressure would no longer exceed hydrostatic pressure, so less water would be reabsorbed into the blood.\n\nMore tissue fluid would accumulate in the interstitial spaces than could be drained by the lymphatic system. This would cause the tissues to swell — a condition known as oedema.\n\nThis can occur in malnutrition (insufficient dietary protein for liver to synthesise plasma proteins) or liver disease (liver cannot produce albumin).", tips:"Mechanism: plasma proteins → oncotic pressure → water potential → osmosis. Consequence: less reabsorption at venous end → accumulation → oedema. Link to real cause (malnutrition/liver disease) for top marks."}
+  ],
+  mistakes:[
+    {wrong:"'Arteries always carry oxygenated blood.'",right:"Arteries carry blood AWAY FROM the heart. The pulmonary artery carries DEOXYGENATED blood from the right ventricle to the lungs."},
+    {wrong:"'Veins have thick walls.'",right:"Veins have THIN walls because blood pressure is LOW in veins. Arteries have thick walls because they experience high pressure from the heart."},
+    {wrong:"'Red blood cells enter the tissue fluid.'",right:"Red blood cells and plasma proteins are too LARGE to pass through capillary walls. Only water and small dissolved molecules form tissue fluid."},
+    {wrong:"'Tissue fluid is the same as blood plasma.'",right:"Tissue fluid is derived from plasma but contains VERY LITTLE PROTEIN — plasma proteins are retained in the blood because they are too large to pass through capillary walls. This protein difference is what drives oncotic pressure."},
+    {wrong:"'Tissue fluid returns to the blood by diffusion.'",right:"Tissue fluid returns to the blood by OSMOSIS at the venous end of capillaries. The high oncotic pressure of the blood (due to plasma proteins) creates a lower water potential, drawing water in by osmosis."},
+    {wrong:"'The lymphatic system pumps lymph using a lymph heart.'",right:"There is NO lymph heart. Lymph moves passively by SKELETAL MUSCLE CONTRACTIONS squeezing lymph vessels, and by BREATHING MOVEMENTS creating pressure changes. Valves prevent backflow."}
+  ]
+}
+];
+
+// ═══ STATE ═══
+var curDeck=null,curSec=0,curIdx=0,shown=false,deck=[],ratings={},easy=0,hard=0,done=0;
+var curMode='flash',eqIdx=0;
+
+function openDeck(n){
+  curDeck=n;curSec=0;curIdx=0;shown=false;easy=0;hard=0;done=0;ratings={};eqIdx=0;
+  document.getElementById('homeScreen').style.display='none';
+  document.getElementById('appScreen').style.display='block';
+  document.getElementById('appTitle').textContent=DECKS[n].title;
+  document.getElementById('pfill').style.background=DECKS[n].accent;
+  setMode('flash');
+}
+function goHome(){document.getElementById('homeScreen').style.display='block';document.getElementById('appScreen').style.display='none';}
+
+function setMode(m){
+  curMode=m;
+  ['flash','exam','mistakes'].forEach(function(x){
+    document.getElementById(x+'Mode').classList.toggle('hide',x!==m);
+    var id='m'+x.charAt(0).toUpperCase()+x.slice(1);
+    document.getElementById(id).classList.toggle('on',x===m);
+  });
+  if(m==='flash'){mkDeck();renderTabs();renderCard();}
+  else if(m==='exam'){eqIdx=0;renderExam();}
+  else{renderMistakes();}
+}
+
+function mkDeck(){deck=[];DECKS[curDeck].cards.forEach(function(c,i){if(c[0]===curSec)deck.push(i);});}
+function renderTabs(){
+  var secs=DECKS[curDeck].sections,cards=DECKS[curDeck].cards,h='';
+  secs.forEach(function(s,i){var cnt=0;cards.forEach(function(c){if(c[0]===i)cnt++;});h+='<span class="stab'+(i===curSec?' on':'')+'" onclick="sw('+i+')">'+s+' ('+cnt+')</span>';});
+  document.getElementById('stabs').innerHTML=h;
+}
+function renderCard(){
+  if(!deck.length)return;
+  var cards=DECKS[curDeck].cards,secs=DECKS[curDeck].sections,gi=deck[curIdx],c=cards[gi],acc=DECKS[curDeck].accent;
+  document.getElementById('CN').textContent=(curIdx+1)+' / '+deck.length;
+  ['badge','badge2'].forEach(function(id){var el=document.getElementById(id);el.textContent=secs[c[0]];el.style.cssText='background:#1c2333;border-color:'+acc+';color:'+acc;});
+  document.getElementById('QQ').textContent=c[1];
+  document.getElementById('AA').textContent=c[2];
+  var tip=document.getElementById('TIP');
+  if(c[3]&&c[3].length){tip.innerHTML='<b>💡 Key Insight:</b> '+c[3];tip.className='tip-box';}else{tip.className='tip-box hide';}
+  var exam=document.getElementById('EXAM');
+  if(c[4]&&c[4].length){exam.innerHTML='<b>🎯 Exam Trap:</b> '+c[4];exam.className='exam-box';}else{exam.className='exam-box hide';}
+  var cd=document.getElementById('CD');
+  cd.className=shown?'card shown':'card';cd.style.borderColor=shown?acc:'#30363d';
+  document.getElementById('RB').className=shown?'rbs show':'rbs';
+  document.getElementById('rp').className=shown?'rprompt show':'rprompt';
+  document.getElementById('cardlbl').textContent='Card '+(curIdx+1)+' of '+deck.length;
+  document.getElementById('DN').style.display='none';document.getElementById('MC').style.display='block';
+  var total=DECKS[curDeck].cards.length;
+  document.getElementById('sT').textContent=total;document.getElementById('sD').textContent=done;
+  document.getElementById('sE').textContent=easy;document.getElementById('sH').textContent=hard;
+  document.getElementById('plbl').textContent=done+' / '+total;
+  document.getElementById('pfill').style.width=Math.round(done/total*100)+'%';
+}
+function rev(){if(!shown){shown=true;renderCard();}}
+function go(d){shown=false;curIdx+=d;if(curIdx<0)curIdx=deck.length-1;if(curIdx>=deck.length)curIdx=0;renderCard();}
+function rt(r){
+  done++;if(r==='e'||r==='o')easy++;else hard++;shown=false;curIdx++;
+  if(curIdx>=deck.length){curIdx=0;if(deck.every(function(gi){return ratings[gi];})){document.getElementById('MC').style.display='none';document.getElementById('DN').style.display='block';return;}}
+  ratings[deck[curIdx-1]]=r;renderCard();
+}
+function sw(n){curSec=n;curIdx=0;shown=false;mkDeck();renderTabs();document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function rst(){curIdx=0;shown=false;document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function shuf(){deck.sort(function(){return Math.random()-.5;});curIdx=0;shown=false;renderCard();}
+
+function renderExam(){
+  var qs=DECKS[curDeck].examQs;
+  if(!qs||!qs.length){document.getElementById('examContent').innerHTML='<p style="color:#888;text-align:center;padding:20px">No exam questions for this section.</p>';return;}
+  document.getElementById('eqCounter').textContent='Question '+(eqIdx+1)+' of '+qs.length;
+  var q=qs[eqIdx],id='eq'+eqIdx;
+  document.getElementById('examContent').innerHTML=
+    '<div class="eq-card" id="'+id+'">'
+    +'<div class="marks-badge">'+q.marks+' marks</div>'
+    +'<div class="eq-q">'+q.q+'</div>'
+    +'<button class="reveal-btn" onclick="revExam(\''+id+'\')">👁 Show A★ Model Answer</button>'
+    +'<div class="model-ans">'
+    +'<div class="model-lbl">✅ A★ Model Answer</div>'
+    +'<div class="model-text">'+q.a+'</div>'
+    +'<div class="examiner-tips"><b>🎯 Examiner Tips:</b> '+q.tips+'</div>'
+    +'</div></div>';
+}
+function revExam(id){document.getElementById(id).classList.add('shown');}
+function eqGo(d){var qs=DECKS[curDeck].examQs;eqIdx+=d;if(eqIdx<0)eqIdx=qs.length-1;if(eqIdx>=qs.length)eqIdx=0;renderExam();}
+
+function renderMistakes(){
+  var ms=DECKS[curDeck].mistakes;
+  if(!ms||!ms.length){document.getElementById('mistakesContent').innerHTML='<p style="color:#888;text-align:center;padding:20px">No common mistakes listed.</p>';return;}
+  var h='<p style="font-size:12px;color:#888;margin-bottom:10px">Common mistakes in Topic 4.2 — memorise these to avoid losing marks!</p>';
+  ms.forEach(function(m,i){
+    h+='<div class="mk-card"><h4>❌ Mistake '+(i+1)+'</h4>'
+      +'<div class="wrong-box">❌ '+m.wrong+'</div>'
+      +'<div class="right-box">✅ '+m.right+'</div></div>';
+  });
+  document.getElementById('mistakesContent').innerHTML=h;
+}
+</script>
+</body>
+</html>
