@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 11 — Synoptic Biology & Cross-Topic Connections</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#0d1117;color:#eee;font-family:Arial,sans-serif;padding:10px;font-size:15px;min-height:100vh}
+.home{max-width:540px;margin:0 auto;padding:10px 0 40px}
+.logo{text-align:center;margin-bottom:14px;padding:16px;background:linear-gradient(135deg,#1c2333,#0d1117);border-radius:14px;border:1px solid #FFD700}
+.logo h1{color:#FFD700;font-size:18px;font-weight:bold;margin-bottom:4px;line-height:1.4}
+.logo .stars{font-size:16px;margin:6px 0}
+.logo p{color:#888;font-size:11px;line-height:1.6;margin-top:4px}
+.warn-banner{background:#1a0a0a;border:1px solid #f78166;border-radius:12px;padding:12px 14px;margin-bottom:13px;font-size:12px;color:#ccc;line-height:1.7}
+.warn-banner b{color:#f78166}
+.sec-hdr{font-size:12px;font-weight:bold;padding:8px 12px;border-radius:10px;margin-bottom:10px;margin-top:14px}
+.sh0{background:#3a2a0a;color:#FFD700}
+.sh1{background:#1f3a5f;color:#58a6ff}
+.sh2{background:#1a3a1a;color:#39d353}
+.sh3{background:#2a1a3a;color:#d2a8ff}
+.sh4{background:#2a0a0a;color:#f78166}
+.dc{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:13px;margin-bottom:10px;cursor:pointer}
+.dc:active{opacity:.8}
+.dc.gold{border-color:#FFD700}
+.dc h3{font-size:13px;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.dc p{color:#aaa;font-size:11px;line-height:1.5;margin-bottom:8px}
+.dc-meta{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:bold}
+.t1{background:#3a2a0a;color:#FFD700}.t2{background:#1f3a5f;color:#58a6ff}.t3{background:#1a3a1a;color:#39d353}
+.t4{background:#2a1a3a;color:#d2a8ff}.t5{background:#2a0a0a;color:#f78166}.t6{background:#3a1a0a;color:#ffa657}
+.ob{display:block;width:100%;padding:9px;border-radius:8px;border:none;font-size:12px;font-weight:bold;cursor:pointer;text-align:center}
+.ob0{background:#FFD700;color:#000}.ob1{background:#58a6ff;color:#000}.ob2{background:#39d353;color:#000}
+.ob3{background:#d2a8ff;color:#000}.ob4{background:#f78166;color:#000}.ob5{background:#ffa657;color:#000}
+
+/* APP */
+.app{display:none;max-width:600px;margin:0 auto}
+.topbar{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #30363d}
+.back{padding:5px 12px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:12px;cursor:pointer}
+.app-title{font-size:12px;font-weight:bold;color:#FFD700;flex:1;line-height:1.3}
+.stabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.stab{padding:5px 9px;background:#1c2333;border:1px solid #30363d;border-radius:20px;color:#aaa;cursor:pointer;font-size:11px}
+.stab.on{background:#FFD700;color:#000;border-color:#FFD700;font-weight:bold}
+.stats{display:flex;gap:5px;margin-bottom:8px}
+.chip{flex:1;background:#1c2333;border:1px solid #30363d;border-radius:8px;padding:5px 4px;text-align:center;font-size:10px;color:#888}
+.chip b{display:block;font-size:15px;font-weight:bold;color:#eee}
+.chip.g b{color:#39d353}.chip.r b{color:#f78166}.chip.y b{color:#FFD700}
+.prow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.plbl{font-size:11px;color:#888;white-space:nowrap}
+.pbar{flex:1;height:4px;background:#30363d;border-radius:99px;overflow:hidden}
+.pfill{height:100%;border-radius:99px;transition:width .3s}
+.card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:16px;min-height:190px;margin-bottom:10px;cursor:pointer;position:relative}
+.card.shown{border-color:#FFD700}
+.cnum{position:absolute;top:10px;right:12px;font-size:10px;color:#555}
+.sbadge{display:inline-block;font-size:9px;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:20px;margin-bottom:10px;border:1px solid}
+.cq{font-size:15px;line-height:1.5;text-align:center;padding:10px 0;color:#eee}
+.chint{text-align:center;color:#555;font-size:12px;margin-top:10px}
+.asec{display:none}
+.card.shown .asec{display:block}
+.card.shown .qsec{display:none}
+.albl{font-size:10px;color:#39d353;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:bold}
+.ans{font-size:13px;line-height:1.78;white-space:pre-wrap;color:#eee}
+.tip-box{border-left:3px solid #FFD700;padding:8px 10px;margin-top:10px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0;background:#0d1a0d}
+.tip-box b{color:#FFD700}
+.topics-box{border-left:3px solid #58a6ff;padding:8px 10px;margin-top:8px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0;background:#0a1a2a}
+.topics-box b{color:#58a6ff}
+.nav{display:flex;gap:6px;margin-bottom:8px}
+.btn{flex:1;padding:10px;border-radius:8px;border:1px solid #30363d;background:#1c2333;color:#eee;font-size:12px;font-weight:bold;cursor:pointer}
+.btn:active{opacity:.7}
+.btn.gold{background:#FFD700;color:#000;border-color:#FFD700}
+.rbs{display:none;gap:5px;margin-bottom:8px}
+.rbs.show{display:flex}
+.rb{flex:1;padding:8px 2px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;border:1px solid;text-align:center}
+.rb:active{opacity:.7}
+.re{background:#0a2a0a;color:#39d353;border-color:#2a6a2a}
+.ro{background:#0a1a3a;color:#58a6ff;border-color:#1a3a6a}
+.rh{background:#2a1a0a;color:#ffa657;border-color:#5a3a1a}
+.rm{background:#2a0a0a;color:#f78166;border-color:#5a1a1a}
+.rprompt{font-size:11px;color:#888;text-align:center;margin-bottom:6px;display:none}
+.rprompt.show{display:block}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.toolbar span{font-size:11px;color:#888}
+.shuf{padding:4px 10px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:11px;cursor:pointer}
+.done{text-align:center;padding:30px 16px;background:#1c2333;border:1px solid #30363d;border-radius:12px;display:none}
+.done h3{color:#FFD700;font-size:18px;margin-bottom:8px}
+.done p{color:#aaa;font-size:13px;margin-bottom:16px;line-height:1.5}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="home" id="homeScreen">
+  <div class="logo">
+    <h1>🔗 Chapter 11 — Synoptic Biology<br>&amp; Cross-Topic Connections</h1>
+    <div class="stars">⭐⭐⭐⭐⭐ HIGHEST EXAM IMPORTANCE</div>
+    <p>Pearson Edexcel A Level Biology B (9BI0) · A/A★ Master Revision Guide · Volume 10<br>All 3 Papers · 6-Mark Questions · Data Analysis · Synoptic Questions</p>
+  </div>
+
+  <div class="warn-banner">
+    <b>⚠️ Why Synoptic Questions Are Different:</b><br>
+    Pearson does NOT ask "Explain diffusion." It asks:<br>
+    <span style="color:#FFD700">"Explain how diffusion, circulation and ventilation work together to maximise oxygen uptake during exercise."</span><br><br>
+    This requires knowledge from <b>3 different topics simultaneously</b>. Master these connections to unlock the marks most students lose.
+  </div>
+
+  <div class="sec-hdr sh0">⭐ Section 1 — The 10 Core Synoptic Links (★★★★★)</div>
+  <div class="dc gold" onclick="openDeck(0)">
+    <h3><span>🔗</span> Synoptic Links 1–5 — Oxygen, DNA, Enzymes, Kidneys, Immunity</h3>
+    <p>The 5 most frequently tested synoptic connections: oxygen pathway during exercise, photosynthesis vs respiration, DNA→protein→phenotype, enzyme homeostasis, and kidney osmosis.</p>
+    <div class="dc-meta">
+      <span class="tag t1">★★★★★ Oxygen Pathway</span>
+      <span class="tag t2">DNA→Phenotype</span>
+      <span class="tag t3">Kidney+Osmosis</span>
+    </div>
+    <div class="ob ob0">Open Flashcards →</div>
+  </div>
+
+  <div class="dc gold" onclick="openDeck(1)">
+    <h3><span>🔗</span> Synoptic Links 6–10 — Immunity, Nerves, Heart, Ecology, Evolution</h3>
+    <p>Immunity+DNA, nervous system+muscles, heart+exercise+respiration, ecology+photosynthesis, evolution+genetics. All appear almost every year.</p>
+    <div class="dc-meta">
+      <span class="tag t4">Immunity+DNA</span>
+      <span class="tag t5">Nerves+Muscles</span>
+      <span class="tag t6">Evolution+Genetics</span>
+    </div>
+    <div class="ob ob1">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh1">📝 Section 2 — Pearson's Top 6-Mark Questions</div>
+  <div class="dc" onclick="openDeck(2)">
+    <h3><span>📝</span> Top 10 Six-Mark Questions — Full Model Answers</h3>
+    <p>Action potential → muscle contraction, blood glucose regulation, ultrafiltration, sliding filament theory, natural selection, mitosis vs meiosis, photosynthesis, aerobic respiration, gas exchange, antibody production.</p>
+    <div class="dc-meta">
+      <span class="tag t1">★★★★★ All 10</span>
+      <span class="tag t3">Model Answers</span>
+      <span class="tag t2">Mark Scheme Language</span>
+    </div>
+    <div class="ob ob2">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh2">⚡ Section 3 — 50 Highest-Yield Biological Processes</div>
+  <div class="dc" onclick="openDeck(3)">
+    <h3><span>⚡</span> Processes 1–25 — Molecules, Cells &amp; Genetics</h3>
+    <p>Diffusion, osmosis, active transport, DNA replication, transcription, translation, mitosis, meiosis, mutation, enzyme action, photosynthesis, and all respiration stages.</p>
+    <div class="dc-meta">
+      <span class="tag t2">Cell Transport</span>
+      <span class="tag t4">Genetics</span>
+      <span class="tag t1">Respiration</span>
+    </div>
+    <div class="ob ob3">Open Flashcards →</div>
+  </div>
+
+  <div class="dc" onclick="openDeck(4)">
+    <h3><span>⚡</span> Processes 26–50 — Physiology, Homeostasis &amp; Ecology</h3>
+    <p>Cardiac cycle, immune response, synaptic transmission, blood glucose regulation, osmoregulation, ultrafiltration, natural selection, biodiversity, nitrogen cycle, xylem transport.</p>
+    <div class="dc-meta">
+      <span class="tag t5">Physiology</span>
+      <span class="tag t3">Homeostasis</span>
+      <span class="tag t6">Ecology</span>
+    </div>
+    <div class="ob ob4">Open Flashcards →</div>
+  </div>
+
+  <div class="sec-hdr sh3">🗺 Section 4 — Ultimate Synoptic Map &amp; A★ Strategy</div>
+  <div class="dc" onclick="openDeck(5)">
+    <h3><span>🗺</span> Synoptic Map &amp; A★ Master Study Strategy</h3>
+    <p>The complete topic connection map, 6-stage study sequence, time allocation, and the 4 most important resources to produce next for exam mastery.</p>
+    <div class="dc-meta">
+      <span class="tag t1">Topic Map</span>
+      <span class="tag t3">6-Stage Strategy</span>
+      <span class="tag t2">180+ Hours Plan</span>
+    </div>
+    <div class="ob ob5">Open Flashcards →</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="appScreen">
+  <div class="topbar">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div class="app-title" id="appTitle"></div>
+  </div>
+  <div class="stabs" id="stabs"></div>
+  <div class="stats">
+    <div class="chip"><b id="sT">0</b>Cards</div>
+    <div class="chip y"><b id="sD">0</b>Done</div>
+    <div class="chip g"><b id="sE">0</b>Easy</div>
+    <div class="chip r"><b id="sH">0</b>Hard</div>
+  </div>
+  <div class="prow">
+    <span class="plbl" id="plbl">0/0</span>
+    <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
+  </div>
+  <div id="MC">
+    <div class="toolbar"><span id="cardlbl"></span><button class="shuf" onclick="shuf()">🔀 Shuffle</button></div>
+    <div class="card" id="CD" onclick="rev()">
+      <span class="cnum" id="CN"></span>
+      <div class="qsec">
+        <span class="sbadge" id="badge"></span>
+        <div class="cq" id="QQ"></div>
+        <div class="chint">👆 Tap to reveal A★ answer</div>
+      </div>
+      <div class="asec">
+        <span class="sbadge" id="badge2"></span>
+        <div class="albl">✅ A★ Answer</div>
+        <div class="ans" id="AA"></div>
+        <div id="TIP" class="tip-box hide"></div>
+        <div id="TOPICS" class="topics-box hide"></div>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="btn" onclick="go(-1)">← Prev</button>
+      <button class="btn gold" onclick="rev()">👁 Reveal</button>
+      <button class="btn" onclick="go(1)">Next →</button>
+    </div>
+    <div class="rprompt" id="rp">How well did you know this?</div>
+    <div class="rbs" id="RB">
+      <button class="rb re" onclick="rt('e')">✅ Easy</button>
+      <button class="rb ro" onclick="rt('o')">👍 Got it</button>
+      <button class="rb rh" onclick="rt('h')">⚠️ Hard</button>
+      <button class="rb rm" onclick="rt('m')">❌ Missed</button>
+    </div>
+  </div>
+  <div class="done" id="DN">
+    <h3>🎉 Section Complete!</h3>
+    <p>Excellent! Practice writing these answers from memory without notes. That is the only way to build the synoptic skill.</p>
+    <button class="btn gold" style="max-width:200px;margin:0 auto;display:block" onclick="rst()">🔄 Review Again</button>
+  </div>
+</div>
+
+<script>
+// card: [secIdx, question, answer, tip, topicsLinked]
+var DECKS=[
+
+// ══════════════════════════════════════════
+// DECK 0: Synoptic Links 1–5
+// ══════════════════════════════════════════
+{title:"🔗 Synoptic Links 1–5", accent:"#FFD700",
+sections:["🫁 Link 1: O₂ Pathway","🌿 Link 2: Photo vs Resp","🧬 Link 3: DNA→Phenotype","🌡 Link 4: Enzymes+Homeo","🫘 Link 5: Kidney+Osmosis"],
+cards:[
+[0,"SYNOPTIC LINK 1 ★★★★★\nExplain how oxygen moves from the atmosphere into muscle cells during exercise. (8 marks)","Step 1: VENTILATION — breathing movements maintain a HIGH O₂ concentration in the alveoli, creating a steep diffusion gradient between air and blood.\n\nStep 2: LARGE SURFACE AREA — millions of alveoli provide an enormous total surface area, maximising diffusion rate.\n\nStep 3: SHORT DIFFUSION DISTANCE — alveolar walls are one cell thick (~0.5 μm), minimising the distance O₂ must diffuse.\n\nStep 4: HAEMOGLOBIN — O₂ binds to haemoglobin in red blood cells (forming oxyhaemoglobin), removing free O₂ from the blood and maintaining the gradient.\n\nStep 5: CARDIAC OUTPUT INCREASES — during exercise, heart rate and stroke volume increase, increasing blood flow to muscles.\n\nStep 6: CAPILLARY DELIVERY — capillaries deliver oxygenated blood to within ~25 μm of every muscle cell.\n\nStep 7: DIFFUSION INTO CELLS — O₂ diffuses down a concentration gradient from blood into the muscle cell cytoplasm and mitochondria.\n\nStep 8: AEROBIC RESPIRATION — O₂ is used as the final electron acceptor in the ETC; ATP is produced.","8 steps, each one a separate mark. Any 6 correct steps = 6 marks. This is the most common synoptic question in all Pearson papers. Every student should memorise all 8 steps in order.","Topics linked: Gas Exchange (Topic 4) + Diffusion (Topic 2) + Haemoglobin (Topic 4) + Circulation (Topic 4) + Respiration (Topic 5) + ATP (Topic 1)"],
+[0,"SYNOPTIC LINK 1 — State the three features of alveoli that maximise diffusion rate.","1. LARGE SURFACE AREA — millions of alveoli in each lung provide a total surface area of approximately 70 m²; this increases the rate of diffusion (more area = more molecules cross per second).\n\n2. SHORT DIFFUSION DISTANCE — alveolar walls are one endothelial cell thick (approximately 0.5 μm); this minimises the distance O₂ must travel from air to blood.\n\n3. STEEP CONCENTRATION GRADIENT — ventilation continuously replaces air in alveoli (maintaining high O₂); blood flow continuously removes O₂ (maintaining low blood O₂); this keeps the gradient steep throughout.","All three features must be stated AND explained with the functional consequence — stating the structural feature alone scores only half marks in Pearson mark schemes.","Topics: Gas Exchange (Topic 4) + Diffusion (Topic 2)"],
+[1,"SYNOPTIC LINK 2 ★★★★★\nExplain why photosynthesis and respiration are interdependent.","PHOTOSYNTHESIS produces glucose and oxygen and requires CO₂ and light energy.\n\nRESPIRATION uses glucose and oxygen and produces CO₂ and water and releases ATP.\n\nINTERDEPENDENCE:\n• The OXYGEN produced in photosynthesis (during the light-dependent reaction when water is split) is used as the final electron acceptor in the electron transport chain of aerobic respiration.\n\n• The CO₂ produced in respiration (during decarboxylation in the link reaction and Krebs cycle) is fixed by RuBisCO in the Calvin cycle of photosynthesis.\n\n• The GLUCOSE produced by the Calvin cycle in photosynthesis is the respiratory substrate that enters glycolysis to produce ATP.\n\n• The ATP produced by respiration powers many cellular processes, including the ACTIVE TRANSPORT of minerals needed for photosynthesis.\n\nAt the ecosystem level: plants photosynthesise → animals respire → CO₂ returned to atmosphere → used in photosynthesis again (carbon cycle).","Comparison table: Photosynthesis ↔ Respiration. Location: chloroplast ↔ mitochondrion. Energy: stores ↔ releases. CO₂: uses ↔ produces. Glucose: produces ↔ uses. Learn this table cold.","Topics: Photosynthesis (Topic 7) + Respiration (Topic 5) + ATP (Topic 1) + Carbon cycle (Topic 9)"],
+[1,"SYNOPTIC LINK 2 — Compare the locations and products of photosynthesis and respiration.","PHOTOSYNTHESIS:\n• Location: CHLOROPLAST\n  - Light-dependent reactions: thylakoid membranes\n  - Calvin cycle: stroma\n• Products: glucose, oxygen, water\n• Energy: STORES light energy as chemical energy (glucose)\n• Requires: CO₂, H₂O, light\n\nRESPIRATION:\n• Location: MITOCHONDRION (and cytoplasm for glycolysis)\n  - Glycolysis: cytoplasm\n  - Link reaction + Krebs: matrix\n  - Oxidative phosphorylation: inner membrane (cristae)\n• Products: CO₂, H₂O, ATP\n• Energy: RELEASES chemical energy as ATP\n• Requires: glucose, O₂ (aerobic)\n\nKEY LINK: Both involve CHEMIOSMOSIS (proton gradient through ATP synthase to produce ATP) — in chloroplasts (photophosphorylation) and in mitochondria (oxidative phosphorylation).","The chemiosmotic link between photosynthesis and respiration is one of the most powerful synoptic connections. Both use proton gradients and ATP synthase — the mechanism is identical despite occurring in different organelles.","Topics: Photosynthesis (Topic 7) + Respiration (Topic 5)"],
+[2,"SYNOPTIC LINK 3 ★★★★★\nExplain how a mutation in DNA can result in a changed phenotype.","STEP 1 — MUTATION: A change in the DNA base sequence (e.g. base substitution, insertion, or deletion).\n\nSTEP 2 — TRANSCRIPTION AFFECTED: The mutated DNA is transcribed into a different mRNA sequence; the codon at the mutation site is changed.\n\nSTEP 3 — TRANSLATION AFFECTED: During translation at the ribosome, the changed mRNA codon is read; a different tRNA anticodon matches, bringing a DIFFERENT AMINO ACID.\n\nSTEP 4 — PRIMARY STRUCTURE CHANGES: The polypeptide has a different amino acid at one position → PRIMARY STRUCTURE is altered.\n\nSTEP 5 — TERTIARY STRUCTURE CHANGES: Different R group interactions (H-bonds, ionic bonds, disulfide bridges) form → the 3D shape of the protein changes.\n\nSTEP 6 — FUNCTION CHANGES: If the protein is an enzyme, the active site shape changes → substrate no longer fits → enzyme non-functional.\n\nSTEP 7 — PHENOTYPE CHANGES: The loss or alteration of protein function produces a different phenotype.\n\nEXAMPLE: Sickle cell disease — base substitution → Glu replaced by Val → HbS polymerises → sickle-shaped RBCs → anaemia.","7 steps in order. Each step must causally link to the next. A common marker error is skipping steps — every link in the chain (mutation → codon → amino acid → primary → tertiary → function → phenotype) must be explicitly stated.","Topics: DNA/Genetics (Topic 3) + Protein structure (Topic 1) + Enzymes (Topic 1) + Gene expression (Topic 6)"],
+[2,"SYNOPTIC LINK 3 — State the three types of gene mutation and their relative severity.","1. SUBSTITUTION (POINT) MUTATION:\n• One base replaced by another\n• Can produce: silent mutation (same amino acid — degenerate code), missense mutation (different amino acid), or nonsense mutation (premature stop codon)\n• Example: sickle cell anaemia (missense: GAG → GTG; Glu → Val)\n• Severity: variable — silent = no effect; nonsense = often severe\n\n2. INSERTION MUTATION:\n• One or more bases inserted into the sequence\n• Causes a FRAMESHIFT — all codons after the insertion are shifted → completely different amino acid sequence\n• Severity: usually VERY SEVERE — affects all amino acids after mutation point\n\n3. DELETION MUTATION:\n• One or more bases removed from the sequence\n• Also causes a FRAMESHIFT if not a multiple of 3\n• Severity: usually VERY SEVERE — same as insertion\n\nSEVERITY ORDER (least to most):\nSilent < Missense < Nonsense < Frameshift","Frameshift mutations (insertion/deletion) are most severe because they alter ALL codons after the mutation point, producing a completely different and usually non-functional protein. Substitution only affects ONE codon.","Topics: DNA structure (Topic 3) + Protein structure (Topic 1) + Gene expression (Topic 6)"],
+[3,"SYNOPTIC LINK 4 ★★★★★\nExplain the link between enzyme denaturation and homeostasis when body temperature rises.","STEP 1: Body temperature rises above 37°C (above optimum for most human enzymes).\n\nSTEP 2: Increased kinetic energy breaks HYDROGEN BONDS and IONIC BONDS in enzyme tertiary structure.\n\nSTEP 3: Active site shape changes → substrate no longer complementary → enzyme-substrate complex cannot form.\n\nSTEP 4: Rate of enzyme-controlled metabolic reactions DECREASES — this is dangerous because all metabolic processes (respiration, protein synthesis, nerve function) slow down.\n\nSTEP 5: HOMEOSTATIC RESPONSE — thermoreceptors in the hypothalamus detect the rise in blood temperature.\n\nSTEP 6: NEGATIVE FEEDBACK — hypothalamus sends signals to effectors (sweat glands, blood vessels) to increase heat loss.\n\nSTEP 7: Vasodilation → more blood to skin surface → more heat lost by radiation.\nSweating → evaporation removes heat.\n\nSTEP 8: Temperature returns to set point (37°C) → enzyme tertiary structure is maintained → normal metabolic rate restored.","The synoptic link here is: enzyme structure (Topic 1) → homeostasis mechanism (Topic 9) → negative feedback loop (Topic 9). This connection is tested in almost every year's Paper 2.","Topics: Enzymes (Topic 1) + Thermoregulation/Homeostasis (Topic 9) + Negative feedback (Topic 9)"],
+[4,"SYNOPTIC LINK 5 ★★★★★\nExplain how water is reabsorbed from the collecting duct. State all the concepts this requires.","COMPLETE ANSWER:\n\n1. ADH (antidiuretic hormone) is released from the posterior pituitary when blood water potential falls.\n\n2. ADH travels in the blood to the COLLECTING DUCT of the kidney nephron.\n\n3. ADH binds to receptors on the collecting duct cells → triggers insertion of AQUAPORIN channel proteins into the cell membranes.\n\n4. Aquaporins increase the PERMEABILITY of the collecting duct to water.\n\n5. The medullary interstitium has a HIGH SOLUTE CONCENTRATION (maintained by the loop of Henle countercurrent multiplier) → LOW WATER POTENTIAL.\n\n6. Water moves by OSMOSIS from the collecting duct (higher water potential) into the medullary fluid (lower water potential) through the aquaporins.\n\n7. Water is reabsorbed into the peritubular capillaries → blood water potential rises → negative feedback → ADH secretion decreases.\n\nCONCEPTS REQUIRED:\n✓ Osmosis (Topic 2)\n✓ Water potential (Topic 2)\n✓ ADH — hormone signalling (Topic 9)\n✓ Aquaporins — membrane proteins (Topic 2)\n✓ Cell membrane structure (Topic 2)\n✓ Negative feedback (Topic 9)","This question requires 6 different concepts from 2 different topics. Students who know kidney function but not osmosis/water potential lose marks here. Always connect the mechanism to the underlying cell biology.","Topics: Kidney (Topic 9) + Osmosis & water potential (Topic 2) + Cell membranes & aquaporins (Topic 2) + Hormonal control & ADH (Topic 9) + Negative feedback (Topic 9)"]
+]},
+
+// ══════════════════════════════════════════
+// DECK 1: Synoptic Links 6–10
+// ══════════════════════════════════════════
+{title:"🔗 Synoptic Links 6–10", accent:"#d2a8ff",
+sections:["💉 Link 6: Immunity+DNA","⚡ Link 7: Nerves+Muscles","❤️ Link 8: Heart+Exercise","🌱 Link 9: Ecology+Photo","🧬 Link 10: Evolution+Genetics"],
+cards:[
+[0,"SYNOPTIC LINK 6 ★★★★★\nExplain how vaccination leads to antibody production when a pathogen is encountered again.","STEP 1 — VACCINATION: A vaccine containing antigens (dead/attenuated pathogen or antigen proteins) is introduced.\n\nSTEP 2 — ANTIGEN PRESENTATION: Antigens are displayed on antigen-presenting cells (macrophages).\n\nSTEP 3 — T HELPER CELL ACTIVATION: T helper cells with complementary receptors bind to antigen → activated.\n\nSTEP 4 — B CELL ACTIVATION: Activated T helper cells stimulate B cells with complementary surface antibodies to proliferate (clonal expansion).\n\nSTEP 5 — ANTIBODY PRODUCTION: Plasma cells (differentiated B cells) secrete large quantities of complementary antibodies.\n\nSTEP 6 — MEMORY CELLS: Some B cells become long-lived memory B cells.\n\nSTEP 7 — SECOND EXPOSURE: On re-exposure to the same pathogen, memory B cells rapidly proliferate and differentiate into plasma cells.\n\nSTEP 8 — RAPID RESPONSE: Large amounts of antibody produced quickly before disease symptoms develop.\n\nDNA LINK: Antibody diversity arises from gene rearrangement — lymphocytes rearrange V, D, J gene segments to produce diverse antibody genes. Each B cell clone has a unique DNA sequence → unique antibody.","The DNA link: antibody diversity is generated at the DNA level (V(D)J recombination). This is why every antibody has a different structure — different gene segments are joined in each lymphocyte.","Topics: Immunity (Topic 6) + DNA & gene expression (Topic 3) + Protein synthesis — antibodies are proteins (Topic 1)"],
+[0,"SYNOPTIC LINK 6 — Explain why protein synthesis is essential to the immune response.","Antibodies are PROTEINS — specifically glycoproteins with a specific 3D structure that allows them to bind to one specific antigen (complementary shape).\n\nFor the immune system to respond:\n1. B cells must TRANSCRIBE the antibody gene into mRNA\n2. mRNA must be TRANSLATED at ribosomes to produce antibody protein\n3. The antibody protein must be correctly FOLDED (tertiary structure) so the antigen-binding site is the correct complementary shape\n4. Antibodies are SECRETED by exocytosis from plasma cells into the blood\n\nTHEREFORE:\n• DNA mutation → different antibody sequence → antibody may not bind antigen → immune response fails\n• Protein denaturation → antibody loses shape → cannot bind antigen → no immune response\n\nThis shows the link: DNA → mRNA → antibody protein → immune function.","This synoptic connection (DNA/protein synthesis → immune response) appears in Paper 3 synoptic essays. The key insight is that antibodies are proteins, so ALL of the protein synthesis machinery (transcription, translation, folding) is essential for immunity.","Topics: Immunity (Topic 6) + Protein synthesis (Topic 3) + Protein structure (Topic 1)"],
+[1,"SYNOPTIC LINK 7 ★★★★★\nExplain how an action potential results in muscle contraction. (6 marks)","STEP 1 — ACTION POTENTIAL: Arrives at the neuromuscular junction (motor end plate).\n\nSTEP 2 — ACETYLCHOLINE RELEASE: Depolarisation causes Ca²⁺ to enter the presynaptic terminal → vesicles fuse with membrane → acetylcholine (ACh) released by exocytosis.\n\nSTEP 3 — DEPOLARISATION OF MUSCLE: ACh binds to receptors on motor end plate → Na⁺ channels open → Na⁺ enters → muscle fibre depolarises.\n\nSTEP 4 — CALCIUM RELEASE: Depolarisation spreads along the sarcolemma into T-tubules → Ca²⁺ released from sarcoplasmic reticulum into the sarcoplasm.\n\nSTEP 5 — TROPONIN-TROPOMYOSIN: Ca²⁺ binds to troponin → tropomyosin moves → exposes MYOSIN BINDING SITES on actin filaments.\n\nSTEP 6 — CROSS-BRIDGE FORMATION: Myosin heads attach to actin (form cross-bridges).\n\nSTEP 7 — POWER STROKE: ATP hydrolysis → myosin head pivots → actin filament pulled towards centre of sarcomere → sarcomere SHORTENS.\n\nSTEP 8 — MUSCLE SHORTENS: Repeated cross-bridge cycles → overall muscle fibre shortens → muscle contracts.","8 steps — one mark each. This is described as 'one of the most common 6-mark questions' in the document. Every step must be in the correct order. Practise writing all 8 steps from memory.","Topics: Nervous system & synapses (Topic 8) + Muscle contraction & sliding filament theory (Topic 8) + ATP (Topic 1) + Ca²⁺ ions (Topic 1)"],
+[1,"SYNOPTIC LINK 7 — State the role of ATP in muscle contraction.","ATP is required at THREE specific points during muscle contraction:\n\n1. MYOSIN HEAD COCKING: ATP binds to the myosin head → hydrolysed to ADP + Pᵢ → myosin head is 'cocked' (moves to high-energy position ready to attach to actin).\n\n2. POWER STROKE: When myosin head is attached to actin and the power stroke occurs, ADP + Pᵢ are released → this release triggers the power stroke (pivoting of myosin head → actin moves).\n\n3. DETACHMENT: A new ATP molecule binds to the myosin head → causes myosin to detach from actin → cycle can repeat.\n\nWITHOUT ATP:\n• Myosin cannot detach from actin → muscle stays in contracted, stiff state → this explains RIGOR MORTIS (the stiffness of muscles after death, when ATP production stops).","Rigor mortis is the perfect exam application: when ATP production stops after death, myosin cannot detach from actin → permanent contraction → stiffness. This demonstrates the ATP requirement for detachment.","Topics: Muscle contraction (Topic 8) + ATP & respiration (Topics 1 & 5)"],
+[2,"SYNOPTIC LINK 8 ★★★★★\nExplain what happens to cardiac output and oxygen delivery during exercise.","TRIGGER: Exercise begins → muscles demand more ATP → O₂ consumption rises → CO₂ production rises.\n\nHEART RATE RESPONSE:\n• Chemoreceptors detect increased CO₂ / decreased pH in blood\n• Signals sent to cardiovascular centre in medulla oblongata\n• Sympathetic nervous system stimulates SAN → heart rate INCREASES\n• Adrenaline (from adrenal medulla) also stimulates increased heart rate\n\nSTROKE VOLUME RESPONSE:\n• Increased venous return (more blood returning) stretches ventricles\n• Starling's Law: greater stretch → stronger contraction → greater stroke volume\n\nCARDIAC OUTPUT INCREASES:\nCardiac output = heart rate × stroke volume\nResting: ~5 dm³ min⁻¹\nExercise: up to ~25 dm³ min⁻¹ in trained athletes\n\nO₂ DELIVERY:\n• More blood reaches muscles per minute\n• Bohr effect: increased CO₂ in muscle → haemoglobin releases O₂ more readily (curve shifts right)\n• More O₂ available for aerobic respiration → more ATP → sustained muscle contraction","The Bohr effect is the key biochemical link: high CO₂ in exercising muscles reduces haemoglobin's affinity for O₂ → more O₂ unloaded to muscles precisely where it is needed most.","Topics: Heart & cardiac cycle (Topic 4) + Haemoglobin & Bohr effect (Topic 4) + Respiration & ATP (Topic 5) + Nervous system & hormones (Topic 8 & 9)"],
+[3,"SYNOPTIC LINK 9 ★★★★★\nExplain how light intensity affects plant biomass and animal population size.","CAUSAL CHAIN:\n\nSTEP 1: Higher light intensity → more light energy absorbed by chlorophyll → more electrons excited in photosystems I and II.\n\nSTEP 2: More electrons → more ATP and NADPH produced in light-dependent reactions → more photophosphorylation.\n\nSTEP 3: More ATP and NADPH available → faster Calvin cycle → more CO₂ fixed by RuBisCO → more triose phosphate produced.\n\nSTEP 4: More triose phosphate → more glucose synthesised → higher rate of photosynthesis → greater net primary productivity (NPP).\n\nSTEP 5: Greater NPP → more plant biomass produced and available.\n\nSTEP 6: More plant biomass → more food available for primary consumers (herbivores) at trophic level 2.\n\nSTEP 7: More food → greater carrying capacity for herbivore population → herbivore population INCREASES.\n\nSTEP 8: More herbivores → more food for predators (secondary consumers) → predator population may also increase.","This question combines photosynthesis biochemistry (Topics 7) with ecology (Topic 9). Many students know both topics separately but cannot connect them in a single causal chain. Practise writing the full 8-step chain from memory.","Topics: Photosynthesis (Topic 7) + Ecology, food chains & biomass (Topic 9)"],
+[4,"SYNOPTIC LINK 10 ★★★★★\nExplain how mutation leads to evolution. State all 5 steps of natural selection.","COMPLETE CAUSAL CHAIN:\n\nSTEP 1 — MUTATION: A random change in the DNA base sequence of a gene produces a new ALLELE. Mutations are the ultimate source of all genetic variation.\n\nSTEP 2 — VARIATION: The new allele may produce a different protein → different phenotype → variation within the population.\n\nSTEP 3 — SELECTION PRESSURE: An environmental factor (predation, disease, competition, climate) acts as a selection pressure, affecting survival differently for different phenotypes.\n\nSTEP 4 — DIFFERENTIAL SURVIVAL AND REPRODUCTION: Individuals with the advantageous allele are more likely to survive, reproduce and pass on that allele (differential reproductive success).\n\nSTEP 5 — CHANGE IN ALLELE FREQUENCY: Over many generations, the frequency of the advantageous allele INCREASES in the gene pool; the disadvantageous allele may decrease or disappear.\n\nRESULT — EVOLUTION: The population's characteristics change over generations → if populations become reproductively isolated, new species can arise (speciation).\n\nGENETICS LINK: Hardy-Weinberg equilibrium predicts allele frequencies in the ABSENCE of selection. When selection acts, frequencies deviate from H-W equilibrium — this is measurable evolution.","Natural selection appears 'almost every year' according to the document. The Hardy-Weinberg link is the most common data analysis component — given allele frequencies, determine if evolution is occurring.","Topics: Genetics & mutation (Topic 3) + Natural selection & evolution (Topic 3/10) + Population genetics & Hardy-Weinberg (Topic 10)"]
+]},
+
+// ══════════════════════════════════════════
+// DECK 2: Top 10 Six-Mark Questions
+// ══════════════════════════════════════════
+{title:"📝 Top 10 Six-Mark Model Answers", accent:"#39d353",
+sections:["💪 Nerves & Muscles","🩸 Physiology","🌿 Plants & Ecology","🧬 Genetics & Evolution"],
+cards:[
+[0,"6-MARK ★★★★★\nExplain how an action potential results in muscle contraction.","1. Action potential arrives at neuromuscular junction → Ca²⁺ enters presynaptic terminal → acetylcholine released by exocytosis.\n\n2. Acetylcholine binds to receptors on motor end plate → Na⁺ channels open → muscle fibre depolarises.\n\n3. Depolarisation spreads along sarcolemma into T-tubules → Ca²⁺ released from sarcoplasmic reticulum.\n\n4. Ca²⁺ binds to troponin → tropomyosin moves → exposes myosin binding sites on actin.\n\n5. Myosin heads attach to actin (cross-bridges form) → ATP hydrolysis → power stroke → actin slides towards centre of sarcomere → sarcomere shortens.\n\n6. Repeated cross-bridge cycles → sarcomere shortens → muscle fibre contracts.","6 numbered points, each a distinct step. NEVER merge two steps into one sentence — each step is a separate mark. Always end with 'muscle fibre contracts' or 'muscle shortens' to close the answer.","Topics: Nervous system (T8) + Muscle contraction (T8) + ATP (T1) + Ca²⁺ ions (T1)"],
+[1,"6-MARK ★★★★★\nExplain blood glucose regulation after a meal containing carbohydrates.","1. Carbohydrates digested to glucose → blood glucose concentration rises.\n\n2. Beta cells of islets of Langerhans in the pancreas detect increased blood glucose.\n\n3. Beta cells secrete INSULIN into the blood.\n\n4. Insulin binds to receptors on liver and muscle cells → increases permeability to glucose (more GLUT transporters inserted into membrane).\n\n5. Glucose absorbed into liver and muscle cells → converted to GLYCOGEN by glycogenesis → blood glucose falls.\n\n6. Blood glucose returns to set point (~5 mmol dm⁻³) → insulin secretion decreases (negative feedback).","KEY TERMS to include: beta cells, islets of Langerhans, insulin, glycogenesis, GLUT transporters, negative feedback. All must appear for full marks. The mechanism is: detect → secrete hormone → target organ responds → negative feedback restores set point.","Topics: Homeostasis (T9) + Hormones (T9) + Cell membranes & transporters (T2) + Carbohydrate biochemistry (T1)"],
+[1,"6-MARK ★★★★★\nExplain ultrafiltration in the kidney.","1. Blood enters the glomerulus via the AFFERENT arteriole, which is wider than the efferent arteriole → creates HIGH HYDROSTATIC PRESSURE in the glomerular capillaries.\n\n2. High hydrostatic pressure forces fluid from the blood through the BASEMENT MEMBRANE and PODOCYTE FOOT PROCESSES into the Bowman's capsule.\n\n3. The basement membrane acts as a filter based on SIZE — small molecules (water, glucose, urea, ions, amino acids) pass through; large molecules (plasma proteins, blood cells) are retained in the blood.\n\n4. The filtrate (glomerular filtrate) collects in the Bowman's capsule — it has the same composition as blood plasma but without large proteins and blood cells.\n\n5. The oncotic pressure (from retained plasma proteins) opposes ultrafiltration — net filtration occurs only when hydrostatic pressure exceeds oncotic pressure.\n\n6. Filtrate passes into the proximal convoluted tubule where selective reabsorption begins.","Afferent arteriole WIDER than efferent → high hydrostatic pressure. This is the key structural detail that drives ultrafiltration. Without this size difference, pressure would be insufficient to force filtration.","Topics: Kidney (T9) + Osmosis & water potential (T2) + Cell membranes (T2) + Protein size (T1)"],
+[2,"6-MARK ★★★★★\nExplain photosynthesis — the light-dependent and light-independent reactions.","LIGHT-DEPENDENT REACTIONS (thylakoid membranes):\n1. Light absorbed by chlorophyll → electrons excited to higher energy level in PSI and PSII.\n2. Photolysis of water: 2H₂O → 4H⁺ + 4e⁻ + O₂ — provides electrons to replace those lost from PSII.\n3. Electrons pass down the ETC (PSII → plastoquinone → cytochrome complex → PSI) → proton gradient generated → ATP produced by chemiosmosis (photophosphorylation).\n4. At PSI, electrons re-energised → used to reduce NADP to NADPH.\n\nLIGHT-INDEPENDENT REACTIONS — CALVIN CYCLE (stroma):\n5. CO₂ fixed by RuBisCO onto RuBP (5C) → 2 molecules of GP (3C).\n6. GP reduced to triose phosphate (TP) using ATP and NADPH from light-dependent reactions.\n7. Some TP used to synthesise glucose; most TP used to regenerate RuBP using ATP.","6 marking points — 3 for light-dependent, 3 for Calvin cycle. Light-dependent: light→electrons→ATP+NADPH+O₂. Calvin: CO₂+RuBP→GP→TP→glucose+RuBP. Learn both stages as separate sequences.","Topics: Photosynthesis (T7) + ATP & chemiosmosis (T5/T1) + Organic molecules (T1)"],
+[2,"6-MARK ★★★★★\nExplain aerobic respiration from glucose to ATP.","GLYCOLYSIS (cytoplasm):\n1. Glucose (6C) phosphorylated twice → split into 2 pyruvate (3C) + net 2 ATP + 2 NADH.\n\nLINK REACTION (mitochondrial matrix):\n2. Pyruvate decarboxylated + NAD reduced → acetyl-CoA (2C) + CO₂ + NADH (×2 per glucose).\n\nKREBS CYCLE (mitochondrial matrix):\n3. Acetyl-CoA combines with oxaloacetate (4C) → citrate (6C) → decarboxylated and dehydrogenated → 2CO₂ + 3NADH + 1FADH₂ + 1ATP per turn; 2 turns per glucose.\n\nOXIDATIVE PHOSPHORYLATION (inner mitochondrial membrane):\n4. NADH and FADH₂ donate electrons to the ETC → electrons pass through protein complexes → H⁺ pumped into intermembrane space → proton gradient formed.\n5. H⁺ flows through ATP synthase down the gradient → ATP produced by CHEMIOSMOSIS.\n6. O₂ acts as final electron acceptor → H₂O formed; approximately 26–28 ATP produced here (total ~30–32 ATP per glucose).","The most marks come from the ETC and chemiosmosis section (Steps 4–6). Most students describe glycolysis and Krebs correctly but lose marks by not explaining the ETC mechanism in detail.","Topics: Respiration (T5) + ATP (T1) + Mitochondrial structure (T2) + Chemiosmosis (T5)"],
+[3,"6-MARK ★★★★★\nExplain natural selection using a named example.","EXAMPLE: Antibiotic resistance in bacteria (Staphylococcus aureus → MRSA).\n\n1. VARIATION: Random mutations produce variation within the bacterial population; some bacteria carry a mutation that confers resistance to the antibiotic methicillin.\n\n2. SELECTION PRESSURE: When antibiotics are applied, they act as a selection pressure against non-resistant bacteria.\n\n3. DIFFERENTIAL SURVIVAL: Non-resistant bacteria are killed by the antibiotic; resistant bacteria SURVIVE and REPRODUCE.\n\n4. INHERITANCE: Resistant alleles are passed to offspring (via binary fission and plasmid transfer).\n\n5. CHANGE IN ALLELE FREQUENCY: Over successive generations, the frequency of the resistance allele INCREASES in the population; non-resistant alleles decrease.\n\n6. RESULT: Eventually, most or all bacteria in the population are resistant (MRSA). New antibiotics must be developed.\n\nGENERAL PRINCIPLE: Natural selection always acts on EXISTING VARIATION (from mutation). It does NOT direct mutations towards advantageous alleles.","Using MRSA (antibiotic resistance) as the example scores highly because it: (1) names a specific organism, (2) uses a real selection pressure, (3) has clear medical relevance that Pearson examiners reward.","Topics: Natural selection & evolution (T3/T10) + Genetics & mutation (T3) + Microbiology (T6)"],
+[3,"6-MARK ★★★★★\nCompare mitosis and meiosis.","MITOSIS:\n• Produces 2 daughter cells\n• Daughter cells are DIPLOID (2n)\n• Daughter cells are GENETICALLY IDENTICAL to parent\n• One division (PMAT)\n• Function: growth, repair, asexual reproduction\n• No crossing over; no independent assortment\n\nMEIOSIS:\n• Produces 4 daughter cells\n• Daughter cells are HAPLOID (n)\n• Daughter cells are GENETICALLY DIFFERENT (non-identical)\n• Two divisions (Meiosis I + Meiosis II)\n• Function: production of gametes for sexual reproduction\n• CROSSING OVER in prophase I + INDEPENDENT ASSORTMENT in metaphase I → genetic variation\n\nKEY SIMILARITIES:\n• Both preceded by DNA replication (S phase)\n• Both involve spindle formation and chromosome separation\n• Both involve cytokinesis\n\nKEY DIFFERENCE: Meiosis I separates HOMOLOGOUS CHROMOSOME PAIRS; Meiosis II separates SISTER CHROMATIDS (like mitosis).","For comparison questions: always address BOTH cell divisions for each feature. Use a parallel structure: 'Mitosis produces 2 cells whereas meiosis produces 4 cells.' Examiner mark schemes expect direct contrasts.","Topics: Cell cycle & mitosis (T2) + Meiosis & reproduction (T3)"]
+]},
+
+// ══════════════════════════════════════════
+// DECK 3: 50 Processes — 1-25
+// ══════════════════════════════════════════
+{title:"⚡ 50 High-Yield Processes — 1–25", accent:"#58a6ff",
+sections:["🔄 Transport","🧬 Genetics","🌿 Photosynthesis","🔋 Respiration"],
+cards:[
+[0,"Define diffusion and state Fick's Law.","DEFINITION: The net movement of molecules from a region of HIGHER concentration to a region of LOWER concentration, down a concentration gradient. Requires NO energy (passive).\n\nFICK'S LAW:\nRate of diffusion ∝ (Surface area × Concentration difference) ÷ Thickness of membrane\n\nFACTORS THAT INCREASE RATE:\n• Steeper concentration gradient\n• Larger surface area\n• Thinner membrane/shorter diffusion distance\n• Higher temperature (greater kinetic energy)\n• Smaller molecular size","'Net movement' is required in the definition. Also required: 'down a concentration gradient' and 'no energy'. Missing any of these costs marks.","Topics: Cell biology (T2) + Gas exchange (T4)"],
+[0,"Define osmosis and water potential.","OSMOSIS: The net movement of WATER MOLECULES from a region of HIGHER water potential to a region of LOWER water potential, across a PARTIALLY PERMEABLE MEMBRANE.\n\nWATER POTENTIAL (Ψ): A measure of the tendency of water to move by osmosis. Pure water has the HIGHEST water potential = 0 kPa. Adding solutes LOWERS (makes more negative) water potential.\n\nWater potential (Ψ) = Solute potential (Ψs) + Pressure potential (Ψp)\n\nOSMOSIS IN CELLS:\n• Animal cell in hypotonic solution → water enters → cell swells → lysis\n• Animal cell in hypertonic solution → water leaves → cell crenates (shrivels)\n• Plant cell in hypotonic → water enters → turgor pressure increases → turgid\n• Plant cell in hypertonic → water leaves → plasmolysis (membrane pulls from wall)","Osmosis is SPECIFICALLY for WATER through a partially permeable membrane. Solutes do NOT move by osmosis — they move by diffusion. This distinction is frequently tested.","Topics: Cell membranes (T2) + Kidney (T9) + Plant transport (T4)"],
+[0,"Define active transport and contrast with facilitated diffusion.","ACTIVE TRANSPORT: The movement of substances AGAINST their concentration gradient (from low to high concentration), using ENERGY (ATP) and carrier proteins.\n\nFACILITATED DIFFUSION: The movement of substances DOWN their concentration gradient through CHANNEL or CARRIER PROTEINS, requiring NO energy.\n\nCOMPARISON:\n• Direction: Active = against gradient; Facilitated = down gradient\n• Energy: Active = requires ATP; Facilitated = no ATP\n• Protein: Both require carrier/channel proteins\n• Speed: Active = faster (can maintain concentration differences); Facilitated = limited by gradient\n\nEXAMPLES:\n• Active transport: Na⁺/K⁺ pump, glucose reabsorption in PCT, mineral ion uptake by root hair cells\n• Facilitated diffusion: glucose uptake by red blood cells, ion movement through channels","The key distinction for exam: active transport moves AGAINST gradient + needs ATP. Facilitated diffusion moves DOWN gradient + no ATP but still needs protein (unlike simple diffusion which needs neither).","Topics: Cell membranes (T2) + Kidney PCT (T9) + Photosynthesis (active loading of sucrose in phloem) (T4)"],
+[1,"Describe DNA replication — state the roles of each enzyme.","SEMI-CONSERVATIVE REPLICATION:\n\n1. DNA HELICASE: Unwinds the double helix and breaks hydrogen bonds between complementary bases → two template strands exposed.\n\n2. DNA POLYMERASE: Adds free nucleotides complementary to each template strand, forming new phosphodiester bonds (synthesises new strand in 5'→3' direction only).\n\n3. DNA LIGASE: Joins Okazaki fragments on the lagging strand (which is synthesised discontinuously).\n\n4. PRIMASE: Synthesises short RNA primers to provide a starting point for DNA polymerase.\n\nRESULT: Two identical double-stranded DNA molecules, each containing one original strand and one new strand (semi-conservative).","Enzyme roles: Helicase = UNZIPS. Polymerase = BUILDS. Ligase = JOINS. Primase = STARTS. Mnemonic: 'Unzip, Build, Join, Start' in order of the process.","Topics: DNA & genetics (T3) + ATP (energy for enzymes) (T1)"],
+[1,"Describe transcription (DNA → mRNA).","TRANSCRIPTION — occurs in the NUCLEUS:\n\n1. RNA polymerase binds to the PROMOTER region of the gene.\n\n2. DNA double helix UNWINDS — hydrogen bonds break — template strand (antisense strand) is exposed.\n\n3. RNA polymerase moves along the template strand (3'→5').\n\n4. FREE RNA NUCLEOTIDES align complementarily to the template strand (A–U, T–A, C–G, G–C).\n\n5. Phosphodiester bonds form between ribonucleotides → pre-mRNA synthesised (5'→3' direction).\n\n6. PRE-mRNA PROCESSING: Introns (non-coding sequences) removed; exons joined (spliced) → mature mRNA.\n\n7. Mature mRNA leaves the nucleus through NUCLEAR PORES → enters cytoplasm.","RNA polymerase reads the TEMPLATE (antisense) strand 3'→5' and produces mRNA 5'→3'. The mRNA sequence matches the CODING (sense) strand with U replacing T.","Topics: Genetics (T3) + Nuclear pores & mRNA processing (T2)"],
+[1,"Describe translation (mRNA → protein) — state the roles of mRNA, tRNA and ribosomes.","TRANSLATION — occurs at RIBOSOMES in cytoplasm:\n\nmRNA ROLE: Carries the genetic code from the nucleus as a sequence of CODONS (triplets of bases); each codon specifies one amino acid.\n\ntRNA ROLE: Transfer RNA molecule with an ANTICODON (3 bases complementary to the mRNA codon) and carries a SPECIFIC AMINO ACID to the ribosome.\n\nRIBOSOME ROLE: Reads the mRNA codon by codon; catalyses PEPTIDE BOND formation between adjacent amino acids.\n\nPROCESS:\n1. Ribosome binds to mRNA at the START codon (AUG → methionine).\n2. tRNA with complementary anticodon brings its amino acid → binds at A site.\n3. Peptide bond forms between adjacent amino acids (condensation reaction → water released).\n4. Ribosome moves along mRNA (translocation) → next codon read.\n5. Process repeats until STOP CODON reached → polypeptide released → folds into functional protein.","Codon = 3 bases on mRNA. Anticodon = 3 bases on tRNA (complementary to codon). The ribosome holds 2 tRNAs simultaneously (A site = incoming, P site = growing chain).","Topics: Genetics (T3) + Protein structure (T1) + ATP (ribosomes use ATP) (T1)"],
+[2,"Describe the light-dependent reactions of photosynthesis.","LOCATION: Thylakoid MEMBRANES (grana) of the chloroplast.\n\n1. LIGHT ABSORPTION: Chlorophyll absorbs light (mainly red and blue wavelengths) → electrons excited to higher energy levels in PSII.\n\n2. PHOTOLYSIS: Water is split: 2H₂O → 4H⁺ + 4e⁻ + O₂. Oxygen is released as a by-product. Electrons replace those lost from PSII.\n\n3. ELECTRON TRANSPORT CHAIN: Excited electrons pass from PSII → plastoquinone → cytochrome b6f complex → plastocyanin → PSI. Energy released as electrons fall → pumps H⁺ into the thylakoid lumen.\n\n4. CHEMIOSMOSIS (PHOTOPHOSPHORYLATION): H⁺ flows back through ATP SYNTHASE from lumen to stroma → ATP produced.\n\n5. PSI: Electrons re-energised → combined with H⁺ and NADP → NADPH produced (by NADP reductase).\n\nPRODUCTS of light-dependent reactions: ATP, NADPH, O₂.","Products: ATP + NADPH + O₂. These three products must be stated. ATP and NADPH are then used in the Calvin cycle. O₂ is released (or used in respiration).","Topics: Photosynthesis (T7) + Chemiosmosis & ATP synthase (same mechanism as mitochondria) (T5)"],
+[3,"Describe glycolysis.","LOCATION: CYTOPLASM (cytosol) — no organelles needed; occurs in ALL living cells, aerobic and anaerobic.\n\nSTAGE 1 — PHOSPHORYLATION:\n• Glucose (6C) is phosphorylated twice using 2 ATP → glucose bisphosphate (6C)\n• This 'activates' the glucose and prevents it leaving the cell\n\nSTAGE 2 — SPLITTING:\n• Glucose bisphosphate split into 2 × triose phosphate (TP, 3C)\n\nSTAGE 3 — OXIDATION:\n• Each TP oxidised → pyruvate (3C)\n• 4 ATP produced per glucose (net gain = 4 − 2 = 2 ATP)\n• 2 NAD reduced → 2 NADH\n\nNET PRODUCTS per glucose molecule:\n• 2 pyruvate\n• NET 2 ATP\n• 2 NADH","Net ATP = 4 produced − 2 used in phosphorylation = 2 ATP net. Never say '4 ATP from glycolysis' — the NET gain is 2. This distinction is regularly tested.","Topics: Respiration (T5) + ATP (T1)"]
+]},
+
+// ══════════════════════════════════════════
+// DECK 4: 50 Processes — 26-50
+// ══════════════════════════════════════════
+{title:"⚡ 50 High-Yield Processes — 26–50", accent:"#ffa657",
+sections:["❤️ Physiology","🛡 Immunity","🧠 Nervous System","🌡 Homeostasis","🌍 Ecology"],
+cards:[
+[0,"Describe the cardiac cycle — all three phases with valve actions.","PHASE 1 — DIASTOLE (relaxation):\n• All chambers relax\n• Blood flows from vena cava/pulmonary veins into atria\n• AV valves open (atrial pressure > ventricular) → blood enters ventricles passively\n• Semilunar valves closed\n\nPHASE 2 — ATRIAL SYSTOLE:\n• Atria contract\n• Remaining blood pushed into ventricles\n• AV valves remain open\n\nPHASE 3 — VENTRICULAR SYSTOLE:\n• Ventricles contract → pressure rises\n• AV valves CLOSE (ventricle pressure > atrial) → 'LUBB' sound\n• Semilunar valves OPEN (ventricle pressure > arterial)\n• Blood ejected into pulmonary artery and aorta\n• Ventricles relax → semilunar valves CLOSE → 'DUPP' sound\n\nFORMULA: Cardiac output = Heart rate × Stroke volume","Heart sounds: LUBB = AV valves closing (start of ventricular systole). DUPP = Semilunar valves closing (end of ventricular systole). Valves close due to PRESSURE DIFFERENCES — not muscular action.","Topics: Heart (T4) + Pressure concepts (T4)"],
+[1,"Describe the immune response — primary and secondary.","PRIMARY IMMUNE RESPONSE (first exposure):\n1. Phagocytes engulf pathogen → present antigens on surface (APC)\n2. T helper cells with complementary receptors bind → activated\n3. T helper cells stimulate B cells → clonal selection and expansion\n4. Plasma cells produce complementary ANTIBODIES → bind to antigens\n5. Memory B and T cells formed (long-lived)\nTimescale: 1–2 weeks → symptoms develop\n\nSECONDARY IMMUNE RESPONSE (re-exposure or vaccination):\n1. Memory B and T cells rapidly recognise the antigen\n2. Clonal expansion occurs MUCH FASTER and to a greater extent\n3. Large quantities of antibody produced QUICKLY (within days)\n4. Pathogen destroyed BEFORE symptoms develop → IMMUNE\n\nANTIBODY STRUCTURE: Y-shaped glycoprotein with variable regions (antigen-binding sites) complementary to ONE specific antigen.","Secondary response is FASTER and LARGER than primary due to memory cells. This is the basis of vaccination — the first dose creates memory cells; re-exposure (or booster) triggers the fast secondary response.","Topics: Immunity (T6) + Protein structure (antibodies are proteins) (T1) + Clonal selection (T6)"],
+[2,"Describe synaptic transmission from action potential to post-synaptic potential.","1. Action potential arrives at presynaptic terminal (axon terminal).\n\n2. Depolarisation causes voltage-gated Ca²⁺ channels to open → Ca²⁺ enters presynaptic terminal.\n\n3. Ca²⁺ causes synaptic vesicles to FUSE with presynaptic membrane → acetylcholine (ACh) released by EXOCYTOSIS into synaptic cleft.\n\n4. ACh DIFFUSES across synaptic cleft.\n\n5. ACh binds to LIGAND-GATED Na⁺ channels on postsynaptic membrane.\n\n6. Na⁺ channels open → Na⁺ flows into postsynaptic cell → DEPOLARISATION → new action potential (if threshold reached).\n\n7. ACh broken down by ACETYLCHOLINESTERASE → choline and acetate → reabsorbed by presynaptic terminal → ACh resynthesised.\n\n8. Ensures unidirectional transmission (synapses act as one-way valves).","Ca²⁺ is the trigger for vesicle fusion. This is why Ca²⁺ ions are required for synaptic transmission. Drugs/toxins that block Ca²⁺ channels prevent neurotransmitter release.","Topics: Nervous system (T8) + Ca²⁺ ions (T1) + Membrane proteins (T2)"],
+[3,"Explain blood glucose regulation — both insulin and glucagon pathways.","HIGH BLOOD GLUCOSE → INSULIN RESPONSE:\n1. Beta cells of islets of Langerhans detect high glucose\n2. Insulin secreted → binds to receptors on liver and muscle cells\n3. More GLUT transporter proteins inserted into cell membranes → increased glucose uptake\n4. Glycogenesis: glucose → glycogen (stored in liver and muscle)\n5. Increased respiration: glucose used as respiratory substrate\n6. Blood glucose falls → insulin secretion decreases (negative feedback)\n\nLOW BLOOD GLUCOSE → GLUCAGON RESPONSE:\n1. Alpha cells of islets of Langerhans detect low glucose\n2. Glucagon secreted → binds to receptors on liver cells\n3. Glycogenolysis: glycogen → glucose\n4. Gluconeogenesis: non-carbohydrate sources (amino acids, glycerol) → glucose\n5. Blood glucose rises → glucagon secretion decreases (negative feedback)","Two hormones: INSULIN (high glucose → store it → glycogenesis) and GLUCAGON (low glucose → release it → glycogenolysis). Both are negative feedback mechanisms. Alpha cells = glucagon. Beta cells = insulin.","Topics: Homeostasis (T9) + Hormones (T9) + Carbohydrate biochemistry (T1) + Membrane receptors (T2)"],
+[3,"Explain thermoregulation — responses to high and low body temperature.","RECEPTOR: Thermoreceptors in HYPOTHALAMUS detect blood temperature changes. Peripheral thermoreceptors in skin also send signals.\n\nHIGH TEMPERATURE RESPONSES:\n• Vasodilation: arterioles in skin widen → more blood near surface → more heat lost by radiation\n• Sweating: evaporation of sweat removes latent heat from skin surface\n• Erector pili muscles relax → hairs lie flat → less insulation\n• Reduced metabolic rate (less heat generation)\n\nLOW TEMPERATURE RESPONSES:\n• Vasoconstriction: arterioles in skin narrow → less blood near surface → less heat lost\n• Shivering: rapid skeletal muscle contractions → ATP used → heat released\n• Erector pili muscles contract → hairs stand up → traps air → insulation\n• Increased metabolic rate / adrenaline release → more heat generated\n\nNEGATIVE FEEDBACK: All responses return temperature to set point (37°C in humans) → effectors switch off.","Vasodilation and vasoconstriction occur in ARTERIOLES (not veins or capillaries). This is frequently incorrectly stated as 'capillaries dilate' — it is the arterioles that change diameter.","Topics: Homeostasis (T9) + Enzymes (why temperature must be regulated) (T1) + Nervous system (T8) + Hormones (T9)"],
+[4,"Explain natural selection and evolution — 5-step process.","1. VARIATION: Random mutations create variation in alleles within a population → different phenotypes.\n\n2. OVERPRODUCTION: Organisms produce more offspring than the environment can support → competition for limited resources.\n\n3. SELECTION PRESSURE: Environmental factors (predators, disease, food availability, climate) act as selection pressures — some phenotypes are better adapted.\n\n4. DIFFERENTIAL REPRODUCTIVE SUCCESS: Better-adapted individuals are MORE LIKELY to survive, reproduce, and pass their advantageous alleles to offspring.\n\n5. CHANGE IN ALLELE FREQUENCY: Over many generations, the frequency of advantageous alleles INCREASES in the gene pool; disadvantageous alleles decrease.\n\nSPECIATION: If populations become REPRODUCTIVELY ISOLATED (geographic barrier or behavioural/mechanical isolation), different mutations accumulate in each population → eventually cannot interbreed → new species.","The 5 steps in order: Variation → Overproduction → Selection pressure → Differential survival → Allele frequency change. Speciation requires isolation. Memorise this sequence for any natural selection question.","Topics: Natural selection (T3/T10) + Population genetics (T10) + Hardy-Weinberg (T10)"],
+[4,"Explain xylem transport — cohesion-tension theory.","COHESION-TENSION THEORY:\n\n1. TRANSPIRATION: Water evaporates from mesophyll cells → diffuses out through stomata → creates low water potential in leaf.\n\n2. TENSION: As water evaporates, it creates a PULLING FORCE (tension/negative pressure) in the xylem.\n\n3. COHESION: Water molecules are held together by HYDROGEN BONDS (cohesion) → form a continuous, unbroken column of water in the xylem.\n\n4. WATER PULLED UP: Tension at the top pulls the entire water column upwards through the narrow xylem vessels.\n\n5. WATER ENTERS ROOTS: Water moves by osmosis from soil (high water potential) into root hair cells (lower water potential) → enters xylem.\n\nXYLEM VESSELS: Dead, hollow, lignified cells joined end-to-end → form continuous tubes → no cell contents obstruct flow → lignin strengthens walls against collapse under negative pressure.","The essential elements: transpiration creates tension, cohesion of water molecules (H-bonds) maintains the column, water is PULLED up (not pushed). Xylem vessels must be dead (no contents obstruct flow) and lignified (resist collapse under negative pressure).","Topics: Plant transport (T4) + Osmosis & water potential (T2) + Hydrogen bonds in water (T1)"]
+]},
+
+// ══════════════════════════════════════════
+// DECK 5: Synoptic Map & A★ Strategy
+// ══════════════════════════════════════════
+{title:"🗺 Synoptic Map & A★ Master Strategy", accent:"#f78166",
+sections:["🗺 Ultimate Topic Map","📋 6-Stage Study Plan","🎯 Next Phase Resources"],
+cards:[
+[0,"What is the Ultimate Synoptic Map — how do all topics connect?","DNA (Central hub — connects everything):\n├── Protein synthesis → determines all proteins\n├── Mutation → drives variation and evolution\n├── Inheritance → passes alleles to offspring\n└── Evolution → allele frequency changes over time\n\nCELLS:\n├── Membranes → selective permeability (transport)\n├── Transport → diffusion, osmosis, active transport\n├── ATP → universal energy currency\n└── Respiration → produces ATP from glucose\n\nPLANTS:\n├── Photosynthesis → produces glucose (primary production)\n├── Xylem → water transport (cohesion-tension)\n├── Phloem → sucrose transport (pressure-flow)\n└── Ecology → plants as producers in food chains\n\nANIMALS:\n├── Circulation → delivers O₂ and nutrients\n├── Gas exchange → O₂ in, CO₂ out\n├── Kidneys → osmoregulation and excretion\n├── Nervous system → rapid response coordination\n└── Hormones → slow, sustained coordination\n\nHOMEOSTASIS (regulates all of the above):\n├── ADH → water reabsorption (kidney)\n├── Glucose → insulin/glucagon (pancreas)\n├── Temperature → thermoregulation (hypothalamus)\n└── Negative feedback → restores all set points","DNA is at the centre of ALL biology. Every protein (enzyme, hormone, antibody, membrane receptor, haemoglobin, collagen) is encoded by DNA. Start every synoptic answer by asking: 'What protein is involved here, and how was it made?'","All topics: DNA (T3) → Proteins (T1) → All physiological systems (T4-T10)"],
+[0,"Why is DNA described as the 'central hub' of all biology?","DNA is the central hub because:\n\n1. DNA encodes ALL proteins → proteins carry out virtually every biological function\n\n2. ENZYMES (proteins) → catalyse all metabolic reactions (respiration, photosynthesis, digestion, DNA replication)\n\n3. HORMONES (proteins or encoded by DNA) → regulate homeostasis (insulin, glucagon, ADH)\n\n4. ANTIBODIES (proteins) → provide immune defence\n\n5. RECEPTORS (proteins) → allow cell communication (hormones, neurotransmitters)\n\n6. STRUCTURAL PROTEINS (collagen, keratin) → provide physical support\n\n7. TRANSPORT PROTEINS (haemoglobin, channel proteins) → move substances\n\n8. MUTATION of DNA → changes proteins → changes phenotype → drives natural selection → drives evolution\n\nTherefore: DNA → proteins → structure → function → physiology → behaviour → ecology → evolution. Every level of biology connects back to DNA.","When writing any synoptic answer, ask: 'What protein is central to this process, and what would happen if its DNA were mutated?' This question links nearly every topic to the DNA core.","All topics connect through DNA"],
+[1,"State the 6-stage A★ study sequence with time allocation.","THE OPTIMAL 6-STAGE SEQUENCE:\n\nSTAGE 1 — CONTENT MASTERY\n• Focus: Learn each topic using the A/A★ Revision Guide\n• Time: 70–80 hours\n• Output: Can explain every key topic without notes\n\nSTAGE 2 — PROCESS FLOWCHARTS\n• Focus: Memorise all biological process flowcharts (50 high-yield processes)\n• Time: 20 hours\n• Output: Can draw complete flowcharts from memory\n\nSTAGE 3 — 6-MARK MODEL ANSWERS\n• Focus: Master all 6-mark model answers in mark-scheme language\n• Time: 25 hours\n• Output: Can write complete 6-mark answers in under 8 minutes\n\nSTAGE 4 — PRACTICAL SKILLS & DATA ANALYSIS\n• Focus: Core Practicals (CP1–CP11), graph interpretation, statistical tests\n• Time: 20 hours\n• Output: Can answer any practical/data question confidently\n\nSTAGE 5 — MOCK PAPERS\n• Focus: Minimum 10 full past papers under timed conditions (1h 45min each)\n• Time: 30–40 hours\n• Output: Consistent A-grade performance under exam conditions\n\nSTAGE 6 — ERROR LOG & TARGETED REVISION\n• Focus: Identify recurring mistakes → targeted re-study of weak areas\n• Time: 15 hours\n• Output: All error categories eliminated\n\nTOTAL: 180–200 hours for strong A/A★ standard","Stage 3 (6-mark model answers) is often underestimated. Writing a perfect 6-mark answer in under 8 minutes (exam pace) requires practise — it cannot be achieved just by knowing the content.","All topics"],
+[1,"What are the 4 highest-priority resources to produce next for exam mastery?","The 4 most efficient resources to maximise exam performance:\n\n1. 100 A/A★ 6-MARK MODEL ANSWERS\n• Based on the most common Pearson question types\n• One for every major process and synoptic link\n• Written in precise mark-scheme language\n• WHY: 6-mark questions appear on ALL 3 papers and represent the highest mark density\n\n2. 200 HIGH-FREQUENCY EXAM QUESTIONS WITH FULL MARK-SCHEME ANSWERS\n• Covers all topics and all question types\n• Includes data analysis, practical interpretation, and graph questions\n• WHY: Pattern recognition through repetition is the fastest route to exam confidence\n\n3. 20 COMPLETE MOCK PAPERS WITH EXAMINER-STYLE MARK SCHEMES\n• Simulate all 3 Edexcel Biology B papers\n• Include synoptic questions across topics\n• WHY: Timed mock papers train exam stamina and time management\n\n4. 30-DAY FINAL REVISION TIMETABLE\n• Daily plan for the 30 days before examination\n• Tells exactly what to study each day\n• WHY: Eliminates decision fatigue and ensures all high-yield topics are covered systematically","The 30-day timetable is the highest-leverage item — most students lose marks in the final month not from lack of knowledge but from disorganised revision that leaves gaps in high-yield areas.","All topics"],
+[2,"Why does Pearson test synoptic questions and how should you approach them?","WHY PEARSON USES SYNOPTIC QUESTIONS:\n• A Level Biology is designed to test conceptual understanding, not factual recall\n• Real biology problems require integrating knowledge from multiple areas\n• Synoptic questions differentiate A/A★ students from B students — because content alone is not sufficient\n\nHOW TO APPROACH SYNOPTIC QUESTIONS:\n\n1. IDENTIFY ALL TOPICS INVOLVED: Read the question and ask 'Which topics does this touch?' List them before writing.\n\n2. PLAN THE CAUSAL CHAIN: Most synoptic questions have a clear 'trigger → process A → process B → outcome' structure. Map it out in 30 seconds.\n\n3. WRITE IN STEPS: Each step = one mark. Number your steps. This prevents merging two marking points into one sentence.\n\n4. USE MARK-SCHEME LANGUAGE: Use precise biological terms at every step (e.g. 'glycogenesis' not 'converted to glycogen for storage'; 'complementary to the active site' not 'fits the active site').\n\n5. CONCLUDE: Always end a synoptic answer by connecting back to the original outcome stated in the question.","The most common student error in synoptic questions: writing about one topic in detail while forgetting to connect it to the other topics the question requires. Answer the WHOLE question, not just the part you know best.","All topics — synoptic skill"],
+[2,"State the 10 synoptic links and rate their exam importance.","SYNOPTIC LINK 1 ★★★★★ — Cell Membrane + Gas Exchange + Circulation\nTypical Q: 'How does oxygen move from air to muscle cells?'\n\nSYNOPTIC LINK 2 ★★★★★ — Photosynthesis + Respiration\nTypical Q: 'Why are photosynthesis and respiration interdependent?'\n\nSYNOPTIC LINK 3 ★★★★★ — DNA + Protein Synthesis + Mutations\nTypical Q: 'How does a mutation change phenotype?'\n\nSYNOPTIC LINK 4 ★★★★★ — Enzymes + Homeostasis\nTypical Q: 'Why must body temperature be controlled?'\n\nSYNOPTIC LINK 5 ★★★★★ — Kidney + Osmosis + Membranes\nTypical Q: 'How is water reabsorbed in the collecting duct?'\n\nSYNOPTIC LINK 6 ★★★★★ — Immunity + Vaccination + DNA\nTypical Q: 'How does vaccination confer immunity?'\n\nSYNOPTIC LINK 7 ★★★★★ — Nervous System + Muscles\nTypical Q: 'How does an action potential cause muscle contraction?'\n\nSYNOPTIC LINK 8 ★★★★★ — Heart + Exercise + Respiration\nTypical Q: 'How does exercise increase ATP production?'\n\nSYNOPTIC LINK 9 ★★★★★ — Ecology + Photosynthesis\nTypical Q: 'How does light intensity affect population size?'\n\nSYNOPTIC LINK 10 ★★★★★ — Evolution + Genetics\nTypical Q: 'How does natural selection lead to evolution?'","ALL 10 LINKS ARE RATED ★★★★★ — they all appear across all 3 papers, every year. There are no low-priority synoptic links. All 10 must be mastered.","All 10 topics"]
+]}
+];
+
+// ═══ STATE ═══
+var curDeck=null,curSec=0,curIdx=0,shown=false,deck=[],ratings={},easy=0,hard=0,done=0;
+function openDeck(n){
+  curDeck=n;curSec=0;curIdx=0;shown=false;easy=0;hard=0;done=0;ratings={};
+  document.getElementById('homeScreen').style.display='none';
+  document.getElementById('appScreen').style.display='block';
+  document.getElementById('appTitle').textContent=DECKS[n].title;
+  document.getElementById('pfill').style.background=DECKS[n].accent;
+  document.getElementById('DN').style.display='none';
+  document.getElementById('MC').style.display='block';
+  mkDeck();renderTabs();renderCard();
+}
+function goHome(){document.getElementById('homeScreen').style.display='block';document.getElementById('appScreen').style.display='none';}
+function mkDeck(){deck=[];DECKS[curDeck].cards.forEach(function(c,i){if(c[0]===curSec)deck.push(i);});}
+function renderTabs(){
+  var secs=DECKS[curDeck].sections,cards=DECKS[curDeck].cards,h='';
+  secs.forEach(function(s,i){var cnt=0;cards.forEach(function(c){if(c[0]===i)cnt++;});h+='<span class="stab'+(i===curSec?' on':'')+'" onclick="sw('+i+')">'+s+' ('+cnt+')</span>';});
+  document.getElementById('stabs').innerHTML=h;
+}
+function renderCard(){
+  if(!deck.length)return;
+  var cards=DECKS[curDeck].cards,secs=DECKS[curDeck].sections,gi=deck[curIdx],c=cards[gi],acc=DECKS[curDeck].accent;
+  document.getElementById('CN').textContent=(curIdx+1)+' / '+deck.length;
+  ['badge','badge2'].forEach(function(id){var el=document.getElementById(id);el.textContent=secs[c[0]];el.style.cssText='background:#1c2333;border-color:'+acc+';color:'+acc;});
+  document.getElementById('QQ').textContent=c[1];
+  document.getElementById('AA').textContent=c[2];
+  var tip=document.getElementById('TIP');
+  if(c[3]&&c[3].length){tip.innerHTML='<b>💡 Exam Insight:</b> '+c[3];tip.className='tip-box';}else{tip.className='tip-box hide';}
+  var top=document.getElementById('TOPICS');
+  if(c[4]&&c[4].length){top.innerHTML='<b>🔗 Topics Linked:</b> '+c[4];top.className='topics-box';}else{top.className='topics-box hide';}
+  var cd=document.getElementById('CD');
+  cd.className=shown?'card shown':'card';cd.style.borderColor=shown?acc:'#30363d';
+  document.getElementById('RB').className=shown?'rbs show':'rbs';
+  document.getElementById('rp').className=shown?'rprompt show':'rprompt';
+  document.getElementById('cardlbl').textContent='Card '+(curIdx+1)+' of '+deck.length;
+  document.getElementById('DN').style.display='none';document.getElementById('MC').style.display='block';
+  var total=DECKS[curDeck].cards.length;
+  document.getElementById('sT').textContent=total;document.getElementById('sD').textContent=done;
+  document.getElementById('sE').textContent=easy;document.getElementById('sH').textContent=hard;
+  document.getElementById('plbl').textContent=done+' / '+total;
+  document.getElementById('pfill').style.width=Math.round(done/total*100)+'%';
+}
+function rev(){if(!shown){shown=true;renderCard();}}
+function go(d){shown=false;curIdx+=d;if(curIdx<0)curIdx=deck.length-1;if(curIdx>=deck.length)curIdx=0;renderCard();}
+function rt(r){
+  done++;if(r==='e'||r==='o')easy++;else hard++;shown=false;curIdx++;
+  if(curIdx>=deck.length){curIdx=0;if(deck.every(function(gi){return ratings[gi];})){document.getElementById('MC').style.display='none';document.getElementById('DN').style.display='block';return;}}
+  ratings[deck[curIdx-1]]=r;renderCard();
+}
+function sw(n){curSec=n;curIdx=0;shown=false;mkDeck();renderTabs();document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function rst(){curIdx=0;shown=false;document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function shuf(){deck.sort(function(){return Math.random()-.5;});curIdx=0;shown=false;renderCard();}
+</script>
+</body>
+</html>
