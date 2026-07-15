@@ -1,492 +1,470 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A★ Biology Flashcards</title>
+<title>Jody's Biology Hub — All Flashcards</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#0d1117;color:#eee;font-family:Arial,sans-serif;padding:10px;font-size:15px}
-h2{color:#FFD700;font-size:16px;margin-bottom:4px}
-.sub{font-size:11px;color:#888;margin-bottom:10px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#0d1117;color:#eee;font-family:Arial,sans-serif;padding:12px;min-height:100vh}
+.wrap{max-width:540px;margin:0 auto;padding-bottom:40px}
 
-/* Home menu */
-.home{max-width:500px;margin:20px auto}
-.home h1{color:#FFD700;font-size:22px;margin-bottom:6px;text-align:center}
-.home p{color:#888;font-size:13px;text-align:center;margin-bottom:24px}
-.deck-card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:20px;margin-bottom:14px;cursor:pointer;transition:border-color .2s}
-.deck-card:hover{border-color:#FFD700}
-.deck-card h3{color:#FFD700;font-size:16px;margin-bottom:6px}
-.deck-card p{color:#aaa;font-size:13px;line-height:1.5}
-.deck-card .meta{display:flex;gap:10px;margin-top:10px}
-.badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:bold}
-.b1{background:#1f3a5f;color:#58a6ff}
-.b2{background:#1a3a1a;color:#4CAF50}
-.open-btn{display:block;width:100%;padding:12px;border-radius:8px;border:none;font-size:14px;font-weight:bold;cursor:pointer;margin-top:10px;text-align:center;text-decoration:none}
-.ob1{background:#FFD700;color:#000}
-.ob2{background:#4CAF50;color:#000}
+/* HEADER */
+.hero{background:linear-gradient(135deg,#1c2333,#0d1117);border:1px solid #FFD700;border-radius:16px;padding:20px;text-align:center;margin-bottom:16px}
+.hero h1{color:#FFD700;font-size:20px;font-weight:bold;margin-bottom:4px}
+.hero .sub{color:#888;font-size:11px;line-height:1.6;margin-top:4px}
+.hero .name{color:#58a6ff;font-size:13px;font-weight:bold;margin-top:8px}
 
-/* Flashcard app */
-.app{display:none}
-.topbar{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #30363d}
-.back-btn{padding:5px 12px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:12px;cursor:pointer}
-.back-btn:hover{color:#FFD700;border-color:#FFD700}
-.app-title{font-size:14px;font-weight:bold;color:#FFD700;flex:1}
+/* OVERALL PROGRESS */
+.overall-bar{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:14px;margin-bottom:14px}
+.overall-bar h3{color:#FFD700;font-size:12px;font-weight:bold;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.big-progress{display:flex;align-items:center;gap:10px}
+.big-pct{font-size:28px;font-weight:bold;color:#FFD700;min-width:58px}
+.big-bar-wrap{flex:1}
+.big-bar{height:10px;background:#30363d;border-radius:99px;overflow:hidden;margin-bottom:4px}
+.big-fill{height:100%;background:linear-gradient(90deg,#FFD700,#ffa657);border-radius:99px;transition:width .8s}
+.big-meta{font-size:10px;color:#888}
+.stat-row{display:flex;gap:8px;margin-top:10px}
+.stat-chip{flex:1;background:#0d1117;border-radius:8px;padding:6px 4px;text-align:center;font-size:10px;color:#888}
+.stat-chip b{display:block;font-size:16px;font-weight:bold}
+.sc-total b{color:#eee}
+.sc-done b{color:#39d353}
+.sc-hard b{color:#f78166}
 
-.tabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
-.tab{padding:5px 10px;background:#1c2333;border:1px solid #30363d;border-radius:20px;color:#aaa;cursor:pointer;font-size:11px}
-.tab.on{background:#FFD700;color:#000;border-color:#FFD700;font-weight:bold}
-.info{display:flex;justify-content:space-between;font-size:12px;color:#888;margin-bottom:6px}
-.pbar{height:4px;background:#30363d;border-radius:99px;margin-bottom:10px;overflow:hidden}
-.pfill{height:100%;background:#FFD700;border-radius:99px;transition:width .3s}
-.card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:16px;min-height:160px;margin-bottom:10px;cursor:pointer;position:relative}
-.card.shown{background:#0f2a0f;border-color:#2a5a2a}
-.cnum{position:absolute;top:10px;right:12px;font-size:11px;color:#555}
-.topic{font-size:10px;color:#FFD700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
-.q{font-size:16px;line-height:1.5;text-align:center;padding:10px 0;color:#eee}
-.hint{text-align:center;color:#555;font-size:12px;margin-top:10px}
-.asec{display:none}
-.card.shown .asec{display:block}
-.card.shown .qsec{display:none}
-.albl{font-size:10px;color:#4CAF50;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:bold}
-.ans{font-size:14px;line-height:1.7;white-space:pre-wrap;color:#eee}
-.tip{background:#1a2a1a;border-left:3px solid #FFD700;padding:8px 10px;margin-top:10px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0}
-.tip b{color:#FFD700}
-.nav{display:flex;gap:6px;margin-bottom:8px}
-.btn{flex:1;padding:10px;border-radius:8px;border:1px solid #30363d;background:#1c2333;color:#eee;font-size:13px;font-weight:bold;cursor:pointer}
-.btn.gold{background:#FFD700;color:#000;border-color:#FFD700}
-.rbs{display:none;gap:5px;margin-bottom:10px}
-.rbs.show{display:flex}
-.rb{flex:1;padding:8px 2px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;border:1px solid;text-align:center}
-.re{background:#0a2a0a;color:#4CAF50;border-color:#2a5a2a}
-.ro{background:#0a1a3a;color:#58a6ff;border-color:#1a3a6a}
-.rh{background:#2a1a0a;color:#ffa657;border-color:#5a3a1a}
-.rm{background:#2a0a0a;color:#ff6b6b;border-color:#5a1a1a}
-.stats{display:flex;gap:6px;margin-bottom:10px}
-.chip{flex:1;background:#1c2333;border:1px solid #30363d;border-radius:8px;padding:6px;text-align:center;font-size:11px;color:#888}
-.chip b{display:block;font-size:18px;font-weight:bold;color:#eee}
-.chip.g b{color:#4CAF50}.chip.r b{color:#ff6b6b}.chip.y b{color:#FFD700}
-.done-banner{text-align:center;padding:30px 16px;background:#1c2333;border:1px solid #30363d;border-radius:12px;display:none}
-.done-banner h3{color:#FFD700;font-size:20px;margin-bottom:10px}
-.done-banner p{color:#aaa;margin-bottom:16px;font-size:14px}
-.shuffle{padding:4px 10px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:11px;cursor:pointer}
+/* SECTION HEADER */
+.sec-hdr{display:flex;align-items:center;gap:8px;margin:18px 0 10px}
+.sec-hdr-line{flex:1;height:1px;background:#30363d}
+.sec-hdr-text{font-size:11px;font-weight:bold;color:#888;white-space:nowrap;padding:0 6px}
+
+/* TOPIC CARDS */
+.topic-card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:13px;margin-bottom:10px;text-decoration:none;display:block;color:#eee;position:relative;overflow:hidden}
+.topic-card:active{opacity:.8}
+.topic-card .tc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
+.topic-card h3{font-size:13px;color:#eee;line-height:1.4;flex:1}
+.tc-pct{font-size:18px;font-weight:bold;min-width:42px;text-align:right;line-height:1}
+.tc-pct-lbl{font-size:9px;color:#888;text-align:right}
+.topic-card p{font-size:11px;color:#888;line-height:1.5;margin-bottom:8px}
+.tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:bold}
+.t1{background:#1f3a5f;color:#58a6ff}.t2{background:#1a3a1a;color:#39d353}.t3{background:#3a2a0a;color:#FFD700}
+.t4{background:#2a1a3a;color:#d2a8ff}.t5{background:#2a0a0a;color:#f78166}.t6{background:#1a2a3a;color:#58a6ff}
+
+/* MINI PROGRESS BAR */
+.mini-bar-wrap{margin-bottom:8px}
+.mini-bar{height:4px;background:#30363d;border-radius:99px;overflow:hidden}
+.mini-fill{height:100%;border-radius:99px;transition:width .6s}
+
+/* STATUS BADGE */
+.status{font-size:9px;font-weight:bold;padding:2px 8px;border-radius:20px;display:inline-block}
+.s-new{background:#1f3a5f;color:#58a6ff}
+.s-started{background:#3a2a0a;color:#ffa657}
+.s-good{background:#1a3a1a;color:#39d353}
+.s-done{background:#1a3a1a;color:#39d353}
+
+/* OPEN BUTTON */
+.open-btn{display:block;width:100%;padding:8px;border-radius:8px;border:none;font-size:12px;font-weight:bold;cursor:pointer;text-align:center}
+
+/* COLOUR ACCENT STRIP */
+.accent-strip{position:absolute;top:0;left:0;width:3px;height:100%;border-radius:12px 0 0 12px}
+
+/* LAST VISITED */
+.last-visit{font-size:10px;color:#555;margin-top:4px}
+
+/* FOOTER */
+.footer-note{text-align:center;color:#555;font-size:11px;margin-top:20px;line-height:1.8}
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<!-- HOME SCREEN -->
-<div class="home" id="homeScreen">
-  <h1>🧬 Biology Flashcards</h1>
-  <p>Pearson Edexcel A Level Biology B (9BI0)<br>Choose a flashcard set to study</p>
-
-  <div class="deck-card" onclick="openDeck('master')">
-    <h3>⭐ A★ Master Companion</h3>
-    <p>Complete revision across all topics — 430 cards covering every key concept for A★ performance.</p>
-    <div class="meta">
-      <span class="badge b1">430 Cards</span>
-      <span class="badge b2">10 Topics</span>
-    </div>
-    <div class="open-btn ob1">Open →</div>
+  <!-- HERO -->
+  <div class="hero">
+    <h1>🧬 Biology Flashcard Hub</h1>
+    <div class="sub">Pearson Edexcel A Level Biology B (9BI0)<br>All topics · All exam question sets · All strategies</div>
+    <div class="name">📚 Jody's Personal Study Dashboard</div>
   </div>
 
-  <div class="deck-card" onclick="openDeck('topic4')">
-    <h3>🔬 Topic 4 — Exchange &amp; Transport</h3>
-    <p>Focused deep-dive into Topic 4: SA:Vol ratios, membranes, gas exchange, circulation, blood, tissue fluid and plant transport.</p>
-    <div class="meta">
-      <span class="badge b1">65 Cards</span>
-      <span class="badge b2">6 Sub-topics</span>
+  <!-- OVERALL PROGRESS -->
+  <div class="overall-bar">
+    <h3>🏆 Overall Progress</h3>
+    <div class="big-progress">
+      <div class="big-pct" id="overallPct">0%</div>
+      <div class="big-bar-wrap">
+        <div class="big-bar"><div class="big-fill" id="overallFill" style="width:0%"></div></div>
+        <div class="big-meta" id="overallMeta">Loading progress from each topic…</div>
+      </div>
     </div>
-    <div class="open-btn ob2">Open →</div>
+    <div class="stat-row">
+      <div class="stat-chip sc-total"><b id="statFiles">13</b>Sets</div>
+      <div class="stat-chip sc-done"><b id="statStarted">-</b>Started</div>
+      <div class="stat-chip sc-hard"><b id="statDone">-</b>Complete</div>
+    </div>
+  </div>
+
+  <!-- ═══════ SECTION 1: CORE TOPIC FLASHCARDS ═══════ -->
+  <div class="sec-hdr">
+    <div class="sec-hdr-line"></div>
+    <div class="sec-hdr-text">⭐ CORE TOPIC FLASHCARDS</div>
+    <div class="sec-hdr-line"></div>
+  </div>
+
+  <a class="topic-card" href="topic4_astar_R1.html" onclick="saveVisit('topic4_astar_R1')">
+    <div class="accent-strip" style="background:#f78166"></div>
+    <div class="tc-top">
+      <h3>❤️ Topic 4 A★ Master Series<br><span style="color:#888;font-size:11px">Exchange & Transport — Full Coverage</span></h3>
+      <div><div class="tc-pct" id="pct-topic4_astar_R1" style="color:#f78166">-</div><div class="tc-pct-lbl">done</div></div>
+    </div>
+    <div class="tags"><span class="tag t5">8 Learning Blocks</span><span class="tag t2">Exam Qs</span><span class="tag t3">Model Answers</span><span class="tag t1">Mistakes</span></div>
+    <div class="mini-bar-wrap"><div class="mini-bar"><div class="mini-fill" id="bar-topic4_astar_R1" style="width:0%;background:#f78166"></div></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span class="status s-new" id="st-topic4_astar_R1">Not started</span>
+      <div class="last-visit" id="lv-topic4_astar_R1"></div>
+    </div>
+  </a>
+
+  <a class="topic-card" href="topic42_transport_mammals.html" onclick="saveVisit('topic42_transport_mammals')">
+    <div class="accent-strip" style="background:#f78166"></div>
+    <div class="tc-top">
+      <h3>🩸 Topic 4.2 — Transport in Mammals<br><span style="color:#888;font-size:11px">Heart, Blood Vessels, Tissue Fluid</span></h3>
+      <div><div class="tc-pct" id="pct-topic42_transport_mammals" style="color:#f78166">-</div><div class="tc-pct-lbl">done</div></div>
+    </div>
+    <div class="tags"><span class="tag t5">Cardiac Cycle</span><span class="tag t2">Blood Vessels</span><span class="tag t3">Exam Qs</span></div>
+    <div class="mini-bar-wrap"><div class="mini-bar"><div class="mini-fill" id="bar-topic42_transport_mammals" style="width:0%;background:#f78166"></div></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span class="status s-new" id="st-topic42_transport_mammals">Not started</span>
+      <div class="last-visit" id="lv-topic42_transport_mammals"></div>
+    </div>
+  </a>
+
+  <a class="topic-card" href="astar_checklist_flashcards.html" onclick="saveVisit('astar_checklist_flashcards')">
+    <div class="accent-strip" style="background:#58a6ff"></div>
+    <div class="tc-top">
+      <h3>🔬 A★ Master Checklist — Topics 1.1–1.4<br><span style="color:#888;font-size:11px">Carbon, Molecules, DNA, Enzymes</span></h3>
+      <div><div class="tc-pct" id="pct-astar_checklist_flashcards" style="color:#58a6ff">-</div><div class="tc-pct-lbl">done</div></div>
+    </div>
+    <div class="tags"><span class="tag t1">Water & Ions</span><span class="tag t2">Carbohydrates</span><span class="tag t3">Proteins</span><span class="tag t4">Enzymes</span></div>
+    <div class="mini-bar-wrap"><div class="mini-bar"><div class="mini-fill" id="bar-astar_checklist_flashcards" style="width:0%;background:#58a6ff"></div></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span class="status s-new" id="st-astar_checklist_flashcards">Not started</span>
+      <div class="last-visit" id="lv-astar_checklist_flashcards"></div>
+    </div>
+  </a>
+
+  <a class="topic-card" href="synoptic_biology.html" onclick="saveVisit('synoptic_biology')">
+    <div class="accent-strip" style="background:#FFD700"></div>
+    <div class="tc-top">
+      <h3>🔗 Chapter 11 — Synoptic Biology<br><span style="color:#888;font-size:11px">Cross-Topic Connections & 6-Mark Questions</span></h3>
+      <div><div class="tc-pct" id="pct-synoptic_biology" style="color:#FFD700">-</div><div class="tc-pct-lbl">done</div></div>
+    </div>
+    <div class="tags"><span class="tag t3">10 Synoptic Links</span><span class="tag t2">50 Processes</span><span class="tag t1">6-Mark Qs</span></div>
+    <div class="mini-bar-wrap"><div class="mini-bar"><div class="mini-fill" id="bar-synoptic_biology" style="width:0%;background:#FFD700"></div></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span class="status s-new" id="st-synoptic_biology">Not started</span>
+      <div class="last-visit" id="lv-synoptic_biology"></div>
+    </div>
+  </a>
+
+  <!-- ═══════ SECTION 2: EXAM QUESTION BANKS ═══════ -->
+  <div class="sec-hdr">
+    <div class="sec-hdr-line"></div>
+    <div class="sec-hdr-text">📝 EXAM QUESTION BANKS</div>
+    <div class="sec-hdr-line"></div>
+  </div>
+
+  <a class="topic-card" href="100_sixmark_answers.html" onclick="saveVisit('100_sixmark_answers')">
+    <div class="accent-strip" style="background:#39d353"></div>
+    <div class="tc-top">
+      <h3>⭐ 100 A★ Model 6-Mark Answers<br><span style="color:#888;font-size:11px">Volume 12 — All Topics</span></h3>
+      <div><div class="tc-pct" id="pct-100_sixmark_answers" style="color:#39d353">-</div><div class="tc-pct-lbl">done</div></div>
+    </div>
+    <div class="tags"><span class="tag t2">100 Questions</span><span class="tag t3">Model Answers</span><span class="tag t1">Keywords</span></div>
+    <div class="mini-bar-wrap"><div class="mini-bar"><div class="mini-fill" id="bar-100_sixmark_answers" style="width:0%;background:#39d353"></div></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span class="status s-new" id="st-100_sixmark_answers">Not started</span>
+      <div class="last-visit" id="lv-100_sixmark_answers"></div>
+    </div>
+  </a>
+
+  <a class="topic-card" href="exam_questions_1_96.html" onclick="saveVisit('exam_questions_1_96')">
+    <div class="accent-strip" style="background:#58a6ff"></div>
+    <div class="tc-top">
+      <h3>📋 Exam Question Bank — Q1–96<br><span style="color:#888;font-size:11px">Volumes 1–10 · All Topics Basic</span></h3>
+      <div><div class="tc-pct" id="pct-exam_questions_1_96" style="color:#58a6ff">-</div><div class="tc-pct-lbl">done</div></div>
+    </div>
+    <div class="tags"><span class="tag t1">96 Questions</span><span class="tag t2">Topics 1–10</span><span class="tag t3">Mistakes</span></div>
+    <div class="mini-bar-wrap"><div class="mini-bar"><div class="mini-fill" id="bar-exam_questions_1_96" style="width:0%;background:#58a6ff"></div></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span class="status s-new" id="st-exam_questions_1_96">Not started</span>
+      <div class="last-visit" id="lv-exam_questions_1_96"></div>
+    </div>
+  </a>
+
+  <a class="topic-card" href="exam_questions_97_200.html" onclick="saveVisit('exam_questions_97_200')">
+    <div class="accent-strip" style="background:#d2a8ff"></div>
+    <div class="tc-top">
+      <h3>📋 Exam Question Bank — Q97–200<br><span style="color:#888;font-size:11px">Volume 11 · Mixed Papers & A★ Challenge</span></h3>
+      <div><div class="tc-pct" id="pct-exam_questions_97_200" style="color:#d2a8ff">-</div><div class="tc-pct-lbl">done</div></div>
+    </div>
+    <div class="tags"><span class="tag t4">104 Questions</span><span class="tag t3">Synoptic</span><span class="tag t5">A★ Challenge</span></div>
+    <div class="mini-bar-wrap"><div class="mini-bar"><div class="mini-fill" id="bar-exam_questions_97_200" style="width:0%;background:#d2a8ff"></div></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span class="status s-new" id="st-exam_questions_97_200">Not started</span>
+      <div class="last-visit" id="lv-exam_questions_97_200"></div>
+    </div>
+  </a>
+
+  <!-- ═══════ SECTION 3: STUDY STRATEGY ═══════ -->
+  <div class="sec-hdr">
+    <div class="sec-hdr-line"></div>
+    <div class="sec-hdr-text">🎯 STUDY STRATEGY & PLANNING</div>
+    <div class="sec-hdr-line"></div>
+  </div>
+
+  <a class="topic-card" href="12week_plan.html" onclick="saveVisit('12week_plan')">
+    <div class="accent-strip" style="background:#ffa657"></div>
+    <div class="tc-top">
+      <h3>📅 12-Week A-Grade Revision Plan<br><span style="color:#888;font-size:11px">Edexcel AS Biology B — Full Schedule</span></h3>
+      <div><div class="tc-pct" id="pct-12week_plan" style="color:#ffa657">-</div><div class="tc-pct-lbl">done</div></div>
+    </div>
+    <div class="tags"><span class="tag t6">Phase 1–3</span><span class="tag t2">12 Weeks</span><span class="tag t3">Core Practicals</span></div>
+    <div class="mini-bar-wrap"><div class="mini-bar"><div class="mini-fill" id="bar-12week_plan" style="width:0%;background:#ffa657"></div></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span class="status s-new" id="st-12week_plan">Not started</span>
+      <div class="last-visit" id="lv-12week_plan"></div>
+    </div>
+  </a>
+
+  <a class="topic-card" href="predicted_grades_plan.html" onclick="saveVisit('predicted_grades_plan')">
+    <div class="accent-strip" style="background:#f78166"></div>
+    <div class="tc-top">
+      <h3>🏆 Maximise Predicted Grades<br><span style="color:#888;font-size:11px">10–12 Week Strategy — Maths, Bio & Chem</span></h3>
+      <div><div class="tc-pct" id="pct-predicted_grades_plan" style="color:#f78166">-</div><div class="tc-pct-lbl">done</div></div>
+    </div>
+    <div class="tags"><span class="tag t5">Strategy</span><span class="tag t2">All 3 Subjects</span><span class="tag t3">Output Focus</span></div>
+    <div class="mini-bar-wrap"><div class="mini-bar"><div class="mini-fill" id="bar-predicted_grades_plan" style="width:0%;background:#f78166"></div></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span class="status s-new" id="st-predicted_grades_plan">Not started</span>
+      <div class="last-visit" id="lv-predicted_grades_plan"></div>
+    </div>
+  </a>
+
+  <a class="topic-card" href="active_recall_flashcards.html" onclick="saveVisit('active_recall_flashcards')">
+    <div class="accent-strip" style="background:#39d353"></div>
+    <div class="tc-top">
+      <h3>🧠 Active Recall Study Method<br><span style="color:#888;font-size:11px">Bio, Chem & Maths Study Techniques</span></h3>
+      <div><div class="tc-pct" id="pct-active_recall_flashcards" style="color:#39d353">-</div><div class="tc-pct-lbl">done</div></div>
+    </div>
+    <div class="tags"><span class="tag t2">Active Recall</span><span class="tag t1">Spaced Rep</span><span class="tag t3">5 Principles</span></div>
+    <div class="mini-bar-wrap"><div class="mini-bar"><div class="mini-fill" id="bar-active_recall_flashcards" style="width:0%;background:#39d353"></div></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span class="status s-new" id="st-active_recall_flashcards">Not started</span>
+      <div class="last-visit" id="lv-active_recall_flashcards"></div>
+    </div>
+  </a>
+
+  <a class="topic-card" href="fullick_study_system.html" onclick="saveVisit('fullick_study_system')">
+    <div class="accent-strip" style="background:#58a6ff"></div>
+    <div class="tc-top">
+      <h3>📖 Fullick Student Book Study System<br><span style="color:#888;font-size:11px">Ann Fullick Biology B — Reading System</span></h3>
+      <div><div class="tc-pct" id="pct-fullick_study_system" style="color:#58a6ff">-</div><div class="tc-pct-lbl">done</div></div>
+    </div>
+    <div class="tags"><span class="tag t1">5-Step Reading</span><span class="tag t4">Claude Prompts</span><span class="tag t3">Protein & Sickle Cell</span></div>
+    <div class="mini-bar-wrap"><div class="mini-bar"><div class="mini-fill" id="bar-fullick_study_system" style="width:0%;background:#58a6ff"></div></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span class="status s-new" id="st-fullick_study_system">Not started</span>
+      <div class="last-visit" id="lv-fullick_study_system"></div>
+    </div>
+  </a>
+
+  <!-- RESET -->
+  <div style="text-align:center;margin-top:20px">
+    <button onclick="resetAll()" style="padding:8px 20px;background:#1c2333;border:1px solid #30363d;border-radius:8px;color:#888;font-size:11px;cursor:pointer">🔄 Reset All Progress</button>
+  </div>
+
+  <div class="footer-note">
+    suntanhk.github.io/bio-flashcrds<br>
+    Edexcel A Level Biology B (9BI0) · Jody's Revision Hub<br>
+    <span style="color:#39d353">Progress saves automatically in your browser</span>
   </div>
 </div>
 
-<!-- FLASHCARD APP -->
-<div class="app" id="appScreen">
-  <div class="topbar">
-    <button class="back-btn" onclick="goHome()">← Home</button>
-    <div class="app-title" id="appTitle"></div>
-  </div>
-
-  <div class="tabs" id="TB"></div>
-  <div class="stats">
-    <div class="chip"><b id="sT">0</b>Total</div>
-    <div class="chip y"><b id="sD">0</b>Done</div>
-    <div class="chip g"><b id="sE">0</b>Easy</div>
-    <div class="chip r"><b id="sH">0</b>Hard</div>
-  </div>
-  <div class="info">
-    <span id="IF">Card 1 of 0</span>
-    <button class="shuffle" onclick="shuf()">🔀 Shuffle</button>
-  </div>
-  <div class="pbar"><div class="pfill" id="PB" style="width:0%"></div></div>
-
-  <div id="MC">
-    <div class="card" id="CD" onclick="rev()">
-      <span class="cnum" id="CN"></span>
-      <div class="qsec">
-        <div class="topic" id="TG"></div>
-        <div class="q" id="QQ"></div>
-        <div class="hint">👆 Tap to reveal answer</div>
-      </div>
-      <div class="asec">
-        <div class="topic" id="TG2"></div>
-        <div class="albl">✅ Answer</div>
-        <div class="ans" id="AA"></div>
-        <div class="tip" id="TP"></div>
-      </div>
-    </div>
-    <div class="nav">
-      <button class="btn" onclick="go(-1)">← Prev</button>
-      <button class="btn gold" onclick="rev()">👁 Reveal</button>
-      <button class="btn" onclick="go(1)">Next →</button>
-    </div>
-    <div class="rbs" id="RB">
-      <button class="rb re" onclick="rt('e')">✅ Easy</button>
-      <button class="rb ro" onclick="rt('o')">👍 OK</button>
-      <button class="rb rh" onclick="rt('h')">⚠️ Hard</button>
-      <button class="rb rm" onclick="rt('m')">❌ Missed</button>
-    </div>
-  </div>
-
-  <div class="done-banner" id="DN">
-    <h3>🎉 Section Complete!</h3>
-    <p>All cards reviewed! Focus on Hard and Missed ones next time.</p>
-    <button class="btn gold" style="max-width:200px;margin:0 auto;display:block" onclick="rst()">🔄 Review Again</button>
-  </div>
-</div>
-
 <script>
-// ── TOPIC 4 DATA ──
-var T4_TOPICS=["SA:Vol","Gas Exchange","Circulation","Blood","Tissue Fluid","Plants"];
-var T4_CARDS=[
-[0,"SA:Vol ratio and organism size?","The LARGER the organism, the LOWER its SA:Vol ratio.","Link SA:Vol to need for exchange surfaces."],
-[0,"How does SA:Vol affect transport?","Lower SA:Vol = molecules travel further to reach all cells. Diffusion alone is insufficient.","State why diffusion is insufficient."],
-[0,"Why do large organisms need mass transport?","Small SA:Vol means diffusion cannot supply all cells. Need mass transport and specialised exchange surfaces.","Give examples: blood system, lungs."],
-[0,"Why do cells have a membrane?","1. To REGULATE movement of substances in and out.\n2. To PROTECT the organelles inside.","State both functions."],
-[0,"What is the fluid mosaic model?","Phospholipid bilayer (fluid) with proteins scattered throughout (mosaic). Includes transport, receptor and enzyme proteins.","Singer & Nicolson 1972."],
-[0,"Define passive transport. Give 3 examples.","Movement DOWN a concentration gradient. NO energy needed.\nExamples: diffusion, facilitated diffusion, osmosis.","Passive = no ATP."],
-[0,"Define diffusion and its rate factors.","Net movement from high to low concentration.\nRate depends on: surface area, temperature, concentration gradient, membrane thickness.","Fick's law: rate ∝ SA × conc gradient ÷ thickness."],
-[0,"Define facilitated diffusion.","High to low concentration through carrier or channel proteins. Used by charged or polar molecules (e.g. glucose, ions).","Needs protein but no ATP."],
-[0,"Define osmosis.","Net movement of FREE WATER MOLECULES from high to low water potential across a partially permeable membrane.","Water only; partially permeable membrane."],
-[0,"Define water potential.","Tendency of water to move by osmosis. Pure water = 0 kPa (highest). Water moves from higher to lower water potential.","Psi symbol; always negative in solutions."],
-[0,"How is water potential calculated?","Psi = Psi-s + Psi-p\nPsi-s = solute/osmotic potential\nPsi-p = pressure/turgor potential","Learn the equation."],
-[0,"How do molecular properties affect transport?","Lipid solubility: lipid-soluble molecules cross easily.\nSize: smaller diffuses faster.\nCharge: charged molecules need proteins.","Three factors: solubility, size, charge."],
-[0,"How do large molecules cross the membrane?","Via VESICLES.\nEndocytosis: cell engulfs material.\nExocytosis: vesicle fuses with membrane, releases contents outside.","Endo = in; Exo = out."],
-[0,"Define active transport.","Movement AGAINST a concentration gradient (low to high). Requires ATP energy and carrier proteins.","Active = ATP + carrier protein."],
-[0,"Role of ATP in active transport?","ATP binds to carrier protein. Energy changes protein shape. Molecule carried across membrane against its gradient.","ATP hydrolysis drives conformational change."],
-[0,"How does ATP release energy?","ADP + Pi forms ATP (stores energy). ATP hydrolysis releases energy for cellular work. ADP re-phosphorylated by respiration.","ATP = universal energy currency."],
-[1,"3 features of efficient gas exchange surface?","1. Large surface area\n2. Short/thin diffusion distance\n3. Steep concentration gradient (maintained by blood or ventilation)","All three required for full marks."],
-[1,"Describe insect gas exchange system.","Spiracles: openings on body surface.\nTraacheae: large tubes through body; rings prevent collapse.\nTraacheoles: tiny branches delivering O2 directly to cells.","Insects have no blood for gas transport."],
-[1,"How are insects adapted for gas exchange?","Spiracles open/close to control water loss.\nMuscles allow mass air movement.\nTraacheoles highly branched = large surface area.","Spiracles reduce water loss."],
-[1,"Describe fish gas exchange system.","Gills: filaments on arches. Lamellae: folds on filaments, water passes over them.\nCountercurrent exchange: blood and water flow opposite directions.","Countercurrent = maintains steep gradient throughout."],
-[1,"How are fish adapted for gas exchange?","Many filaments and lamellae = large surface area.\nCountercurrent flow: water always meets blood with lower O2, maintaining steep gradient throughout.","Countercurrent is key adaptation."],
-[1,"How are mammals adapted for gas exchange?","Alveoli: large surface area (~70 m2), one-cell-thick walls (short diffusion path), rich blood supply maintains steep O2 gradient.","Three features: SA, thin walls, blood supply."],
-[1,"How are plant leaves adapted for gas exchange?","1. Spongy mesophyll: large surface area.\n2. Waxy cuticle: impermeable, reduces water loss.\n3. Lenticels: allow gas entry and exit.","Stomata controlled by guard cells."],
-[1,"How do plants limit water loss during gas exchange?","Guard cells regulate stomata. Stomata close to prevent water loss but some stay open for gas exchange.","Stomata open in light, close in dark."],
-[2,"Relate heart chamber structure to function.","Atria: thin elastic walls, stretch when filling.\nVentricles: thick muscular walls, pump at high pressure.\nLeft ventricle THICKER - pumps blood around entire body.","Left ventricle thicker than right."],
-[2,"Relate artery structure to function.","Thick muscular walls: withstand high pressure.\nElastic tissue: recoils for smooth flow.\nNarrow lumen: maintains high pressure.","Arteries carry blood AWAY from heart."],
-[2,"Relate vein structure to function.","Thin walls: low blood pressure.\nValves: prevent backflow.\nLess muscular/elastic tissue: less need to control flow.","Veins carry blood TO heart; have valves."],
-[2,"Relate capillary structure to function.","One-cell-thick walls: short diffusion pathway.\nNarrow lumen: RBCs lie flat for efficient O2 delivery.\nNumerous and branched: large surface area.","Site of exchange between blood and tissues."],
-[2,"Why are two heart pumps needed?","Pressure drops through lung capillaries. Blood returns to heart for pressure boost. This is DOUBLE CIRCULATION.","Pulmonary + systemic circuits."],
-[2,"Describe cardiac diastole.","Heart RELAXED. Blood fills atria, opens AV valves, flows into ventricles. Semilunar valves stay closed.","Diastole = filling phase."],
-[2,"Describe atrial systole.","ATRIA CONTRACT. Remaining blood pushed into ventricles.","Atrial systole completes ventricular filling."],
-[2,"Describe ventricular systole.","VENTRICLES CONTRACT. Pressure rises. AV valves close (prevent backflow). Semilunar valves open. Blood enters arteries.","Ventricular systole = main pumping phase."],
-[2,"What does myogenic mean?","Heart initiates its own contraction FROM WITHIN the cardiac muscle. Not controlled by external nerve impulses.","SAN is the pacemaker."],
-[2,"Name the nodes and locations.","SAN: wall of RIGHT ATRIUM - the pacemaker.\nAVN: between the two atria.","SAN → AVN → Bundle of His → Purkinje fibres."],
-[2,"How does the heart contract?","1. SAN sends impulse across atria - atria contract.\n2. AVN receives, DELAYS, sends down Bundle of His.\n3. Purkinje fibres spread impulse - ventricles contract bottom-up.","AVN delay allows ventricles to fill."],
-[2,"Why does the AVN delay the impulse?","Allows ATRIAL SYSTOLE TO COMPLETE before ventricular contraction. Ensures ventricles fill fully with blood.","Without delay, ventricles contract too early."],
-[2,"What is an ECG?","Graph of electrical activity in the heart.\nP wave: atrial depolarisation\nQRS complex: ventricular depolarisation\nT wave: ventricular repolarisation","P = atria; QRS = ventricles; T = recovery."],
-[3,"Function of blood?","Transports O2, nutrients, hormones, CO2 and waste.\nForms tissue fluid.\nImmune defence against pathogens.","Three functions required."],
-[3,"Main components of blood?","1. Erythrocytes: carry O2\n2. Leucocytes: immune defence\n3. Platelets: clotting\n4. Plasma: liquid matrix (55%)","Plasma = 55%; cells = 45%."],
-[3,"Structure and function of erythrocytes?","Biconcave disc: large SA for gas exchange.\nNo nucleus: more space for haemoglobin.\nPacked with Hb: carries O2.\nSmall and flexible: fits through capillaries.","No nucleus = more Hb = more O2."],
-[3,"Types of leucocytes and functions?","Lymphocytes: release antibodies.\nEosinophils: detoxify foreign proteins.\nNeutrophils: phagocytosis.\nMonocytes: respond to inflammation.","All are white blood cells."],
-[3,"Explain blood clotting.","1. Platelets release THROMBOPLASTIN.\n2. Prothrombin becomes THROMBIN.\n3. Fibrinogen becomes FIBRIN mesh, traps cells, forms clot.","Cascade: thromboplastin → thrombin → fibrin."],
-[3,"What causes atherosclerosis?","Endothelium damage. Cholesterol and cells accumulate. Hardens into FIBROUS PLAQUE narrowing artery.\nRisk of: heart attack, stroke, angina.","Plaque = atheromatous plaque."],
-[3,"Risk factors for atherosclerosis?","Age, genetics, smoking, alcohol, lack of exercise, obesity, high cholesterol.","Modifiable vs non-modifiable risk factors."],
-[3,"Structure of haemoglobin?","Globular water-soluble protein. Four polypeptide chains each with a haem group containing Fe2+ that binds O2. Quaternary structure.","4 chains + 4 haem groups = 4 O2 max."],
-[3,"How does pO2 affect haemoglobin?","High pO2 in lungs: Hb LOADS O2 (high affinity).\nLow pO2 in tissues: Hb RELEASES O2 (low affinity).","S-shaped dissociation curve."],
-[3,"Explain the Bohr effect.","High pCO2 creates acidic conditions. Hb changes shape - LOWER AFFINITY for O2. O2 released to active tissues. Curve shifts RIGHT.","Bohr shift = curve moves right."],
-[3,"What do dissociation curves show?","% Hb saturation with O2 (y-axis) vs partial pressure of O2 in kPa (x-axis).\nCurve LEFT = higher affinity. Curve RIGHT = lower affinity.","Foetal Hb curve is LEFT of adult Hb."],
-[3,"What is myoglobin?","O2-storage protein in muscle cells. Higher affinity for O2 than Hb. Curve sits further LEFT. Releases O2 only at very low pO2.","Myoglobin = O2 store in muscles."],
-[3,"How does foetal Hb differ from adult Hb?","Foetal Hb has HIGHER AFFINITY for O2. Loads O2 released by maternal Hb at the placenta. Meets both mother and foetus needs.","Foetal Hb curve = left of adult Hb."],
-[4,"What is tissue fluid?","Watery solution of glucose, amino acids and O2. Bathes cells, supplying nutrients and removing waste (CO2, urea).","Tissue fluid ≠ blood plasma (no large proteins)."],
-[4,"Pressures influencing tissue fluid formation?","Hydrostatic pressure (HP): forces fluid OUT at arterial end.\nOncotic pressure (OP): draws fluid BACK IN at venous end.","HP > OP at arterial end; OP > HP at venous end."],
-[4,"How is tissue fluid formed?","Blood in narrow capillaries: hydrostatic pressure forces fluid out into intercellular spaces. Fluid returns when HP drops at venous end.","Net flow out at arterial end; net flow in at venous end."],
-[4,"What happens to excess tissue fluid?","Absorbed into LYMPH CAPILLARIES. Travels through lymphatic system. Returned to blood near the heart.","Lymph → subclavian vein → blood."],
-[5,"Relate xylem structure to function.","Long dead hollow columns: uninterrupted water flow.\nPits: lateral water movement.\nLignified walls: structural support, prevents collapse.","Xylem = dead tissue; water + minerals upward."],
-[5,"Relate phloem structure to function.","Sieve tube elements: transport sucrose.\nCompanion cells: active transport of sugars into tubes.\nPlasmodesmata: connect cytoplasms, allow flow.","Phloem = living tissue; sucrose both directions."],
-[5,"Explain the apoplastic pathway.","Water moves through CELL WALLS and intercellular spaces. Blocked at CASPARIAN STRIP in endodermis. Forces water into symplast.","Apoplast = cell walls; blocked by Casparian strip."],
-[5,"Explain the symplastic pathway.","Water moves through CYTOPLASM via plasmodesmata. Requires water to be actively transported into cells first.","Symplast = cytoplasm connected by plasmodesmata."],
-[5,"Explain the cohesion-tension theory.","Water forms hydrogen bonds (COHESION). Transpiration creates TENSION that pulls the water column up through the xylem.","Cohesion-tension = main mechanism of water transport."],
-[5,"How does root pressure affect water movement?","High mineral concentration in root = LOW WATER POTENTIAL. Osmotic flow into root. Weak PUSH EFFECT moves water up stem.","Root pressure = minor contribution to water movement."],
-[5,"How does temperature affect transpiration?","Higher temperature = more kinetic energy = faster evaporation = INCREASED transpiration rate.","Temperature ↑ → transpiration rate ↑."],
-[5,"How does light affect transpiration?","More light = more photosynthesis = more stomata open = INCREASED transpiration rate.","Light ↑ → stomata open → transpiration ↑."],
-[5,"How does humidity affect transpiration?","High humidity = reduced concentration gradient = DECREASED transpiration rate.","Humidity ↑ → gradient ↓ → transpiration ↓."],
-[5,"How does wind affect transpiration?","Wind blows moist air away = steeper gradient = INCREASED transpiration rate.","Wind ↑ → gradient ↑ → transpiration ↑."],
-[5,"Summarise the mass-flow hypothesis.","1. Sucrose loaded by active transport - lowers water potential.\n2. Water enters by osmosis - raises pressure.\n3. Pressure drives sugars from SOURCE (leaf) to SINK (root/fruit).","Source = leaf; Sink = root, fruit, growing tip."],
-[5,"Evidence FOR mass flow hypothesis.","Sap released when stem cut confirms pressure in phloem.\nHigher sucrose in leaves than roots confirms gradient exists.","Two pieces of evidence required."],
-[5,"Evidence AGAINST mass flow hypothesis.","Not all solutes move at same speed (mass flow predicts they should).\nBidirectional movement in sieve tubes (mass flow is unidirectional).","Bidirectional movement is key evidence against."]
+// ═══════════════════════════════════════════
+// ALL TRACKED FILES
+// ═══════════════════════════════════════════
+var FILES = [
+  'topic4_astar_R1',
+  'topic42_transport_mammals',
+  'astar_checklist_flashcards',
+  'synoptic_biology',
+  '100_sixmark_answers',
+  'exam_questions_1_96',
+  'exam_questions_97_200',
+  '12week_plan',
+  'predicted_grades_plan',
+  'active_recall_flashcards',
+  'fullick_study_system'
 ];
-</script>
 
-<script>
-// ── MASTER DATA ──
-var M_TOPICS=["1-Cell Structure","2-Bio Molecules","3-Enzymes","4-Membranes","5-Genetics","6-Respiration","7-Photosynthesis","8-Homeostasis","9-Ecology","10-Practical"];
-var M_CARDS=[
-[0,"State the Cell Theory.","1. All living organisms are composed of cells.\n2. Cells are the basic structural and functional units of life.\n3. New cells arise from pre-existing cells through cell division.","State all three principles."],
-[0,"Which organelle produces ATP?","The mitochondrion carries out aerobic respiration and produces ATP by oxidative phosphorylation.","Link cristae to increased surface area for ETC."],
-[0,"Why do mitochondria have folded inner membranes?","The cristae increase surface area available for the ETC and ATP synthase, maximising ATP production.","Cristae = inner membrane folds."],
-[0,"Why are ribosomes non-membrane-bound?","They are composed of ribosomal RNA and proteins and are not surrounded by any membrane.","80S in eukaryotes; 70S in prokaryotes."],
-[0,"Give two functions of the Golgi apparatus.","1. Modifies proteins.\n2. Packages proteins into vesicles for transport or secretion.","Golgi = post office of the cell."],
-[0,"What is the function of the rough ER?","Synthesises and transports proteins. Ribosomes on its surface produce proteins for secretion.","Rough ER = ribosomes → protein synthesis."],
-[0,"What is the function of the smooth ER?","Synthesises lipids and steroids; involved in detoxification.","Smooth ER = no ribosomes → lipid synthesis."],
-[0,"What is the role of the nucleus?","Contains DNA and controls gene expression; nucleolus produces ribosomal RNA.","Nucleus = control centre."],
-[0,"Differences between prokaryotic and eukaryotic cells?","Prokaryotes: no nucleus, no membrane-bound organelles, smaller, circular DNA, 70S ribosomes.\nEukaryotes: nucleus, membrane-bound organelles, larger, linear DNA, 80S ribosomes.","Pro = before nucleus; Eu = true nucleus."],
-[0,"What is a cell wall made of in plants?","Cellulose microfibrils provide structural support.","Plant = cellulose; fungal = chitin."],
-[0,"What is the function of the vacuole in plants?","Maintains turgor pressure, supports the cell and stores solutes.","Large central vacuole = unique to plant cells."],
-[0,"What is the function of chloroplasts?","Carry out photosynthesis, converting light energy into chemical energy (glucose).","Double membrane; thylakoids + stroma."],
-[0,"What is the role of the cytoskeleton?","Maintains cell shape, enables movement and organelle transport via microtubules and microfilaments.","Actin = microfilaments; tubulin = microtubules."],
-[0,"What is the function of lysosomes?","Contain hydrolytic enzymes that digest worn-out organelles and foreign material.","Lysosomes = recycling centre."],
-[0,"Differences between plant and animal cells?","Plant: cell wall, chloroplasts, large vacuole, no centrioles.\nAnimal: no cell wall, no chloroplasts, small vacuoles, centrioles present.",""],
-[0,"What is the resolution of a light microscope?","200 nm (0.2 μm).","Resolution = ability to distinguish two separate points."],
-[0,"What is the resolution of an electron microscope?","0.1-0.5 nm (up to 500x greater than light microscope).","Electrons have shorter wavelength → higher resolution."],
-[0,"What is magnification?","Magnification = Image size ÷ Actual size.","Always show working in exam calculations."],
-[0,"Difference between magnification and resolution?","Magnification increases apparent size; resolution is the ability to distinguish fine detail.","High magnification without resolution = blurry."],
-[0,"TEM vs SEM?","TEM: electrons pass through specimen → internal detail.\nSEM: electrons bounce off surface → 3D surface image.","TEM = internal; SEM = surface."],
-[0,"Why must specimens be dead in EM?","Electrons are fired in a vacuum; living cells cannot survive vacuum conditions.","Limitation of electron microscopy."],
-[0,"What is a eukaryote?","An organism whose cells contain a membrane-bound nucleus and membrane-bound organelles.","Examples: animals, plants, fungi, protists."],
-[0,"What is a prokaryote?","An organism whose cells lack a membrane-bound nucleus and membrane-bound organelles.","Examples: bacteria, archaea."],
-[0,"What is a plasmid?","A small, circular, double-stranded DNA molecule found in prokaryotic cells, separate from the main chromosome.","Plasmids can carry antibiotic resistance genes."],
-[0,"What is endosymbiosis theory?","Mitochondria and chloroplasts were once free-living prokaryotes engulfed by a host cell.\nEvidence: double membrane, own DNA, 70S ribosomes.","Evidence = double membrane + own DNA + 70S ribosomes."],
-[1,"What is a condensation reaction?","A reaction that joins two molecules with formation of a covalent bond and removal of one molecule of water.","Condensation = bond formed + water removed."],
-[1,"What is hydrolysis?","The breakdown of a molecule by the addition of water, breaking covalent bonds.","Hydrolysis = bond broken + water added."],
-[1,"Why is glucose suitable for respiration?","Small and soluble; easily transported; readily broken down; produces ATP efficiently.","Alpha glucose used in respiration."],
-[1,"Why is starch suitable for storage?","Insoluble; compact; does not affect water potential; easily hydrolysed when required.","Starch = amylose + amylopectin."],
-[1,"Difference between alpha and beta glucose?","Alpha glucose: -OH on C1 is below the ring.\nBeta glucose: -OH on C1 is above the ring.","Alpha → starch/glycogen; Beta → cellulose."],
-[1,"What bonds form between glucose monomers in starch?","Glycosidic bonds formed by condensation reactions between alpha glucose molecules.","1-4 bonds in amylose; 1-4 and 1-6 in amylopectin."],
-[1,"Why is cellulose strong?","Beta glucose forms straight chains that hydrogen bond with adjacent chains, forming strong microfibrils.","Alternating beta glucose = straight chains = H-bonds."],
-[1,"What is glycogen?","Branched polysaccharide of alpha glucose. Compact; insoluble; quickly hydrolysed due to many branch ends.","Stored in liver and muscle."],
-[1,"Structure of a triglyceride?","One glycerol molecule joined to three fatty acid molecules by three ester bonds via condensation reactions.","3 fatty acids + 1 glycerol = triglyceride."],
-[1,"Saturated vs unsaturated fatty acids?","Saturated: no C=C double bonds; solid at room temperature.\nUnsaturated: one or more C=C double bonds; liquid at room temperature.","Saturated fats linked to heart disease."],
-[1,"Why are triglycerides good energy storage?","High ratio of H to O → more energy per gram than carbohydrates; insoluble so does not affect water potential.","Fat releases ~twice as much energy per gram as carbohydrate."],
-[1,"What is a phospholipid?","Glycerol + 2 fatty acids + phosphate group. Hydrophilic head and hydrophobic tails (amphipathic).","Amphipathic = forms bilayer spontaneously."],
-[1,"Levels of protein structure?","Primary: amino acid sequence.\nSecondary: alpha helix or beta pleated sheet (H-bonds).\nTertiary: 3D folding.\nQuaternary: 2+ polypeptide chains.","All levels determine protein function."],
-[1,"Bonds stabilising tertiary structure?","Hydrogen bonds, ionic bonds, disulfide bridges and hydrophobic interactions.","Disulfide bridges are covalent; others are weaker."],
-[1,"What is a peptide bond?","A covalent bond between the amine group of one amino acid and the carboxyl group of another, formed by condensation.","Condensation = peptide bond + water."],
-[1,"What is a globular protein? Example?","Spherical, water-soluble protein with hydrophilic exterior. Example: haemoglobin, enzymes.","Globular = functional proteins."],
-[1,"What is a fibrous protein? Example?","Long, insoluble structural protein. Example: collagen, keratin.","Fibrous = structural proteins."],
-[1,"Why is water important to living organisms?","High specific heat capacity; solvent; metabolite; high latent heat; cohesion; transparent.","Learn all properties of water."],
-[1,"What is the biuret test?","Tests for protein. Add NaOH then CuSO4. Positive: purple/lilac colour.","Biuret = protein → purple."],
-[1,"What is Benedict's test?","Tests for reducing sugars. Add Benedict's reagent and heat. Positive: brick-red precipitate.","Reducing sugars → brick red."],
-[1,"How do you test for starch?","Add iodine solution. Positive: blue-black colour.","Iodine = starch → blue-black."],
-[1,"How do you test for lipids?","Emulsion test: dissolve in ethanol, add water. Positive: cloudy white emulsion.","Lipid + ethanol + water → cloudy."],
-[1,"What is DNA made of?","Nucleotides: deoxyribose sugar + phosphate group + one of four bases (A, T, C, G).","DNA = double helix; complementary base pairs."],
-[1,"Complementary base pairs in DNA?","Adenine pairs with Thymine (2 H-bonds).\nCytosine pairs with Guanine (3 H-bonds).","AT = 2 bonds; CG = 3 bonds."],
-[1,"What is RNA?","Single-stranded nucleic acid containing ribose sugar, phosphate and bases A, U, C, G (uracil replaces thymine).","RNA = single strand; U replaces T."],
-[1,"Three types of RNA and functions?","mRNA: carries genetic code to ribosome.\ntRNA: brings amino acids to ribosome.\nrRNA: forms ribosome structure.","mRNA = message; tRNA = transfer; rRNA = ribosome."],
-[1,"What is ATP and why is it important?","Adenosine triphosphate — universal energy currency. Releases energy when hydrolysed to ADP + Pi.","ATP → ADP + Pi + energy."],
-[1,"Why is ATP better than glucose as immediate energy?","Releases energy in small manageable amounts; immediately available; cannot be stored; diffuses to where needed.","ATP = immediate; glucose = long-term storage."],
-[1,"Structure of haemoglobin?","Quaternary structure: 4 polypeptide chains (2 alpha, 2 beta) each with haem group containing Fe2+ that binds O2.","Haemoglobin = globular quaternary protein."],
-[1,"Structure of collagen?","Fibrous protein: 3 polypeptide chains wound into triple helix, cross-linked by covalent bonds.","Collagen = strength in tendons, bone, skin."],
-[1,"What are inorganic ions? Two examples?","Ions not containing carbon, essential for biological processes.\nExamples: Fe2+ (haemoglobin), Mg2+ (chlorophyll).","Inorganic ions = cofactors."],
-[2,"Define activation energy.","The minimum energy required for a chemical reaction to begin.","Enzymes lower activation energy."],
-[2,"How do enzymes lower activation energy?","They provide an alternative reaction pathway requiring less activation energy.","Lock and key vs induced fit."],
-[2,"Why does increasing substrate eventually have no effect?","All enzyme active sites become occupied (saturated); rate cannot increase further.","At saturation, substrate not limiting."],
-[2,"What is the lock and key model?","Substrate fits exactly into the complementary-shaped active site of the enzyme.","Lock and key = rigid active site."],
-[2,"What is the induced fit model?","Active site changes shape slightly when substrate binds, improving fit and stressing substrate bonds.","Induced fit = flexible active site; more accurate."],
-[2,"How does temperature affect enzyme activity?","Increasing temperature increases kinetic energy and collision rate. Above optimum, enzyme denatures (active site changes irreversibly).","Optimum ≠ maximum; above optimum = denaturation."],
-[2,"How does pH affect enzyme activity?","Extreme pH disrupts H-bonds and ionic bonds in active site, altering shape and denaturing enzyme.","Each enzyme has an optimum pH."],
-[2,"What is a competitive inhibitor?","Molecule with similar shape to substrate that competes for the active site. Effect can be overcome by increasing substrate concentration.","Competitive = same active site; reversible."],
-[2,"What is a non-competitive inhibitor?","Molecule that binds to an allosteric site, changing active site shape so substrate cannot bind. Cannot be overcome by more substrate.","Non-competitive = allosteric site; cannot be reversed."],
-[2,"What is enzyme denaturation?","Permanent change in tertiary structure of enzyme (active site shape changes) due to excessive heat or extreme pH.","Denaturation is IRREVERSIBLE."],
-[2,"What factors affect enzyme activity?","Temperature, pH, substrate concentration, enzyme concentration, inhibitor concentration.","Remember all five factors."],
-[2,"What is Vmax?","The maximum rate of reaction when all enzyme active sites are saturated with substrate.","Vmax is constant for a given enzyme concentration."],
-[2,"What is Km?","The substrate concentration at which rate is half of Vmax. Low Km = high affinity for substrate.","Km = measure of enzyme-substrate affinity."],
-[2,"What is a coenzyme?","An organic cofactor that temporarily binds to the enzyme and is chemically changed during the reaction (e.g. NAD, FAD).","Coenzyme = organic cofactor."],
-[2,"What is end-product inhibition?","The final product of a metabolic pathway acts as a non-competitive inhibitor of an earlier enzyme.","End-product inhibition = negative feedback at enzyme level."],
-[3,"State the Fluid Mosaic Model.","Cell membrane = phospholipid bilayer containing proteins that move laterally, creating a dynamic (fluid) and varied (mosaic) structure.","Singer and Nicolson, 1972."],
-[3,"Why are phospholipids amphipathic?","Hydrophilic phosphate head (attracted to water) and hydrophobic fatty acid tails (repelled by water).","Amphipathic = both hydrophilic and hydrophobic."],
-[3,"What is facilitated diffusion?","Passive movement down concentration gradient through specific channel or carrier proteins. No energy required.","Passive = no ATP; needs protein channels."],
-[3,"Role of cholesterol in the membrane?","Regulates membrane fluidity: prevents fatty acid tails packing too closely; reduces fluidity at high temperatures.","Cholesterol = membrane stabiliser."],
-[3,"What is active transport?","Movement against concentration gradient using ATP energy and carrier proteins.","Active = ATP required; against gradient."],
-[3,"What is osmosis?","Net movement of water from higher to lower water potential across a partially permeable membrane.","Osmosis = passive movement of water only."],
-[3,"Factors affecting rate of diffusion?","Concentration gradient, surface area, temperature, distance, molecular size.","Fick's law: rate ∝ (SA × gradient) ÷ thickness."],
-[3,"Two types of membrane proteins?","Intrinsic: span the entire bilayer.\nExtrinsic: attached to surface only.","Intrinsic = embedded; extrinsic = surface only."],
-[3,"Function of glycoproteins in membrane?","Cell signalling, recognition and adhesion. Act as receptor sites for hormones and neurotransmitters.","Glycoprotein = protein + carbohydrate chain."],
-[3,"What happens to animal cell in hypotonic solution?","Takes in water by osmosis, swells and may burst (lysis).","Hypotonic = more water outside → water enters."],
-[3,"What is plasmolysis?","Plant cell in hypertonic solution loses water; vacuole shrinks; cell membrane pulls away from cell wall.","Plasmolysis = plant cell loses water."],
-[3,"What is the sodium-potassium pump?","Active transport carrier: moves 3 Na+ out and 2 K+ in per ATP molecule. Maintains electrochemical gradient.","Na+/K+ pump = 3 out, 2 in; uses ATP."],
-[3,"What is co-transport?","One substance moves down its gradient, driving another against its gradient through a shared carrier protein.","Example: glucose-Na+ co-transport in gut."],
-[3,"What are aquaporins?","Channel proteins that specifically facilitate rapid passage of water molecules across the membrane.","Aquaporins = water channels."],
-[4,"Define a gene.","A sequence of DNA that codes for a polypeptide or functional RNA molecule.","One gene → one polypeptide (simplified)."],
-[4,"What is an allele?","An alternative form of a gene found at the same locus on homologous chromosomes.","Different alleles → different versions of a trait."],
-[4,"Why is DNA replication semi-conservative?","Each daughter DNA molecule contains one original strand and one newly synthesised strand.","Meselson-Statt proved semi-conservative."],
-[4,"What is a codon?","A sequence of three bases (triplet) on mRNA that codes for a specific amino acid.","64 codons; 61 code for amino acids; 3 stop codons."],
-[4,"What is transcription?","The process by which the base sequence of a gene (DNA) is copied into mRNA in the nucleus.","DNA → mRNA (in nucleus)."],
-[4,"What is translation?","The process by which the mRNA sequence is decoded at the ribosome to produce a specific polypeptide.","mRNA → protein (at ribosome)."],
-[4,"What is a frameshift mutation?","Insertion or deletion of a base shifts the reading frame, altering all subsequent codons.","Frameshift = drastic effect on protein."],
-[4,"What is the genetic code?","The set of rules by which codons in mRNA are translated into amino acids. Universal, degenerate and non-overlapping.","Universal = same in all organisms."],
-[4,"What is meiosis?","Cell division producing four genetically non-identical haploid daughter cells from a diploid parent.","Meiosis = gamete production; 4 haploid cells."],
-[4,"What is mitosis?","Cell division producing two genetically identical diploid daughter cells from a diploid parent.","Mitosis = growth and repair; 2 identical diploid cells."],
-[4,"What is crossing over?","During meiosis I, homologous chromosomes exchange segments at chiasmata, producing new allele combinations.","Crossing over → genetic variation."],
-[4,"What is independent assortment?","Homologous chromosome pairs orient randomly at metaphase plate; each gamete receives random combination.","Independent assortment → 2^23 combinations in humans."],
-[4,"What is codominance?","Both alleles are expressed equally in the phenotype of a heterozygote.","Example: ABO blood group."],
-[4,"What is sex linkage?","Gene located on sex chromosomes (usually X). Males more likely to express X-linked recessive conditions.","Males have only one X → cannot be carriers."],
-[4,"What is the Hardy-Weinberg principle?","Allele and genotype frequencies remain constant between generations in absence of evolutionary forces.\np2 + 2pq + q2 = 1 and p + q = 1.","Assumes: large population, random mating, no selection/mutation/migration."],
-[4,"What is natural selection?","Organisms with advantageous heritable traits survive and reproduce more successfully, passing traits to offspring.","Natural selection = differential reproduction."],
-[4,"What is epigenetics?","Changes in gene expression caused by chemical modifications to DNA or histones without changes to DNA sequence.","Methylation = silencing; acetylation = activation."],
-[4,"What is a stem cell?","An undifferentiated cell capable of self-renewal and differentiation into specialised cell types.","Embryonic = totipotent; adult = multipotent."],
-[4,"What is alternative splicing?","Different exons from same pre-mRNA are joined in different combinations, producing different proteins.","One gene → many proteins."],
-[4,"What is PCR?","Polymerase Chain Reaction — amplifies specific DNA sequences using DNA polymerase, primers and thermal cycling.","PCR: denature → anneal → extend."],
-[5,"Where does glycolysis occur?","In the cytoplasm (cytosol).","Glycolysis = anaerobic stage; all cells."],
-[5,"Products of glycolysis?","2 pyruvate, net 2 ATP, 2 reduced NAD (NADH).","Glycolysis: glucose → 2 pyruvate + 2 ATP + 2 NADH."],
-[5,"Why is oxygen essential for aerobic respiration?","It acts as the final electron acceptor in the ETC, allowing NADH and FADH2 to be re-oxidised and ATP production to continue.","Without O2, ETC stops → no oxidative phosphorylation."],
-[5,"What is the link reaction?","Pyruvate is decarboxylated and combined with CoA to produce acetyl-CoA, CO2 and reduced NAD. Occurs in mitochondrial matrix.","Pyruvate → Acetyl-CoA + CO2 + NADH."],
-[5,"What is the Krebs cycle?","Reactions in mitochondrial matrix where acetyl-CoA is oxidised, producing CO2, ATP, NADH and FADH2.","Krebs: 2 turns per glucose."],
-[5,"How many ATP per glucose in aerobic respiration?","Approximately 30-32 ATP per glucose molecule.","Glycolysis: 2; Krebs: 2; Oxidative phosphorylation: ~28."],
-[5,"What is oxidative phosphorylation?","Production of ATP using proton gradient generated by the ETC (chemiosmosis) in inner mitochondrial membrane.","Oxidative phosphorylation = ETC + chemiosmosis."],
-[5,"What is chemiosmosis?","Movement of protons (H+) down their electrochemical gradient through ATP synthase to produce ATP.","Proton gradient → ATP synthesis."],
-[5,"What is anaerobic respiration in animals?","Pyruvate reduced to lactate by reduced NAD, regenerating NAD so glycolysis can continue.\nGlucose → 2 lactate + 2 ATP.","Lactate fermentation: NAD regenerated."],
-[5,"What is anaerobic respiration in yeast?","Pyruvate → ethanal → ethanol; CO2 released; NAD regenerated.\nGlucose → 2 ethanol + 2 CO2 + 2 ATP.","Alcoholic fermentation: ethanol + CO2."],
-[5,"What is the respiratory quotient (RQ)?","RQ = CO2 produced ÷ O2 consumed.\nCarbohydrate: RQ = 1.0; Fat: RQ = 0.7; Protein: RQ = 0.9.","RQ = 1 → carbohydrate; RQ < 1 → fat."],
-[6,"What is photolysis?","The light-driven splitting of water into oxygen, electrons and hydrogen ions in the thylakoid membrane.","Photolysis: 2H2O → 4H+ + 4e- + O2."],
-[6,"Why is ATP needed in the Calvin cycle?","ATP supplies energy to reduce glycerate 3-phosphate (GP) to triose phosphate (TP).","Calvin: CO2 fixation → reduction needs ATP + NADPH."],
-[6,"What is RuBisCO?","The enzyme catalysing fixation of CO2 to ribulose bisphosphate (RuBP) in the Calvin cycle.","RuBisCO = most abundant enzyme on Earth."],
-[6,"Two main stages of photosynthesis?","Light-dependent (thylakoid): produces ATP and NADPH.\nLight-independent/Calvin cycle (stroma): fixes CO2 into sugar.","Thylakoid = light-dep; stroma = Calvin."],
-[6,"What is non-cyclic photophosphorylation?","Electrons flow from PSII through ETC to PSI; water split; NADP reduced to NADPH; ATP produced.","Non-cyclic: ATP + NADPH + O2 produced."],
-[6,"What is cyclic photophosphorylation?","Electrons from PSI recycled back through ETC; only ATP produced. No water split, no NADPH.","Cyclic: ATP only; no NADPH, no O2."],
-[6,"What is the Calvin cycle?","CO2 fixed onto RuBP by RuBisCO → GP formed → reduced to TP using ATP and NADPH → RuBP regenerated.","Calvin: CO2 → GP → TP → RuBP."],
-[6,"Net equation for photosynthesis?","6CO2 + 6H2O + light energy → C6H12O6 + 6O2","Learn overall equation."],
-[6,"What is the absorption spectrum of chlorophyll?","Absorbs most light in red (650-700 nm) and blue (400-500 nm) regions; reflects green (500-600 nm).","Absorption ≠ action spectrum."],
-[6,"What is the action spectrum?","Rate of photosynthesis at different wavelengths; highest at red and blue (matches absorption spectrum).","Action spectrum mirrors absorption spectrum."],
-[7,"What is negative feedback?","A mechanism that reverses deviations from a set point, maintaining conditions within narrow limits.","Negative feedback = self-correcting."],
-[7,"Which hormone lowers blood glucose?","Insulin (secreted by beta cells of islets of Langerhans in pancreas).","Insulin ↓ blood glucose; glucagon ↑."],
-[7,"Which hormone increases blood glucose?","Glucagon (secreted by alpha cells of islets of Langerhans in pancreas).","Alpha = glucagon; beta = insulin."],
-[7,"What is glycogenesis?","Conversion of glucose to glycogen for storage in liver and muscle, stimulated by insulin.","Glycogenesis = glucose → glycogen."],
-[7,"What is glycogenolysis?","Breakdown of glycogen to glucose in liver and muscle, stimulated by glucagon and adrenaline.","Glycogenolysis = glycogen → glucose."],
-[7,"What is diabetes Type 1?","Autoimmune: immune system destroys beta cells; no insulin produced. Treated with insulin injections.","Type 1 = no insulin; autoimmune."],
-[7,"What is diabetes Type 2?","Cells become resistant to insulin; often linked to obesity. Managed by diet and exercise.","Type 2 = insulin resistance; lifestyle-related."],
-[7,"What is the role of ADH?","Released when blood water potential is low; increases permeability of collecting duct to water, promoting reabsorption.","ADH ↑ → more water reabsorbed → concentrated urine."],
-[7,"What is an action potential?","Temporary reversal of membrane potential: depolarisation (+40 mV), repolarisation, hyperpolarisation, return to -70 mV.","AP: -70 mV → +40 mV → -70 mV."],
-[7,"What is saltatory conduction?","Jumping of action potentials from one node of Ranvier to the next in myelinated neurones, increasing conduction speed.","Saltatory = faster than non-myelinated."],
-[7,"What is synaptic transmission?","AP → Ca2+ influx → vesicle fusion → neurotransmitter released → binds postsynaptic receptor.","Electrical → chemical → electrical."],
-[7,"What is thermoregulation?","Control of core body temperature within narrow range despite changes in external environment.","Hypothalamus = thermoregulatory centre."],
-[7,"Responses when body temperature rises?","Vasodilation: more blood to skin surface.\nSweating: evaporation cools skin.\nBehaviour: remove clothing.","Vasodilation + sweating = cooling."],
-[7,"Responses when body temperature falls?","Vasoconstriction: less blood to skin.\nShivering: muscle contractions generate heat.\nErector pili: raise hairs to trap air.","Vasoconstriction + shivering = warming."],
-[8,"Define biodiversity.","The variety of living organisms within a habitat, ecosystem or biosphere, including genetic, species and ecosystem diversity.","Three levels: genetic, species, ecosystem."],
-[8,"Why is biodiversity important?","Greater biodiversity increases ecosystem stability, resilience to change and provides essential ecosystem services.","More species = more stable ecosystem."],
-[8,"What is succession?","Gradual, directional change in species composition from pioneer species to climax community.","Primary: bare rock; secondary: soil present."],
-[8,"What is the 10% rule?","Only ~10% of energy is transferred from one trophic level to the next; 90% lost as heat, excretion, undigested material.","Energy pyramid is always a true pyramid."],
-[8,"NPP = ?","NPP = GPP - Respiration (R).\nNPP = energy available to consumers after producer respiration.","GPP = total photosynthesis; NPP = available to consumers."],
-[8,"What is eutrophication?","Excess nitrates/phosphates cause algal bloom → blocks light → plants die → decomposers use O2 → aerobic organisms die.","BOD = biological oxygen demand."],
-[8,"What is the nitrogen cycle?","N2 → NH3 (fixation) → NO2- → NO3- (nitrification) → N2 (denitrification).","Rhizobium fixes nitrogen in root nodules."],
-[8,"What is denitrification?","Conversion of NO3- to N2 gas by denitrifying bacteria in anaerobic conditions.","Denitrification = anaerobic; removes nitrogen from soil."],
-[8,"What is Simpson's Diversity Index?","D = 1 - [Sn(n-1)/N(N-1)]. D close to 1 = high diversity.","D near 1 = high; D near 0 = low diversity."],
-[8,"What is the mark-release-recapture method?","N = (M x S) / R. M = marked; S = second sample; R = recaptured marked individuals.","Assumes: marks don't affect survival; random mixing."],
-[8,"What is carrying capacity?","The maximum population size that an environment can sustain indefinitely given available resources.","K in logistic growth model."],
-[8,"What is biomagnification?","Accumulation of persistent pollutants at increasing concentrations at higher trophic levels.","DDT/mercury concentrate at top of food chain."],
-[8,"What is a keystone species?","Species with disproportionately large effect on its ecosystem; removal causes major changes.","Example: sea otters and kelp forests."],
-[9,"What is an independent variable?","The variable deliberately changed by the investigator.","IV on x-axis."],
-[9,"What is a dependent variable?","The variable measured during the investigation, which may change due to the independent variable.","DV on y-axis."],
-[9,"What is a control variable?","A variable kept constant to ensure a fair test.","Must identify AND justify."],
-[9,"Why repeat experiments?","To improve reliability, identify anomalous results and calculate a mean.","Repeats = reliability."],
-[9,"When should t-test be used?","To determine if there is a significant difference between the means of two sets of data.","t-test = compares two means."],
-[9,"What is the null hypothesis?","A statement that there is no significant difference between two sets of data.","Statistical tests either reject or fail to reject."],
-[9,"What is chi-squared test used for?","To test whether observed results differ significantly from expected results (categorical data).","x2 = S(O-E)2/E; compare to critical value."],
-[9,"What is Spearman's rank used for?","To determine whether there is a significant correlation between two sets of ranked data.","Spearman's: -1 to +1."],
-[9,"What is accuracy?","How close a measurement is to the true or accepted value.","Accuracy ≠ precision."],
-[9,"What is precision?","How close repeated measurements are to each other.","Precise but inaccurate = systematic error."],
-[9,"What is a systematic error?","An error that consistently occurs in same direction, shifting all results by same amount.","Systematic error affects accuracy; not reduced by repeating."],
-[9,"What is a random error?","An unpredictable error that varies in magnitude and direction between measurements.","Random error reduced by repeating and averaging."],
-[9,"What is the formula for percentage change?","% change = [(new - original) / original] x 100.","Always compare to ORIGINAL value."],
-[9,"What is standard deviation?","A measure of the spread of data around the mean.","Large SD = wide spread; small SD = clustered around mean."],
-[9,"What is the Rf value?","Rf = distance moved by substance / distance moved by solvent front.","Rf specific to substance, solvent and conditions."],
-[9,"What is a transect?","A line along which organisms are sampled to investigate distribution across an area.","Belt transect: quadrats along line."],
-[9,"What is a quadrat?","A square frame used to count or estimate abundance or % cover of organisms.","Random placement avoids sampling bias."],
-[9,"What is the 3Rs principle?","Replace: use alternatives to animals.\nReduce: use fewer animals.\nRefine: minimise suffering.","3Rs = ethical standard for animal research."],
-[9,"What is interpolation?","Reading a value from within the range of data on a graph.","Interpolation = reliable; extrapolation = less reliable."],
-[9,"What is extrapolation?","Extending a graph beyond the range of data to estimate values outside the measured range.","Extrapolation = beyond data range; less reliable."]
-];
-</script>
+var COLOURS = {
+  'topic4_astar_R1':'#f78166',
+  'topic42_transport_mammals':'#f78166',
+  'astar_checklist_flashcards':'#58a6ff',
+  'synoptic_biology':'#FFD700',
+  '100_sixmark_answers':'#39d353',
+  'exam_questions_1_96':'#58a6ff',
+  'exam_questions_97_200':'#d2a8ff',
+  '12week_plan':'#ffa657',
+  'predicted_grades_plan':'#f78166',
+  'active_recall_flashcards':'#39d353',
+  'fullick_study_system':'#58a6ff'
+};
 
-<script>
-// ── APP LOGIC ──
-var curDeck='';
-var TOPICS=[];
-var CARDS=[];
-var cur=0,idx=0,shown=false,deck=[],easy=0,hard=0,done=0;
-
-function openDeck(name){
-  curDeck=name;
-  easy=0;hard=0;done=0;
-  if(name==='master'){
-    TOPICS=M_TOPICS;
-    CARDS=M_CARDS;
-    document.getElementById('appTitle').textContent='A★ Master Companion';
-  } else {
-    TOPICS=T4_TOPICS;
-    CARDS=T4_CARDS;
-    document.getElementById('appTitle').textContent='Topic 4 — Exchange & Transport';
-  }
-  cur=0;idx=0;shown=false;
-  document.getElementById('homeScreen').style.display='none';
-  document.getElementById('appScreen').style.display='block';
-  document.getElementById('DN').style.display='none';
-  document.getElementById('MC').style.display='block';
-  mkDeck();tabs();render();
+// ═══════════════════════════════════════════
+// PROGRESS STORAGE
+// Each flashcard page should call saveProgress(key, done, total)
+// This index reads that data to show progress bars
+// ═══════════════════════════════════════════
+function getProgress(key) {
+  try {
+    var raw = localStorage.getItem('bio_progress_' + key);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch(e) { return null; }
 }
 
-function goHome(){
-  document.getElementById('homeScreen').style.display='block';
-  document.getElementById('appScreen').style.display='none';
+function saveVisit(key) {
+  try {
+    var d = getProgress(key) || {};
+    d.lastVisit = new Date().toLocaleDateString('en-GB', {day:'numeric',month:'short'});
+    localStorage.setItem('bio_progress_' + key, JSON.stringify(d));
+  } catch(e) {}
 }
 
-function mkDeck(){deck=[];for(var i=0;i<CARDS.length;i++){if(CARDS[i][0]===cur)deck.push(i);}}
-
-function tabs(){
-  var h='';
-  for(var i=0;i<TOPICS.length;i++){
-    var cnt=0;for(var j=0;j<CARDS.length;j++){if(CARDS[j][0]===i)cnt++;}
-    h+='<span class="tab'+(i===cur?' on':'')+'" onclick="sw('+i+')">'+TOPICS[i]+' ('+cnt+')</span>';
-  }
-  document.getElementById('TB').innerHTML=h;
+function resetAll() {
+  if (!confirm('Reset ALL progress? This cannot be undone.')) return;
+  FILES.forEach(function(k) {
+    try { localStorage.removeItem('bio_progress_' + k); } catch(e) {}
+  });
+  location.reload();
 }
 
-function render(){
-  if(!deck.length)return;
-  var c=CARDS[deck[idx]];
-  document.getElementById('TG').textContent=TOPICS[c[0]];
-  document.getElementById('TG2').textContent=TOPICS[c[0]];
-  document.getElementById('QQ').textContent=c[1];
-  document.getElementById('AA').textContent=c[2];
-  document.getElementById('TP').innerHTML='<b>🎯 Exam Tip:</b> '+c[3];
-  document.getElementById('CN').textContent=(idx+1)+' / '+deck.length;
-  document.getElementById('CD').className=shown?'card shown':'card';
-  document.getElementById('RB').className=shown?'rbs show':'rbs';
-  document.getElementById('IF').textContent='Card '+(idx+1)+' of '+deck.length;
-  var pct=Math.round((done/CARDS.length)*100);
-  document.getElementById('PB').style.width=pct+'%';
-  document.getElementById('sT').textContent=CARDS.length;
-  document.getElementById('sD').textContent=done;
-  document.getElementById('sE').textContent=easy;
-  document.getElementById('sH').textContent=hard;
+function pctColour(pct) {
+  if (pct === 0) return '#555';
+  if (pct < 30) return '#f78166';
+  if (pct < 70) return '#ffa657';
+  if (pct < 100) return '#58a6ff';
+  return '#39d353';
 }
 
-function rev(){if(!shown){shown=true;render();}}
-function go(d){shown=false;idx+=d;if(idx<0)idx=deck.length-1;if(idx>=deck.length)idx=0;render();}
-function rt(r){
-  done++;
-  if(r==='e'||r==='o')easy++;else hard++;
-  shown=false;idx++;
-  if(idx>=deck.length){
-    idx=0;
-    document.getElementById('MC').style.display='none';
-    document.getElementById('DN').style.display='block';
-  } else {render();}
+function statusLabel(pct) {
+  if (pct === 0) return ['Not started', 's-new'];
+  if (pct < 30) return ['Just started', 's-started'];
+  if (pct < 70) return ['In progress', 's-started'];
+  if (pct < 100) return ['Almost done', 's-good'];
+  return ['✓ Complete', 's-done'];
 }
-function sw(n){cur=n;idx=0;shown=false;mkDeck();tabs();document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';render();}
-function rst(){idx=0;shown=false;document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';render();}
-function shuf(){deck.sort(function(){return Math.random()-0.5;});idx=0;shown=false;render();}
+
+function formatDate(d) {
+  if (!d) return '';
+  return 'Last visited: ' + d;
+}
+
+// ═══════════════════════════════════════════
+// RENDER DASHBOARD
+// ═══════════════════════════════════════════
+function renderDashboard() {
+  var totalFiles = FILES.length;
+  var started = 0, completed = 0;
+  var totalCards = 0, doneCards = 0;
+
+  // Approximate card counts per file (for overall %)
+  var CARD_COUNTS = {
+    'topic4_astar_R1': 80,
+    'topic42_transport_mammals': 40,
+    'astar_checklist_flashcards': 50,
+    'synoptic_biology': 50,
+    '100_sixmark_answers': 100,
+    'exam_questions_1_96': 96,
+    'exam_questions_97_200': 104,
+    '12week_plan': 96,
+    'predicted_grades_plan': 40,
+    'active_recall_flashcards': 49,
+    'fullick_study_system': 35
+  };
+
+  FILES.forEach(function(key) {
+    var p = getProgress(key);
+    var colour = COLOURS[key] || '#58a6ff';
+    var approxTotal = CARD_COUNTS[key] || 50;
+
+    var pct = 0;
+    var cardsDone = 0;
+
+    if (p) {
+      if (p.pct !== undefined) {
+        pct = p.pct;
+        cardsDone = Math.round(pct / 100 * approxTotal);
+      } else if (p.done !== undefined && p.total) {
+        pct = Math.round(p.done / p.total * 100);
+        cardsDone = p.done;
+        approxTotal = p.total;
+      }
+
+      if (pct > 0) started++;
+      if (pct >= 100) completed++;
+    }
+
+    totalCards += approxTotal;
+    doneCards += cardsDone;
+
+    // Update card UI
+    var pctEl = document.getElementById('pct-' + key);
+    var barEl = document.getElementById('bar-' + key);
+    var stEl = document.getElementById('st-' + key);
+    var lvEl = document.getElementById('lv-' + key);
+
+    if (pctEl) {
+      pctEl.textContent = pct + '%';
+      pctEl.style.color = pctColour(pct);
+    }
+    if (barEl) {
+      barEl.style.width = pct + '%';
+      barEl.style.background = pctColour(pct);
+    }
+    if (stEl) {
+      var sl = statusLabel(pct);
+      stEl.textContent = sl[0];
+      stEl.className = 'status ' + sl[1];
+    }
+    if (lvEl && p && p.lastVisit) {
+      lvEl.textContent = formatDate(p.lastVisit);
+    }
+  });
+
+  // Overall
+  var overallPct = totalCards > 0 ? Math.round(doneCards / totalCards * 100) : 0;
+  document.getElementById('overallPct').textContent = overallPct + '%';
+  document.getElementById('overallFill').style.width = overallPct + '%';
+  document.getElementById('overallMeta').textContent =
+    'Approximately ' + doneCards + ' of ' + totalCards + ' cards reviewed across all sets';
+  document.getElementById('statFiles').textContent = totalFiles;
+  document.getElementById('statStarted').textContent = started;
+  document.getElementById('statDone').textContent = completed;
+}
+
+// ═══════════════════════════════════════════
+// HELPER: Flashcard pages can save progress here
+// Call from each flashcard page:
+// window.opener?.saveBioProgress(key, done, total)
+// OR localStorage directly:
+// localStorage.setItem('bio_progress_KEY', JSON.stringify({pct:50, done:25, total:50}))
+// ═══════════════════════════════════════════
+
+renderDashboard();
+
+// Auto-refresh every 30s in case user has another tab open
+setInterval(renderDashboard, 30000);
 </script>
 </body>
 </html>
