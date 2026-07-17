@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A★ Master Series — Specification Audit 2026-27</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#0d1117;color:#eee;font-family:Arial,sans-serif;padding:10px;font-size:15px;min-height:100vh}
+.home{max-width:540px;margin:0 auto;padding:10px 0 40px}
+.logo{text-align:center;margin-bottom:14px;padding:16px;background:linear-gradient(135deg,#1c2333,#0d1117);border-radius:14px;border:1px solid #FFD700}
+.logo h1{color:#FFD700;font-size:17px;font-weight:bold;margin-bottom:4px;line-height:1.4}
+.logo p{color:#888;font-size:11px;line-height:1.6;margin-top:4px}
+.insight{background:#0d1a0d;border:1px solid #39d353;border-radius:12px;padding:12px;margin-bottom:13px;font-size:12px;color:#aaa;line-height:1.7}
+.insight b{color:#39d353}
+.progress-bar{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:12px;margin-bottom:13px}
+.progress-bar h4{color:#FFD700;font-size:11px;margin-bottom:8px}
+.topics-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.tg{background:#0d1117;border-radius:6px;padding:6px 8px;font-size:10px;color:#888;text-align:center}
+.tg.done{background:#0a2a0a;color:#39d353}
+.sec-hdr{font-size:12px;font-weight:bold;padding:8px 12px;border-radius:10px;margin-bottom:10px;margin-top:14px}
+.sh0{background:#1f3a5f;color:#58a6ff}.sh1{background:#1a3a1a;color:#39d353}.sh2{background:#3a2a0a;color:#FFD700}
+.sh3{background:#2a1a3a;color:#d2a8ff}.sh4{background:#2a0a0a;color:#f78166}.sh5{background:#0a2a2a;color:#39d3d3}
+.sh6{background:#1a2a0a;color:#39d353}.sh7{background:#2a1a0a;color:#ffa657}.sh8{background:#1a0a2a;color:#d2a8ff}.sh9{background:#3a1a1a;color:#f78166}
+.dc{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:13px;margin-bottom:10px;cursor:pointer}
+.dc:active{opacity:.8}
+.dc h3{font-size:13px;margin-bottom:4px}
+.dc p{color:#aaa;font-size:11px;line-height:1.5;margin-bottom:8px}
+.dc-meta{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:bold}
+.t1{background:#1f3a5f;color:#58a6ff}.t2{background:#1a3a1a;color:#39d353}.t3{background:#3a2a0a;color:#FFD700}
+.t4{background:#2a1a3a;color:#d2a8ff}.t5{background:#2a0a0a;color:#f78166}
+.ob{display:block;width:100%;padding:9px;border-radius:8px;border:none;font-size:12px;font-weight:bold;cursor:pointer;text-align:center}
+.ob0{background:#58a6ff;color:#000}.ob1{background:#39d353;color:#000}.ob2{background:#FFD700;color:#000}
+.ob3{background:#d2a8ff;color:#000}.ob4{background:#f78166;color:#000}.ob5{background:#39d3d3;color:#000}
+.ob6{background:#39d353;color:#000}.ob7{background:#ffa657;color:#000}.ob8{background:#d2a8ff;color:#000}.ob9{background:#f78166;color:#000}
+.app{display:none;max-width:600px;margin:0 auto}
+.topbar{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #30363d}
+.back{padding:5px 12px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:12px;cursor:pointer}
+.app-title{font-size:12px;font-weight:bold;color:#FFD700;flex:1;line-height:1.3}
+.modes{display:flex;gap:4px;margin-bottom:10px}
+.modebt{flex:1;padding:7px 4px;background:#1c2333;border:1px solid #30363d;border-radius:8px;color:#aaa;cursor:pointer;font-size:11px;font-weight:bold;text-align:center}
+.modebt.on{background:#FFD700;color:#000;border-color:#FFD700}
+.stabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.stab{padding:5px 9px;background:#1c2333;border:1px solid #30363d;border-radius:20px;color:#aaa;cursor:pointer;font-size:11px}
+.stab.on{background:#FFD700;color:#000;border-color:#FFD700;font-weight:bold}
+.stats{display:flex;gap:5px;margin-bottom:8px}
+.chip{flex:1;background:#1c2333;border:1px solid #30363d;border-radius:8px;padding:5px 4px;text-align:center;font-size:10px;color:#888}
+.chip b{display:block;font-size:15px;font-weight:bold;color:#eee}
+.chip.g b{color:#39d353}.chip.r b{color:#f78166}.chip.y b{color:#FFD700}
+.prow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.plbl{font-size:11px;color:#888;white-space:nowrap}
+.pbar{flex:1;height:4px;background:#30363d;border-radius:99px;overflow:hidden}
+.pfill{height:100%;border-radius:99px;transition:width .3s}
+.card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:16px;min-height:190px;margin-bottom:10px;cursor:pointer;position:relative}
+.card.shown{border-color:#FFD700}
+.cnum{position:absolute;top:10px;right:12px;font-size:10px;color:#555}
+.sbadge{display:inline-block;font-size:9px;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:20px;margin-bottom:10px;border:1px solid}
+.cq{font-size:15px;line-height:1.5;padding:8px 0;color:#eee}
+.chint{text-align:center;color:#555;font-size:12px;margin-top:10px}
+.asec{display:none}
+.card.shown .asec{display:block}
+.card.shown .qsec{display:none}
+.albl{font-size:10px;color:#39d353;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:bold}
+.ans{font-size:13px;line-height:1.78;white-space:pre-wrap;color:#eee}
+.tip-box{border-left:3px solid #FFD700;padding:8px 10px;margin-top:10px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0;background:#0d1a0d}
+.tip-box b{color:#FFD700}
+.trap-box{border-left:3px solid #f78166;padding:8px 10px;margin-top:8px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0;background:#1a0a0a}
+.trap-box b{color:#f78166}
+.link-box{border-left:3px solid #58a6ff;padding:8px 10px;margin-top:8px;font-size:12px;color:#ccc;border-radius:0 6px 6px 0;background:#0a1a2a}
+.link-box b{color:#58a6ff}
+/* MISTAKES MODE */
+.mk-card{background:#1c2333;border:1px solid #30363d;border-radius:12px;padding:14px;margin-bottom:10px}
+.mk-card h4{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.mk-wrong{background:#2a0a0a;border-radius:8px;padding:10px;margin-bottom:8px;font-size:13px;color:#f78166;line-height:1.6}
+.mk-right{background:#0a2a0a;border-radius:8px;padding:10px;font-size:13px;color:#39d353;line-height:1.6}
+.nav{display:flex;gap:6px;margin-bottom:8px}
+.btn{flex:1;padding:10px;border-radius:8px;border:1px solid #30363d;background:#1c2333;color:#eee;font-size:12px;font-weight:bold;cursor:pointer}
+.btn:active{opacity:.7}
+.btn.gold{background:#FFD700;color:#000;border-color:#FFD700}
+.rbs{display:none;gap:5px;margin-bottom:8px}
+.rbs.show{display:flex}
+.rb{flex:1;padding:8px 2px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;border:1px solid;text-align:center}
+.re{background:#0a2a0a;color:#39d353;border-color:#2a6a2a}
+.ro{background:#0a1a3a;color:#58a6ff;border-color:#1a3a6a}
+.rh{background:#2a1a0a;color:#ffa657;border-color:#5a3a1a}
+.rm{background:#2a0a0a;color:#f78166;border-color:#5a1a1a}
+.rprompt{font-size:11px;color:#888;text-align:center;margin-bottom:6px;display:none}
+.rprompt.show{display:block}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.toolbar span{font-size:11px;color:#888}
+.shuf{padding:4px 10px;background:#1c2333;border:1px solid #30363d;border-radius:6px;color:#aaa;font-size:11px;cursor:pointer}
+.done{text-align:center;padding:30px 16px;background:#1c2333;border:1px solid #30363d;border-radius:12px;display:none}
+.done h3{color:#FFD700;font-size:18px;margin-bottom:8px}
+.done p{color:#aaa;font-size:13px;margin-bottom:16px;line-height:1.5}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<div class="home" id="homeScreen">
+  <div class="logo">
+    <h1>⭐ A★ Master Series 2026–2027<br>Specification Audit — All 10 Topics</h1>
+    <p>Pearson Edexcel A Level Biology B (9BI0)<br>Definitions · Exam Traps · Synoptic Links · Command Words · High-Frequency Topics</p>
+  </div>
+  <div class="insight"><b>🎯 How to use:</b> Each topic has 4 modes — 📖 Definitions (precise Pearson language), ⚠️ Exam Traps (common misconceptions), 🔗 Synoptic Links, and 📋 Exam Checklist. Master all four before your exam.</div>
+  <div class="progress-bar">
+    <h4>✅ Audit Status — All 10 Topics Complete</h4>
+    <div class="topics-grid">
+      <div class="tg done">✅ T1 Biological Molecules</div><div class="tg done">✅ T2 Cells &amp; Viruses</div>
+      <div class="tg done">✅ T3 Classification &amp; Biodiversity</div><div class="tg done">✅ T4 Exchange &amp; Transport</div>
+      <div class="tg done">✅ T5 Energy Processes</div><div class="tg done">✅ T6 Microbiology</div>
+      <div class="tg done">✅ T7 Modern Genetics</div><div class="tg done">✅ T8 Genetic Variation</div>
+      <div class="tg done">✅ T9 Control Systems</div><div class="tg done">✅ T10 Ecosystems</div>
+    </div>
+  </div>
+
+  <div class="sec-hdr sh0">🔬 Topic 1 — Biological Molecules</div>
+  <div class="dc" onclick="openDeck(0)"><h3>🔬 T1: Biological Molecules</h3><p>Key definitions, 4 exam traps (sucrose, carbs, enzymes, ATP), command words, synoptic links to T2/4/5/7/10.</p><div class="dc-meta"><span class="tag t1">Definitions</span><span class="tag t5">4 Exam Traps</span><span class="tag t3">Rating: 9.8/10</span></div><div class="ob ob0">Open →</div></div>
+
+  <div class="sec-hdr sh1">🔬 Topic 2 — Cells, Viruses & Reproduction</div>
+  <div class="dc" onclick="openDeck(1)"><h3>🔬 T2: Cells, Viruses & Reproduction</h3><p>Key definitions, 5 exam traps (active transport, osmosis, viruses, ribosomes, mitosis), ultrastructure, membrane transport.</p><div class="dc-meta"><span class="tag t2">Definitions</span><span class="tag t5">5 Exam Traps</span><span class="tag t3">Rating: 9.9/10</span></div><div class="ob ob1">Open →</div></div>
+
+  <div class="sec-hdr sh2">🌿 Topic 3 — Classification & Biodiversity</div>
+  <div class="dc" onclick="openDeck(2)"><h3>🌿 T3: Classification & Biodiversity</h3><p>Key definitions, 5 exam traps (classification, binomial, biodiversity, evolution, convergent evolution), taxonomy hierarchy mnemonic.</p><div class="dc-meta"><span class="tag t3">Definitions</span><span class="tag t5">5 Exam Traps</span><span class="tag t2">Rating: 10/10</span></div><div class="ob ob2">Open →</div></div>
+
+  <div class="sec-hdr sh3">❤️ Topic 4 — Exchange & Transport</div>
+  <div class="dc" onclick="openDeck(3)"><h3>❤️ T4: Exchange & Transport</h3><p>Key definitions, 5 exam traps (veins, xylem/phloem, transpiration, counter-current, haemoglobin), exchange surface success formula.</p><div class="dc-meta"><span class="tag t4">Definitions</span><span class="tag t5">5 Exam Traps</span><span class="tag t3">Rating: 10/10</span></div><div class="ob ob3">Open →</div></div>
+
+  <div class="sec-hdr sh4">⚡ Topic 5 — Energy for Biological Processes</div>
+  <div class="dc" onclick="openDeck(4)"><h3>⚡ T5: Energy for Biological Processes</h3><p>Key definitions, 5 exam traps (ATP storage, enzymes, aerobic/anaerobic, denaturation, ATP bonds), enzyme activity memory aid.</p><div class="dc-meta"><span class="tag t1">Definitions</span><span class="tag t5">5 Exam Traps</span><span class="tag t3">Rating: 10/10</span></div><div class="ob ob4">Open →</div></div>
+
+  <div class="sec-hdr sh5">🦠 Topic 6 — Microbiology & Pathogens</div>
+  <div class="dc" onclick="openDeck(5)"><h3>🦠 T6: Microbiology & Pathogens</h3><p>Key definitions, 5 exam traps (antibiotics, vaccines, disease, memory cells, antibiotic resistance), immune response memory aid.</p><div class="dc-meta"><span class="tag t2">Definitions</span><span class="tag t5">5 Exam Traps</span><span class="tag t3">Rating: 9.9/10</span></div><div class="ob ob5">Open →</div></div>
+
+  <div class="sec-hdr sh6">🧬 Topic 7 — Modern Genetics</div>
+  <div class="dc" onclick="openDeck(6)"><h3>🧬 T7: Modern Genetics</h3><p>Key definitions, 5 exam traps (silent mutations, DNA polymerase, RNA bases, ribosomes, mutations), DNA→mRNA→protein pathway.</p><div class="dc-meta"><span class="tag t4">Definitions</span><span class="tag t5">5 Exam Traps</span><span class="tag t3">Rating: 10/10</span></div><div class="ob ob6">Open →</div></div>
+
+  <div class="sec-hdr sh7">🔀 Topic 8 — Origins of Genetic Variation</div>
+  <div class="dc" onclick="openDeck(7)"><h3>🔀 T8: Origins of Genetic Variation</h3><p>Key definitions, 5 exam traps (evolution, mutations, natural selection, adaptation, crossing over), complete natural selection sequence.</p><div class="dc-meta"><span class="tag t3">Definitions</span><span class="tag t5">5 Exam Traps</span><span class="tag t3">Rating: 10/10</span></div><div class="ob ob7">Open →</div></div>
+
+  <div class="sec-hdr sh8">🧠 Topic 9 — Control Systems</div>
+  <div class="dc" onclick="openDeck(8)"><h3>🧠 T9: Control Systems</h3><p>Key definitions, 5 exam traps (positive feedback, hormones, reflexes, auxin, synapses), homeostasis sequence memory aid.</p><div class="dc-meta"><span class="tag t1">Definitions</span><span class="tag t5">5 Exam Traps</span><span class="tag t3">Rating: 10/10</span></div><div class="ob ob8">Open →</div></div>
+
+  <div class="sec-hdr sh9">🌍 Topic 10 — Ecosystems</div>
+  <div class="dc" onclick="openDeck(9)"><h3>🌍 T10: Ecosystems</h3><p>Key definitions, 5 exam traps (energy recycling, biomass, food chains, decomposers, population size), energy flow vs nutrient cycling.</p><div class="dc-meta"><span class="tag t2">Definitions</span><span class="tag t5">5 Exam Traps</span><span class="tag t3">Rating: 10/10</span></div><div class="ob ob9">Open →</div></div>
+</div>
+
+<!-- APP -->
+<div class="app" id="appScreen">
+  <div class="topbar">
+    <button class="back" onclick="goHome()">← Home</button>
+    <div class="app-title" id="appTitle"></div>
+  </div>
+  <div class="modes">
+    <div class="modebt on" id="mFlash" onclick="setMode('flash')">🃏 Flashcards</div>
+    <div class="modebt" id="mTraps" onclick="setMode('traps')">⚠️ Traps</div>
+  </div>
+  <div id="flashMode">
+    <div class="stabs" id="stabs"></div>
+    <div class="stats">
+      <div class="chip"><b id="sT">0</b>Cards</div>
+      <div class="chip y"><b id="sD">0</b>Done</div>
+      <div class="chip g"><b id="sE">0</b>Easy</div>
+      <div class="chip r"><b id="sH">0</b>Hard</div>
+    </div>
+    <div class="prow"><span class="plbl" id="plbl">0/0</span><div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div></div>
+    <div id="MC">
+      <div class="toolbar"><span id="cardlbl"></span><button class="shuf" onclick="shuf()">🔀 Shuffle</button></div>
+      <div class="card" id="CD" onclick="rev()">
+        <span class="cnum" id="CN"></span>
+        <div class="qsec">
+          <span class="sbadge" id="badge"></span>
+          <div class="cq" id="QQ"></div>
+          <div class="chint">👆 Tap to reveal answer</div>
+        </div>
+        <div class="asec">
+          <span class="sbadge" id="badge2"></span>
+          <div class="albl">✅ A★ Answer</div>
+          <div class="ans" id="AA"></div>
+          <div id="TIP" class="tip-box hide"></div>
+          <div id="LINK" class="link-box hide"></div>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="btn" onclick="go(-1)">← Prev</button>
+        <button class="btn gold" onclick="rev()">👁 Reveal</button>
+        <button class="btn" onclick="go(1)">Next →</button>
+      </div>
+      <div class="rprompt" id="rp">How well did you know this?</div>
+      <div class="rbs" id="RB">
+        <button class="rb re" onclick="rt('e')">✅ Easy</button>
+        <button class="rb ro" onclick="rt('o')">👍 Got it</button>
+        <button class="rb rh" onclick="rt('h')">⚠️ Hard</button>
+        <button class="rb rm" onclick="rt('m')">❌ Missed</button>
+      </div>
+    </div>
+    <div class="done" id="DN">
+      <h3>🎉 Topic Complete!</h3>
+      <p>Check the Exam Traps mode next — these are the most commonly lost marks.</p>
+      <button class="btn gold" style="max-width:200px;margin:0 auto;display:block" onclick="rst()">🔄 Review Again</button>
+    </div>
+  </div>
+  <div id="trapsMode" class="hide">
+    <div id="trapsContent"></div>
+  </div>
+</div>
+<script>
+var DECKS=[
+{title:"🔬 Topic 1 — Biological Molecules",accent:"#58a6ff",
+sections:["📖 Definitions","💬 Command Words","🔗 Synoptic Links","⭐ High-Freq Topics"],
+traps:[
+["Sucrose is a reducing sugar.","Sucrose is NON-REDUCING. It cannot reduce Benedict's reagent because the anomeric carbons of both glucose and fructose are involved in the glycosidic bond, leaving no free reducing group."],
+["All carbohydrates are sugars.","Starch, glycogen and cellulose are POLYSACCHARIDES — not sugars. The term 'carbohydrate' includes monosaccharides, disaccharides AND polysaccharides."],
+["Enzymes change the equilibrium of reactions.","Enzymes lower ACTIVATION ENERGY and increase the RATE of reaction. They do NOT change the equilibrium position — the same products are formed in the same proportions."],
+["ATP stores energy in high-energy bonds.","A more precise Pearson-style answer: ATP hydrolysis to ADP and inorganic phosphate RELEASES ENERGY that can be coupled to cellular processes. Do not say 'high-energy bonds'."],
+["Denaturation breaks peptide bonds.","Denaturation disrupts HYDROGEN BONDS, IONIC BONDS and DISULFIDE BRIDGES maintaining tertiary structure. Peptide bonds (primary structure) remain intact."]
+],
+cards:[
+[0,"Define: Monomer","A small molecule that joins with others to form a polymer.","Monomers join by CONDENSATION reactions. Examples: glucose (polysaccharides), amino acids (proteins), nucleotides (DNA/RNA).",""],
+[0,"Define: Polymer","A large molecule made from repeating monomer units joined by covalent bonds.","Polymers are broken down by HYDROLYSIS. Examples: starch, protein, DNA.",""],
+[0,"Define: Condensation reaction","A reaction that joins two molecules together with the release of one molecule of water, forming a new covalent bond.","Condensation = bond FORMED + water REMOVED. This applies to glycosidic bonds, peptide bonds, ester bonds and phosphodiester bonds.",""],
+[0,"Define: Hydrolysis","A reaction that breaks a chemical bond by adding water.","Hydrolysis = bond BROKEN + water ADDED. The reverse of condensation. Occurs during digestion.",""],
+[0,"Define: Peptide bond","A covalent bond formed between two amino acids during a condensation reaction, linking the carboxyl group of one to the amino group of the next.","Peptide bonds link amino acids in PRIMARY structure only. They are NOT broken during denaturation.",""],
+[0,"Define: Glycosidic bond","A covalent bond linking monosaccharides, formed by a condensation reaction.","α-1,4 bonds form starch/glycogen. β-1,4 bonds form cellulose. The type of bond determines the polysaccharide's shape and function.",""],
+[0,"Define: Ester bond","A covalent bond formed between a fatty acid and glycerol during a condensation reaction in triglyceride formation.","Three ester bonds = one triglyceride. Also present in phospholipids (two fatty acids bonded to glycerol via ester bonds).",""],
+[0,"Define: Phosphodiester bond","A covalent bond linking nucleotides in nucleic acids (DNA and RNA), connecting the phosphate group of one nucleotide to the sugar of the next.","Phosphodiester bonds form the SUGAR-PHOSPHATE BACKBONE. Hydrogen bonds hold the two strands together via complementary base pairing.",""],
+[1,"What does 'State' require in Pearson answers?","A brief factual answer — one sentence, no explanation required. No 'because' needed.","'State' = short, factual, no mechanism. If you explain when asked to state, you do not lose marks — but you waste time.",""],
+[1,"What does 'Define' require in Pearson answers?","Give the precise biological meaning — the exact, Pearson-accepted definition of the term.","Learn definitions word-for-word. Examiners compare your answer against a mark scheme definition. Vague definitions lose marks.",""],
+[1,"What does 'Explain' require in Pearson answers?","Give biological reasons or mechanisms — state WHAT happens AND WHY it happens.","'Explain' always requires a cause → effect link. 'The surface area is large' = describe. 'The large surface area increases the rate of diffusion' = explain.",""],
+[1,"What does 'Evaluate' require in Pearson answers?","Discuss strengths and limitations of evidence or a method, then reach a justified judgement or conclusion.","Evaluate = pros + cons + conclusion. All three parts must appear. A conclusion without supporting reasoning scores poorly.",""],
+[1,"What does 'Calculate' require in Pearson answers?","Show all working, give the correct numerical answer, and include units where required.","Always show the formula, substitution, and calculation as separate steps. Round to appropriate significant figures. State units.",""],
+[2,"State the synoptic links between Topic 1 and Topic 2.","Topic 1 biological molecules directly link to Topic 2 through:\n• Membrane phospholipids (Topic 1 lipids → Topic 2 cell membranes)\n• Membrane proteins (Topic 1 protein structure → Topic 2 membrane proteins)\n• ATP (Topic 1 ATP structure → Topic 2 active transport)","",  "T1→T2: phospholipids, proteins, ATP — all essential for membrane structure and function."],
+[2,"State the synoptic links between Topic 1 and Topics 5 and 7.","• Topic 5: ATP structure and hydrolysis (Topic 1) → ATP as energy currency in respiration and photosynthesis (Topic 5)\n• Topic 7: Nucleotide structure (Topic 1) → DNA and RNA structure, replication and protein synthesis (Topic 7)","","T1→T5: ATP. T1→T7: nucleotides/DNA/RNA. Both are fundamental molecular biology connections."],
+[3,"List the high-frequency Topic 1 exam topics (⭐⭐).","⭐⭐ Benedict's test for reducing and non-reducing sugars\n⭐⭐ Biuret test for protein\n⭐⭐ Iodine test for starch\n⭐⭐ Enzyme structure → function (active site, induced fit)\n⭐⭐ Effects of temperature and pH on enzymes\n⭐⭐ ATP hydrolysis and phosphorylation\n⭐⭐ Water properties and biological importance","Food tests appear almost every year. Always state both the COLOUR CHANGE and the CONTROL in practical questions.",""],
+[3,"State the four food tests with their reagents and positive results.","BENEDICT'S TEST (reducing sugars): Add Benedict's reagent → heat → brick-red precipitate = positive\n\nIODINE TEST (starch): Add iodine solution → blue-black colour = positive\n\nBIURET TEST (protein): Add NaOH then CuSO₄ → purple/violet colour = positive\n\nETHANOL EMULSION TEST (lipids): Add ethanol → mix with water → white emulsion = positive","Always include: reagent name, colour change, positive AND negative result. For Benedict's: colour sequence = blue → green → yellow → orange → brick red (increasing sugar concentration).",""]
+]},
+{title:"🔬 Topic 2 — Cells, Viruses & Reproduction",accent:"#39d353",
+sections:["📖 Definitions","💬 Practical Skills","🔗 Synoptic Links","⭐ High-Freq Topics"],
+traps:[
+["Active transport does not require oxygen.","Active transport requires ATP. AEROBIC RESPIRATION is the main source of ATP — but ATP itself is the direct energy requirement, not oxygen. In cells that respire anaerobically, active transport can still occur if ATP is available."],
+["Osmosis is movement of water from dilute to concentrated solution.","Osmosis is the net movement of water from HIGHER WATER POTENTIAL to LOWER WATER POTENTIAL through a PARTIALLY PERMEABLE MEMBRANE. Always use water potential terminology, not 'dilute/concentrated'."],
+["Viruses are cells.","Viruses are ACELLULAR particles. They consist of nucleic acid enclosed in a protein coat (capsid). They lack cellular organelles, cannot independently metabolise and can only replicate inside living host cells."],
+["Ribosomes are membrane-bound organelles.","Ribosomes are NON-MEMBRANE-BOUND structures. They consist of rRNA and protein, and are found free in the cytoplasm or on the rough ER. They are NOT surrounded by a membrane."],
+["Mitosis produces genetically different cells.","Mitosis produces GENETICALLY IDENTICAL diploid daughter cells. Genetic variation only arises if mutations occur during DNA replication before division."]
+],
+cards:[
+[0,"Define: Organelle","A specialised structure within a cell that performs a specific function.","Name the organelle + state its function when asked. 'An organelle carries out functions' alone is too vague.",""],
+[0,"Define: Resolution","The ability to distinguish two closely spaced points as separate.","Resolution ≠ Magnification. Higher resolution = shorter wavelength. Electron microscope (0.1 nm) > Light microscope (200 nm).",""],
+[0,"Define: Magnification","How many times larger an image appears compared to the actual specimen.\nFormula: Magnification = Image size ÷ Actual size","Always convert units before calculating (mm, μm, nm). 1 mm = 1000 μm = 1,000,000 nm.",""],
+[0,"Define: Diffusion","Net movement of particles from a region of higher concentration to lower concentration, down a concentration gradient, without using energy.","'Net movement' and 'concentration gradient' must both appear. 'Without energy' = passive process. Simple diffusion needs no membrane protein.",""],
+[0,"Define: Osmosis","Net movement of water molecules through a partially permeable membrane from a region of higher water potential to a region of lower water potential.","Five key words: water, partially permeable membrane, higher water potential, lower water potential. All must appear. Pure water has the highest water potential = 0 kPa.",""],
+[0,"Define: Active transport","The movement of substances against their concentration gradient, using energy from ATP and carrier proteins.","Three requirements: against gradient + ATP + carrier protein. If any are missing, the definition is incomplete.",""],
+[1,"Describe how to calibrate a microscope using a stage micrometer and eyepiece graticule.","1. Place stage micrometer on microscope stage.\n2. Align eyepiece graticule divisions with stage micrometer divisions.\n3. Count how many eyepiece divisions = a known stage micrometer distance.\n4. Calculate calibration factor: actual distance per eyepiece division.\n5. Remove stage micrometer; measure specimen using calibrated graticule.\n6. Multiply eyepiece divisions by calibration factor to find actual size.\n7. Repeat calibration for each objective lens magnification used.","Calibrate separately for EACH magnification — the graticule scale changes as you change objectives. Most commonly tested practical in Topic 2.",""],
+[1,"Explain how to investigate osmosis in plant tissue.","1. Cut equal-sized pieces of plant tissue (e.g. potato cylinders).\n2. Find and record initial mass of each piece.\n3. Place each piece in a different concentration of sucrose solution.\n4. Leave for a set time period.\n5. Remove, blot dry, and measure final mass.\n6. Calculate percentage change in mass.\n7. Plot % mass change against sucrose concentration.\n8. Where % change = 0, the sucrose concentration equals the water potential of the tissue.","Always use PERCENTAGE change in mass, not absolute change. This accounts for different initial masses. The crossing point of the graph = tissue water potential.",""],
+[2,"State the synoptic links between Topic 2 and Topics 4, 5 and 7.","Topic 4: Root hair cells (osmosis for water uptake); gas exchange surfaces (diffusion)\nTopic 5: ATP production (mitochondria); active transport requiring ATP from respiration\nTopic 7: DNA replication before mitosis; chromosomes; cell cycle regulation by gene expression","","T2→T4: root hairs, gas exchange. T2→T5: mitochondria/ATP. T2→T7: mitosis/DNA replication."],
+[3,"List the high-frequency Topic 2 exam topics.","⭐⭐ Membrane transport (osmosis, active transport)\n⭐⭐ Osmosis calculations (% mass change)\n⭐⭐ Cell ultrastructure (prokaryote vs eukaryote)\n⭐⭐ Mitosis stages and significance\n⭐⭐ Stem cells and ethics\n⭐⭐ Viruses — structure and replication\n⭐⭐ Magnification calculations\n⭐⭐ Resolution vs magnification","Osmosis calculation questions appear almost every year. Practice: % mass change = (final − initial) ÷ initial × 100.",""]
+]},
+{title:"🌿 Topic 3 — Classification & Biodiversity",accent:"#FFD700",
+sections:["📖 Definitions","💬 Key Concepts","🔗 Synoptic Links","⭐ High-Freq Topics"],
+traps:[
+["Classification is based only on appearance.","Modern classification uses evidence from MORPHOLOGY, ANATOMY, PHYSIOLOGY and MOLECULAR BIOLOGY (DNA and protein sequences). Molecular evidence often reveals evolutionary relationships not apparent from appearance."],
+["Scientific names are written in capital letters.","Only the GENUS begins with a capital letter. The SPECIES name begins with a lowercase letter. Both should be italicised (or underlined in handwriting). Example: Homo sapiens."],
+["Biodiversity means the number of species.","Biodiversity includes THREE levels: GENETIC DIVERSITY (variety of alleles within a species), SPECIES DIVERSITY (variety of species in an area) and ECOSYSTEM DIVERSITY (variety of habitats and communities)."],
+["Evolution always produces more complex organisms.","Evolution results in organisms becoming BETTER ADAPTED to their environments. Increased complexity is not inevitable — some organisms evolve simpler forms if that improves survival."],
+["Closely related organisms always look similar.","CONVERGENT EVOLUTION can produce similar appearances in unrelated organisms (e.g. dolphins and sharks). Molecular evidence (DNA) may reveal very different evolutionary relationships than morphology suggests."]
+],
+cards:[
+[0,"Define: Species","A group of organisms sharing common characteristics that are capable of interbreeding to produce fertile offspring.","The 'fertile offspring' clause is essential — it distinguishes species from closely related groups that can hybridise but produce sterile offspring (e.g. horse × donkey = sterile mule).",""],
+[0,"Define: Taxonomy","The science of naming, describing and classifying organisms based on shared characteristics and evolutionary relationships.","Taxonomy provides the framework for biological classification. It is evidence-based — new molecular evidence can change taxonomic positions.",""],
+[0,"Define: Biodiversity","The variety of life at genetic, species and ecosystem levels.","Three levels: genetic (allele variety within a species), species (variety of species in an area), ecosystem (variety of habitats and communities). All three must be named in definition questions.",""],
+[0,"Define: Binomial nomenclature","The two-part scientific naming system in which every organism is given a genus name followed by a species name.","Format: Genus species. Genus = capital letter. Species = lowercase. Both italicised (or underlined in handwriting). Example: Homo sapiens.",""],
+[0,"Define: Phylogeny","The evolutionary history and relationships among organisms, showing how they are related through common ancestors.","Phylogenetic trees show EVOLUTIONARY RELATIONSHIPS, not similarity of appearance. Molecular evidence (DNA, amino acid sequences) produces the most reliable phylogenies.",""],
+[1,"State the taxonomic hierarchy from Kingdom to Species.","Kingdom → Phylum → Class → Order → Family → Genus → Species\n\nMemory aid: 'King Philip Came Over For Good Soup'\n\nAt the Domain level (above Kingdom): Bacteria → Archaea → Eukarya","At each level, the grouping becomes more specific. Species is the most specific grouping. Members of the same species can interbreed to produce fertile offspring.",""],
+[1,"Explain why molecular evidence provides more reliable classification than morphology.","Molecular evidence (DNA base sequences, amino acid sequences) directly reflects evolutionary relationships because:\n1. More similar sequences = more recent common ancestor\n2. Molecular evidence is objective and quantifiable\n3. Convergent evolution can produce similar body plans in unrelated organisms, misleading morphological classification\n4. Molecular evidence reveals relationships not apparent from physical characteristics","The key principle: more similar DNA/amino acid sequences = more closely related = more recent common ancestor. State this explicitly.",""],
+[2,"State the synoptic links between Topic 3 and Topics 7 and 10.","Topic 7: Mutation creates new alleles → genetic variation → evolution; DNA sequencing as evidence for classification\n\nTopic 10: Biodiversity conservation; sustainable management; species interactions within ecosystems; importance of maintaining genetic diversity","","T3→T7: mutation, DNA evidence. T3→T10: biodiversity, conservation, ecosystems."],
+[3,"List the high-frequency Topic 3 exam topics.","⭐⭐ Classification hierarchy (Kingdom → Species)\n⭐⭐ Binomial nomenclature (format and rules)\n⭐⭐ Molecular evidence for classification\n⭐⭐ Phylogenetic trees (reading and interpreting)\n⭐⭐ Three levels of biodiversity\n⭐⭐ Conservation strategies (in-situ vs ex-situ)\n⭐⭐ Evolutionary relationships from DNA data","Phylogenetic tree questions: read from branch points (nodes) to identify common ancestors. The more recent the node, the more closely related the species.",""]
+]},
+{title:"❤️ Topic 4 — Exchange & Transport",accent:"#f78166",
+sections:["📖 Definitions","💬 Key Concepts","🔗 Synoptic Links","⭐ High-Freq Topics"],
+traps:[
+["Blood flows through veins because veins pump blood.","Veins do NOT pump. Blood returns via: (1) SKELETAL MUSCLE CONTRACTION compressing veins, (2) VALVES preventing backflow, (3) PRESSURE GRADIENT from heart."],
+["Xylem transports sugars.","XYLEM transports water and MINERAL IONS only. PHLOEM transports sucrose and amino acids (assimilates) from source to sink by mass flow."],
+["Transpiration is water moving up the xylem.","TRANSPIRATION is the LOSS OF WATER VAPOUR from leaves through stomata. The movement of water through xylem driven by transpiration is called the TRANSPIRATION STREAM."],
+["Counter-current flow means blood and water move together.","Counter-current means blood and water move in OPPOSITE DIRECTIONS across gill lamellae. This maintains a diffusion gradient along the ENTIRE length of the gill, maximising oxygen uptake."],
+["Oxygen leaves haemoglobin because diffusion stops.","Oxygen dissociates because RESPIRING TISSUES have a LOWER PARTIAL PRESSURE of oxygen than the blood. This creates a concentration gradient driving oxygen into cells."]
+],
+cards:[
+[0,"Define: Diffusion (in exchange context)","Net movement of particles from a region of higher concentration to lower concentration, down a concentration gradient.","Rate of diffusion ∝ (Surface area × Concentration difference) ÷ Thickness. Fick's Law — all three factors must be mentioned when explaining efficient exchange surfaces.",""],
+[0,"Define: Ventilation","The bulk movement of air into and out of the lungs, maintaining a concentration gradient for gas exchange.","Ventilation ≠ gas exchange. Ventilation MAINTAINS the gradient; gas exchange IS the diffusion of O₂ and CO₂ across the alveolar surface.",""],
+[0,"Define: Transpiration","The loss of water vapour from plant leaves, mainly through stomata.","Must say 'water VAPOUR', not just 'water'. 'From leaves through stomata' must be stated. Linked to cohesion-tension in xylem.",""],
+[0,"Define: Translocation","The movement of assimilates — mainly sucrose and amino acids — in the phloem from source tissues to sink tissues.","Source = where sucrose enters phloem (e.g. leaves). Sink = where sucrose is removed (e.g. roots, fruit). Mass flow driven by hydrostatic pressure difference.",""],
+[0,"Define: Cohesion","The attraction between water molecules due to hydrogen bonding.","Cohesion allows water to form a continuous column in xylem. Adhesion = water sticking to xylem walls. Both required for the cohesion-tension mechanism.",""],
+[1,"State the four features of an efficient gas exchange surface.","1. LARGE SURFACE AREA — increases total area for diffusion\n2. THIN EXCHANGE SURFACE — reduces diffusion distance\n3. STEEP CONCENTRATION GRADIENT — maintained by ventilation/blood flow\n4. MOIST SURFACE — gases dissolve before diffusing (in mammals)\n\nMemory: Large, Thin, Steep, Moist","Structure → Function → Biological Advantage. Always link each feature to its function. 'Large surface area' alone = 0 marks without explaining the consequence.",""],
+[1,"Explain the cohesion-tension mechanism of water transport in xylem.","1. Water evaporates from mesophyll cells (transpiration)\n2. This creates TENSION (negative pressure) in leaf xylem\n3. COHESION (H-bonds) between water molecules keeps column intact\n4. ADHESION of water to xylem walls provides support\n5. Water is PULLED upwards through xylem from roots to leaves\n6. Water enters root hair cells by OSMOSIS from soil","The process is PASSIVE — no ATP required. Tension is transmitted down the column because cohesive water molecules pull each other.",""],
+[2,"State the synoptic links between Topic 4 and Topics 1, 2 and 5.","Topic 1: Membrane structure (phospholipids, proteins) underpins membrane permeability in gas exchange\nTopic 2: Active transport (root mineral uptake); osmosis (water uptake by root hair cells)\nTopic 5: Aerobic respiration uses oxygen transported by haemoglobin; ATP demand drives oxygen transport","","T4→T1: membrane. T4→T2: osmosis/active transport. T4→T5: oxygen for respiration, ATP demand."],
+[3,"List the high-frequency Topic 4 exam topics.","⭐⭐ Surface area to volume ratio\n⭐⭐ Alveolar adaptations for gas exchange\n⭐⭐ Counter-current exchange in fish\n⭐⭐ Haemoglobin oxygen dissociation curves\n⭐⭐ Bohr effect\n⭐⭐ Cohesion-tension mechanism in xylem\n⭐⭐ Mass flow in phloem\n⭐⭐ Potometer investigations","Potometer questions: cut shoot UNDER WATER (prevents air bubble/embolism). Potometer measures WATER UPTAKE not transpiration directly.",""]
+]},
+{title:"⚡ Topic 5 — Energy for Biological Processes",accent:"#ffa657",
+sections:["📖 Definitions","💬 Key Concepts","🔗 Synoptic Links","⭐ High-Freq Topics"],
+traps:[
+["ATP is stored in large quantities in cells.","ATP is produced CONTINUOUSLY and used RAPIDLY. Cells store only very small amounts. ATP is not a long-term energy store — glycogen, starch and triglycerides are."],
+["Enzymes supply energy for reactions.","Enzymes LOWER ACTIVATION ENERGY. They do NOT provide energy for reactions. The energy for cellular processes comes from ATP hydrolysis."],
+["Respiration only occurs when oxygen is present.","AEROBIC respiration requires oxygen. ANAEROBIC respiration can occur without oxygen, producing lactate (animals) or ethanol + CO₂ (yeast). Both forms of respiration occur in living cells as required."],
+["Denatured enzymes can regain their original shape.","Denaturation is generally IRREVERSIBLE. The bonds maintaining tertiary structure are disrupted permanently. Some mild changes in pH or temperature may be reversible (e.g. cooling an enzyme after mild heating)."],
+["ATP contains energy released by breaking a high-energy bond.","Pearson-precise: ATP HYDROLYSIS to ADP and inorganic phosphate releases energy that can be COUPLED TO CELLULAR PROCESSES. Avoid 'high-energy bond' — this is an oversimplification not aligned with Pearson mark schemes."]
+],
+cards:[
+[0,"Define: ATP","Adenosine triphosphate — the immediate energy source for cellular processes. Energy is released when ATP is hydrolysed to ADP and inorganic phosphate.","ATP = immediate energy carrier. NOT a long-term store. Produced by respiration (mitochondria) AND photosynthesis (chloroplasts).",""],
+[0,"Define: Activation energy","The minimum energy required for a reaction to occur.","Enzymes lower activation energy → more molecules have sufficient energy to react → faster reaction rate at the same temperature.",""],
+[0,"Define: Active site","The region of an enzyme where the substrate binds to form an enzyme-substrate complex.","The active site has a SPECIFIC TERTIARY STRUCTURE complementary to the substrate. This is determined by the protein's amino acid sequence (primary structure).",""],
+[0,"Define: Enzyme-substrate complex","A temporary complex formed when a substrate binds to the active site of an enzyme.","According to induced fit model, the active site changes shape SLIGHTLY when substrate binds. This strains substrate bonds and lowers activation energy.",""],
+[0,"Define: Denaturation","A permanent change in the tertiary structure of a protein resulting in loss of biological function.","Caused by: extreme temperature (breaks H-bonds/ionic bonds) or extreme pH (disrupts ionic bonds). Peptide bonds (primary structure) are NOT broken.",""],
+[1,"Explain how temperature affects enzyme activity.","BELOW OPTIMUM: Less kinetic energy → fewer collisions → fewer enzyme-substrate complexes → lower rate\n\nAT OPTIMUM: Maximum rate of reaction\n\nABOVE OPTIMUM: Excessive kinetic energy breaks H-bonds and ionic bonds in tertiary structure → active site changes shape → substrate cannot bind → denaturation → rate falls\n\nKey distinction:\n• Increase rate = more kinetic energy / more collisions\n• Decrease rate = denaturation / active site shape change","Distinguish THREE effects: (1) kinetic energy/collisions (below optimum), (2) denaturation (above optimum), (3) optimum (maximum rate). All three needed in 6-mark answers.",""],
+[1,"Explain how pH affects enzyme activity.","Each enzyme has an OPTIMUM pH at which its active site is the correct shape.\n\nEXTREME pH (too high or low):\n• H⁺ or OH⁻ ions interact with charged R groups\n• IONIC BONDS in tertiary structure are disrupted\n• Active site shape changes\n• Substrate no longer complementary\n• Enzyme-substrate complex cannot form\n• Rate decreases","pH affects IONIC BONDS specifically (by altering charges on R groups). Temperature affects H-bonds AND ionic bonds. This distinction is commonly examined.",""],
+[2,"State the synoptic links between Topic 5 and Topics 1, 2, 4 and 6.","Topic 1: ATP structure (nucleotide with adenine + ribose + 3 phosphates)\nTopic 2: ATP needed for active transport; mitochondria produce ATP\nTopic 4: Oxygen transported by haemoglobin is used in aerobic respiration; ATP demand drives circulation\nTopic 6: Microbial respiration; enzyme action in bacteria; antimicrobial targets","","T5→T1: ATP nucleotide. T5→T2: active transport. T5→T4: oxygen/circulation. T5→T6: microbial respiration."],
+[3,"List the high-frequency Topic 5 exam topics.","⭐⭐ Enzyme specificity\n⭐⭐ Factors affecting enzyme activity (temperature, pH, substrate concentration)\n⭐⭐ Induced fit model\n⭐⭐ ATP hydrolysis\n⭐⭐ Aerobic respiration overview\n⭐⭐ Mitochondrial structure related to function\n⭐⭐ Interpretation of enzyme activity graphs","For enzyme graphs: ALWAYS identify the optimum, the plateau (substrate saturation), and the decline (denaturation). Quote actual values from graphs.",""]
+]},
+{title:"🦠 Topic 6 — Microbiology & Pathogens",accent:"#39d3d3",
+sections:["📖 Definitions","💬 Key Concepts","🔗 Synoptic Links","⭐ High-Freq Topics"],
+traps:[
+["Antibiotics kill viruses.","Antibiotics are effective ONLY against BACTERIA. They target bacterial cell walls, ribosomes or metabolic enzymes. Viruses lack cell walls and use host cell machinery — so antibiotics have no effect on them."],
+["Vaccines contain antibodies.","Vaccines contain ANTIGENS (or attenuated/inactivated pathogens). The vaccine stimulates the BODY to produce its OWN antibodies. Passive immunity involves giving antibodies directly."],
+["Every exposure to a pathogen causes disease.","Disease depends on: pathogen VIRULENCE, INFECTIOUS DOSE, effectiveness of the HOST IMMUNE RESPONSE, and prior immunity (memory cells)."],
+["Memory cells produce antibodies immediately after vaccination.","Memory cells PERSIST after the primary immune response and enable a FASTER, STRONGER secondary response upon LATER EXPOSURE to the same antigen. They do not continuously produce antibodies."],
+["Antibiotic resistance develops because people become resistant.","It is BACTERIA that evolve resistance through NATURAL SELECTION acting on GENETIC VARIATION from random MUTATIONS. People do not become resistant. The bacteria evolve."]
+],
+cards:[
+[0,"Define: Pathogen","A microorganism or infectious agent that causes disease.","Pathogens include bacteria, viruses, fungi and protists. Distinguish from 'toxin' (a harmful substance produced by a pathogen).",""],
+[0,"Define: Antigen","A molecule — usually a protein or glycoprotein on the surface of a pathogen — that triggers a specific immune response.","Antigens are SPECIFIC to the pathogen. B lymphocytes produce antibodies complementary to specific antigens.",""],
+[0,"Define: Antibody","A globular protein (immunoglobulin) produced by plasma cells (activated B lymphocytes) that binds specifically to a complementary antigen.","Antibodies are Y-shaped glycoproteins. Variable regions are specific to one antigen. Functions: neutralisation, agglutination, opsonisation.",""],
+[0,"Define: Vaccine","A preparation containing antigens (from weakened, inactivated or harmless forms of pathogens) that stimulates a primary immune response without causing the disease.","Vaccines stimulate ACTIVE immunity (body makes its own antibodies + memory cells). Contrast with PASSIVE immunity (antibodies given directly, e.g. antitoxin).",""],
+[0,"Define: Antibiotic","A substance that kills bacteria or inhibits their growth, usually by targeting specific bacterial structures or metabolic pathways.","Antibiotics work by: inhibiting cell wall synthesis (penicillin), inhibiting protein synthesis (streptomycin), or inhibiting DNA replication. NOT effective against viruses.",""],
+[1,"Describe the complete immune response to a pathogen — primary and secondary.","PRIMARY RESPONSE (first exposure):\n1. Pathogen antigens detected by phagocytes → presented on cell surface\n2. T helper cells activated → stimulate B lymphocytes\n3. B lymphocytes undergo clonal expansion → plasma cells + memory cells\n4. Plasma cells produce specific antibodies\n5. Antibodies bind antigens → neutralisation/phagocytosis\n\nSECONDARY RESPONSE (re-exposure):\n1. Memory B cells rapidly recognise antigen\n2. Rapid, massive clonal expansion\n3. Large quantities of antibody produced quickly\n4. Pathogen eliminated before symptoms develop","Memory cells are the KEY to secondary response. They persist for years/decades. Always state why secondary response is FASTER and LARGER than primary.",""],
+[1,"Explain how antibiotic resistance evolves.","1. RANDOM MUTATIONS create variation within bacterial populations\n2. Some mutations confer resistance (e.g. produce β-lactamase enzyme that destroys penicillin)\n3. ANTIBIOTIC = SELECTION PRESSURE: susceptible bacteria die\n4. Resistant bacteria SURVIVE and REPRODUCE by binary fission\n5. Resistance alleles passed to offspring\n6. Resistance genes can also spread via PLASMIDS (conjugation)\n7. Over generations, ALLELE FREQUENCY of resistance genes increases\n8. Population becomes predominantly resistant","The antibiotic does NOT cause the mutation. Mutations occur BEFORE exposure. The antibiotic is the selection pressure that determines which bacteria survive. This distinction is essential.",""],
+[2,"State the synoptic links between Topic 6 and Topics 2, 7 and 10.","Topic 2: Viral structure vs bacterial cell structure; lysozyme as an enzyme defence\nTopic 7: Mutation causes variation in pathogens; natural selection → evolution of antibiotic resistance; DNA structure in bacteria vs viruses\nTopic 10: Decomposers (bacteria/fungi) in nutrient cycling; pathogen impact on populations; microbial ecology","","T6→T2: cell structure. T6→T7: mutation/selection. T6→T10: decomposers/ecology."],
+[3,"List the high-frequency Topic 6 exam topics.","⭐⭐ Structural differences between bacteria and viruses\n⭐⭐ Primary vs secondary immune responses\n⭐⭐ How vaccination provides immunity\n⭐⭐ Antibiotic resistance — mechanism and evolution\n⭐⭐ Interpretation of disease/vaccination data\n⭐⭐ Evaluation of experimental evidence (clinical trials)\n⭐⭐ Innate vs adaptive immunity","Clinical trial/vaccination data interpretation: identify correlation vs causation; identify confounding variables; state whether significance is established.",""]
+]},
+{title:"🧬 Topic 7 — Modern Genetics",accent:"#d2a8ff",
+sections:["📖 Definitions","💬 Key Concepts","🔗 Synoptic Links","⭐ High-Freq Topics"],
+traps:[
+["Every mutation changes the amino acid sequence.","Some mutations are SILENT because of the DEGENERACY of the genetic code — multiple codons can code for the same amino acid. A base change may produce a different codon but the same amino acid."],
+["DNA polymerase joins DNA strands together.","DNA polymerase SYNTHESISES a new DNA strand by adding complementary deoxyribonucleotides in sequence. DNA LIGASE joins Okazaki fragments together (seals nicks in the backbone)."],
+["mRNA contains thymine.","RNA contains URACIL (U) instead of thymine (T). This applies to mRNA, tRNA and rRNA. Uracil pairs with adenine (A) during transcription and translation."],
+["Ribosomes make DNA.","Ribosomes are the site of PROTEIN SYNTHESIS (TRANSLATION). DNA replication is performed by DNA polymerase. Transcription produces mRNA from DNA (in the nucleus)."],
+["All mutations are harmful.","Mutations may be NEUTRAL, HARMFUL or BENEFICIAL depending on their effect on the protein produced and the organism's fitness in its environment. Most mutations are neutral."]
+],
+cards:[
+[0,"Define: Gene","A sequence of DNA that codes for a functional product, usually a polypeptide or functional RNA.","A gene occupies a specific LOCUS on a chromosome. Alleles are alternative forms of the same gene at the same locus.",""],
+[0,"Define: Allele","An alternative form of a gene, differing in one or more nucleotide bases.","Alleles arise through MUTATION. Different alleles of the same gene may produce different versions of the protein.",""],
+[0,"Define: Codon","A sequence of three consecutive bases (a triplet) on mRNA that specifies a particular amino acid or a stop signal.","The genetic code is TRIPLET (3 bases per codon), DEGENERATE (multiple codons per amino acid), NON-OVERLAPPING and UNIVERSAL.",""],
+[0,"Define: Transcription","The synthesis of mRNA from a DNA template, catalysed by RNA polymerase, occurring in the nucleus.","Transcription: DNA → mRNA. Occurs in the NUCLEUS. Template strand is read 3'→5'. mRNA is synthesised 5'→3'. Uracil replaces thymine in mRNA.",""],
+[0,"Define: Translation","The synthesis of a polypeptide at ribosomes, using the sequence of codons on mRNA as a template.","Translation: mRNA → polypeptide. Occurs at RIBOSOMES in the CYTOPLASM. tRNA molecules carry specific amino acids to the ribosome.",""],
+[0,"Define: Mutation","A permanent change in the DNA base sequence that may alter the structure and function of the protein produced.","Types: substitution (one base replaced), insertion (base added → frameshift), deletion (base removed → frameshift). Frameshift mutations affect ALL codons after the mutation point.",""],
+[1,"Describe semi-conservative DNA replication.","1. DNA HELICASE unwinds the double helix and breaks hydrogen bonds between base pairs\n2. Each strand acts as a TEMPLATE\n3. Free deoxyribonucleotides align by COMPLEMENTARY BASE PAIRING (A-T, C-G)\n4. DNA POLYMERASE catalyses phosphodiester bond formation, building new strands (5'→3')\n5. DNA LIGASE joins Okazaki fragments on the lagging strand\n6. Result: two DNA molecules, each with ONE ORIGINAL + ONE NEW strand\n= SEMI-CONSERVATIVE replication","Helicase = UNZIPS. Polymerase = BUILDS (5'→3'). Ligase = JOINS fragments. Semi-conservative = one old + one new strand per daughter molecule.",""],
+[1,"Describe the process of translation.","1. mRNA leaves nucleus through nuclear pores and attaches to RIBOSOME\n2. Ribosome reads mRNA one CODON at a time (5'→3')\n3. Each tRNA carries a specific amino acid and has an ANTICODON complementary to the mRNA codon\n4. tRNA anticodon base-pairs with mRNA codon at the A site\n5. PEPTIDE BOND forms between adjacent amino acids (condensation reaction)\n6. Ribosome moves along mRNA; empty tRNA leaves\n7. Process repeats until a STOP CODON is reached\n8. Polypeptide released and folds into functional protein","Key terms: codon (mRNA), anticodon (tRNA), A site, peptide bond, stop codon. All must appear in extended answers about translation.",""],
+[2,"State the synoptic links between Topic 7 and Topics 1, 5 and 8.","Topic 1: Nucleotides (monomers of DNA/RNA); protein structure (product of translation); ATP (energy for biosynthesis)\nTopic 5: ATP required for transcription, translation and DNA replication; enzyme function linked to gene expression\nTopic 8: Mutation creates new alleles → genetic variation → natural selection and evolution","","T7→T1: nucleotides/proteins. T7→T5: ATP/enzymes. T7→T8: mutation→variation→evolution."],
+[3,"List the high-frequency Topic 7 exam topics.","⭐⭐ DNA structure (double helix, base pairing, antiparallel)\n⭐⭐ DNA replication (semi-conservative)\n⭐⭐ Transcription (DNA→mRNA)\n⭐⭐ Translation (mRNA→protein)\n⭐⭐ Gene mutations (substitution, insertion, deletion)\n⭐⭐ Effects of mutations on protein structure\n⭐⭐ Interpreting codon tables and DNA sequence data","Exam shortcut for mutation questions: always state the CAUSAL CHAIN: mutation → codon change → amino acid change → primary structure change → tertiary structure change → function change.",""]
+]},
+{title:"🔀 Topic 8 — Origins of Genetic Variation",accent:"#ffa657",
+sections:["📖 Definitions","💬 Key Concepts","🔗 Synoptic Links","⭐ High-Freq Topics"],
+traps:[
+["Individuals evolve during their lifetime.","POPULATIONS evolve, not individuals. Evolution occurs through changes in ALLELE FREQUENCIES across generations within a population. An individual's genome does not change in response to the environment."],
+["Organisms mutate because they need to adapt.","Mutations occur RANDOMLY and SPONTANEOUSLY. Natural selection acts on EXISTING VARIATION created by chance mutations. Evolution does not have a direction or purpose."],
+["Natural selection gives organisms useful characteristics.","Natural selection does NOT create variation. It FAVOURS individuals that ALREADY POSSESS advantageous inherited characteristics. Selection acts on existing variation, not directed toward a goal."],
+["Adaptation and acclimatisation are the same thing.","ADAPTATION is INHERITED and occurs over generations through natural selection. ACCLIMATISATION is a REVERSIBLE physiological response within an individual's lifetime (not inherited)."],
+["Crossing over creates new genes.","Crossing over produces NEW COMBINATIONS OF EXISTING ALLELES. It does not create new genes. New genes arise only through mutation."]
+],
+cards:[
+[0,"Define: Variation","Differences between individuals within the same species, arising from genetic differences (mutations, recombination) and environmental influences.","Genetic variation arises from: mutation (new alleles), crossing over (new allele combinations), independent assortment, random fertilisation.",""],
+[0,"Define: Natural selection","The process by which individuals with advantageous inherited characteristics are more likely to survive and reproduce, passing favourable alleles to offspring.","Five-step process: variation → selection pressure → differential survival → alleles inherited → allele frequency changes over generations.",""],
+[0,"Define: Adaptation","An inherited characteristic that increases an organism's chance of survival and reproduction in its environment.","Types: ANATOMICAL (structural), PHYSIOLOGICAL (internal processes), BEHAVIOURAL (actions). All three types may be examined.",""],
+[0,"Define: Speciation","The formation of new species through the accumulation of genetic differences leading to reproductive isolation, such that populations can no longer interbreed to produce fertile offspring.","Two routes: ALLOPATRIC (geographic isolation → divergence) and SYMPATRIC (same location, different reproductive isolation mechanism).",""],
+[0,"Define: Allele frequency","The proportion of a particular allele within the total gene pool of a population.","Hardy-Weinberg equations: p + q = 1 and p² + 2pq + q² = 1. Allele frequencies change when Hardy-Weinberg conditions are violated (selection, mutation, drift, migration, non-random mating).",""],
+[1,"State the complete natural selection sequence in order.","1. GENETIC VARIATION exists within the population (from mutation and sexual reproduction)\n2. SELECTION PRESSURE acts (environmental change, predation, disease, competition)\n3. Individuals with ADVANTAGEOUS ALLELES are more likely to SURVIVE and REPRODUCE\n4. Advantageous ALLELES are PASSED TO OFFSPRING through reproduction\n5. ALLELE FREQUENCY of advantageous alleles INCREASES over generations\n6. Population becomes BETTER ADAPTED to the environment\n\nIf populations become REPRODUCTIVELY ISOLATED → SPECIATION may occur","Missing step 4 (inheritance) is the most common mark lost in natural selection questions. Survival alone is not sufficient — alleles must be PASSED ON.",""],
+[1,"Explain how meiosis generates genetic variation.","CROSSING OVER (Prophase I):\n• Homologous chromosomes pair and exchange corresponding DNA segments at CHIASMATA\n• New allele combinations created on each chromosome\n\nINDEPENDENT ASSORTMENT (Metaphase I):\n• Homologous chromosome pairs align randomly on the cell equator\n• Different combinations of maternal/paternal chromosomes distributed to gametes\n\nRANDOM FERTILISATION:\n• Any sperm can fertilise any egg\n• Further increases the diversity of possible allele combinations","Three sources: crossing over + independent assortment + random fertilisation. All three must be named and briefly explained for full marks.",""],
+[2,"State the synoptic links between Topic 8 and Topics 3, 7 and 10.","Topic 3: Classification reflects evolutionary relationships; phylogenetic trees show common ancestry\nTopic 7: Mutation creates new alleles; DNA provides molecular evidence for evolution; gene expression changes may affect phenotype and fitness\nTopic 10: Biodiversity depends on genetic variation; conservation protects genetic diversity; evolution shapes ecosystem structure","","T8→T3: classification/phylogeny. T8→T7: mutation/DNA. T8→T10: biodiversity/conservation."],
+[3,"List the high-frequency Topic 8 exam topics.","⭐⭐ Mutation as source of variation\n⭐⭐ Meiosis (crossing over, independent assortment)\n⭐⭐ Natural selection — complete 5-step sequence\n⭐⭐ Adaptation (anatomical, physiological, behavioural)\n⭐⭐ Speciation (allopatric)\n⭐⭐ Allele frequency change\n⭐⭐ Hardy-Weinberg calculations","Hardy-Weinberg calculation method: q² = recessive phenotype frequency → q = √q² → p = 1-q → 2pq = carrier frequency. Always show full working.",""]
+]},
+{title:"🧠 Topic 9 — Control Systems",accent:"#58a6ff",
+sections:["📖 Definitions","💬 Key Concepts","🔗 Synoptic Links","⭐ High-Freq Topics"],
+traps:[
+["Positive feedback is the main mechanism of homeostasis.","Homeostasis is maintained by NEGATIVE FEEDBACK. Negative feedback REVERSES changes from the set point. Positive feedback AMPLIFIES changes and drives rapid completion of events (e.g. childbirth, blood clotting)."],
+["Hormones act immediately.","Hormonal responses are generally SLOWER than nervous responses (hormones must travel in bloodstream to target cells) but are often LONGER-LASTING. Nervous responses are rapid but short-lived."],
+["Reflex actions always involve the brain.","Many reflexes are coordinated by the SPINAL CORD, allowing a very rapid response. The brain becomes aware of the reflex AFTER it has occurred — but the brain does not initiate it."],
+["Auxin always promotes growth.","Auxin PROMOTES cell elongation in SHOOTS but can INHIBIT elongation in ROOTS at high concentrations. Different tissues have different sensitivities to auxin concentrations."],
+["Nerve impulses travel across synapses electrically.","Within neurones, impulses are ELECTRICAL (action potentials). Across most synapses, transmission is CHEMICAL — neurotransmitters diffuse across the synaptic cleft and bind to postsynaptic receptors."]
+],
+cards:[
+[0,"Define: Homeostasis","The maintenance of a relatively stable internal environment despite changes in the external environment.","Homeostasis maintains: body temperature, blood glucose concentration, blood pH, water potential. All are maintained by NEGATIVE FEEDBACK.",""],
+[0,"Define: Receptor (in homeostasis)","A cell or organ that detects a stimulus and converts it into a nerve impulse or hormonal signal.","Receptors detect DEVIATIONS from the set point. Examples: thermoreceptors (temperature), osmoreceptors (water potential), stretch receptors.",""],
+[0,"Define: Effector","A muscle or gland that carries out the appropriate response to a stimulus.","Effectors produce the CORRECTIVE RESPONSE that returns conditions to the set point. Examples: sweat glands (temperature), pancreas (blood glucose), adrenal glands (stress).",""],
+[0,"Define: Synapse","A junction between two neurones (or a neurone and an effector) where information is transmitted chemically by neurotransmitters.","Synapses ensure ONE-WAY transmission. Neurotransmitters (e.g. acetylcholine) diffuse across the synaptic cleft and bind to specific receptors on the postsynaptic membrane.",""],
+[0,"Define: Hormone","A chemical messenger produced by an endocrine gland and transported in the blood to target cells with complementary receptors.","Hormones are specific to TARGET CELLS with complementary receptors. They produce slower but longer-lasting responses than nerve impulses.",""],
+[0,"Define: Tropism","A directional growth response of a plant to a directional stimulus (e.g. light, gravity).","PHOTOTROPISM = growth response to light. GRAVITROPISM = growth response to gravity. Mediated by unequal distribution of AUXIN.",""],
+[1,"Explain the complete homeostasis sequence.","1. STIMULUS: change in internal condition (e.g. blood temperature rises)\n2. RECEPTOR: detects the deviation from the set point (e.g. hypothalamic thermoreceptors)\n3. COORDINATION CENTRE: processes information and sends signals (e.g. hypothalamus)\n4. EFFECTOR: produces corrective response (e.g. sweat glands, vasodilation)\n5. RESPONSE: returns variable towards set point (e.g. body temperature falls)\n6. NEGATIVE FEEDBACK: once set point is restored, effector activity decreases\n\nSet point is re-established → system returns to steady state","Exam tip: structure your answer around: stimulus → receptor → coordinator → effector → response → negative feedback. This sequence scores marks in every homeostasis extended answer.",""],
+[1,"Compare nervous and hormonal communication.","NERVOUS:\n• Electrical impulses along neurones\n• Neurotransmitters at synapses\n• Fast response\n• Short-lived effect\n• Highly localised/specific\n• Non-secretory (uses neurotransmitters, not hormones)\n\nHORMONAL:\n• Chemical messengers in bloodstream\n• Travels to target organs\n• Slower response\n• Longer-lasting effect\n• Widespread (affects all cells with receptors)\n• Secreted by endocrine glands","Both systems coordinate body functions and contribute to homeostasis. The HYPOTHALAMUS integrates both systems — producing hormones AND receiving/sending nerve impulses.",""],
+[2,"State the synoptic links between Topic 9 and Topics 2, 5 and 7.","Topic 2: Cell membranes contain receptor proteins for hormones and neurotransmitters; membrane transport in nerve impulse propagation\nTopic 5: ATP required for active transport of neurotransmitters; energy for synaptic vesicle fusion\nTopic 7: Gene expression determines which receptor proteins are produced by target cells","","T9→T2: membrane receptors. T9→T5: ATP/synapses. T9→T7: gene expression/receptors."],
+[3,"List the high-frequency Topic 9 exam topics.","⭐⭐ Homeostasis and negative feedback\n⭐⭐ Synaptic transmission\n⭐⭐ Reflex arcs\n⭐⭐ Hormonal coordination (insulin, glucagon, ADH)\n⭐⭐ Blood glucose regulation\n⭐⭐ Tropisms and auxin\n⭐⭐ Interpretation of physiological data graphs","Synaptic transmission sequence: action potential → calcium ions enter → vesicles fuse → exocytosis of neurotransmitter → diffuse across cleft → bind receptors → new AP if threshold reached.",""]
+]},
+{title:"🌍 Topic 10 — Ecosystems",accent:"#39d353",
+sections:["📖 Definitions","💬 Key Concepts","🔗 Synoptic Links","⭐ High-Freq Topics"],
+traps:[
+["Energy is recycled within ecosystems.","ENERGY FLOWS through ecosystems — it is not recycled. Energy enters as light, passes through trophic levels, and is ultimately lost as HEAT. NUTRIENTS (matter) ARE recycled."],
+["Biomass and energy are the same thing.","BIOMASS is the total mass of living material at a trophic level. ENERGY is stored within that biomass. They are related but distinct concepts. Energy is lost when biomass is transferred."],
+["Food chains show all feeding relationships.","Food chains are SIMPLIFIED representations of feeding relationships. FOOD WEBS show the MULTIPLE and interconnected feeding relationships that actually exist in ecosystems."],
+["Decomposers make nutrients.","Decomposers RELEASE mineral ions and other nutrients by BREAKING DOWN dead organic matter. They do not create nutrients — they recycle existing ones from organic to inorganic forms."],
+["Larger populations always indicate healthier ecosystems.","Ecosystem health depends on BIODIVERSITY, SPECIES INTERACTIONS, RESILIENCE and ENVIRONMENTAL STABILITY — not simply population size. A very large population of one species may indicate an unhealthy ecosystem."]
+],
+cards:[
+[0,"Define: Ecosystem","A community of organisms interacting with each other and with their physical environment.","Ecosystem = biotic (living) + abiotic (non-living) components. Closed systems for MATTER (nutrients cycle) but open for ENERGY (flows in as light, leaves as heat).",""],
+[0,"Define: Niche","The role of an organism within an ecosystem, including how it obtains and uses resources and how it interacts with other organisms.","No two species occupy exactly the same niche in the same location at the same time (competitive exclusion principle). Niche ≠ habitat.",""],
+[0,"Define: Decomposer","An organism, typically a bacterium or fungus, that breaks down dead organic matter, releasing mineral ions back into the environment.","Decomposers carry out EXTRACELLULAR DIGESTION (secrete enzymes onto dead matter, then absorb soluble products = saprotrophic nutrition). Essential for nutrient cycling.",""],
+[0,"Define: Biomass","The total mass of living biological material in a given area or trophic level, usually measured as dry mass.","DRY MASS is used (not fresh mass) to eliminate variation due to water content. Lost as heat (respiration), faeces (egestion), urine (excretion) and unconsumed material.",""],
+[0,"Define: Producer","An organism that synthesises organic molecules from inorganic substances using an external energy source (light or chemical energy).","Producers are the FIRST trophic level. They convert light energy to chemical energy (photosynthesis). All energy in an ecosystem originates from producers.",""],
+[1,"Explain why energy transfer between trophic levels is inefficient.","Energy is lost at each trophic level because:\n1. RESPIRATION: energy released as heat during metabolic processes\n2. EGESTION: energy in indigestible material (cellulose, bone) lost in faeces\n3. EXCRETION: energy lost in metabolic waste products (urea, ammonia)\n4. UNCONSUMED material: not all organisms at one level are eaten by the next\n\nTypically only ~10% of energy transfers between trophic levels\n\nThis limits FOOD CHAIN LENGTH and explains why higher trophic levels support fewer individuals","Four reasons: respiration (heat), egestion (faeces), excretion (urine), unconsumed matter. All four should appear in full-mark answers. Energy FLOWS; nutrients CYCLE.",""],
+[1,"Distinguish between energy flow and nutrient cycling in ecosystems.","ENERGY FLOW:\n• One-directional flow through trophic levels\n• Enters as LIGHT energy (photosynthesis)\n• Lost as HEAT at each trophic level (respiration)\n• Cannot be recycled — new energy input required continuously\n\nNUTRIENT CYCLING:\n• Matter (carbon, nitrogen, minerals) circulates continuously\n• Passes from inorganic → organic (producers) → organic (consumers) → inorganic (decomposers)\n• Recycled indefinitely through the ecosystem\n• Decomposers essential for releasing nutrients back into inorganic form","Examiner's most important tip for Topic 10: ENERGY FLOWS (one-way, lost as heat). NUTRIENTS CYCLE (recycled continuously). Confusing these is the most common cause of lost marks.",""],
+[2,"State the synoptic links between Topic 10 and all other topics.","T1: Photosynthesis (biological molecules); decomposition releases nutrients\nT2: Osmosis in plants; cell transport in ecological processes\nT3: Biodiversity; classification; conservation\nT4: Plant transport; gas exchange in ecosystems\nT5: Respiration; ATP; energy transfer through food webs\nT6: Decomposers (bacteria/fungi); pathogens affecting populations\nT7: Genetic diversity in conservation; DNA evidence in ecology\nT8: Evolution, adaptation; biodiversity conservation\nT9: Responses to environmental change; behaviour","Topic 10 is the MOST SYNOPTIC topic. Paper 3 questions frequently use ecosystems as the context for integrating multiple topics.",""],
+[3,"List the high-frequency Topic 10 exam topics.","⭐⭐ Energy transfer through food chains/webs\n⭐⭐ Why energy transfer is inefficient (~10%)\n⭐⭐ Carbon cycle\n⭐⭐ Nitrogen cycle\n⭐⭐ Ecological sampling (quadrats, transects)\n⭐⭐ Biodiversity and conservation\n⭐⭐ Human impacts on ecosystems (deforestation, pollution, climate change)","Ecological sampling: RANDOM placement of quadrats is essential. Mark-release-recapture for mobile animals. Spearman's rank for correlation between variables.",""]
+]}
+];
+
+var curDeck=null,curSec=0,curIdx=0,shown=false,deck=[],ratings={},easy=0,hard=0,done=0,curMode='flash';
+function openDeck(n){
+  curDeck=n;curSec=0;curIdx=0;shown=false;easy=0;hard=0;done=0;ratings={};
+  document.getElementById('homeScreen').style.display='none';
+  document.getElementById('appScreen').style.display='block';
+  document.getElementById('appTitle').textContent=DECKS[n].title;
+  document.getElementById('pfill').style.background=DECKS[n].accent;
+  document.getElementById('DN').style.display='none';
+  document.getElementById('MC').style.display='block';
+  setMode('flash');
+}
+function goHome(){document.getElementById('homeScreen').style.display='block';document.getElementById('appScreen').style.display='none';}
+function setMode(m){
+  curMode=m;
+  document.getElementById('flashMode').classList.toggle('hide',m!=='flash');
+  document.getElementById('trapsMode').classList.toggle('hide',m!=='traps');
+  document.getElementById('mFlash').classList.toggle('on',m==='flash');
+  document.getElementById('mTraps').classList.toggle('on',m==='traps');
+  if(m==='flash'){mkDeck();renderTabs();renderCard();}
+  else{renderTraps();}
+}
+function renderTraps(){
+  var tr=DECKS[curDeck].traps;
+  if(!tr||!tr.length){document.getElementById('trapsContent').innerHTML='<p style="color:#888;text-align:center;padding:20px">No traps listed.</p>';return;}
+  var h='<p style="font-size:12px;color:#888;margin-bottom:10px">Common exam traps — memorise these corrections!</p>';
+  tr.forEach(function(t){h+='<div class="mk-card"><div class="mk-wrong">❌ Common mistake: '+t[0]+'</div><div class="mk-right">✅ Correct: '+t[1]+'</div></div>';});
+  document.getElementById('trapsContent').innerHTML=h;
+}
+function mkDeck(){deck=[];DECKS[curDeck].cards.forEach(function(c,i){if(c[0]===curSec)deck.push(i);});}
+function renderTabs(){
+  var secs=DECKS[curDeck].sections,cards=DECKS[curDeck].cards,h='';
+  secs.forEach(function(s,i){var cnt=0;cards.forEach(function(c){if(c[0]===i)cnt++;});h+='<span class="stab'+(i===curSec?' on':'')+'" onclick="sw('+i+')">'+s+' ('+cnt+')</span>';});
+  document.getElementById('stabs').innerHTML=h;
+}
+function renderCard(){
+  if(!deck.length)return;
+  var cards=DECKS[curDeck].cards,secs=DECKS[curDeck].sections,gi=deck[curIdx],c=cards[gi],acc=DECKS[curDeck].accent;
+  document.getElementById('CN').textContent=(curIdx+1)+' / '+deck.length;
+  ['badge','badge2'].forEach(function(id){var el=document.getElementById(id);el.textContent=secs[c[0]];el.style.cssText='background:#1c2333;border-color:'+acc+';color:'+acc;});
+  document.getElementById('QQ').textContent=c[1];
+  document.getElementById('AA').textContent=c[2];
+  var tip=document.getElementById('TIP');
+  if(c[3]&&c[3].length){tip.innerHTML='<b>💡 Exam Tip:</b> '+c[3];tip.className='tip-box';}else{tip.className='tip-box hide';}
+  var lnk=document.getElementById('LINK');
+  if(c[4]&&c[4].length){lnk.innerHTML='<b>🔗 Synoptic Link:</b> '+c[4];lnk.className='link-box';}else{lnk.className='link-box hide';}
+  var cd=document.getElementById('CD');
+  cd.className=shown?'card shown':'card';cd.style.borderColor=shown?acc:'#30363d';
+  document.getElementById('RB').className=shown?'rbs show':'rbs';
+  document.getElementById('rp').className=shown?'rprompt show':'rprompt';
+  document.getElementById('cardlbl').textContent='Card '+(curIdx+1)+' of '+deck.length;
+  document.getElementById('DN').style.display='none';document.getElementById('MC').style.display='block';
+  var total=DECKS[curDeck].cards.length;
+  document.getElementById('sT').textContent=total;document.getElementById('sD').textContent=done;
+  document.getElementById('sE').textContent=easy;document.getElementById('sH').textContent=hard;
+  document.getElementById('plbl').textContent=done+' / '+total;
+  document.getElementById('pfill').style.width=Math.round(done/total*100)+'%';
+}
+function rev(){if(!shown){shown=true;renderCard();}}
+function go(d){shown=false;curIdx+=d;if(curIdx<0)curIdx=deck.length-1;if(curIdx>=deck.length)curIdx=0;renderCard();}
+function rt(r){
+  done++;if(r==='e'||r==='o')easy++;else hard++;shown=false;curIdx++;
+  if(curIdx>=deck.length){curIdx=0;if(deck.every(function(gi){return ratings[gi];})){document.getElementById('MC').style.display='none';document.getElementById('DN').style.display='block';return;}}
+  ratings[deck[curIdx-1]]=r;renderCard();
+}
+function sw(n){curSec=n;curIdx=0;shown=false;mkDeck();renderTabs();document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function rst(){curIdx=0;shown=false;document.getElementById('MC').style.display='block';document.getElementById('DN').style.display='none';renderCard();}
+function shuf(){deck.sort(function(){return Math.random()-.5;});curIdx=0;shown=false;renderCard();}
+</script>
+</body>
+</html>
