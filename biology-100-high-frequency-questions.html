@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Biology 100 High-Frequency Questions — 9BI0</title>
+<style>
+  :root{
+    --bg:#0d1117;
+    --card-bg:#161b22;
+    --card-back:#1c2333;
+    --border:#2a3346;
+    --text:#e6edf3;
+    --text-dim:#8b96a5;
+    --accent:#4fd1c5;
+    --accent2:#a78bfa;
+    --good:#3fb950;
+    --warn:#f0b429;
+    --danger:#f85149;
+    --shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overscroll-behavior:none;
+  }
+  body{
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100vh;
+    min-height:-webkit-fill-available;
+    padding: env(safe-area-inset-top,16px) 16px calc(env(safe-area-inset-bottom,16px) + 12px);
+  }
+  header{
+    width:100%; max-width:520px; text-align:center; padding-top:10px;
+  }
+  h1{
+    font-size:1.05rem; font-weight:700; margin:4px 0 2px; letter-spacing:0.2px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .subtitle{ font-size:0.75rem; color:var(--text-dim); margin-bottom:10px;}
+
+  .topic-bar{
+    width:100%; max-width:520px;
+    display:flex; gap:6px; overflow-x:auto; padding:4px 2px 10px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .topic-bar::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto;
+    padding:7px 12px;
+    border-radius:20px;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    color:var(--text-dim);
+    font-size:0.72rem;
+    font-weight:600;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .chip.active{
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    color:#0d1117;
+    border-color:transparent;
+  }
+
+  .progress-row{
+    width:100%; max-width:520px;
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:0.72rem; color:var(--text-dim); margin-bottom:8px; padding:0 2px;
+  }
+  .progress-track{
+    flex:1; height:5px; background:var(--border); border-radius:4px; margin:0 10px; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); width:0%;
+    transition:width .25s ease;
+  }
+
+  .stage{
+    width:100%; max-width:520px;
+    flex:1;
+    display:flex; align-items:center; justify-content:center;
+    perspective:1400px;
+    margin: 6px 0 14px;
+    min-height:340px;
+  }
+  .card{
+    width:100%;
+    height:360px;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.2,.9,.3,1);
+    cursor:pointer;
+  }
+  .card.flipped{ transform:rotateY(180deg); }
+  .face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:20px;
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+    display:flex; flex-direction:column;
+    padding:22px;
+    overflow-y:auto;
+  }
+  .face::-webkit-scrollbar{width:4px;}
+  .face::-webkit-scrollbar-thumb{background:var(--border); border-radius:4px;}
+  .front{
+    background:radial-gradient(circle at 30% 20%, #1c2333, var(--card-bg) 70%);
+    justify-content:center; align-items:center; text-align:center;
+  }
+  .back{
+    background:radial-gradient(circle at 70% 20%, #232c44, var(--card-back) 70%);
+    transform:rotateY(180deg);
+    justify-content:flex-start; align-items:flex-start; text-align:left;
+  }
+  .tag{
+    position:absolute; top:14px; left:14px;
+    font-size:0.62rem; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;
+    color:var(--accent);
+    background:rgba(79,209,197,0.1);
+    border:1px solid rgba(79,209,197,0.3);
+    padding:3px 8px; border-radius:20px;
+  }
+  .card-index{
+    position:absolute; top:14px; right:14px;
+    font-size:0.65rem; color:var(--text-dim);
+  }
+  .q-text{
+    font-size:1.15rem; font-weight:600; line-height:1.4; margin-top:20px;
+  }
+  .tap-hint{
+    position:absolute; bottom:14px; left:0; right:0; text-align:center;
+    font-size:0.65rem; color:var(--text-dim);
+  }
+  .a-label{
+    font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;
+    color:var(--accent2); margin:20px 0 8px;
+  }
+  .a-text{
+    font-size:1rem; line-height:1.5; font-weight:500;
+  }
+  .a-text ul{ margin:6px 0 0 18px; padding:0; }
+  .a-text li{ margin-bottom:4px; }
+
+  .controls{
+    width:100%; max-width:520px;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:8px;
+  }
+  .btn{
+    flex:1;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:13px 10px;
+    border-radius:14px;
+    font-size:0.85rem;
+    font-weight:600;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    cursor:pointer;
+    -webkit-user-select:none; user-select:none;
+    transition:transform .1s ease, background .15s ease;
+  }
+  .btn:active{ transform:scale(0.96); background:#1e2635; }
+  .btn.wide{ flex:2; }
+  .btn.icon-only{ flex:0 0 52px; font-size:1.1rem; }
+
+  .rate-row{
+    width:100%; max-width:520px;
+    display:flex; gap:8px; margin-bottom:6px;
+  }
+  .rate-btn{
+    flex:1;
+    padding:11px 6px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--card-bg);
+    font-size:0.72rem;
+    font-weight:700;
+    text-align:center;
+    cursor:pointer;
+    -webkit-user-select:none; user-select:none;
+  }
+  .rate-btn.again{ color:var(--danger); }
+  .rate-btn.hard{ color:var(--warn); }
+  .rate-btn.good{ color:var(--good); }
+  .rate-btn:active{ transform:scale(0.96); }
+
+  .footer-row{
+    width:100%; max-width:520px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:0.68rem; color:var(--text-dim); margin-top:6px;
+  }
+  .footer-row span.link{
+    color:var(--accent); cursor:pointer; font-weight:600;
+  }
+
+  .done-screen{
+    width:100%; max-width:520px; text-align:center; padding:30px 10px;
+  }
+  .done-screen h2{ color:var(--good); font-size:1.3rem; margin-bottom:6px;}
+  .done-screen p{ color:var(--text-dim); font-size:0.85rem; }
+
+  @media (max-height:700px){
+    .card{ height:310px; }
+    .stage{ min-height:300px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>100 High-Frequency Questions</h1>
+  <div class="subtitle">Topics 1–4 · A★ Model Answers · Edexcel 9BI0</div>
+</header>
+
+<div class="topic-bar" id="topicBar"></div>
+
+<div class="progress-row">
+  <span id="progressLabel">1 / 1</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span id="knownLabel">✓ 0</span>
+</div>
+
+<div class="stage">
+  <div class="card" id="card">
+    <div class="face front">
+      <span class="tag" id="tagFront">Topic 1</span>
+      <span class="card-index" id="idxFront">1/1</span>
+      <div class="q-text" id="qText">Loading…</div>
+      <div class="tap-hint">tap to flip</div>
+    </div>
+    <div class="face back">
+      <span class="tag" id="tagBack">Topic 1</span>
+      <span class="card-index" id="idxBack">1/1</span>
+      <div class="a-label">Answer</div>
+      <div class="a-text" id="aText"></div>
+    </div>
+  </div>
+</div>
+
+<div class="rate-row" id="rateRow">
+  <div class="rate-btn again" id="rateAgain">✗ Again</div>
+  <div class="rate-btn hard" id="rateHard">~ Shaky</div>
+  <div class="rate-btn good" id="rateGood">✓ Got it</div>
+</div>
+
+<div class="controls">
+  <div class="btn icon-only" id="prevBtn">‹</div>
+  <div class="btn wide" id="shuffleBtn">🔀 Shuffle</div>
+  <div class="btn icon-only" id="nextBtn">›</div>
+</div>
+
+<div class="footer-row">
+  <span id="deckLabel">All Topics · 0 cards</span>
+  <span class="link" id="resetLink">reset progress</span>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const DECK = [];
+let uid = 0;
+function add(topic, q, a){ DECK.push({id: uid++, topic, q, a}); }
+
+/* ===== PART 1 — Q1-20: Topics 1 & 2 ===== */
+const P1 = "Q1-20: Topics 1&2";
+add(P1,"Q1 (2). Explain why water is described as a polar molecule.","Oxygen is more electronegative than hydrogen, creating an unequal charge distribution — a slightly negative oxygen (δ−) and slightly positive hydrogens (δ+).");
+add(P1,"Q2 (3). State three biological functions of water.","Solvent for metabolic reactions; transport medium for dissolved substances; maintains stable temperature via its high specific heat capacity.");
+add(P1,"Q3 (3). Explain how hydrogen bonding contributes to the properties of water.","Hydrogen bonds between water molecules produce cohesion, contribute to its high specific heat capacity, and require large amounts of energy to break during evaporation.");
+add(P1,"Q4 (4). Compare starch and glycogen (1 similarity, 3 differences).","Similarity: both are polysaccharides made from α-glucose. Differences: glycogen is more highly branched; glycogen is the animal storage carbohydrate; starch is the plant storage carbohydrate.");
+add(P1,"Q5 (3). Explain why cellulose is suitable for forming plant cell walls.","Cellulose consists of β-glucose joined by β-1,4 glycosidic bonds; straight chains hydrogen-bond with neighbouring chains, creating strong microfibrils that strengthen the wall.");
+add(P1,"Q6 (4). Describe the structure of a triglyceride.","One glycerol molecule joined to three fatty acids by three ester bonds, formed through condensation reactions.");
+add(P1,"Q7 (4). Explain the difference between saturated and unsaturated fatty acids.","Saturated: no C=C double bonds, straight chains, close packing. Unsaturated: one or more double bonds, creates bends, reduces packing, lowers melting point.");
+add(P1,"Q8 (5). Describe the four levels of protein structure.","Primary: amino acid sequence. Secondary: α-helices/β-pleated sheets via hydrogen bonding. Tertiary: 3D folding from side-chain interactions. Quaternary: association of two or more polypeptide chains.");
+add(P1,"Q9 (4). Explain how temperature affects enzyme activity.","Rising temperature raises kinetic energy → more enzyme-substrate collisions up to the optimum. Above the optimum, bonds maintaining tertiary structure break → active site changes shape → activity falls (denaturation).");
+add(P1,"Q10 (4). Explain how pH affects enzyme activity.","Changes in pH alter ionisation of amino acid side chains, disrupting ionic/hydrogen bonds that maintain tertiary structure. This changes the active site's shape, reducing substrate binding and activity.");
+add(P1,"Q11 (3). State three differences between prokaryotic and eukaryotic cells.","Eukaryotes have a membrane-bound nucleus, prokaryotes don't; eukaryotes have membrane-bound organelles, prokaryotes don't; eukaryotic ribosomes are 80S, prokaryotic are 70S.");
+add(P1,"Q12 (4). Describe the functions of: nucleus, mitochondrion, ribosome, Golgi apparatus.","Nucleus: contains DNA, controls cell activities. Mitochondrion: aerobic respiration, ATP production. Ribosome: protein synthesis. Golgi apparatus: modifies, sorts and packages proteins.");
+add(P1,"Q13 (4). Explain the fluid mosaic model of the cell membrane.","Phospholipid bilayer with embedded proteins; cholesterol regulates fluidity; glycoproteins/glycolipids handle cell recognition and signalling; membrane is selectively permeable.");
+add(P1,"Q14 (4). Compare diffusion and facilitated diffusion.","Both move substances down a concentration gradient without ATP. But facilitated diffusion needs specific channel/carrier proteins because the substance can't cross the phospholipid bilayer directly.");
+add(P1,"Q15 (4). Explain active transport.","Moves substances against their concentration gradient using carrier proteins and ATP from respiration.");
+add(P1,"Q16 (3). Define osmosis and give a biological example.","Net movement of water from higher to lower water potential through a partially permeable membrane. Example: water entering root hair cells.");
+add(P1,"Q17 (5). Compare mitosis and meiosis — what must you include?","One division vs two; two daughter cells vs four; diploid vs haploid; genetically identical vs genetically different; growth/repair vs gamete production.");
+add(P1,"Q18 (4). Explain why viruses are 'obligate intracellular parasites'.","They lack ribosomes and the enzymes needed for metabolism, so cannot reproduce independently — they must infect living cells and use the host's machinery to replicate.");
+add(P1,"Q19 (4). Describe the structure of a virus.","Nucleic acid (DNA or RNA) surrounded by a protein capsid; some viruses also have a lipid envelope with attachment proteins.");
+add(P1,"Q20 (5). Discuss one advantage and one limitation of stem cells in medicine.","Advantage: can replace damaged tissue and treat diseases like leukaemia. Limitation: embryonic stem cell use raises ethical concerns, plus risk of uncontrolled cell division or immune rejection depending on source.");
+
+/* ===== PART 2 — Q21-40: Topic 3 ===== */
+const P2 = "Q21-40: Topic 3";
+add(P2,"Q21 (2). Define taxonomy.","The science of identifying, naming and classifying organisms according to their evolutionary relationships.");
+add(P2,"Q21 — Examiner's tip.","Must include 'evolutionary relationships' — just writing 'classification of organisms' usually isn't enough for full marks.");
+add(P2,"Q22 (3). State the taxonomic hierarchy from Kingdom to Species.","Kingdom → Phylum → Class → Order → Family → Genus → Species. Memory aid: 'King Philip Came Over For Good Soup'.");
+add(P2,"Q23 (3). Explain binomial nomenclature and give one advantage.","Naming organisms using two names — genus and species. Advantage: provides a universal naming system, reducing confusion caused by different common names in different countries/languages.");
+add(P2,"Q24 (4). Compare Bacteria and Archaea.","Both prokaryotic with circular DNA. Bacteria: cell walls contain peptidoglycan, often in common environments. Archaea: cell walls lack peptidoglycan, many inhabit extreme environments.");
+add(P2,"Q25 (4). Explain why DNA sequencing has improved biological classification.","DNA comparisons give objective evidence of evolutionary relationships — more similar sequences suggest a more recent common ancestor. Tip: DNA provides evidence for evolution, it doesn't 'prove' it.");
+add(P2,"Q26 (4). Describe homologous structures and why they support evolution.","Structures sharing a common underlying anatomical pattern because they were inherited from a common ancestor, even if they now perform different functions — evidence for divergent evolution.");
+add(P2,"Q27 (5). Explain the process of natural selection.","Genetic variation exists in a population; more offspring are produced than can survive, causing competition; individuals with advantageous traits survive and reproduce, passing on beneficial alleles; over generations these alleles become more common.");
+add(P2,"Q27 — Examiner's checklist (6 points).","Genetic variation ✔ Competition ✔ Differential survival ✔ Reproduction ✔ Inheritance ✔ Allele frequency changes ✔");
+add(P2,"Q28 (4). Distinguish adaptation from acclimatisation.","Adaptation: inherited, genetic, occurs over many generations through evolution. Acclimatisation: individual response, usually reversible, occurs within a lifetime.");
+add(P2,"Q29 (4). State four reasons biodiversity is important.","Any four: maintains ecosystem stability; provides food resources; source of medicines; conserves genetic diversity; supports ecosystem services (pollination, nutrient cycling); increases resilience to environmental change.");
+add(P2,"Q30 (4). Describe four major threats to biodiversity.","Any four: habitat destruction, climate change, pollution, overexploitation, invasive species.");
+add(P2,"Q31 (5). Compare in situ and ex situ conservation.","In situ: natural habitat, maintains natural interactions, larger populations — e.g. national parks, marine reserves. Ex situ: outside natural habitat, allows intensive management, often smaller captive populations — e.g. zoos, botanical gardens, seed banks.");
+add(P2,"Q32 (3). Why are small populations at greater risk of extinction?","Lower genetic diversity makes them more vulnerable to disease, environmental change and inbreeding, reducing their ability to adapt.");
+add(P2,"Q33 (4). Explain how quadrats are used to estimate plant abundance.","Quadrats of known area placed randomly; number of individuals (or % cover) recorded in each; results from multiple quadrats estimate abundance across the whole habitat.");
+add(P2,"Q34 (4). Why is random sampling important?","Reduces investigator bias and increases the likelihood the sample represents the whole population.");
+add(P2,"Q35 (5). Describe how a line transect investigates changes in species distribution.","A tape measure is laid across the habitat; quadrats placed at regular intervals along it; species and abundance recorded at each point — allows distribution changes along an environmental gradient to be analysed.");
+add(P2,"Q36 (3). Define species diversity.","Considers both the number of different species present (species richness) and their relative abundance (evenness).");
+add(P2,"Q37 (4). Explain why genetic diversity is important within a population.","High genetic diversity increases the chance some individuals have advantageous alleles, improving the population's ability to survive environmental change, disease and other selection pressures.");
+add(P2,"Q38 (4). Explain why monoculture farming can reduce biodiversity.","Monocultures replace varied habitats with a single crop species, reducing available niches and food sources for other organisms — lowering species richness and overall biodiversity.");
+add(P2,"Q39 (5). Describe how climate change threatens biodiversity.","Alters temperature/rainfall patterns, shifts species distributions, disrupts breeding/migration, increases extreme weather, may cause habitat loss — species unable to adapt or migrate face greater extinction risk.");
+add(P2,"Q40 (6, extended). Explain how natural selection leads to antibiotic-resistant bacteria.","Random mutation creates genetic variation in the bacterial population; some bacteria carry resistance mutations; the antibiotic kills susceptible bacteria while resistant bacteria survive and reproduce (binary fission), passing on resistance genes; over generations, resistance allele frequency increases.");
+add(P2,"Q40 — Examiner's checklist (7 points).","Mutation creates variation ✔ Resistance allele present ✔ Antibiotic = selection pressure ✔ Susceptible bacteria die ✔ Resistant bacteria survive ✔ Resistant bacteria reproduce ✔ Resistance allele frequency increases ✔");
+
+/* ===== PART 3 — Q41-70: Topic 4 ===== */
+const P3 = "Q41-70: Topic 4";
+add(P3,"Q41 (3). State three adaptations of alveoli for gas exchange.","Large surface area for diffusion; walls one cell thick (reduces diffusion distance); dense capillary network (maintains steep concentration gradient).");
+add(P3,"Q42 (4). Explain how ventilation helps maintain efficient gas exchange.","Ventilation continually replaces alveolar air, keeping O₂ concentration high and CO₂ low — maintaining steep concentration gradients so O₂ diffuses in and CO₂ diffuses out.");
+add(P3,"Q43 (4). Compare ventilation, gas exchange, and respiration.","Ventilation = movement of air into/out of lungs. Gas exchange = diffusion of O₂/CO₂ across the alveolar surface. Respiration = release of energy from glucose inside cells.");
+add(P3,"Q44 (5). Explain why diffusion across the alveoli is rapid.","Large surface area; walls one cell thick; moist lining lets gases dissolve; ventilation maintains concentration gradients; continuous blood flow removes oxygenated blood and brings deoxygenated blood.");
+add(P3,"Q45 (4). Describe four adaptations of red blood cells for oxygen transport.","Biconcave shape (↑ surface area); no nucleus (more space for haemoglobin); flexible membrane (passes through capillaries); high haemoglobin content.");
+add(P3,"Q46 (5). Explain the oxygen dissociation curve.","Sigmoid due to cooperative binding — binding one O₂ changes haemoglobin's shape, increasing affinity so further O₂ binds more easily. Promotes efficient loading in lungs and unloading in tissues.");
+add(P3,"Q47 (4). Explain the Bohr effect.","In actively respiring tissue, CO₂ concentration rises → pH decreases → haemoglobin's O₂ affinity decreases → more O₂ released where it's needed for aerobic respiration.");
+add(P3,"Q48 (3). Why does fetal haemoglobin have a higher oxygen affinity than adult haemoglobin?","Its higher affinity lets oxygen transfer from the mother's blood, across the placenta, into the fetal circulation.");
+add(P3,"Q49 (4). State the route of blood through the heart from the vena cava.","Vena cava → right atrium → tricuspid valve → right ventricle → pulmonary artery → lungs → pulmonary vein → left atrium → mitral (bicuspid) valve → left ventricle → aorta.");
+add(P3,"Q50 (4). Explain the advantage of double circulation.","Blood passes through the heart twice per circuit, allowing high pressure in the systemic circulation while keeping pulmonary pressure lower — protecting delicate alveoli and ensuring efficient oxygen delivery to tissues.");
+add(P3,"Q51 (4). Why is the left ventricle thicker than the right ventricle?","It must generate higher pressure to pump blood around the entire body, whereas the right ventricle only pumps to the nearby lungs.");
+add(P3,"Q52 (5). Describe the cardiac cycle.","Diastole: heart relaxes, chambers fill. Atrial systole: atria contract, completes ventricular filling. Ventricular systole: ventricles contract, forcing blood into pulmonary artery/aorta, AV valves close to prevent backflow.");
+add(P3,"Q53 (3). State the formula for cardiac output.","Cardiac Output = Heart Rate × Stroke Volume.");
+add(P3,"Q54 (4). Explain why arteries have thick muscular and elastic walls.","Carry blood away from the heart at high pressure — thick muscular walls withstand this, elastic fibres stretch during systole and recoil during diastole, helping maintain flow.");
+add(P3,"Q55 (4). Explain why veins contain valves.","Blood in veins is under low pressure; valves prevent backflow and help ensure blood returns to the heart, especially from the lower limbs.");
+add(P3,"Q56 (4). Explain why capillaries are efficient exchange surfaces.","Walls one cell thick (short diffusion distance); narrow diameter slows blood flow and keeps red blood cells close to the wall; extensive network gives a large surface area.");
+add(P3,"Q57 (4). State four adaptations of xylem vessels.","Dead cells; hollow lumen; no end walls; thick lignified walls.");
+add(P3,"Q58 (5). Explain the cohesion-tension theory.","Water evaporates from mesophyll cell walls and diffuses out through stomata, creating tension in the xylem. Cohesion between water molecules maintains a continuous column, pulled upward. Adhesion to xylem walls supports the column; lignified walls prevent collapse.");
+add(P3,"Q59 (4). State four factors affecting transpiration.","Light intensity, temperature, wind speed, humidity.");
+add(P3,"Q60 (4). Explain why wind increases transpiration.","Wind removes the humid air layer around the leaf, maintaining a steep water vapour concentration gradient and increasing diffusion of water vapour out of the stomata.");
+add(P3,"Q61 (5). Describe the structure of phloem.","Living sieve tube elements joined end to end; end walls form sieve plates with pores for phloem sap flow; companion cells (rich in mitochondria) are closely associated, providing ATP for active loading/unloading of sucrose.");
+add(P3,"Q62 (5). Explain the mass flow hypothesis.","Sucrose is actively loaded into sieve tubes at the source, lowering water potential; water enters from the xylem by osmosis, raising hydrostatic pressure; phloem sap moves by mass flow towards sinks where sucrose is unloaded, and water may return to the xylem.");
+add(P3,"Q63 (3). Define translocation.","The movement of sucrose and other assimilates through the phloem, from sources to sinks.");
+add(P3,"Q64 (4). Explain why companion cells contain many mitochondria.","They need ATP for active loading/unloading of sucrose during translocation — numerous mitochondria supply this via aerobic respiration.");
+add(P3,"Q65 (4). State the difference between source and sink.","Source: where sucrose is produced/released, e.g. mature leaves. Sink: where sucrose is used/stored, e.g. roots, developing fruits.");
+add(P3,"Q66 (4). What does a potometer measure, and why is it only an estimate of transpiration?","Measures the rate of water uptake by a shoot. It's only an estimate because some absorbed water is used in photosynthesis, growth and maintaining turgor rather than lost via the stomata.");
+add(P3,"Q67 (3). Why cut a shoot under water when setting up a potometer?","Prevents air entering the xylem and forming air bubbles (embolisms), which would interrupt the water column and reduce uptake.");
+add(P3,"Q68 (4). Give two potometer control variables and explain why.","Any two: leaf area (keeps transpiring surface constant); plant species (different transpiration rates); water availability (avoids water-stress differences); time interval (fair comparisons).");
+add(P3,"Q69 (5). Compare xylem and phloem.","Xylem: dead cells, water/mineral ions, one-way, lignified walls, no ATP needed. Phloem: living cells, sucrose/assimilates, bidirectional, sieve plates + companion cells, ATP required for loading/unloading.");
+add(P3,"Q70 (6). Explain why xylem and phloem structures suit their different transport functions.","Xylem: dead cells with no cytoplasm/end walls form hollow tubes with minimal resistance; thick lignified walls resist collapse under tension. Phloem: living sieve tube elements connected by sieve plates; companion cells' mitochondria provide ATP for active loading/unloading; water enters by osmosis, generating pressure that drives mass flow source→sink.");
+
+/* ===== PART 4 — Q71-100: Mixed Synoptic ===== */
+const P4 = "Q71-100: Mixed Synoptic";
+add(P4,"Q71 (4). Why does a marathon runner breathe more rapidly during exercise?","Muscle cells respire faster and need more oxygen for aerobic respiration. Increased ventilation raises O₂ uptake and CO₂ removal, maintaining diffusion gradients across the alveoli.");
+add(P4,"Q72 (5). Why is active transport important in root hair cells when diffusion alone is insufficient?","Mineral ions are often at lower concentration in soil than inside root hair cells. Active transport uses ATP and carrier proteins to move ions against the gradient — diffusion can't move substances against a gradient.");
+add(P4,"Q73 (4). How does the cell membrane's structure allow both diffusion and active transport?","Phospholipid bilayer lets small non-polar molecules diffuse directly through; embedded channel/carrier proteins enable facilitated diffusion; specific carrier proteins use ATP for active transport against the gradient.");
+add(P4,"Q74 (5). How do enzymes and temperature influence digestion?","Digestive enzymes break large food molecules into smaller absorbable ones. Rising temperature increases activity to the optimum (more kinetic energy, more collisions); above the optimum, the enzyme denatures and activity falls.");
+add(P4,"Q75 (6). Compare diffusion, osmosis and active transport.","Diffusion: any particles, down concentration gradient, no ATP. Osmosis: water only, down water potential gradient, no ATP, needs partially permeable membrane. Active transport: solutes, against gradient, ATP required, needs carrier proteins.");
+add(P4,"Q76 (5). Why is a high surface area to volume ratio important for efficient exchange?","Large surface area gives more space for diffusion; small volume reduces diffusion distance and increases the rate substances enter/leave. Alveoli, capillaries and villi all show this adaptation.");
+add(P4,"Q77 (4). How do haemoglobin and red blood cells work together to transport oxygen efficiently?","Haemoglobin reversibly binds O₂ to form oxyhaemoglobin. Red blood cells provide a large surface area, lack a nucleus (maximising haemoglobin content), and are flexible enough to pass through narrow capillaries.");
+add(P4,"Q78 (5). Why is biodiversity important for maintaining stable ecosystems?","High biodiversity increases resilience — greater species/genetic variation lets ecosystems recover more effectively from disease, environmental change and other disturbances, and supports ecosystem services like pollination.");
+add(P4,"Q79 (4). Describe two ways climate change can affect plants and animals.","Alters species distributions as organisms move to more suitable conditions; disrupts flowering, breeding and migration patterns, reducing reproductive success and changing food-web interactions.");
+add(P4,"Q80 (5). Explain how transpiration benefits plants.","Generates the tension pulling water up the xylem, supplying leaves with water for photosynthesis, transporting dissolved mineral ions, and cooling the plant through evaporation.");
+add(P4,"Q81 (4). Why do companion cells contain more mitochondria than sieve tube elements?","They need ATP for active loading/unloading of sucrose, so contain numerous mitochondria — sieve tube elements are specialised for transport and contain very few organelles.");
+add(P4,"Q82 (5). Explain how mutations contribute to evolution.","Random mutations create new alleles, increasing genetic variation. If a mutation is advantageous, natural selection increases that allele's frequency over generations.");
+add(P4,"Q83 (4). How can a potometer investigate the effect of light intensity on transpiration?","Measure air bubble movement in a capillary tube over a fixed time while varying light intensity; keep temperature, humidity, wind speed and leaf area constant; repeat and calculate a mean rate.");
+add(P4,"Q84 (5). Why are viruses difficult to treat with antibiotics?","Antibiotics target bacterial structures/processes (e.g. cell wall synthesis, ribosomes). Viruses lack these structures and use the host cell's machinery to replicate, so antibiotics are ineffective.");
+add(P4,"Q85 (6). How is the structure of arteries, veins and capillaries related to their functions?","Arteries: thick muscular/elastic walls for high pressure. Veins: thinner walls, larger lumen, valves for low-pressure return. Capillaries: walls one cell thick, extensive networks — short diffusion distance and large surface area.");
+add(P4,"Q86 (4). Why is water an excellent transport medium in living organisms?","It's a polar solvent that dissolves many ions and polar molecules, allowing glucose, amino acids and mineral ions to be transported in blood plasma and xylem.");
+add(P4,"Q87 (5). Describe how natural selection can lead to pesticide resistance in insects.","Random mutations produce variation; some insects carry resistance alleles; pesticides kill susceptible insects while resistant ones survive and reproduce, increasing resistance allele frequency in the population.");
+add(P4,"Q88 (4). State four factors affecting enzyme activity.","Temperature, pH, enzyme concentration, substrate concentration.");
+add(P4,"Q89 (5). Why does water move from xylem into mesophyll cells?","Water evaporates from mesophyll cell walls, lowering their water potential. Water then moves from the xylem into mesophyll cells by osmosis, down the water potential gradient.");
+add(P4,"Q90 (5). How does glucose produced in photosynthesis reach a growing root?","Converted to sucrose in leaves (source); actively loaded into phloem and transported by mass flow to roots (sink); unloaded and used in respiration or converted to starch for storage.");
+add(P4,"Q91 (4). Why is ATP the 'universal energy currency' of cells?","Stores energy in phosphate bonds, releasing small manageable amounts when hydrolysed — powers processes like active transport, biosynthesis and muscle contraction.");
+add(P4,"Q92 (5). Why does carbon dioxide concentration affect photosynthesis?","CO₂ is a raw material for photosynthesis. At low concentrations it limits the rate of carbon fixation; as concentration rises, rate increases until another factor becomes limiting.");
+add(P4,"Q93 (4). How does adaptation differ from acclimatisation?","Adaptation: inherited genetic change over many generations via natural selection. Acclimatisation: reversible physiological response made by an individual within its lifetime.");
+add(P4,"Q94 (5). Why are xylem vessels dead at maturity?","During development they lose cytoplasm and organelles, leaving hollow tubes that reduce resistance to water flow; lignified walls provide strength and prevent collapse under tension.");
+add(P4,"Q95 (6). Why is maintaining biodiversity important for future medicine and agriculture?","Preserves genetic resources that may contain genes for disease resistance or environmental tolerance. Many medicines originate from natural organisms; biodiversity offers opportunities for new drugs and improved crop breeding.");
+add(P4,"Q96 (4). Why is oxygen released from haemoglobin in actively respiring tissues?","These tissues produce CO₂, lowering pH. This reduces haemoglobin's oxygen affinity (Bohr effect), causing O₂ to dissociate and diffuse into the tissue.");
+add(P4,"Q97 (5). Describe two similarities and three differences between xylem and phloem.","Similarities: both vascular tissues; both transport substances round the plant. Differences: xylem = water/mineral ions vs phloem = sucrose/assimilates; xylem = mainly dead cells vs phloem = living cells; xylem transport mainly upward vs phloem bidirectional (source↔sink).");
+add(P4,"Q98 (4). Why is random sampling important when estimating biodiversity?","Reduces bias and increases the likelihood the sample accurately represents the habitat, improving the reliability of biodiversity estimates.");
+add(P4,"Q99 (5). Why are enzymes described as biological catalysts?","They speed up biochemical reactions by lowering the activation energy required; they're not used up and can be reused, making cellular processes efficient.");
+add(P4,"Q100 (6). After severe blood loss and treatment, how do the circulatory and respiratory systems maintain oxygen delivery to tissues?","Ventilation supplies O₂ to the alveoli, where it diffuses into the blood. Haemoglobin in red blood cells binds O₂ (oxyhaemoglobin) and transports it via the circulatory system. The heart pumps oxygenated blood to tissues via arteries. In actively respiring tissues, the Bohr effect promotes O₂ release from haemoglobin, allowing it to diffuse into cells for aerobic respiration and ATP production.");
+
+/* ---------------- APP LOGIC ---------------- */
+const TOPICS = [P1, P2, P3, P4];
+let currentTopic = "All";
+let order = [];
+let pos = 0;
+let known = new Set();
+let flipped = false;
+
+const STORAGE_KEY = "bio_hfq100_progress_v1";
+
+function loadProgress(){
+  try{
+    const raw = localStorageSafe.getItem(STORAGE_KEY);
+    if(raw){ known = new Set(JSON.parse(raw)); }
+  }catch(e){}
+}
+function saveProgress(){
+  try{ localStorageSafe.setItem(STORAGE_KEY, JSON.stringify([...known])); }catch(e){}
+}
+/* In-memory fallback (artifacts / private browsing safe) */
+const memStore = {};
+const localStorageSafe = {
+  getItem(k){ try{ return window.localStorage.getItem(k); }catch(e){ return memStore[k] || null; } },
+  setItem(k,v){ try{ window.localStorage.setItem(k,v); }catch(e){ memStore[k]=v; } }
+};
+
+function buildTopicBar(){
+  const bar = document.getElementById('topicBar');
+  const all = ["All", ...TOPICS];
+  bar.innerHTML = "";
+  all.forEach(t=>{
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (t===currentTopic ? ' active':'');
+    chip.textContent = t==="All" ? "All Topics" : t;
+    chip.onclick = ()=>{ currentTopic = t; setupDeck(); buildTopicBar(); };
+    bar.appendChild(chip);
+  });
+}
+
+function setupDeck(){
+  const filtered = currentTopic==="All" ? DECK : DECK.filter(c=>c.topic===currentTopic);
+  order = filtered.map(c=>c.id);
+  pos = 0;
+  flipped = false;
+  render();
+}
+
+function shuffleDeck(){
+  for(let i=order.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [order[i],order[j]] = [order[j],order[i]];
+  }
+  pos = 0;
+  flipped = false;
+  render();
+}
+
+function currentCard(){
+  const id = order[pos];
+  return DECK.find(c=>c.id===id);
+}
+
+function render(){
+  const card = currentCard();
+  const cardEl = document.getElementById('card');
+  cardEl.classList.remove('flipped');
+  flipped = false;
+  if(!card){
+    document.getElementById('qText').textContent = "No cards in this topic.";
+    document.getElementById('aText').innerHTML = "";
+    return;
+  }
+  document.getElementById('qText').innerHTML = card.q;
+  document.getElementById('aText').innerHTML = card.a;
+  const shortTag = card.topic;
+  document.getElementById('tagFront').textContent = shortTag;
+  document.getElementById('tagBack').textContent = shortTag;
+  document.getElementById('idxFront').textContent = (pos+1)+"/"+order.length;
+  document.getElementById('idxBack').textContent = (pos+1)+"/"+order.length;
+  document.getElementById('progressLabel').textContent = (pos+1)+" / "+order.length;
+  document.getElementById('progressFill').style.width = order.length ? (((pos+1)/order.length)*100)+"%" : "0%";
+  document.getElementById('knownLabel').textContent = "✓ "+[...known].filter(id=>order.includes(id)).length;
+  document.getElementById('deckLabel').textContent = (currentTopic==="All"?"All Topics":currentTopic) + " · " + order.length + " cards";
+}
+
+function flip(){
+  const cardEl = document.getElementById('card');
+  flipped = !flipped;
+  cardEl.classList.toggle('flipped', flipped);
+}
+
+function next(){
+  if(order.length===0) return;
+  pos = (pos+1) % order.length;
+  render();
+}
+function prev(){
+  if(order.length===0) return;
+  pos = (pos-1+order.length) % order.length;
+  render();
+}
+
+function rate(status){
+  const card = currentCard();
+  if(!card) return;
+  if(status==="good"){ known.add(card.id); }
+  else { known.delete(card.id); }
+  saveProgress();
+  next();
+}
+
+/* Events */
+document.getElementById('card').addEventListener('click', flip);
+document.getElementById('nextBtn').addEventListener('click', next);
+document.getElementById('prevBtn').addEventListener('click', prev);
+document.getElementById('shuffleBtn').addEventListener('click', shuffleDeck);
+document.getElementById('rateAgain').addEventListener('click', ()=>rate('again'));
+document.getElementById('rateHard').addEventListener('click', ()=>rate('hard'));
+document.getElementById('rateGood').addEventListener('click', ()=>rate('good'));
+document.getElementById('resetLink').addEventListener('click', ()=>{
+  known = new Set();
+  saveProgress();
+  render();
+});
+
+/* Swipe support */
+let touchStartX = null, touchStartY = null;
+const stage = document.querySelector('.stage');
+stage.addEventListener('touchstart', e=>{
+  touchStartX = e.changedTouches[0].clientX;
+  touchStartY = e.changedTouches[0].clientY;
+}, {passive:true});
+stage.addEventListener('touchend', e=>{
+  if(touchStartX===null) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
+    if(dx < 0) next(); else prev();
+  }
+  touchStartX = null; touchStartY = null;
+}, {passive:true});
+
+/* Keyboard support (desktop) */
+document.addEventListener('keydown', e=>{
+  if(e.key==="ArrowRight") next();
+  else if(e.key==="ArrowLeft") prev();
+  else if(e.key===" "){ e.preventDefault(); flip(); }
+  else if(e.key==="1") rate('again');
+  else if(e.key==="2") rate('hard');
+  else if(e.key==="3") rate('good');
+});
+
+/* Init */
+loadProgress();
+buildTopicBar();
+setupDeck();
+</script>
+</body>
+</html>
