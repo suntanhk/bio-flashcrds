@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Biology A★ Phase 2 Flashcards — Topics 1-4</title>
+<style>
+  :root{
+    --bg:#0d1117;
+    --card-bg:#161b22;
+    --card-back:#1c2333;
+    --border:#2a3346;
+    --text:#e6edf3;
+    --text-dim:#8b96a5;
+    --accent:#4fd1c5;
+    --accent2:#a78bfa;
+    --good:#3fb950;
+    --warn:#f0b429;
+    --danger:#f85149;
+    --shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overscroll-behavior:none;
+  }
+  body{
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100vh;
+    min-height:-webkit-fill-available;
+    padding: env(safe-area-inset-top,16px) 16px calc(env(safe-area-inset-bottom,16px) + 12px);
+  }
+  header{
+    width:100%; max-width:520px; text-align:center; padding-top:10px;
+  }
+  h1{
+    font-size:1.05rem; font-weight:700; margin:4px 0 2px; letter-spacing:0.2px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .subtitle{ font-size:0.75rem; color:var(--text-dim); margin-bottom:10px;}
+
+  .topic-bar{
+    width:100%; max-width:520px;
+    display:flex; gap:6px; overflow-x:auto; padding:4px 2px 10px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .topic-bar::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto;
+    padding:7px 12px;
+    border-radius:20px;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    color:var(--text-dim);
+    font-size:0.72rem;
+    font-weight:600;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .chip.active{
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    color:#0d1117;
+    border-color:transparent;
+  }
+
+  .progress-row{
+    width:100%; max-width:520px;
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:0.72rem; color:var(--text-dim); margin-bottom:8px; padding:0 2px;
+  }
+  .progress-track{
+    flex:1; height:5px; background:var(--border); border-radius:4px; margin:0 10px; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); width:0%;
+    transition:width .25s ease;
+  }
+
+  .stage{
+    width:100%; max-width:520px;
+    flex:1;
+    display:flex; align-items:center; justify-content:center;
+    perspective:1400px;
+    margin: 6px 0 14px;
+    min-height:340px;
+  }
+  .card{
+    width:100%;
+    height:360px;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.2,.9,.3,1);
+    cursor:pointer;
+  }
+  .card.flipped{ transform:rotateY(180deg); }
+  .face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:20px;
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+    display:flex; flex-direction:column;
+    padding:22px;
+    overflow-y:auto;
+  }
+  .face::-webkit-scrollbar{width:4px;}
+  .face::-webkit-scrollbar-thumb{background:var(--border); border-radius:4px;}
+  .front{
+    background:radial-gradient(circle at 30% 20%, #1c2333, var(--card-bg) 70%);
+    justify-content:center; align-items:center; text-align:center;
+  }
+  .back{
+    background:radial-gradient(circle at 70% 20%, #232c44, var(--card-back) 70%);
+    transform:rotateY(180deg);
+    justify-content:flex-start; align-items:flex-start; text-align:left;
+  }
+  .tag{
+    position:absolute; top:14px; left:14px;
+    font-size:0.62rem; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;
+    color:var(--accent);
+    background:rgba(79,209,197,0.1);
+    border:1px solid rgba(79,209,197,0.3);
+    padding:3px 8px; border-radius:20px;
+  }
+  .card-index{
+    position:absolute; top:14px; right:14px;
+    font-size:0.65rem; color:var(--text-dim);
+  }
+  .q-text{
+    font-size:1.15rem; font-weight:600; line-height:1.4; margin-top:20px;
+  }
+  .tap-hint{
+    position:absolute; bottom:14px; left:0; right:0; text-align:center;
+    font-size:0.65rem; color:var(--text-dim);
+  }
+  .a-label{
+    font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;
+    color:var(--accent2); margin:20px 0 8px;
+  }
+  .a-text{
+    font-size:1rem; line-height:1.5; font-weight:500;
+  }
+  .a-text ul{ margin:6px 0 0 18px; padding:0; }
+  .a-text li{ margin-bottom:4px; }
+
+  .controls{
+    width:100%; max-width:520px;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:8px;
+  }
+  .btn{
+    flex:1;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:13px 10px;
+    border-radius:14px;
+    font-size:0.85rem;
+    font-weight:600;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    cursor:pointer;
+    -webkit-user-select:none; user-select:none;
+    transition:transform .1s ease, background .15s ease;
+  }
+  .btn:active{ transform:scale(0.96); background:#1e2635; }
+  .btn.wide{ flex:2; }
+  .btn.icon-only{ flex:0 0 52px; font-size:1.1rem; }
+
+  .rate-row{
+    width:100%; max-width:520px;
+    display:flex; gap:8px; margin-bottom:6px;
+  }
+  .rate-btn{
+    flex:1;
+    padding:11px 6px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--card-bg);
+    font-size:0.72rem;
+    font-weight:700;
+    text-align:center;
+    cursor:pointer;
+    -webkit-user-select:none; user-select:none;
+  }
+  .rate-btn.again{ color:var(--danger); }
+  .rate-btn.hard{ color:var(--warn); }
+  .rate-btn.good{ color:var(--good); }
+  .rate-btn:active{ transform:scale(0.96); }
+
+  .footer-row{
+    width:100%; max-width:520px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:0.68rem; color:var(--text-dim); margin-top:6px;
+  }
+  .footer-row span.link{
+    color:var(--accent); cursor:pointer; font-weight:600;
+  }
+
+  .done-screen{
+    width:100%; max-width:520px; text-align:center; padding:30px 10px;
+  }
+  .done-screen h2{ color:var(--good); font-size:1.3rem; margin-bottom:6px;}
+  .done-screen p{ color:var(--text-dim); font-size:0.85rem; }
+
+  @media (max-height:700px){
+    .card{ height:310px; }
+    .stage{ min-height:300px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Biology A★ Phase 2</h1>
+  <div class="subtitle">Topics 1–4 · High-Yield Quick Revision · Edexcel 9BI0</div>
+</header>
+
+<div class="topic-bar" id="topicBar"></div>
+
+<div class="progress-row">
+  <span id="progressLabel">1 / 1</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span id="knownLabel">✓ 0</span>
+</div>
+
+<div class="stage">
+  <div class="card" id="card">
+    <div class="face front">
+      <span class="tag" id="tagFront">Topic 1</span>
+      <span class="card-index" id="idxFront">1/1</span>
+      <div class="q-text" id="qText">Loading…</div>
+      <div class="tap-hint">tap to flip</div>
+    </div>
+    <div class="face back">
+      <span class="tag" id="tagBack">Topic 1</span>
+      <span class="card-index" id="idxBack">1/1</span>
+      <div class="a-label">Answer</div>
+      <div class="a-text" id="aText"></div>
+    </div>
+  </div>
+</div>
+
+<div class="rate-row" id="rateRow">
+  <div class="rate-btn again" id="rateAgain">✗ Again</div>
+  <div class="rate-btn hard" id="rateHard">~ Shaky</div>
+  <div class="rate-btn good" id="rateGood">✓ Got it</div>
+</div>
+
+<div class="controls">
+  <div class="btn icon-only" id="prevBtn">‹</div>
+  <div class="btn wide" id="shuffleBtn">🔀 Shuffle</div>
+  <div class="btn icon-only" id="nextBtn">›</div>
+</div>
+
+<div class="footer-row">
+  <span id="deckLabel">All Topics · 0 cards</span>
+  <span class="link" id="resetLink">reset progress</span>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const DECK = [];
+let uid = 0;
+function add(topic, q, a){ DECK.push({id: uid++, topic, q, a}); }
+
+/* ===== TOPIC 1 — Biological Molecules ===== */
+const T1 = "Topic 1: Molecules";
+add(T1,"Why is water an excellent solvent?","Because water is <strong>polar</strong>.");
+add(T1,"What property of water causes cohesion and adhesion?","<strong>Hydrogen bonding</strong> between water molecules.");
+add(T1,"Which property of water gives a stable body temperature?","High <strong>specific heat capacity</strong>.");
+add(T1,"Which property of water allows cooling during sweating/transpiration?","High <strong>latent heat of vaporisation</strong>.");
+add(T1,"Which property of water means aquatic habitats freeze slowly?","High <strong>latent heat of fusion</strong>.");
+add(T1,"Name the three monosaccharides you need to know.","Glucose, fructose, galactose.");
+add(T1,"What is the main function of monosaccharides?","Immediate energy source.");
+add(T1,"Maltose is made of which two monomers?","Glucose + Glucose.");
+add(T1,"Sucrose is made of which two monomers?","Glucose + Fructose.");
+add(T1,"Lactose is made of which two monomers?","Glucose + Galactose.");
+add(T1,"What bond joins two monosaccharides together?","A <strong>glycosidic bond</strong>.");
+add(T1,"What is the function of starch?","Energy storage in <strong>plants</strong>.");
+add(T1,"What is the function of glycogen?","Energy storage in <strong>animals</strong>.");
+add(T1,"What is the function of cellulose?","Forms <strong>plant cell walls</strong>.");
+add(T1,"Which glucose isomer forms cellulose?","<strong>β-glucose</strong>.");
+add(T1,"Which glucose isomer forms starch?","<strong>α-glucose</strong>.");
+add(T1,"What two components make up a lipid (triglyceride)?","Glycerol + fatty acids.");
+add(T1,"What bond joins glycerol to fatty acids?","An <strong>ester bond</strong>.");
+add(T1,"Name four functions of lipids.","Energy storage, insulation, protection, cell membranes.");
+add(T1,"Saturated vs unsaturated: C=C bonds?","Saturated = none; unsaturated = one or more.");
+add(T1,"Saturated vs unsaturated: chain shape?","Saturated = straight chains; unsaturated = bent chains.");
+add(T1,"Saturated vs unsaturated: melting point?","Saturated = higher; unsaturated = lower.");
+add(T1,"What is the monomer of a protein?","An <strong>amino acid</strong>.");
+add(T1,"What bond joins amino acids together?","A <strong>peptide bond</strong>.");
+add(T1,"List the four levels of protein structure.","Primary → Secondary → Tertiary → Quaternary.");
+add(T1,"Name five functions of proteins.","Enzymes, antibodies, hormones, structural proteins, transport proteins.");
+add(T1,"What model explains how enzymes bind substrates?","The <strong>induced-fit model</strong>.");
+add(T1,"List four factors affecting enzyme activity.","Temperature, pH, substrate concentration, enzyme concentration.");
+add(T1,"What is the monomer of DNA?","A <strong>nucleotide</strong>.");
+add(T1,"What three components make up a nucleotide?","Phosphate, deoxyribose, base.");
+add(T1,"State the DNA base-pairing rules.","A–T and C–G.");
+add(T1,"[Self-test] Which carbohydrate is made of β-glucose monomers?","<strong>Cellulose</strong> (not glycogen, starch or maltose).");
+add(T1,"[Self-test] Which statement about enzymes is correct?","They are <strong>biological catalysts that lower activation energy</strong> — they are not used up and don't increase activation energy.");
+add(T1,"[Top fact] What do enzymes do to activation energy?","They <strong>lower</strong> it.");
+add(T1,"[Top fact] Which model best explains enzyme action?","The <strong>induced-fit model</strong>.");
+add(T1,"[Top fact] Is glycogen a branched or unbranched molecule?","Highly <strong>branched</strong>.");
+
+/* ===== TOPIC 2 — Cells, Viruses and Reproduction ===== */
+const T2 = "Topic 2: Cells";
+add(T2,"State the three points of Cell Theory.","All living organisms are made of cells; cells are the basic structural/functional unit of life; new cells arise only from pre-existing cells by division.");
+add(T2,"Eukaryotic vs prokaryotic: nucleus?","Eukaryotic = present; prokaryotic = absent.");
+add(T2,"Eukaryotic vs prokaryotic: DNA form?","Eukaryotic = linear chromosomes; prokaryotic = circular DNA.");
+add(T2,"Eukaryotic vs prokaryotic: ribosome size?","Eukaryotic = 80S; prokaryotic = 70S.");
+add(T2,"A★ tip: how should you answer eukaryote vs prokaryote comparison questions?","Don't just list differences — <strong>explain how they affect cell function</strong> if asked.");
+add(T2,"What is the function of the nucleus?","Contains DNA and controls cell activities.");
+add(T2,"What is the function of the mitochondrion?","Site of aerobic respiration and ATP production.");
+add(T2,"What is the function of ribosomes?","Protein synthesis.");
+add(T2,"What is the function of rough endoplasmic reticulum?","Protein modification and transport.");
+add(T2,"What is the function of the Golgi apparatus?","Modifies, sorts and packages proteins.");
+add(T2,"What is the function of the lysosome?","Contains hydrolytic enzymes for intracellular digestion.");
+add(T2,"What is the function of chloroplasts?","Photosynthesis (plants only).");
+add(T2,"What is the function of a plant vacuole?","Maintains cell turgor.");
+add(T2,"What four components make up the fluid mosaic model of the cell membrane?","Phospholipid bilayer, proteins, cholesterol, glycoproteins/glycolipids.");
+add(T2,"Diffusion: is ATP required, and what direction?","No ATP; high → low concentration.");
+add(T2,"Facilitated diffusion: is ATP required, and what direction?","No ATP; high → low concentration (via channel/carrier proteins).");
+add(T2,"Define osmosis precisely.","The net movement of water molecules from a region of <strong>higher water potential</strong> to a region of <strong>lower water potential</strong>, through a partially permeable membrane.");
+add(T2,"Common exam error with osmosis — what must you avoid writing?","Don't write 'high to low concentration' unless you specify <strong>water concentration/water potential</strong>.");
+add(T2,"Active transport: is ATP required, and what direction?","Yes, ATP required; low → high concentration.");
+add(T2,"What is the purpose of mitosis?","Growth, repair, asexual reproduction.");
+add(T2,"What is the outcome of mitosis?","Two genetically identical diploid daughter cells.");
+add(T2,"Give the mnemonic for the stages of mitosis.","<strong>PMAT</strong> — Prophase, Metaphase, Anaphase, Telophase.");
+add(T2,"What is the purpose of meiosis?","Production of gametes.");
+add(T2,"What is the outcome of meiosis?","Four genetically different haploid cells.");
+add(T2,"Name two sources of genetic variation in meiosis.","Crossing over; independent assortment of chromosomes.");
+add(T2,"Mitosis vs meiosis: number of divisions and daughter cells?","Mitosis = 1 division, 2 daughter cells; Meiosis = 2 divisions, 4 daughter cells.");
+add(T2,"Mitosis vs meiosis: chromosome number and genetic variation?","Mitosis = maintained, no variation; Meiosis = halved, produces variation.");
+add(T2,"Define a stem cell.","An undifferentiated cell capable of self-renewal and differentiation into specialised cell types.");
+add(T2,"Name the three types of stem cells covered.","Embryonic, adult, meristem (plants).");
+add(T2,"Name three applications of stem cells.","Tissue repair, treatment of blood disorders, regenerative medicine.");
+add(T2,"What three structural features do all viruses have/lack?","Genetic material (DNA or RNA), a protein coat (capsid); some also have a lipid envelope.");
+add(T2,"List three characteristics that make viruses 'acellular'.","No cytoplasm, no ribosomes, replicate only inside living host cells.");
+add(T2,"[Self-test] Which organelle produces ATP?","<strong>Mitochondrion</strong>.");
+add(T2,"[Self-test] Which process moves substances against a concentration gradient?","<strong>Active transport</strong>.");
+add(T2,"[Self-test] Which feature is found only in eukaryotic cells?","A <strong>membrane-bound nucleus</strong>.");
+add(T2,"[Self-test] Why are viruses obligate intracellular parasites?","They have no metabolism/ribosomes of their own and can only replicate inside a living host cell.");
+add(T2,"[Top fact] Are embryonic stem cells pluripotent or multipotent?","<strong>Pluripotent</strong>.");
+add(T2,"[Top fact] Are adult stem cells pluripotent or multipotent?","<strong>Multipotent</strong>.");
+add(T2,"[Exam tip] How should you distinguish facilitated diffusion from active transport?","Facilitated diffusion needs <strong>no ATP</strong>; active transport <strong>requires ATP</strong>.");
+
+/* ===== TOPIC 3 — Classification and Biodiversity ===== */
+const T3 = "Topic 3: Classification";
+add(T3,"Define taxonomy.","The science of naming, identifying and classifying organisms according to their evolutionary relationships.");
+add(T3,"Give the classification hierarchy in order.","Kingdom → Phylum → Class → Order → Family → Genus → Species.");
+add(T3,"What is the mnemonic for the classification hierarchy?","'King Philip Came Over For Good Soup'.");
+add(T3,"What is binomial nomenclature? Give the format.","A two-part scientific name: Genus (capital letter) + species (lower case), e.g. <em>Homo sapiens</em>.");
+add(T3,"Give two advantages of binomial nomenclature.","Universal naming system; avoids confusion from common names (also shows evolutionary relationships).");
+add(T3,"Name the three domains of classification.","Bacteria, Archaea, Eukarya.");
+add(T3,"Describe Bacteria (domain) characteristics.","Prokaryotic cells with peptidoglycan cell walls.");
+add(T3,"Describe Archaea characteristics.","Prokaryotic cells without peptidoglycan; often live in extreme environments.");
+add(T3,"Describe Eukarya characteristics.","Eukaryotic organisms — animals, plants, fungi and protists.");
+add(T3,"A★ tip: domain vs kingdom?","A <strong>domain</strong> is a higher taxonomic rank than a kingdom — don't confuse them.");
+add(T3,"What do fossils show as evidence for evolution?","Organisms that lived in the past and evolutionary changes over time.");
+add(T3,"Give an example of comparative anatomy evidence for evolution.","The pentadactyl limb in vertebrates — homologous structures indicate common ancestry.");
+add(T3,"How do DNA/protein comparisons provide evolutionary evidence?","The more similar the DNA sequence, the more closely related two species are likely to be.");
+add(T3,"Define natural selection.","The process by which individuals with advantageous inherited characteristics are more likely to survive and reproduce.");
+add(T3,"State the 5-step sequence of natural selection.","Genetic variation exists → competition for resources → individuals with advantageous traits survive → they reproduce → beneficial alleles become more common over generations.");
+add(T3,"Define an adaptation.","An inherited characteristic that increases an organism's chances of survival and reproduction.");
+add(T3,"Give an example of a structural adaptation.","Thick fur in polar bears.");
+add(T3,"Give an example of a behavioural adaptation.","Migration.");
+add(T3,"Give an example of a physiological adaptation.","Concentrated urine in desert mammals.");
+add(T3,"Define biodiversity.","The variety of life within a habitat, ecosystem, or the entire Earth.");
+add(T3,"What three levels does biodiversity include?","Species diversity, genetic diversity, ecosystem diversity.");
+add(T3,"Give four reasons biodiversity is important.","Stable ecosystems, food security, medicines, ecosystem services (e.g. pollination, nutrient cycling).");
+add(T3,"List five major threats to biodiversity.","Habitat destruction, pollution, climate change, overexploitation, invasive species.");
+add(T3,"What is in situ conservation? Give examples.","Protecting species in their natural habitats — e.g. national parks, marine protected areas, nature reserves.");
+add(T3,"What is ex situ conservation? Give examples.","Protecting species outside their natural habitats — e.g. zoos, botanical gardens, seed banks.");
+add(T3,"What is random sampling used for?","Reduces sampling bias.");
+add(T3,"What is quadrat sampling used for?","Sampling plants and slow-moving organisms.");
+add(T3,"What are transects used for?","Investigating changes in species distribution across an environmental gradient.");
+add(T3,"[Self-test] Which taxonomic rank comes immediately below Family?","<strong>Genus</strong>.");
+add(T3,"[Self-test] Which domain contains animals?","<strong>Eukarya</strong>.");
+add(T3,"[Self-test] Best description of natural selection?","Beneficial inherited traits become more common through <strong>differential survival and reproduction</strong>.");
+add(T3,"[Self-test] Best method to estimate abundance of daisies in grassland?","<strong>Quadrat</strong> sampling.");
+add(T3,"[Self-test] Which is an example of ex situ conservation?","<strong>Botanical garden</strong>.");
+add(T3,"[Exam tip] What four terms must you include when explaining natural selection?","Genetic variation, selection pressure, differential survival, inheritance.");
+add(T3,"[Exam tip] Why are DNA sequence comparisons more reliable than appearance for evolutionary relationships?","DNA similarity gives a direct measure of genetic relatedness, whereas appearance can result from convergent evolution rather than shared ancestry.");
+
+/* ===== TOPIC 4 — Exchange and Transport ===== */
+const T4 = "Topic 4: Exchange/Transport";
+add(T4,"List the five adaptations of alveoli for gas exchange.","Large surface area, one-cell-thick wall, moist lining, dense capillary network, continuous ventilation.");
+add(T4,"Distinguish ventilation, gas exchange and respiration.","Ventilation = movement of air; gas exchange = diffusion of gases; respiration = release of energy in cells.");
+add(T4,"What is the function of plasma?","Transports dissolved substances.");
+add(T4,"What is the function of red blood cells?","Oxygen transport.");
+add(T4,"What is the function of white blood cells?","Defence against pathogens.");
+add(T4,"What is the function of platelets?","Blood clotting.");
+add(T4,"List four adaptations of red blood cells.","Biconcave shape, no nucleus, flexible membrane, packed with haemoglobin.");
+add(T4,"State five key facts about haemoglobin's structure.","Globular protein; four polypeptide chains; four haem groups; one Fe²⁺ ion per haem group; carries four oxygen molecules.");
+add(T4,"What shape is the oxygen dissociation curve, and why?","Sigmoid (S-shaped), due to cooperative binding.");
+add(T4,"State the Bohr effect chain.","High CO₂ → low pH → lower oxygen affinity → more oxygen released.");
+add(T4,"Give three properties of fetal haemoglobin.","Higher oxygen affinity; left-shifted dissociation curve; efficient oxygen transfer across the placenta.");
+add(T4,"Trace the blood flow through the heart, starting from the body.","Body → vena cava → right atrium → right ventricle → pulmonary artery → lungs → pulmonary vein → left atrium → left ventricle → aorta → body.");
+add(T4,"Name the three phases of the cardiac cycle.","Diastole (filling), atrial systole (atria contract), ventricular systole (ventricles contract).");
+add(T4,"State the cardiac output formula.","Cardiac Output = Heart Rate × Stroke Volume (always include units).");
+add(T4,"Describe an artery's key features.","Thick wall, small lumen, high pressure.");
+add(T4,"Describe a vein's key features.","Thin wall, valves, large lumen.");
+add(T4,"Describe a capillary's key feature.","One-cell-thick wall, for exchange.");
+add(T4,"List five features of xylem.","Dead cells, hollow lumen, lignified walls, one-way transport, carries water and mineral ions.");
+add(T4,"State the five steps of the cohesion–tension theory.","Water evaporates from leaves → tension develops → cohesion pulls water upward → adhesion supports the water column → lignin prevents vessel collapse.");
+add(T4,"Is phloem living or dead tissue, and what does it transport?","Living tissue; transports sucrose and other assimilates.");
+add(T4,"What direction does phloem transport occur, and does it need ATP?","Source ↔ sink; yes, ATP is required for active loading/unloading.");
+add(T4,"What does a potometer actually measure?","The rate of <strong>water uptake</strong> — not transpiration directly.");
+add(T4,"[Self-test] Which vessel carries oxygenated blood from lungs to heart?","<strong>Pulmonary vein</strong>.");
+add(T4,"[Self-test] Which alveolar adaptation shortens diffusion distance?","<strong>One-cell-thick wall</strong>.");
+add(T4,"[Self-test] What causes the Bohr effect?","<strong>Increased carbon dioxide concentration</strong>.");
+add(T4,"[Self-test] Which tissue transports sucrose?","<strong>Phloem</strong>.");
+add(T4,"[Self-test] A potometer bubble's movement estimates what?","<strong>Water uptake rate</strong>.");
+add(T4,"[Top fact] Which heart chamber has the thickest wall, and why?","The <strong>left ventricle</strong> — it pumps blood around the whole body (systemic circulation).");
+add(T4,"[Top fact] What do companion cells contain lots of, and why?","Many <strong>mitochondria</strong>, for active transport (loading sucrose into phloem).");
+add(T4,"[Exam tip] What must gas exchange explanations always link?","Adaptation → diffusion rate.");
+add(T4,"[Exam tip] What should heart questions describe?","The <strong>pressure changes</strong> that cause valves to open and close.");
+add(T4,"[Exam tip] Distinguish transpiration from the transpiration stream.","Transpiration = loss of water vapour (from leaves); transpiration stream = movement of water through the xylem.");
+
+/* ---------------- APP LOGIC ---------------- */
+const TOPICS = [T1, T2, T3, T4];
+let currentTopic = "All";
+let order = [];
+let pos = 0;
+let known = new Set();
+let flipped = false;
+
+const STORAGE_KEY = "bio_phase2_progress_v1";
+
+function loadProgress(){
+  try{
+    const raw = localStorageSafe.getItem(STORAGE_KEY);
+    if(raw){ known = new Set(JSON.parse(raw)); }
+  }catch(e){}
+}
+function saveProgress(){
+  try{ localStorageSafe.setItem(STORAGE_KEY, JSON.stringify([...known])); }catch(e){}
+}
+/* In-memory fallback (artifacts / private browsing safe) */
+const memStore = {};
+const localStorageSafe = {
+  getItem(k){ try{ return window.localStorage.getItem(k); }catch(e){ return memStore[k] || null; } },
+  setItem(k,v){ try{ window.localStorage.setItem(k,v); }catch(e){ memStore[k]=v; } }
+};
+
+function buildTopicBar(){
+  const bar = document.getElementById('topicBar');
+  const all = ["All", ...TOPICS];
+  bar.innerHTML = "";
+  all.forEach(t=>{
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (t===currentTopic ? ' active':'');
+    chip.textContent = t==="All" ? "All Topics" : t.replace(/^Topic \d: /,'');
+    chip.onclick = ()=>{ currentTopic = t; setupDeck(); buildTopicBar(); };
+    bar.appendChild(chip);
+  });
+}
+
+function setupDeck(){
+  const filtered = currentTopic==="All" ? DECK : DECK.filter(c=>c.topic===currentTopic);
+  order = filtered.map(c=>c.id);
+  pos = 0;
+  flipped = false;
+  render();
+}
+
+function shuffleDeck(){
+  for(let i=order.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [order[i],order[j]] = [order[j],order[i]];
+  }
+  pos = 0;
+  flipped = false;
+  render();
+}
+
+function currentCard(){
+  const id = order[pos];
+  return DECK.find(c=>c.id===id);
+}
+
+function render(){
+  const card = currentCard();
+  const cardEl = document.getElementById('card');
+  cardEl.classList.remove('flipped');
+  flipped = false;
+  if(!card){
+    document.getElementById('qText').textContent = "No cards in this topic.";
+    document.getElementById('aText').innerHTML = "";
+    return;
+  }
+  document.getElementById('qText').innerHTML = card.q;
+  document.getElementById('aText').innerHTML = card.a;
+  const shortTag = card.topic.replace(/^Topic (\d): .*/,'Topic $1');
+  document.getElementById('tagFront').textContent = shortTag;
+  document.getElementById('tagBack').textContent = shortTag;
+  document.getElementById('idxFront').textContent = (pos+1)+"/"+order.length;
+  document.getElementById('idxBack').textContent = (pos+1)+"/"+order.length;
+  document.getElementById('progressLabel').textContent = (pos+1)+" / "+order.length;
+  document.getElementById('progressFill').style.width = order.length ? (((pos+1)/order.length)*100)+"%" : "0%";
+  document.getElementById('knownLabel').textContent = "✓ "+[...known].filter(id=>order.includes(id)).length;
+  document.getElementById('deckLabel').textContent = (currentTopic==="All"?"All Topics":currentTopic) + " · " + order.length + " cards";
+}
+
+function flip(){
+  const cardEl = document.getElementById('card');
+  flipped = !flipped;
+  cardEl.classList.toggle('flipped', flipped);
+}
+
+function next(){
+  if(order.length===0) return;
+  pos = (pos+1) % order.length;
+  render();
+}
+function prev(){
+  if(order.length===0) return;
+  pos = (pos-1+order.length) % order.length;
+  render();
+}
+
+function rate(status){
+  const card = currentCard();
+  if(!card) return;
+  if(status==="good"){ known.add(card.id); }
+  else { known.delete(card.id); }
+  saveProgress();
+  next();
+}
+
+/* Events */
+document.getElementById('card').addEventListener('click', flip);
+document.getElementById('nextBtn').addEventListener('click', next);
+document.getElementById('prevBtn').addEventListener('click', prev);
+document.getElementById('shuffleBtn').addEventListener('click', shuffleDeck);
+document.getElementById('rateAgain').addEventListener('click', ()=>rate('again'));
+document.getElementById('rateHard').addEventListener('click', ()=>rate('hard'));
+document.getElementById('rateGood').addEventListener('click', ()=>rate('good'));
+document.getElementById('resetLink').addEventListener('click', ()=>{
+  known = new Set();
+  saveProgress();
+  render();
+});
+
+/* Swipe support */
+let touchStartX = null, touchStartY = null;
+const stage = document.querySelector('.stage');
+stage.addEventListener('touchstart', e=>{
+  touchStartX = e.changedTouches[0].clientX;
+  touchStartY = e.changedTouches[0].clientY;
+}, {passive:true});
+stage.addEventListener('touchend', e=>{
+  if(touchStartX===null) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
+    if(dx < 0) next(); else prev();
+  }
+  touchStartX = null; touchStartY = null;
+}, {passive:true});
+
+/* Keyboard support (desktop) */
+document.addEventListener('keydown', e=>{
+  if(e.key==="ArrowRight") next();
+  else if(e.key==="ArrowLeft") prev();
+  else if(e.key===" "){ e.preventDefault(); flip(); }
+  else if(e.key==="1") rate('again');
+  else if(e.key==="2") rate('hard');
+  else if(e.key==="3") rate('good');
+});
+
+/* Init */
+loadProgress();
+buildTopicBar();
+setupDeck();
+</script>
+</body>
+</html>
