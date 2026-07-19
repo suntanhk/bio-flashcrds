@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Biology Mock Paper 1 Flashcards — 9BI0</title>
+<style>
+  :root{
+    --bg:#0d1117;
+    --card-bg:#161b22;
+    --card-back:#1c2333;
+    --border:#2a3346;
+    --text:#e6edf3;
+    --text-dim:#8b96a5;
+    --accent:#4fd1c5;
+    --accent2:#a78bfa;
+    --good:#3fb950;
+    --warn:#f0b429;
+    --danger:#f85149;
+    --shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overscroll-behavior:none;
+  }
+  body{
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100vh;
+    min-height:-webkit-fill-available;
+    padding: env(safe-area-inset-top,16px) 16px calc(env(safe-area-inset-bottom,16px) + 12px);
+  }
+  header{
+    width:100%; max-width:520px; text-align:center; padding-top:10px;
+  }
+  h1{
+    font-size:1.05rem; font-weight:700; margin:4px 0 2px; letter-spacing:0.2px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .subtitle{ font-size:0.75rem; color:var(--text-dim); margin-bottom:10px;}
+
+  .topic-bar{
+    width:100%; max-width:520px;
+    display:flex; gap:6px; overflow-x:auto; padding:4px 2px 10px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .topic-bar::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto;
+    padding:7px 12px;
+    border-radius:20px;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    color:var(--text-dim);
+    font-size:0.72rem;
+    font-weight:600;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .chip.active{
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    color:#0d1117;
+    border-color:transparent;
+  }
+
+  .progress-row{
+    width:100%; max-width:520px;
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:0.72rem; color:var(--text-dim); margin-bottom:8px; padding:0 2px;
+  }
+  .progress-track{
+    flex:1; height:5px; background:var(--border); border-radius:4px; margin:0 10px; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); width:0%;
+    transition:width .25s ease;
+  }
+
+  .stage{
+    width:100%; max-width:520px;
+    flex:1;
+    display:flex; align-items:center; justify-content:center;
+    perspective:1400px;
+    margin: 6px 0 14px;
+    min-height:340px;
+  }
+  .card{
+    width:100%;
+    height:360px;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.2,.9,.3,1);
+    cursor:pointer;
+  }
+  .card.flipped{ transform:rotateY(180deg); }
+  .face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:20px;
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+    display:flex; flex-direction:column;
+    padding:22px;
+    overflow-y:auto;
+  }
+  .face::-webkit-scrollbar{width:4px;}
+  .face::-webkit-scrollbar-thumb{background:var(--border); border-radius:4px;}
+  .front{
+    background:radial-gradient(circle at 30% 20%, #1c2333, var(--card-bg) 70%);
+    justify-content:center; align-items:center; text-align:center;
+  }
+  .back{
+    background:radial-gradient(circle at 70% 20%, #232c44, var(--card-back) 70%);
+    transform:rotateY(180deg);
+    justify-content:flex-start; align-items:flex-start; text-align:left;
+  }
+  .tag{
+    position:absolute; top:14px; left:14px;
+    font-size:0.62rem; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;
+    color:var(--accent);
+    background:rgba(79,209,197,0.1);
+    border:1px solid rgba(79,209,197,0.3);
+    padding:3px 8px; border-radius:20px;
+  }
+  .card-index{
+    position:absolute; top:14px; right:14px;
+    font-size:0.65rem; color:var(--text-dim);
+  }
+  .q-text{
+    font-size:1.15rem; font-weight:600; line-height:1.4; margin-top:20px;
+  }
+  .tap-hint{
+    position:absolute; bottom:14px; left:0; right:0; text-align:center;
+    font-size:0.65rem; color:var(--text-dim);
+  }
+  .a-label{
+    font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;
+    color:var(--accent2); margin:20px 0 8px;
+  }
+  .a-text{
+    font-size:1rem; line-height:1.5; font-weight:500;
+  }
+  .a-text ul{ margin:6px 0 0 18px; padding:0; }
+  .a-text li{ margin-bottom:4px; }
+
+  .controls{
+    width:100%; max-width:520px;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:8px;
+  }
+  .btn{
+    flex:1;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:13px 10px;
+    border-radius:14px;
+    font-size:0.85rem;
+    font-weight:600;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    cursor:pointer;
+    -webkit-user-select:none; user-select:none;
+    transition:transform .1s ease, background .15s ease;
+  }
+  .btn:active{ transform:scale(0.96); background:#1e2635; }
+  .btn.wide{ flex:2; }
+  .btn.icon-only{ flex:0 0 52px; font-size:1.1rem; }
+
+  .rate-row{
+    width:100%; max-width:520px;
+    display:flex; gap:8px; margin-bottom:6px;
+  }
+  .rate-btn{
+    flex:1;
+    padding:11px 6px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--card-bg);
+    font-size:0.72rem;
+    font-weight:700;
+    text-align:center;
+    cursor:pointer;
+    -webkit-user-select:none; user-select:none;
+  }
+  .rate-btn.again{ color:var(--danger); }
+  .rate-btn.hard{ color:var(--warn); }
+  .rate-btn.good{ color:var(--good); }
+  .rate-btn:active{ transform:scale(0.96); }
+
+  .footer-row{
+    width:100%; max-width:520px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:0.68rem; color:var(--text-dim); margin-top:6px;
+  }
+  .footer-row span.link{
+    color:var(--accent); cursor:pointer; font-weight:600;
+  }
+
+  .done-screen{
+    width:100%; max-width:520px; text-align:center; padding:30px 10px;
+  }
+  .done-screen h2{ color:var(--good); font-size:1.3rem; margin-bottom:6px;}
+  .done-screen p{ color:var(--text-dim); font-size:0.85rem; }
+
+  @media (max-height:700px){
+    .card{ height:310px; }
+    .stage{ min-height:300px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Biology Mock Paper 1</h1>
+  <div class="subtitle">Full Mock · Topics 1–4 · Mark Scheme &amp; A★ Answers · Edexcel 9BI0</div>
+</header>
+
+<div class="topic-bar" id="topicBar"></div>
+
+<div class="progress-row">
+  <span id="progressLabel">1 / 1</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span id="knownLabel">✓ 0</span>
+</div>
+
+<div class="stage">
+  <div class="card" id="card">
+    <div class="face front">
+      <span class="tag" id="tagFront">Topic 1</span>
+      <span class="card-index" id="idxFront">1/1</span>
+      <div class="q-text" id="qText">Loading…</div>
+      <div class="tap-hint">tap to flip</div>
+    </div>
+    <div class="face back">
+      <span class="tag" id="tagBack">Topic 1</span>
+      <span class="card-index" id="idxBack">1/1</span>
+      <div class="a-label">Answer</div>
+      <div class="a-text" id="aText"></div>
+    </div>
+  </div>
+</div>
+
+<div class="rate-row" id="rateRow">
+  <div class="rate-btn again" id="rateAgain">✗ Again</div>
+  <div class="rate-btn hard" id="rateHard">~ Shaky</div>
+  <div class="rate-btn good" id="rateGood">✓ Got it</div>
+</div>
+
+<div class="controls">
+  <div class="btn icon-only" id="prevBtn">‹</div>
+  <div class="btn wide" id="shuffleBtn">🔀 Shuffle</div>
+  <div class="btn icon-only" id="nextBtn">›</div>
+</div>
+
+<div class="footer-row">
+  <span id="deckLabel">All Topics · 0 cards</span>
+  <span class="link" id="resetLink">reset progress</span>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const DECK = [];
+let uid = 0;
+function add(topic, q, a){ DECK.push({id: uid++, topic, q, a}); }
+
+/* ===== EXAM INFO ===== */
+const EI = "Exam Info";
+add(EI,"How long is Mock Paper 1, and how many marks?","1 hour 30 minutes; 80 marks total.");
+add(EI,"Which topics does Mock Paper 1 cover?","Topics 1–4: Biological Molecules, Cells/Viruses/Reproduction, Classification and Biodiversity, Exchange and Transport.");
+add(EI,"How many sections does the paper have, and what are they?","Section A: Multiple Choice (10); Section B: Short Answer (Q11–15); Section C: Data Analysis (Q16); Section D: Structured Questions (Q17–20); Section E: Extended Response (Q21).");
+add(EI,"How many marks is Section A (MCQ) worth?","10 marks (1 mark each, Q1–10).");
+add(EI,"How many marks are Q17–20 (structured questions) each worth?","6 marks each.");
+add(EI,"How many marks is Q21 (extended response) worth?","10 marks — the largest single question on the paper.");
+add(EI,"How many marks is Q16 (data analysis) worth, and how is it split?","8 marks total: (a) describe pattern 2, (b) explain pattern 4, (c) limitation + improvement 2.");
+add(EI,"What score range is the practice A* boundary on this mock?","72–80 marks (practice target only — real Pearson boundaries vary each year).");
+add(EI,"What score range is the practice A boundary?","64–71 marks.");
+add(EI,"What score range is the practice B boundary?","56–63 marks.");
+add(EI,"What's the recommended exam-technique protocol before marking?","Complete the paper in 90 minutes under exam conditions, no notes/textbooks, mark in a different coloured pen, and record which topics lost marks.");
+
+/* ===== SECTION A — Multiple Choice ===== */
+const SA = "Section A: MCQ";
+add(SA,"Q1. Which property of water is most important in maintaining a stable body temperature?<br>A. Polarity B. Transparency C. High specific heat capacity D. Cohesion","<strong>C — High specific heat capacity.</strong>");
+add(SA,"Q2. Which bond joins amino acids together?<br>A. Ester bond B. Glycosidic bond C. Hydrogen bond D. Peptide bond","<strong>D — Peptide bond.</strong>");
+add(SA,"Q3. Which organelle is the main site of aerobic respiration?<br>A. Ribosome B. Golgi apparatus C. Mitochondrion D. Lysosome","<strong>C — Mitochondrion.</strong>");
+add(SA,"Q4. Which transport process requires ATP?<br>A. Diffusion B. Osmosis C. Facilitated diffusion D. Active transport","<strong>D — Active transport.</strong>");
+add(SA,"Q5. Which statement about viruses is correct?<br>A. They possess ribosomes. B. They are prokaryotic cells. C. They replicate only inside living host cells. D. They carry out independent metabolism.","<strong>C —</strong> They replicate only inside living host cells.");
+add(SA,"Q6. Which taxonomic rank comes immediately below Order?<br>A. Class B. Family C. Genus D. Species","<strong>B — Family.</strong> (Order → Family → Genus → Species)");
+add(SA,"Q7. Which blood vessel carries oxygenated blood from the lungs to the heart?<br>A. Pulmonary artery B. Aorta C. Pulmonary vein D. Vena cava","<strong>C — Pulmonary vein.</strong>");
+add(SA,"Q8. The oxygen dissociation curve is S-shaped because of:<br>A. Active transport B. Diffusion C. Cooperative binding D. Osmosis","<strong>C — Cooperative binding.</strong>");
+add(SA,"Q9. Which tissue transports sucrose?<br>A. Cortex B. Epidermis C. Xylem D. Phloem","<strong>D — Phloem.</strong>");
+add(SA,"Q10. A potometer measures:<br>A. Photosynthesis rate B. Respiration rate C. Water uptake rate D. Translocation rate","<strong>C — Water uptake rate.</strong>");
+
+/* ===== SECTION B — Short Answer (with mark scheme) ===== */
+const SB = "Section B: Short Answer";
+add(SB,"Q11 (4 marks). Describe four adaptations of alveoli that make gas exchange efficient.","1 mark each: large surface area (↑ diffusion rate); walls one cell thick (↓ diffusion distance); moist lining (gases dissolve before diffusing); dense capillary network + continuous ventilation (maintains steep concentration gradient).");
+add(SB,"Q11 — Common mistake to avoid.","❌ 'Alveoli are thin.' ✔ Better: 'The walls are <strong>one cell thick</strong>, reducing the diffusion distance.' Always give the mechanism, not just a vague description.");
+add(SB,"Q12 (5 marks). Compare mitosis and meiosis — what 5 points earn marks?","1 mark each: (1) mitosis = 1 division, meiosis = 2; (2) mitosis → 2 daughter cells, meiosis → 4; (3) mitosis = genetically identical, meiosis = genetically different; (4) mitosis maintains chromosome number (diploid→diploid), meiosis halves it (diploid→haploid); (5) mitosis for growth/repair/asexual reproduction, meiosis produces gametes for sexual reproduction.");
+add(SB,"Q13 (4 marks). Why are mature mammalian red blood cells well adapted for transporting oxygen?","1 mark each: biconcave shape → large surface area to volume ratio; no nucleus → more space for haemoglobin; packed with haemoglobin to bind oxygen; flexible membrane allows passage through narrow capillaries.");
+add(SB,"Q14 (5 marks). Describe the role of water in living organisms.","1 mark each: solvent for metabolic reactions; transport medium in blood/xylem; high specific heat capacity stabilises temperature; high latent heat of vaporisation provides cooling; reactant/product in biochemical reactions (e.g. photosynthesis, hydrolysis, condensation).");
+add(SB,"Q15 (4 marks). Explain why companion cells contain many mitochondria.","1 mark each: mitochondria produce ATP by aerobic respiration; ATP is required for active loading of sucrose (at source); ATP may also be needed for unloading (at sink); active transport creates the pressure gradient needed for mass flow.");
+
+/* ===== SECTION C — Data Analysis (Q16) ===== */
+const SC = "Section C: Data Analysis";
+add(SC,"Q16 data: rate of reaction (arbitrary units) at 10/20/30/40/50/60°C.","12, 24, 39, 55, 18, 3 — rate peaks at <strong>40°C</strong> then falls sharply.");
+add(SC,"Q16(a) (2 marks). Describe the pattern shown by the data.","Rate of reaction increases from 10°C up to a peak at 40°C (55 units), then decreases sharply between 40°C and 60°C (down to 3 units).");
+add(SC,"Q16(b) (4 marks). Explain the pattern.","Up to the optimum (40°C): rising temperature increases kinetic energy → more frequent, successful enzyme–substrate collisions → rate increases. Above the optimum: the enzyme denatures — hydrogen/ionic bonds break, the active site changes shape, substrate can no longer bind — so the rate falls sharply.");
+add(SC,"Q16(c) (2 marks). State one limitation of the investigation and one improvement.","Limitation: only one reading was taken per temperature, so anomalies can't be identified and the result may be unreliable. Improvement: repeat at each temperature and calculate a mean rate.");
+
+/* ===== SECTION D — Structured Questions ===== */
+const SD = "Section D: Structured";
+add(SD,"Q17 (6 marks). Explain the Bohr effect and why it's beneficial in actively respiring tissue.","High CO₂ → lowers pH (more acidic) → haemoglobin's oxygen affinity decreases → the dissociation curve shifts right → more oxygen is released. This is beneficial because actively respiring tissue produces more CO₂ and needs more oxygen — the effect delivers oxygen exactly where it's needed most.");
+add(SD,"Q18 (6 marks). Explain the cohesion–tension theory for water transport in plants.","Water evaporates from leaf mesophyll cells (transpiration) → this creates tension (negative pressure) that pulls water up through the xylem → water molecules cohere to each other via hydrogen bonds, forming a continuous column → adhesion to xylem walls supports the column → lignified walls prevent the vessel collapsing under tension.");
+add(SD,"Q19 (6 marks). Compare the structure and function of arteries and veins.","Arteries: thick muscular/elastic wall, small lumen, no valves (except semilunar), carry blood at high pressure away from the heart. Veins: thin wall, large lumen, contain valves to prevent backflow, carry blood at low pressure towards the heart (often aided by skeletal muscle contraction).");
+add(SD,"Q20 (6 marks). How does active transport differ from facilitated diffusion?","Active transport moves substances against the concentration gradient (low → high) and requires ATP via carrier proteins. Facilitated diffusion moves substances down the concentration gradient (high → low) via channel or carrier proteins and needs no ATP.");
+
+/* ===== SECTION E — Extended Response (Q21) ===== */
+const SE = "Section E: Extended";
+add(SE,"Q21 (10 marks). What six things must an A★ answer on xylem vs phloem transport include?","Xylem structure; phloem structure; transpiration; translocation; cohesion–tension theory; mass flow hypothesis — with explicit links between each tissue's structure and its function.");
+add(SE,"Q21 — how are marks awarded on this extended-response question?","For the presence of key biological ideas, accurate terminology, logical sequencing, and clear linkage between structure and function (not just listing facts).");
+add(SE,"Q21 — Xylem: what structural features must you mention?","Dead cells, hollow lumen, lignified walls (prevent collapse under tension), enabling one-way transport of water and mineral ions.");
+add(SE,"Q21 — Phloem: what structural features must you mention?","Living tissue with sieve tube elements and companion cells (rich in mitochondria); transports sucrose and assimilates bidirectionally, source ↔ sink, requiring ATP for loading/unloading.");
+
+/* ---------------- APP LOGIC ---------------- */
+const TOPICS = [EI, SA, SB, SC, SD, SE];
+let currentTopic = "All";
+let order = [];
+let pos = 0;
+let known = new Set();
+let flipped = false;
+
+const STORAGE_KEY = "bio_mock1_progress_v1";
+
+function loadProgress(){
+  try{
+    const raw = localStorageSafe.getItem(STORAGE_KEY);
+    if(raw){ known = new Set(JSON.parse(raw)); }
+  }catch(e){}
+}
+function saveProgress(){
+  try{ localStorageSafe.setItem(STORAGE_KEY, JSON.stringify([...known])); }catch(e){}
+}
+/* In-memory fallback (artifacts / private browsing safe) */
+const memStore = {};
+const localStorageSafe = {
+  getItem(k){ try{ return window.localStorage.getItem(k); }catch(e){ return memStore[k] || null; } },
+  setItem(k,v){ try{ window.localStorage.setItem(k,v); }catch(e){ memStore[k]=v; } }
+};
+
+function buildTopicBar(){
+  const bar = document.getElementById('topicBar');
+  const all = ["All", ...TOPICS];
+  bar.innerHTML = "";
+  all.forEach(t=>{
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (t===currentTopic ? ' active':'');
+    chip.textContent = t==="All" ? "All Topics" : t;
+    chip.onclick = ()=>{ currentTopic = t; setupDeck(); buildTopicBar(); };
+    bar.appendChild(chip);
+  });
+}
+
+function setupDeck(){
+  const filtered = currentTopic==="All" ? DECK : DECK.filter(c=>c.topic===currentTopic);
+  order = filtered.map(c=>c.id);
+  pos = 0;
+  flipped = false;
+  render();
+}
+
+function shuffleDeck(){
+  for(let i=order.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [order[i],order[j]] = [order[j],order[i]];
+  }
+  pos = 0;
+  flipped = false;
+  render();
+}
+
+function currentCard(){
+  const id = order[pos];
+  return DECK.find(c=>c.id===id);
+}
+
+function render(){
+  const card = currentCard();
+  const cardEl = document.getElementById('card');
+  cardEl.classList.remove('flipped');
+  flipped = false;
+  if(!card){
+    document.getElementById('qText').textContent = "No cards in this topic.";
+    document.getElementById('aText').innerHTML = "";
+    return;
+  }
+  document.getElementById('qText').innerHTML = card.q;
+  document.getElementById('aText').innerHTML = card.a;
+  const shortTag = card.topic;
+  document.getElementById('tagFront').textContent = shortTag;
+  document.getElementById('tagBack').textContent = shortTag;
+  document.getElementById('idxFront').textContent = (pos+1)+"/"+order.length;
+  document.getElementById('idxBack').textContent = (pos+1)+"/"+order.length;
+  document.getElementById('progressLabel').textContent = (pos+1)+" / "+order.length;
+  document.getElementById('progressFill').style.width = order.length ? (((pos+1)/order.length)*100)+"%" : "0%";
+  document.getElementById('knownLabel').textContent = "✓ "+[...known].filter(id=>order.includes(id)).length;
+  document.getElementById('deckLabel').textContent = (currentTopic==="All"?"All Topics":currentTopic) + " · " + order.length + " cards";
+}
+
+function flip(){
+  const cardEl = document.getElementById('card');
+  flipped = !flipped;
+  cardEl.classList.toggle('flipped', flipped);
+}
+
+function next(){
+  if(order.length===0) return;
+  pos = (pos+1) % order.length;
+  render();
+}
+function prev(){
+  if(order.length===0) return;
+  pos = (pos-1+order.length) % order.length;
+  render();
+}
+
+function rate(status){
+  const card = currentCard();
+  if(!card) return;
+  if(status==="good"){ known.add(card.id); }
+  else { known.delete(card.id); }
+  saveProgress();
+  next();
+}
+
+/* Events */
+document.getElementById('card').addEventListener('click', flip);
+document.getElementById('nextBtn').addEventListener('click', next);
+document.getElementById('prevBtn').addEventListener('click', prev);
+document.getElementById('shuffleBtn').addEventListener('click', shuffleDeck);
+document.getElementById('rateAgain').addEventListener('click', ()=>rate('again'));
+document.getElementById('rateHard').addEventListener('click', ()=>rate('hard'));
+document.getElementById('rateGood').addEventListener('click', ()=>rate('good'));
+document.getElementById('resetLink').addEventListener('click', ()=>{
+  known = new Set();
+  saveProgress();
+  render();
+});
+
+/* Swipe support */
+let touchStartX = null, touchStartY = null;
+const stage = document.querySelector('.stage');
+stage.addEventListener('touchstart', e=>{
+  touchStartX = e.changedTouches[0].clientX;
+  touchStartY = e.changedTouches[0].clientY;
+}, {passive:true});
+stage.addEventListener('touchend', e=>{
+  if(touchStartX===null) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
+    if(dx < 0) next(); else prev();
+  }
+  touchStartX = null; touchStartY = null;
+}, {passive:true});
+
+/* Keyboard support (desktop) */
+document.addEventListener('keydown', e=>{
+  if(e.key==="ArrowRight") next();
+  else if(e.key==="ArrowLeft") prev();
+  else if(e.key===" "){ e.preventDefault(); flip(); }
+  else if(e.key==="1") rate('again');
+  else if(e.key==="2") rate('hard');
+  else if(e.key==="3") rate('good');
+});
+
+/* Init */
+loadProgress();
+buildTopicBar();
+setupDeck();
+</script>
+</body>
+</html>
