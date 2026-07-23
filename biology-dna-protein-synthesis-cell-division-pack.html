@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Biology DNA, Protein Synthesis & Cell Division Pack — 9BI0</title>
+<style>
+  :root{
+    --bg:#0d1117;
+    --card-bg:#161b22;
+    --card-back:#1c2333;
+    --border:#2a3346;
+    --text:#e6edf3;
+    --text-dim:#8b96a5;
+    --accent:#4fd1c5;
+    --accent2:#a78bfa;
+    --good:#3fb950;
+    --warn:#f0b429;
+    --danger:#f85149;
+    --shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overscroll-behavior:none;
+  }
+  body{
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100vh;
+    min-height:-webkit-fill-available;
+    padding: env(safe-area-inset-top,16px) 16px calc(env(safe-area-inset-bottom,16px) + 12px);
+  }
+  header{
+    width:100%; max-width:520px; text-align:center; padding-top:10px;
+  }
+  h1{
+    font-size:1.05rem; font-weight:700; margin:4px 0 2px; letter-spacing:0.2px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .subtitle{ font-size:0.75rem; color:var(--text-dim); margin-bottom:10px;}
+
+  .topic-bar{
+    width:100%; max-width:520px;
+    display:flex; gap:6px; overflow-x:auto; padding:4px 2px 10px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .topic-bar::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto;
+    padding:7px 12px;
+    border-radius:20px;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    color:var(--text-dim);
+    font-size:0.72rem;
+    font-weight:600;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .chip.active{
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    color:#0d1117;
+    border-color:transparent;
+  }
+
+  .progress-row{
+    width:100%; max-width:520px;
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:0.72rem; color:var(--text-dim); margin-bottom:8px; padding:0 2px;
+  }
+  .progress-track{
+    flex:1; height:5px; background:var(--border); border-radius:4px; margin:0 10px; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); width:0%;
+    transition:width .25s ease;
+  }
+
+  .stage{
+    width:100%; max-width:520px;
+    flex:1;
+    display:flex; align-items:center; justify-content:center;
+    perspective:1400px;
+    margin: 6px 0 14px;
+    min-height:340px;
+  }
+  .card{
+    width:100%;
+    height:360px;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.2,.9,.3,1);
+    cursor:pointer;
+  }
+  .card.flipped{ transform:rotateY(180deg); }
+  .face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:20px;
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+    display:flex; flex-direction:column;
+    padding:22px;
+    overflow-y:auto;
+  }
+  .face::-webkit-scrollbar{width:4px;}
+  .face::-webkit-scrollbar-thumb{background:var(--border); border-radius:4px;}
+  .front{
+    background:radial-gradient(circle at 30% 20%, #1c2333, var(--card-bg) 70%);
+    justify-content:center; align-items:center; text-align:center;
+  }
+  .back{
+    background:radial-gradient(circle at 70% 20%, #232c44, var(--card-back) 70%);
+    transform:rotateY(180deg);
+    justify-content:flex-start; align-items:flex-start; text-align:left;
+  }
+  .tag{
+    position:absolute; top:14px; left:14px;
+    font-size:0.62rem; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;
+    color:var(--accent);
+    background:rgba(79,209,197,0.1);
+    border:1px solid rgba(79,209,197,0.3);
+    padding:3px 8px; border-radius:20px;
+  }
+  .card-index{
+    position:absolute; top:14px; right:14px;
+    font-size:0.65rem; color:var(--text-dim);
+  }
+  .q-text{
+    font-size:1.15rem; font-weight:600; line-height:1.4; margin-top:20px;
+  }
+  .tap-hint{
+    position:absolute; bottom:14px; left:0; right:0; text-align:center;
+    font-size:0.65rem; color:var(--text-dim);
+  }
+  .a-label{
+    font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;
+    color:var(--accent2); margin:20px 0 8px;
+  }
+  .a-text{
+    font-size:1rem; line-height:1.5; font-weight:500;
+  }
+  .a-text ul{ margin:6px 0 0 18px; padding:0; }
+  .a-text li{ margin-bottom:4px; }
+
+  .controls{
+    width:100%; max-width:520px;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:8px;
+  }
+  .btn{
+    flex:1;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:13px 10px;
+    border-radius:14px;
+    font-size:0.85rem;
+    font-weight:600;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    cursor:pointer;
+    -webkit-user-select:none; user-select:none;
+    transition:transform .1s ease, background .15s ease;
+  }
+  .btn:active{ transform:scale(0.96); background:#1e2635; }
+  .btn.wide{ flex:2; }
+  .btn.icon-only{ flex:0 0 52px; font-size:1.1rem; }
+
+  .rate-row{
+    width:100%; max-width:520px;
+    display:flex; gap:8px; margin-bottom:6px;
+  }
+  .rate-btn{
+    flex:1;
+    padding:11px 6px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--card-bg);
+    font-size:0.72rem;
+    font-weight:700;
+    text-align:center;
+    cursor:pointer;
+    -webkit-user-select:none; user-select:none;
+  }
+  .rate-btn.again{ color:var(--danger); }
+  .rate-btn.hard{ color:var(--warn); }
+  .rate-btn.good{ color:var(--good); }
+  .rate-btn:active{ transform:scale(0.96); }
+
+  .footer-row{
+    width:100%; max-width:520px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:0.68rem; color:var(--text-dim); margin-top:6px;
+  }
+  .footer-row span.link{
+    color:var(--accent); cursor:pointer; font-weight:600;
+  }
+
+  .done-screen{
+    width:100%; max-width:520px; text-align:center; padding:30px 10px;
+  }
+  .done-screen h2{ color:var(--good); font-size:1.3rem; margin-bottom:6px;}
+  .done-screen p{ color:var(--text-dim); font-size:0.85rem; }
+
+  @media (max-height:700px){
+    .card{ height:310px; }
+    .stage{ min-height:300px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>DNA, Protein Synthesis &amp; Cell Division</h1>
+  <div class="subtitle">★★★★★ Replication · Transcription · Mitosis · Meiosis · 9BI0</div>
+</header>
+
+<div class="topic-bar" id="topicBar"></div>
+
+<div class="progress-row">
+  <span id="progressLabel">1 / 1</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span id="knownLabel">✓ 0</span>
+</div>
+
+<div class="stage">
+  <div class="card" id="card">
+    <div class="face front">
+      <span class="tag" id="tagFront">Topic 1</span>
+      <span class="card-index" id="idxFront">1/1</span>
+      <div class="q-text" id="qText">Loading…</div>
+      <div class="tap-hint">tap to flip</div>
+    </div>
+    <div class="face back">
+      <span class="tag" id="tagBack">Topic 1</span>
+      <span class="card-index" id="idxBack">1/1</span>
+      <div class="a-label">Answer</div>
+      <div class="a-text" id="aText"></div>
+    </div>
+  </div>
+</div>
+
+<div class="rate-row" id="rateRow">
+  <div class="rate-btn again" id="rateAgain">✗ Again</div>
+  <div class="rate-btn hard" id="rateHard">~ Shaky</div>
+  <div class="rate-btn good" id="rateGood">✓ Got it</div>
+</div>
+
+<div class="controls">
+  <div class="btn icon-only" id="prevBtn">‹</div>
+  <div class="btn wide" id="shuffleBtn">🔀 Shuffle</div>
+  <div class="btn icon-only" id="nextBtn">›</div>
+</div>
+
+<div class="footer-row">
+  <span id="deckLabel">All Topics · 0 cards</span>
+  <span class="link" id="resetLink">reset progress</span>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const DECK = [];
+let uid = 0;
+function add(topic, q, a){ DECK.push({id: uid++, topic, q, a}); }
+
+/* ===== HIGHEST-YIELD FACTS ===== */
+const HY = "Highest-Yield Facts";
+add(HY,"List the 11 things A/A* students must be able to explain in this topic.","DNA structure; semi-conservative DNA replication; the genetic code; transcription; translation; mutations; mitosis; meiosis; genetic variation; stem cells; cell cycle control.");
+add(HY,"Why does this topic carry so much weight in Paper 1?","DNA, protein synthesis, mitosis and meiosis generate a large proportion of Paper 1 marks and frequently appear in synoptic questions linking genetics, evolution, cell biology and disease.");
+
+/* ===== DNA STRUCTURE & REPLICATION ===== */
+const DR = "DNA Structure & Replication";
+add(DR,"★★★★★ Q1 (6 marks). Describe the structure of DNA.","DNA consists of two antiparallel polynucleotide strands twisted into a double helix. Each nucleotide contains deoxyribose sugar, a phosphate group and a nitrogen-containing base. Adjacent nucleotides are joined by phosphodiester bonds. The two strands are held together by hydrogen bonds between complementary base pairs: adenine pairs with thymine, cytosine pairs with guanine.");
+add(DR,"Q1 — Examiner Keywords: which 6 terms must you include?","Double helix; antiparallel; nucleotide; phosphodiester bond; hydrogen bond; complementary base pairing.");
+add(DR,"★★★★★ Q2 (6 marks). Explain semi-conservative DNA replication.","DNA helicase breaks the hydrogen bonds between complementary bases, separating the two strands. Each original strand acts as a template. Free nucleotides align by complementary base pairing. DNA polymerase joins adjacent nucleotides by forming phosphodiester bonds. Two identical DNA molecules are produced, each containing one original strand and one newly synthesised strand.");
+add(DR,"Q2 — Common Examiner Trap.","❌ 'DNA polymerase breaks hydrogen bonds.' ✔ DNA helicase breaks hydrogen bonds — DNA polymerase joins nucleotides together.");
+add(DR,"★★★★★ Q3. Explain the importance of complementary base pairing.","It ensures accurate DNA replication because each strand can act as a template for a new strand, helping preserve genetic information when cells divide.");
+
+/* ===== PROTEIN SYNTHESIS ===== */
+const PSY = "Protein Synthesis";
+add(PSY,"★★★★★ Q4. Explain transcription.","DNA helicase separates the DNA strands. One strand acts as the template strand. RNA polymerase joins complementary RNA nucleotides together to form a molecule of messenger RNA (mRNA). Uracil replaces thymine in RNA. The mRNA then leaves the nucleus through a nuclear pore.");
+add(PSY,"★★★★★ Q5. Explain translation.","Translation occurs on ribosomes. The mRNA attaches to a ribosome, where codons are read in sequence. Transfer RNA (tRNA) molecules carrying specific amino acids bind via complementary anticodons. Peptide bonds form between adjacent amino acids, producing a polypeptide chain.");
+add(PSY,"★★★★★ Q6. Explain why the genetic code is described as degenerate.","More than one codon can code for the same amino acid — this is why the genetic code is described as degenerate.");
+add(PSY,"★★★★☆ Q7. Explain why the genetic code is universal.","The same codon specifies the same amino acid in almost all organisms. This provides evidence for a common evolutionary origin.");
+
+/* ===== MUTATIONS ===== */
+const MU = "Mutations";
+add(MU,"★★★★★ Q8. Explain how mutations can affect proteins.","A mutation changes the DNA base sequence. This may alter one or more codons in mRNA, changing the amino acid sequence of the protein. The protein's tertiary structure may then change, affecting its function.");
+add(MU,"★★★★★ Q9. Explain why some mutations have no effect.","Due to the degeneracy of the genetic code, a changed codon may still code for the same amino acid — in this case the protein remains unchanged (a silent mutation).");
+
+/* ===== MITOSIS ===== */
+const MI = "Mitosis";
+add(MI,"★★★★★ Q10. Explain the importance of mitosis.","Mitosis produces genetically identical daughter cells. It's important for growth, tissue repair and asexual reproduction.");
+add(MI,"★★★★★ Q11. Describe the stages of mitosis (key events only).","Chromosomes condense → chromosomes align at the equator → sister chromatids separate → new nuclei form → cytokinesis produces two genetically identical daughter cells.");
+add(MI,"Q11 — Examiner Tip.","Focus on the key events rather than writing long descriptions — examiners reward concise, accurate sequencing over detail.");
+
+/* ===== MEIOSIS ===== */
+const ME = "Meiosis";
+add(ME,"★★★★★ Q12. Explain why meiosis is important.","Meiosis produces haploid gametes and generates genetic variation. This maintains chromosome number across generations and provides variation for natural selection.");
+add(ME,"★★★★★ Q13. Explain how meiosis generates variation.","Variation arises through crossing over during prophase I and independent assortment of homologous chromosomes during metaphase I.");
+add(ME,"★★★★★ Q14 (6 marks). Compare mitosis and meiosis — 5 features.","Number of divisions: 1 / 2. Daughter cells: 2 / 4. Chromosome number: same / halved. Genetic variation: no / yes. Function: growth and repair / gamete production.");
+
+/* ===== CELL CYCLE ===== */
+const CC = "Cell Cycle";
+add(CC,"★★★★★ Q15. Explain why DNA replication occurs before mitosis.","DNA replication ensures that each daughter cell receives a complete and identical set of genetic information.");
+add(CC,"★★★★☆ Q16. Explain the role of checkpoints in the cell cycle.","Checkpoints monitor DNA integrity and chromosome replication. Cells with damaged DNA may be repaired or prevented from dividing, reducing the risk of uncontrolled cell division.");
+
+/* ===== PRACTICAL QUESTIONS ===== */
+const PQ = "Practical Questions";
+add(PQ,"★★★★★ Q17. State the formula for mitotic index.","Mitotic Index = (Number of cells in mitosis) ÷ (Total number of cells).");
+add(PQ,"Q17 — Common Exam Error.","Students often forget to include cells in interphase in the denominator — the total must count ALL cells observed, not just those dividing.");
+add(PQ,"★★★★★ Q18. Why is a root tip used to observe mitosis?","Root tips contain meristematic tissue where cells divide rapidly by mitosis, increasing the likelihood of observing cells in different stages.");
+
+/* ===== TOP 10 MISTAKES ===== */
+const MX = "Top 10 Mistakes";
+add(MX,"❌ 'DNA polymerase separates strands.' What's correct?","✔ DNA helicase separates strands.");
+add(MX,"❌ 'RNA contains thymine.' What's correct?","✔ RNA contains uracil (not thymine).");
+add(MX,"❌ 'Mitosis produces variation.' What's correct?","✔ Mitosis produces genetically identical cells.");
+add(MX,"❌ 'Meiosis produces diploid cells.' What's correct?","✔ Meiosis produces haploid cells.");
+add(MX,"❌ 'Crossing over occurs in mitosis.' What's correct?","✔ Crossing over occurs in prophase I of meiosis.");
+add(MX,"❌ 'Translation occurs in the nucleus.' What's correct?","✔ Translation occurs on ribosomes (in the cytoplasm).");
+add(MX,"❌ 'Codons are found on tRNA.' What's correct?","✔ Codons are found on mRNA.");
+add(MX,"❌ 'Anticodons are found on mRNA.' What's correct?","✔ Anticodons are found on tRNA.");
+add(MX,"❌ 'Every mutation changes phenotype.' What's correct?","✔ Some mutations are silent (no effect on phenotype).");
+add(MX,"❌ 'DNA replication occurs after mitosis.' What's correct?","✔ DNA replication occurs before mitosis (during interphase, S phase).");
+
+/* ===== A★ MEMORY CHECKLIST ===== */
+const MC = "A★ Memory Checklist";
+add(MC,"Define: DNA structure in one line.","Double helix of two antiparallel polynucleotide strands, joined by phosphodiester bonds within each strand and hydrogen bonds between complementary bases across strands.");
+add(MC,"Define: Complementary base pairing.","A pairs with T, C pairs with G — held together by hydrogen bonds (2 between A-T, 3 between C-G).");
+add(MC,"Define: Semi-conservative replication.","DNA replication where each new DNA molecule contains one original (template) strand and one newly synthesised strand.");
+add(MC,"Define: Codon vs Anticodon.","Codon: a sequence of 3 bases on mRNA coding for a specific amino acid. Anticodon: the complementary 3-base sequence on tRNA that binds to the codon.");
+add(MC,"Define: Crossing over and Independent assortment.","Crossing over: exchange of genetic material between homologous chromosomes during prophase I. Independent assortment: random orientation/separation of homologous chromosome pairs during metaphase I — both increase genetic variation.");
+add(MC,"Define: Mitotic index and Cell cycle checkpoints.","Mitotic index: proportion of cells in a sample that are undergoing mitosis. Checkpoints: control points in the cell cycle that monitor DNA integrity/replication before allowing progression to the next stage.");
+
+/* ===== EXPECTED EXAM FREQUENCY ===== */
+const EF = "Exam Frequency";
+add(EF,"Rate the exam probability of: DNA structure, DNA replication, protein synthesis, mitosis, meiosis, genetic variation.","All ★★★★★ — these are among the most consistently assessed areas of the whole specification and should be treated as core revision priorities.");
+add(EF,"Rate the exam probability of: mitotic index.","★★★★☆.");
+add(EF,"What comes next in the A★ Examiner Prediction Pack series?","Prediction 6: Gas Exchange, Transport and the Cardiovascular System — covering alveoli/diffusion, haemoglobin/oxygen transport, the heart/cardiac cycle, coronary heart disease, atherosclerosis, xylem/phloem, examiner-favourite 6-mark questions, the 25 highest-probability transport questions, and full A★ model answers/mark schemes.");
+
+/* ---------------- APP LOGIC ---------------- */
+const TOPICS = [HY, DR, PSY, MU, MI, ME, CC, PQ, MX, MC, EF];
+let currentTopic = "All";
+let order = [];
+let pos = 0;
+let known = new Set();
+let flipped = false;
+
+const STORAGE_KEY = "bio_dna_progress_v1";
+
+function loadProgress(){
+  try{
+    const raw = localStorageSafe.getItem(STORAGE_KEY);
+    if(raw){ known = new Set(JSON.parse(raw)); }
+  }catch(e){}
+}
+function saveProgress(){
+  try{ localStorageSafe.setItem(STORAGE_KEY, JSON.stringify([...known])); }catch(e){}
+}
+/* In-memory fallback (artifacts / private browsing safe) */
+const memStore = {};
+const localStorageSafe = {
+  getItem(k){ try{ return window.localStorage.getItem(k); }catch(e){ return memStore[k] || null; } },
+  setItem(k,v){ try{ window.localStorage.setItem(k,v); }catch(e){ memStore[k]=v; } }
+};
+
+function buildTopicBar(){
+  const bar = document.getElementById('topicBar');
+  const all = ["All", ...TOPICS];
+  bar.innerHTML = "";
+  all.forEach(t=>{
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (t===currentTopic ? ' active':'');
+    chip.textContent = t==="All" ? "All Topics" : t;
+    chip.onclick = ()=>{ currentTopic = t; setupDeck(); buildTopicBar(); };
+    bar.appendChild(chip);
+  });
+}
+
+function setupDeck(){
+  const filtered = currentTopic==="All" ? DECK : DECK.filter(c=>c.topic===currentTopic);
+  order = filtered.map(c=>c.id);
+  pos = 0;
+  flipped = false;
+  render();
+}
+
+function shuffleDeck(){
+  for(let i=order.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [order[i],order[j]] = [order[j],order[i]];
+  }
+  pos = 0;
+  flipped = false;
+  render();
+}
+
+function currentCard(){
+  const id = order[pos];
+  return DECK.find(c=>c.id===id);
+}
+
+function render(){
+  const card = currentCard();
+  const cardEl = document.getElementById('card');
+  cardEl.classList.remove('flipped');
+  flipped = false;
+  if(!card){
+    document.getElementById('qText').textContent = "No cards in this topic.";
+    document.getElementById('aText').innerHTML = "";
+    return;
+  }
+  document.getElementById('qText').innerHTML = card.q;
+  document.getElementById('aText').innerHTML = card.a;
+  const shortTag = card.topic;
+  document.getElementById('tagFront').textContent = shortTag;
+  document.getElementById('tagBack').textContent = shortTag;
+  document.getElementById('idxFront').textContent = (pos+1)+"/"+order.length;
+  document.getElementById('idxBack').textContent = (pos+1)+"/"+order.length;
+  document.getElementById('progressLabel').textContent = (pos+1)+" / "+order.length;
+  document.getElementById('progressFill').style.width = order.length ? (((pos+1)/order.length)*100)+"%" : "0%";
+  document.getElementById('knownLabel').textContent = "✓ "+[...known].filter(id=>order.includes(id)).length;
+  document.getElementById('deckLabel').textContent = (currentTopic==="All"?"All Topics":currentTopic) + " · " + order.length + " cards";
+}
+
+function flip(){
+  const cardEl = document.getElementById('card');
+  flipped = !flipped;
+  cardEl.classList.toggle('flipped', flipped);
+}
+
+function next(){
+  if(order.length===0) return;
+  pos = (pos+1) % order.length;
+  render();
+}
+function prev(){
+  if(order.length===0) return;
+  pos = (pos-1+order.length) % order.length;
+  render();
+}
+
+function rate(status){
+  const card = currentCard();
+  if(!card) return;
+  if(status==="good"){ known.add(card.id); }
+  else { known.delete(card.id); }
+  saveProgress();
+  next();
+}
+
+/* Events */
+document.getElementById('card').addEventListener('click', flip);
+document.getElementById('nextBtn').addEventListener('click', next);
+document.getElementById('prevBtn').addEventListener('click', prev);
+document.getElementById('shuffleBtn').addEventListener('click', shuffleDeck);
+document.getElementById('rateAgain').addEventListener('click', ()=>rate('again'));
+document.getElementById('rateHard').addEventListener('click', ()=>rate('hard'));
+document.getElementById('rateGood').addEventListener('click', ()=>rate('good'));
+document.getElementById('resetLink').addEventListener('click', ()=>{
+  known = new Set();
+  saveProgress();
+  render();
+});
+
+/* Swipe support */
+let touchStartX = null, touchStartY = null;
+const stage = document.querySelector('.stage');
+stage.addEventListener('touchstart', e=>{
+  touchStartX = e.changedTouches[0].clientX;
+  touchStartY = e.changedTouches[0].clientY;
+}, {passive:true});
+stage.addEventListener('touchend', e=>{
+  if(touchStartX===null) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
+    if(dx < 0) next(); else prev();
+  }
+  touchStartX = null; touchStartY = null;
+}, {passive:true});
+
+/* Keyboard support (desktop) */
+document.addEventListener('keydown', e=>{
+  if(e.key==="ArrowRight") next();
+  else if(e.key==="ArrowLeft") prev();
+  else if(e.key===" "){ e.preventDefault(); flip(); }
+  else if(e.key==="1") rate('again');
+  else if(e.key==="2") rate('hard');
+  else if(e.key==="3") rate('good');
+});
+
+/* Init */
+loadProgress();
+buildTopicBar();
+setupDeck();
+</script>
+</body>
+</html>
