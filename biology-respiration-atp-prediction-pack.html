@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Biology Respiration & ATP Prediction Pack — 9BI0</title>
+<style>
+  :root{
+    --bg:#0d1117;
+    --card-bg:#161b22;
+    --card-back:#1c2333;
+    --border:#2a3346;
+    --text:#e6edf3;
+    --text-dim:#8b96a5;
+    --accent:#4fd1c5;
+    --accent2:#a78bfa;
+    --good:#3fb950;
+    --warn:#f0b429;
+    --danger:#f85149;
+    --shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overscroll-behavior:none;
+  }
+  body{
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100vh;
+    min-height:-webkit-fill-available;
+    padding: env(safe-area-inset-top,16px) 16px calc(env(safe-area-inset-bottom,16px) + 12px);
+  }
+  header{
+    width:100%; max-width:520px; text-align:center; padding-top:10px;
+  }
+  h1{
+    font-size:1.05rem; font-weight:700; margin:4px 0 2px; letter-spacing:0.2px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .subtitle{ font-size:0.75rem; color:var(--text-dim); margin-bottom:10px;}
+
+  .topic-bar{
+    width:100%; max-width:520px;
+    display:flex; gap:6px; overflow-x:auto; padding:4px 2px 10px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .topic-bar::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto;
+    padding:7px 12px;
+    border-radius:20px;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    color:var(--text-dim);
+    font-size:0.72rem;
+    font-weight:600;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .chip.active{
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    color:#0d1117;
+    border-color:transparent;
+  }
+
+  .progress-row{
+    width:100%; max-width:520px;
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:0.72rem; color:var(--text-dim); margin-bottom:8px; padding:0 2px;
+  }
+  .progress-track{
+    flex:1; height:5px; background:var(--border); border-radius:4px; margin:0 10px; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); width:0%;
+    transition:width .25s ease;
+  }
+
+  .stage{
+    width:100%; max-width:520px;
+    flex:1;
+    display:flex; align-items:center; justify-content:center;
+    perspective:1400px;
+    margin: 6px 0 14px;
+    min-height:340px;
+  }
+  .card{
+    width:100%;
+    height:360px;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.2,.9,.3,1);
+    cursor:pointer;
+  }
+  .card.flipped{ transform:rotateY(180deg); }
+  .face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:20px;
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+    display:flex; flex-direction:column;
+    padding:22px;
+    overflow-y:auto;
+  }
+  .face::-webkit-scrollbar{width:4px;}
+  .face::-webkit-scrollbar-thumb{background:var(--border); border-radius:4px;}
+  .front{
+    background:radial-gradient(circle at 30% 20%, #1c2333, var(--card-bg) 70%);
+    justify-content:center; align-items:center; text-align:center;
+  }
+  .back{
+    background:radial-gradient(circle at 70% 20%, #232c44, var(--card-back) 70%);
+    transform:rotateY(180deg);
+    justify-content:flex-start; align-items:flex-start; text-align:left;
+  }
+  .tag{
+    position:absolute; top:14px; left:14px;
+    font-size:0.62rem; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;
+    color:var(--accent);
+    background:rgba(79,209,197,0.1);
+    border:1px solid rgba(79,209,197,0.3);
+    padding:3px 8px; border-radius:20px;
+  }
+  .card-index{
+    position:absolute; top:14px; right:14px;
+    font-size:0.65rem; color:var(--text-dim);
+  }
+  .q-text{
+    font-size:1.15rem; font-weight:600; line-height:1.4; margin-top:20px;
+  }
+  .tap-hint{
+    position:absolute; bottom:14px; left:0; right:0; text-align:center;
+    font-size:0.65rem; color:var(--text-dim);
+  }
+  .a-label{
+    font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;
+    color:var(--accent2); margin:20px 0 8px;
+  }
+  .a-text{
+    font-size:1rem; line-height:1.5; font-weight:500;
+  }
+  .a-text ul{ margin:6px 0 0 18px; padding:0; }
+  .a-text li{ margin-bottom:4px; }
+
+  .controls{
+    width:100%; max-width:520px;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:8px;
+  }
+  .btn{
+    flex:1;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:13px 10px;
+    border-radius:14px;
+    font-size:0.85rem;
+    font-weight:600;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    cursor:pointer;
+    -webkit-user-select:none; user-select:none;
+    transition:transform .1s ease, background .15s ease;
+  }
+  .btn:active{ transform:scale(0.96); background:#1e2635; }
+  .btn.wide{ flex:2; }
+  .btn.icon-only{ flex:0 0 52px; font-size:1.1rem; }
+
+  .rate-row{
+    width:100%; max-width:520px;
+    display:flex; gap:8px; margin-bottom:6px;
+  }
+  .rate-btn{
+    flex:1;
+    padding:11px 6px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--card-bg);
+    font-size:0.72rem;
+    font-weight:700;
+    text-align:center;
+    cursor:pointer;
+    -webkit-user-select:none; user-select:none;
+  }
+  .rate-btn.again{ color:var(--danger); }
+  .rate-btn.hard{ color:var(--warn); }
+  .rate-btn.good{ color:var(--good); }
+  .rate-btn:active{ transform:scale(0.96); }
+
+  .footer-row{
+    width:100%; max-width:520px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:0.68rem; color:var(--text-dim); margin-top:6px;
+  }
+  .footer-row span.link{
+    color:var(--accent); cursor:pointer; font-weight:600;
+  }
+
+  .done-screen{
+    width:100%; max-width:520px; text-align:center; padding:30px 10px;
+  }
+  .done-screen h2{ color:var(--good); font-size:1.3rem; margin-bottom:6px;}
+  .done-screen p{ color:var(--text-dim); font-size:0.85rem; }
+
+  @media (max-height:700px){
+    .card{ height:310px; }
+    .stage{ min-height:300px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Respiration &amp; ATP Pack</h1>
+  <div class="subtitle">★★★★★ Glycolysis · Krebs · Chemiosmosis · Edexcel 9BI0</div>
+</header>
+
+<div class="topic-bar" id="topicBar"></div>
+
+<div class="progress-row">
+  <span id="progressLabel">1 / 1</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span id="knownLabel">✓ 0</span>
+</div>
+
+<div class="stage">
+  <div class="card" id="card">
+    <div class="face front">
+      <span class="tag" id="tagFront">Topic 1</span>
+      <span class="card-index" id="idxFront">1/1</span>
+      <div class="q-text" id="qText">Loading…</div>
+      <div class="tap-hint">tap to flip</div>
+    </div>
+    <div class="face back">
+      <span class="tag" id="tagBack">Topic 1</span>
+      <span class="card-index" id="idxBack">1/1</span>
+      <div class="a-label">Answer</div>
+      <div class="a-text" id="aText"></div>
+    </div>
+  </div>
+</div>
+
+<div class="rate-row" id="rateRow">
+  <div class="rate-btn again" id="rateAgain">✗ Again</div>
+  <div class="rate-btn hard" id="rateHard">~ Shaky</div>
+  <div class="rate-btn good" id="rateGood">✓ Got it</div>
+</div>
+
+<div class="controls">
+  <div class="btn icon-only" id="prevBtn">‹</div>
+  <div class="btn wide" id="shuffleBtn">🔀 Shuffle</div>
+  <div class="btn icon-only" id="nextBtn">›</div>
+</div>
+
+<div class="footer-row">
+  <span id="deckLabel">All Topics · 0 cards</span>
+  <span class="link" id="resetLink">reset progress</span>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const DECK = [];
+let uid = 0;
+function add(topic, q, a){ DECK.push({id: uid++, topic, q, a}); }
+
+/* ===== LEARNING OBJECTIVES ===== */
+const LO = "Learning Objectives";
+add(LO,"List the six high-priority learning objectives for Respiration & ATP.","Explain ATP as the universal energy carrier; compare aerobic and anaerobic respiration; describe glycolysis, the link reaction, the Krebs cycle and oxidative phosphorylation; explain the role of NAD and FAD as hydrogen carriers; describe chemiosmosis and ATP synthase; interpret respiration data from unfamiliar experiments.");
+add(LO,"Why is Respiration & ATP one of the highest-yield Paper 1 topics?","It's examined in multiple ways at once — direct knowledge, practical analysis, data interpretation and synoptic essays — giving examiners many ways to build a question around it.");
+
+/* ===== CORE QUESTIONS Q1-10 ===== */
+const CQ = "Core Questions Q1-10";
+add(CQ,"★★★★★ Q1 (6 marks). Explain why ATP is described as the universal energy currency of cells.","ATP stores energy in its terminal phosphate bond. Hydrolysis of ATP releases a small, immediate amount of energy that can be coupled to energy-requiring processes such as active transport, muscle contraction and protein synthesis. ATP is rapidly regenerated from ADP and inorganic phosphate during respiration, giving a continuous supply of usable energy.");
+add(CQ,"Q1 — Key examiner terms to include.","Hydrolysis; ADP; inorganic phosphate (Pi); immediate energy; coupled reactions.");
+add(CQ,"★★★★★ Q2 (6 marks). Compare aerobic and anaerobic respiration — 4 features.","Oxygen required: Yes / No. ATP yield: High / Low. Main products: CO₂ + H₂O / Lactate (in animals). Location: cytoplasm + mitochondria / cytoplasm only.");
+add(CQ,"Q2 — Common trap.","Don't state that anaerobic respiration 'stops completely' when oxygen is present — cells may use different pathways depending on conditions.");
+add(CQ,"★★★★★ Q3. Explain the role of NAD in respiration.","NAD accepts hydrogen atoms and electrons during glycolysis, the link reaction and the Krebs cycle to become reduced NAD. Reduced NAD transports these electrons to the electron transport chain, where they're oxidised. The released energy is used to pump protons across the inner mitochondrial membrane, contributing to ATP production.");
+add(CQ,"★★★★★ Q4. Explain why most ATP is produced during oxidative phosphorylation.","Reduced NAD and reduced FAD donate electrons to the electron transport chain in the inner mitochondrial membrane. As electrons pass through carrier proteins, energy is released and used to pump protons into the intermembrane space. Protons then flow back through ATP synthase, driving ATP synthesis from ADP + inorganic phosphate by chemiosmosis.");
+add(CQ,"★★★★★ Q5. Explain the role of oxygen in aerobic respiration.","Oxygen acts as the terminal electron acceptor at the end of the electron transport chain. It accepts electrons and hydrogen ions to form water. Without oxygen, electron transport stops, the proton gradient can't be maintained, and ATP production by oxidative phosphorylation ceases.");
+add(CQ,"★★★★☆ Q6. Explain why cyanide is a respiratory poison.","Cyanide inhibits the electron transport chain by preventing electron transfer to oxygen. This stops oxidative phosphorylation, ATP synthesis falls dramatically, and cells are unable to maintain essential metabolic processes.");
+add(CQ,"★★★★★ Q7. Explain why ATP production increases during exercise.","Exercise increases muscle contraction, which requires ATP. The rate of aerobic respiration increases to supply more ATP. Heart rate and ventilation rate also increase to deliver more oxygen and glucose and remove carbon dioxide.");
+add(CQ,"★★★★☆ Q8. Explain oxygen debt.","During vigorous exercise, oxygen supply may be insufficient for aerobic respiration, so anaerobic respiration produces lactate. After exercise, extra oxygen is required to oxidise the lactate, restore ATP and phosphocreatine stores, and return the body to resting conditions.");
+add(CQ,"★★★★★ Q9. Explain why mitochondrial cristae are highly folded.","Cristae increase the surface area of the inner mitochondrial membrane. This provides space for more electron transport chain proteins and ATP synthase complexes, increasing the capacity for oxidative phosphorylation.");
+add(CQ,"★★★★★ Q10 (practical). A respirometer shows O₂ uptake increasing with temperature until 35°C, then decreasing. Explain the pattern.","Increasing temperature increases enzyme activity and the rate of respiration up to the optimum temperature. Above the optimum, respiratory enzymes begin to denature, reducing enzyme activity and lowering oxygen uptake.");
+
+/* ===== PRACTICAL SKILLS ===== */
+const PS = "Practical Skills";
+add(PS,"Name four types of respiration practicals you should be able to evaluate.","Respirometer investigations; oxygen uptake experiments; germinating seed experiments; temperature-controlled respiration experiments.");
+add(PS,"State four typical improvements for respiration practicals.","Maintain constant temperature using a water bath; use equal masses of germinating seeds; include a control with non-germinating or boiled seeds where appropriate; repeat measurements and calculate a mean.");
+
+/* ===== TOP 10 MISTAKES ===== */
+const MX = "Top 10 Mistakes";
+add(MX,"❌ 'ATP stores unlimited energy.' What's correct?","✔ ATP stores small, immediately available amounts of energy.");
+add(MX,"❌ 'Oxygen produces ATP.' What's correct?","✔ Oxygen is the terminal electron acceptor — it doesn't produce ATP directly.");
+add(MX,"❌ 'Glycolysis occurs in mitochondria.' What's correct?","✔ Glycolysis occurs in the cytoplasm.");
+add(MX,"❌ 'The Krebs cycle occurs in the cytoplasm.' What's correct?","✔ It occurs in the mitochondrial matrix.");
+add(MX,"❌ 'Electron transport occurs in the matrix.' What's correct?","✔ It occurs on the inner mitochondrial membrane.");
+add(MX,"❌ 'ATP synthase pumps protons.' What's correct?","✔ ATP synthase allows protons to flow DOWN their gradient and uses the released energy to make ATP — it doesn't pump them up.");
+add(MX,"❌ 'NAD is an enzyme.' What's correct?","✔ NAD is a coenzyme (hydrogen carrier), not an enzyme.");
+add(MX,"❌ 'Water is produced in glycolysis.' What's correct?","✔ Water is formed at the end of the electron transport chain, when oxygen accepts electrons and H⁺.");
+add(MX,"❌ 'Anaerobic respiration produces large amounts of ATP.' What's correct?","✔ It produces far less ATP than aerobic respiration.");
+add(MX,"❌ 'Cristae store ATP.' What's correct?","✔ Cristae increase surface area for oxidative phosphorylation — they don't store ATP.");
+
+/* ===== A★ MEMORY CHECKLIST ===== */
+const MC = "A★ Memory Checklist";
+add(MC,"Define: ATP hydrolysis and ATP regeneration.","Hydrolysis: ATP + water → ADP + Pi, releasing energy. Regeneration: ADP + Pi → ATP, using energy released during respiration.");
+add(MC,"Define: Glycolysis — location and basic outcome.","Occurs in the cytoplasm; glucose is split into two molecules of pyruvate, producing a small net yield of ATP and reduced NAD.");
+add(MC,"Define: Link reaction — location and basic outcome.","Occurs in the mitochondrial matrix; pyruvate is converted to acetyl CoA, releasing CO₂ and producing reduced NAD.");
+add(MC,"Define: Krebs cycle — location and basic outcome.","Occurs in the mitochondrial matrix; acetyl CoA is broken down, releasing CO₂ and producing reduced NAD, reduced FAD and a small amount of ATP.");
+add(MC,"Define: Oxidative phosphorylation — location and basic outcome.","Occurs on the inner mitochondrial membrane; electrons from reduced NAD/FAD pass along the electron transport chain, driving proton pumping and ATP synthesis — produces the majority of the cell's ATP.");
+add(MC,"Define: Chemiosmosis.","The movement of protons (H⁺) down their concentration gradient, through ATP synthase, driving the synthesis of ATP from ADP and inorganic phosphate.");
+add(MC,"Define: ATP synthase.","An enzyme complex in the inner mitochondrial membrane that catalyses ATP synthesis as protons flow through it down their concentration gradient.");
+add(MC,"Define: NAD and FAD.","Coenzymes (hydrogen carriers) that accept hydrogen atoms/electrons during respiration, becoming 'reduced', and later donate them to the electron transport chain.");
+add(MC,"Define: Oxygen's role as the terminal electron acceptor.","Oxygen accepts electrons and H⁺ at the end of the electron transport chain, combining to form water — without it, the chain backs up and stops.");
+add(MC,"Define: Cristae and the mitochondrial matrix.","Cristae: folds of the inner mitochondrial membrane that increase surface area for the electron transport chain/ATP synthase. Matrix: the fluid interior of the mitochondrion where the link reaction and Krebs cycle occur.");
+add(MC,"Describe: the respirometer practical in one line.","Measures the rate of oxygen uptake (or CO₂ production) by a living organism/tissue, often used to investigate how a variable like temperature affects respiration rate.");
+
+/* ===== EXAM STRATEGY ===== */
+const ES = "Exam Strategy";
+add(ES,"What is the 5-step A★ structure for answering any respiration question?","1. Identify which stage of respiration is being assessed. 2. State where it occurs. 3. Explain what happens. 4. Link the process to ATP production. 5. Use precise terminology (reduced NAD, electron transport chain, proton gradient, oxidative phosphorylation).");
+add(ES,"What comes next in the A★ Examiner Prediction Pack series?","Prediction 5: DNA, Protein Synthesis and Cell Division — the 20 highest-probability questions, A★ model answers, DNA replication, transcription and translation, mitosis and meiosis, mutation and gene expression, practical interpretation and examiner traps.");
+
+/* ---------------- APP LOGIC ---------------- */
+const TOPICS = [LO, CQ, PS, MX, MC, ES];
+let currentTopic = "All";
+let order = [];
+let pos = 0;
+let known = new Set();
+let flipped = false;
+
+const STORAGE_KEY = "bio_respiration_progress_v1";
+
+function loadProgress(){
+  try{
+    const raw = localStorageSafe.getItem(STORAGE_KEY);
+    if(raw){ known = new Set(JSON.parse(raw)); }
+  }catch(e){}
+}
+function saveProgress(){
+  try{ localStorageSafe.setItem(STORAGE_KEY, JSON.stringify([...known])); }catch(e){}
+}
+/* In-memory fallback (artifacts / private browsing safe) */
+const memStore = {};
+const localStorageSafe = {
+  getItem(k){ try{ return window.localStorage.getItem(k); }catch(e){ return memStore[k] || null; } },
+  setItem(k,v){ try{ window.localStorage.setItem(k,v); }catch(e){ memStore[k]=v; } }
+};
+
+function buildTopicBar(){
+  const bar = document.getElementById('topicBar');
+  const all = ["All", ...TOPICS];
+  bar.innerHTML = "";
+  all.forEach(t=>{
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (t===currentTopic ? ' active':'');
+    chip.textContent = t==="All" ? "All Topics" : t;
+    chip.onclick = ()=>{ currentTopic = t; setupDeck(); buildTopicBar(); };
+    bar.appendChild(chip);
+  });
+}
+
+function setupDeck(){
+  const filtered = currentTopic==="All" ? DECK : DECK.filter(c=>c.topic===currentTopic);
+  order = filtered.map(c=>c.id);
+  pos = 0;
+  flipped = false;
+  render();
+}
+
+function shuffleDeck(){
+  for(let i=order.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [order[i],order[j]] = [order[j],order[i]];
+  }
+  pos = 0;
+  flipped = false;
+  render();
+}
+
+function currentCard(){
+  const id = order[pos];
+  return DECK.find(c=>c.id===id);
+}
+
+function render(){
+  const card = currentCard();
+  const cardEl = document.getElementById('card');
+  cardEl.classList.remove('flipped');
+  flipped = false;
+  if(!card){
+    document.getElementById('qText').textContent = "No cards in this topic.";
+    document.getElementById('aText').innerHTML = "";
+    return;
+  }
+  document.getElementById('qText').innerHTML = card.q;
+  document.getElementById('aText').innerHTML = card.a;
+  const shortTag = card.topic;
+  document.getElementById('tagFront').textContent = shortTag;
+  document.getElementById('tagBack').textContent = shortTag;
+  document.getElementById('idxFront').textContent = (pos+1)+"/"+order.length;
+  document.getElementById('idxBack').textContent = (pos+1)+"/"+order.length;
+  document.getElementById('progressLabel').textContent = (pos+1)+" / "+order.length;
+  document.getElementById('progressFill').style.width = order.length ? (((pos+1)/order.length)*100)+"%" : "0%";
+  document.getElementById('knownLabel').textContent = "✓ "+[...known].filter(id=>order.includes(id)).length;
+  document.getElementById('deckLabel').textContent = (currentTopic==="All"?"All Topics":currentTopic) + " · " + order.length + " cards";
+}
+
+function flip(){
+  const cardEl = document.getElementById('card');
+  flipped = !flipped;
+  cardEl.classList.toggle('flipped', flipped);
+}
+
+function next(){
+  if(order.length===0) return;
+  pos = (pos+1) % order.length;
+  render();
+}
+function prev(){
+  if(order.length===0) return;
+  pos = (pos-1+order.length) % order.length;
+  render();
+}
+
+function rate(status){
+  const card = currentCard();
+  if(!card) return;
+  if(status==="good"){ known.add(card.id); }
+  else { known.delete(card.id); }
+  saveProgress();
+  next();
+}
+
+/* Events */
+document.getElementById('card').addEventListener('click', flip);
+document.getElementById('nextBtn').addEventListener('click', next);
+document.getElementById('prevBtn').addEventListener('click', prev);
+document.getElementById('shuffleBtn').addEventListener('click', shuffleDeck);
+document.getElementById('rateAgain').addEventListener('click', ()=>rate('again'));
+document.getElementById('rateHard').addEventListener('click', ()=>rate('hard'));
+document.getElementById('rateGood').addEventListener('click', ()=>rate('good'));
+document.getElementById('resetLink').addEventListener('click', ()=>{
+  known = new Set();
+  saveProgress();
+  render();
+});
+
+/* Swipe support */
+let touchStartX = null, touchStartY = null;
+const stage = document.querySelector('.stage');
+stage.addEventListener('touchstart', e=>{
+  touchStartX = e.changedTouches[0].clientX;
+  touchStartY = e.changedTouches[0].clientY;
+}, {passive:true});
+stage.addEventListener('touchend', e=>{
+  if(touchStartX===null) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
+    if(dx < 0) next(); else prev();
+  }
+  touchStartX = null; touchStartY = null;
+}, {passive:true});
+
+/* Keyboard support (desktop) */
+document.addEventListener('keydown', e=>{
+  if(e.key==="ArrowRight") next();
+  else if(e.key==="ArrowLeft") prev();
+  else if(e.key===" "){ e.preventDefault(); flip(); }
+  else if(e.key==="1") rate('again');
+  else if(e.key==="2") rate('hard');
+  else if(e.key==="3") rate('good');
+});
+
+/* Init */
+loadProgress();
+buildTopicBar();
+setupDeck();
+</script>
+</body>
+</html>
