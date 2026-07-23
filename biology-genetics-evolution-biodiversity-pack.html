@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Biology Genetics, Evolution & Biodiversity Pack — 9BI0</title>
+<style>
+  :root{
+    --bg:#0d1117;
+    --card-bg:#161b22;
+    --card-back:#1c2333;
+    --border:#2a3346;
+    --text:#e6edf3;
+    --text-dim:#8b96a5;
+    --accent:#4fd1c5;
+    --accent2:#a78bfa;
+    --good:#3fb950;
+    --warn:#f0b429;
+    --danger:#f85149;
+    --shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overscroll-behavior:none;
+  }
+  body{
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100vh;
+    min-height:-webkit-fill-available;
+    padding: env(safe-area-inset-top,16px) 16px calc(env(safe-area-inset-bottom,16px) + 12px);
+  }
+  header{
+    width:100%; max-width:520px; text-align:center; padding-top:10px;
+  }
+  h1{
+    font-size:1.05rem; font-weight:700; margin:4px 0 2px; letter-spacing:0.2px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .subtitle{ font-size:0.75rem; color:var(--text-dim); margin-bottom:10px;}
+
+  .topic-bar{
+    width:100%; max-width:520px;
+    display:flex; gap:6px; overflow-x:auto; padding:4px 2px 10px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .topic-bar::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto;
+    padding:7px 12px;
+    border-radius:20px;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    color:var(--text-dim);
+    font-size:0.72rem;
+    font-weight:600;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .chip.active{
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    color:#0d1117;
+    border-color:transparent;
+  }
+
+  .progress-row{
+    width:100%; max-width:520px;
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:0.72rem; color:var(--text-dim); margin-bottom:8px; padding:0 2px;
+  }
+  .progress-track{
+    flex:1; height:5px; background:var(--border); border-radius:4px; margin:0 10px; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); width:0%;
+    transition:width .25s ease;
+  }
+
+  .stage{
+    width:100%; max-width:520px;
+    flex:1;
+    display:flex; align-items:center; justify-content:center;
+    perspective:1400px;
+    margin: 6px 0 14px;
+    min-height:340px;
+  }
+  .card{
+    width:100%;
+    height:360px;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.2,.9,.3,1);
+    cursor:pointer;
+  }
+  .card.flipped{ transform:rotateY(180deg); }
+  .face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:20px;
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+    display:flex; flex-direction:column;
+    padding:22px;
+    overflow-y:auto;
+  }
+  .face::-webkit-scrollbar{width:4px;}
+  .face::-webkit-scrollbar-thumb{background:var(--border); border-radius:4px;}
+  .front{
+    background:radial-gradient(circle at 30% 20%, #1c2333, var(--card-bg) 70%);
+    justify-content:center; align-items:center; text-align:center;
+  }
+  .back{
+    background:radial-gradient(circle at 70% 20%, #232c44, var(--card-back) 70%);
+    transform:rotateY(180deg);
+    justify-content:flex-start; align-items:flex-start; text-align:left;
+  }
+  .tag{
+    position:absolute; top:14px; left:14px;
+    font-size:0.62rem; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;
+    color:var(--accent);
+    background:rgba(79,209,197,0.1);
+    border:1px solid rgba(79,209,197,0.3);
+    padding:3px 8px; border-radius:20px;
+  }
+  .card-index{
+    position:absolute; top:14px; right:14px;
+    font-size:0.65rem; color:var(--text-dim);
+  }
+  .q-text{
+    font-size:1.15rem; font-weight:600; line-height:1.4; margin-top:20px;
+  }
+  .tap-hint{
+    position:absolute; bottom:14px; left:0; right:0; text-align:center;
+    font-size:0.65rem; color:var(--text-dim);
+  }
+  .a-label{
+    font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;
+    color:var(--accent2); margin:20px 0 8px;
+  }
+  .a-text{
+    font-size:1rem; line-height:1.5; font-weight:500;
+  }
+  .a-text ul{ margin:6px 0 0 18px; padding:0; }
+  .a-text li{ margin-bottom:4px; }
+
+  .controls{
+    width:100%; max-width:520px;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:8px;
+  }
+  .btn{
+    flex:1;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:13px 10px;
+    border-radius:14px;
+    font-size:0.85rem;
+    font-weight:600;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    cursor:pointer;
+    -webkit-user-select:none; user-select:none;
+    transition:transform .1s ease, background .15s ease;
+  }
+  .btn:active{ transform:scale(0.96); background:#1e2635; }
+  .btn.wide{ flex:2; }
+  .btn.icon-only{ flex:0 0 52px; font-size:1.1rem; }
+
+  .rate-row{
+    width:100%; max-width:520px;
+    display:flex; gap:8px; margin-bottom:6px;
+  }
+  .rate-btn{
+    flex:1;
+    padding:11px 6px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--card-bg);
+    font-size:0.72rem;
+    font-weight:700;
+    text-align:center;
+    cursor:pointer;
+    -webkit-user-select:none; user-select:none;
+  }
+  .rate-btn.again{ color:var(--danger); }
+  .rate-btn.hard{ color:var(--warn); }
+  .rate-btn.good{ color:var(--good); }
+  .rate-btn:active{ transform:scale(0.96); }
+
+  .footer-row{
+    width:100%; max-width:520px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:0.68rem; color:var(--text-dim); margin-top:6px;
+  }
+  .footer-row span.link{
+    color:var(--accent); cursor:pointer; font-weight:600;
+  }
+
+  .done-screen{
+    width:100%; max-width:520px; text-align:center; padding:30px 10px;
+  }
+  .done-screen h2{ color:var(--good); font-size:1.3rem; margin-bottom:6px;}
+  .done-screen p{ color:var(--text-dim); font-size:0.85rem; }
+
+  @media (max-height:700px){
+    .card{ height:310px; }
+    .stage{ min-height:300px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Genetics, Evolution &amp; Biodiversity</h1>
+  <div class="subtitle">★★★★★ Inheritance · Natural Selection · Conservation · 9BI0</div>
+</header>
+
+<div class="topic-bar" id="topicBar"></div>
+
+<div class="progress-row">
+  <span id="progressLabel">1 / 1</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span id="knownLabel">✓ 0</span>
+</div>
+
+<div class="stage">
+  <div class="card" id="card">
+    <div class="face front">
+      <span class="tag" id="tagFront">Topic 1</span>
+      <span class="card-index" id="idxFront">1/1</span>
+      <div class="q-text" id="qText">Loading…</div>
+      <div class="tap-hint">tap to flip</div>
+    </div>
+    <div class="face back">
+      <span class="tag" id="tagBack">Topic 1</span>
+      <span class="card-index" id="idxBack">1/1</span>
+      <div class="a-label">Answer</div>
+      <div class="a-text" id="aText"></div>
+    </div>
+  </div>
+</div>
+
+<div class="rate-row" id="rateRow">
+  <div class="rate-btn again" id="rateAgain">✗ Again</div>
+  <div class="rate-btn hard" id="rateHard">~ Shaky</div>
+  <div class="rate-btn good" id="rateGood">✓ Got it</div>
+</div>
+
+<div class="controls">
+  <div class="btn icon-only" id="prevBtn">‹</div>
+  <div class="btn wide" id="shuffleBtn">🔀 Shuffle</div>
+  <div class="btn icon-only" id="nextBtn">›</div>
+</div>
+
+<div class="footer-row">
+  <span id="deckLabel">All Topics · 0 cards</span>
+  <span class="link" id="resetLink">reset progress</span>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const DECK = [];
+let uid = 0;
+function add(topic, q, a){ DECK.push({id: uid++, topic, q, a}); }
+
+/* ===== LEARNING OUTCOMES ===== */
+const LO = "Learning Outcomes";
+add(LO,"List the eight highest-priority learning outcomes for this topic.","Explain the relationship between genes, alleles and chromosomes; interpret inheritance diagrams; explain sources of genetic variation; describe natural selection and evolution; explain speciation; compare natural and artificial selection; explain the importance of biodiversity; evaluate conservation strategies.");
+add(LO,"Why is this topic essential for an A/A*?","Genetics, evolution and biodiversity are examined regularly because they assess knowledge, data analysis and application together — this is the final major theory block of the specification.");
+
+/* ===== KEY DEFINITIONS Q1-2 ===== */
+const KD = "Key Definitions";
+add(KD,"★★★★★ Q1 (4 marks). Define: gene, allele, locus, chromosome.","Gene: a sequence of DNA that codes for a functional product (a polypeptide or functional RNA). Allele: an alternative version of the same gene. Locus: the fixed position of a gene on a chromosome. Chromosome: a DNA molecule associated with proteins that carries many genes.");
+add(KD,"★★★★★ Q2. Explain the difference between genotype and phenotype.","The genotype is the genetic makeup (combination of alleles) of an organism. The phenotype is the observable characteristics produced by the interaction of the genotype with the environment.");
+
+/* ===== GENETIC VARIATION & NATURAL SELECTION Q3-5 ===== */
+const GV = "Variation & Natural Selection";
+add(GV,"★★★★★ Q3. Explain how meiosis generates genetic variation — 3 sources.","Crossing over between homologous chromosomes during prophase I; independent assortment of homologous chromosomes during metaphase I; random fertilisation, which combines gametes from two parents.");
+add(GV,"★★★★★ Q4. Explain the process of natural selection.","Individuals within a population show genetic variation. Some individuals possess inherited characteristics that increase their chances of survival and reproduction in a particular environment. These individuals leave more offspring, passing advantageous alleles to the next generation. Over many generations, the frequency of these alleles increases — evolution by natural selection.");
+add(GV,"★★★★★ Q5. Explain how antibiotic resistance evolves (as a natural selection example).","Random mutations may produce resistant bacteria. Antibiotics create a selection pressure by killing susceptible bacteria. Resistant bacteria survive, reproduce by binary fission and pass resistance genes to their offspring. As a result, resistance becomes more common in the population.");
+
+/* ===== SPECIATION & SELECTION TYPES Q6-7 ===== */
+const SP = "Speciation & Selection Types";
+add(SP,"★★★★★ Q6. Explain how speciation occurs.","A population becomes geographically or reproductively isolated, preventing gene flow. Different selection pressures and mutations cause the populations to diverge genetically. Over time, they become reproductively isolated and can no longer produce fertile offspring — forming separate species.");
+add(SP,"★★★★☆ Q7. Compare natural selection and artificial selection — 4 features.","Selecting agent: environment / humans. Purpose: adaptation / desired characteristics. Speed: usually gradual / often faster. Genetic diversity: may remain relatively high / often reduced.");
+
+/* ===== BIODIVERSITY & CONSERVATION Q8-10 ===== */
+const BC = "Biodiversity & Conservation";
+add(BC,"★★★★★ Q8. Explain why biodiversity is important.","High biodiversity increases ecosystem stability and resilience to environmental change. It provides genetic resources for future adaptation and supports ecosystem services such as pollination, nutrient cycling and food production.");
+add(BC,"★★★★★ Q9. Explain why small populations are vulnerable.","Small populations have lower genetic diversity and are more susceptible to inbreeding. Reduced variation limits the ability to adapt to environmental changes and increases the risk of extinction.");
+add(BC,"★★★★★ Q10. Explain how conservation programmes maintain biodiversity.","Conservation programmes protect habitats, restore degraded ecosystems and increase connectivity through wildlife corridors. Captive breeding and reintroduction programmes may also increase population size and genetic diversity.");
+
+/* ===== DATA & PRACTICAL SKILLS ===== */
+const DP = "Data & Practical Skills";
+add(DP,"Name six high-frequency data-analysis skills for this topic.","Interpret family pedigrees; calculate genotype and phenotype ratios; analyse graphs showing changes in allele frequency; explain changes in population size; interpret biodiversity indices where required; evaluate conservation data.");
+add(DP,"Name six common ecological practical investigation topics.","Estimating plant populations using quadrats; random and systematic sampling; calculating mean population density; estimating total population size; evaluating sampling methods; improving ecological investigations.");
+
+/* ===== TOP 10 MISTAKES ===== */
+const MX = "Top 10 Mistakes";
+add(MX,"❌ 'Individuals evolve.' What's correct?","✔ Populations evolve over generations — individuals don't evolve within their own lifetime.");
+add(MX,"❌ 'Mutations occur because organisms need them.' What's correct?","✔ Mutations occur randomly, regardless of whether they'd be useful.");
+add(MX,"❌ 'Natural selection gives organisms useful traits.' What's correct?","✔ Selection acts on existing variation — it doesn't create new traits on demand.");
+add(MX,"❌ 'Evolution always produces perfection.' What's correct?","✔ Evolution produces adaptations suited to CURRENT conditions, not a perfect end-state.");
+add(MX,"❌ 'Artificial selection increases biodiversity.' What's correct?","✔ It often REDUCES genetic diversity, since only individuals with desired traits are bred.");
+add(MX,"❌ 'Species change during their lifetime.' What's correct?","✔ Evolution occurs across generations, not within one individual's life.");
+add(MX,"❌ 'All mutations are harmful.' What's correct?","✔ Mutations may be harmful, beneficial or neutral.");
+add(MX,"❌ 'Genetic variation comes only from mutation.' What's correct?","✔ It also arises through meiosis (crossing over, independent assortment) and random fertilisation.");
+add(MX,"❌ 'Conservation only means protecting animals.' What's correct?","✔ It includes protecting habitats, plants and whole ecosystem processes.");
+add(MX,"❌ 'Small populations always become extinct.' What's correct?","✔ They have a HIGHER risk, but extinction is not inevitable.");
+
+/* ===== A★ MEMORY CHECKLIST ===== */
+const MC = "A★ Memory Checklist";
+add(MC,"Define: Homozygous vs Heterozygous.","Homozygous: having two identical alleles for a gene. Heterozygous: having two different alleles for a gene.");
+add(MC,"Define: Dominant vs Recessive.","Dominant: an allele expressed in the phenotype whenever present (even with one copy). Recessive: an allele only expressed in the phenotype when two copies are present (homozygous recessive).");
+add(MC,"Define: Crossing over and Independent assortment (recap).","Crossing over: exchange of genetic material between homologous chromosomes in prophase I. Independent assortment: random orientation/separation of homologous chromosome pairs in metaphase I — both increase genetic variation.");
+add(MC,"Define: Genetic drift.","Random changes in allele frequency in a population, which have a larger effect in small populations, and are not driven by natural selection.");
+add(MC,"Define: Gene flow.","The movement of alleles between populations, usually via migration of individuals and interbreeding.");
+add(MC,"Define: Speciation (recap).","The formation of new, distinct species as a result of populations becoming reproductively isolated and diverging genetically over time.");
+
+/* ===== EXPECTED EXAM FREQUENCY ===== */
+const EF = "Exam Frequency";
+add(EF,"Rate the exam probability of: natural selection, genetic variation, meiosis and variation, biodiversity, conservation.","All ★★★★★.");
+add(EF,"Rate the exam probability of: speciation, inheritance calculations.","Both ★★★★☆.");
+
+/* ===== A★ EXAM STRATEGY ===== */
+const ES = "A★ Exam Strategy";
+add(ES,"What is the 4-step structure for long-answer genetics/evolution questions?","1. Define the key biological terms accurately. 2. Explain the underlying biological mechanism. 3. Apply the explanation to the context given in the question. 4. Conclude by linking back to the biological outcome (e.g. increased allele frequency, adaptation, species survival, or maintenance of biodiversity).");
+add(ES,"With Predictions 1-8 now complete, what's the recommended next resource?","A Final A★ Rapid Revision Pack: 200 essential one-line recall facts, 100 examiner favourite definitions, 50 must-know biological processes, 50 calculation drills with worked answers, 30 practical investigation summaries, 20 synoptic essay plans, and a final 48-hour revision checklist.");
+
+/* ---------------- APP LOGIC ---------------- */
+const TOPICS = [LO, KD, GV, SP, BC, DP, MX, MC, EF, ES];
+let currentTopic = "All";
+let order = [];
+let pos = 0;
+let known = new Set();
+let flipped = false;
+
+const STORAGE_KEY = "bio_genetics_progress_v1";
+
+function loadProgress(){
+  try{
+    const raw = localStorageSafe.getItem(STORAGE_KEY);
+    if(raw){ known = new Set(JSON.parse(raw)); }
+  }catch(e){}
+}
+function saveProgress(){
+  try{ localStorageSafe.setItem(STORAGE_KEY, JSON.stringify([...known])); }catch(e){}
+}
+/* In-memory fallback (artifacts / private browsing safe) */
+const memStore = {};
+const localStorageSafe = {
+  getItem(k){ try{ return window.localStorage.getItem(k); }catch(e){ return memStore[k] || null; } },
+  setItem(k,v){ try{ window.localStorage.setItem(k,v); }catch(e){ memStore[k]=v; } }
+};
+
+function buildTopicBar(){
+  const bar = document.getElementById('topicBar');
+  const all = ["All", ...TOPICS];
+  bar.innerHTML = "";
+  all.forEach(t=>{
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (t===currentTopic ? ' active':'');
+    chip.textContent = t==="All" ? "All Topics" : t;
+    chip.onclick = ()=>{ currentTopic = t; setupDeck(); buildTopicBar(); };
+    bar.appendChild(chip);
+  });
+}
+
+function setupDeck(){
+  const filtered = currentTopic==="All" ? DECK : DECK.filter(c=>c.topic===currentTopic);
+  order = filtered.map(c=>c.id);
+  pos = 0;
+  flipped = false;
+  render();
+}
+
+function shuffleDeck(){
+  for(let i=order.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [order[i],order[j]] = [order[j],order[i]];
+  }
+  pos = 0;
+  flipped = false;
+  render();
+}
+
+function currentCard(){
+  const id = order[pos];
+  return DECK.find(c=>c.id===id);
+}
+
+function render(){
+  const card = currentCard();
+  const cardEl = document.getElementById('card');
+  cardEl.classList.remove('flipped');
+  flipped = false;
+  if(!card){
+    document.getElementById('qText').textContent = "No cards in this topic.";
+    document.getElementById('aText').innerHTML = "";
+    return;
+  }
+  document.getElementById('qText').innerHTML = card.q;
+  document.getElementById('aText').innerHTML = card.a;
+  const shortTag = card.topic;
+  document.getElementById('tagFront').textContent = shortTag;
+  document.getElementById('tagBack').textContent = shortTag;
+  document.getElementById('idxFront').textContent = (pos+1)+"/"+order.length;
+  document.getElementById('idxBack').textContent = (pos+1)+"/"+order.length;
+  document.getElementById('progressLabel').textContent = (pos+1)+" / "+order.length;
+  document.getElementById('progressFill').style.width = order.length ? (((pos+1)/order.length)*100)+"%" : "0%";
+  document.getElementById('knownLabel').textContent = "✓ "+[...known].filter(id=>order.includes(id)).length;
+  document.getElementById('deckLabel').textContent = (currentTopic==="All"?"All Topics":currentTopic) + " · " + order.length + " cards";
+}
+
+function flip(){
+  const cardEl = document.getElementById('card');
+  flipped = !flipped;
+  cardEl.classList.toggle('flipped', flipped);
+}
+
+function next(){
+  if(order.length===0) return;
+  pos = (pos+1) % order.length;
+  render();
+}
+function prev(){
+  if(order.length===0) return;
+  pos = (pos-1+order.length) % order.length;
+  render();
+}
+
+function rate(status){
+  const card = currentCard();
+  if(!card) return;
+  if(status==="good"){ known.add(card.id); }
+  else { known.delete(card.id); }
+  saveProgress();
+  next();
+}
+
+/* Events */
+document.getElementById('card').addEventListener('click', flip);
+document.getElementById('nextBtn').addEventListener('click', next);
+document.getElementById('prevBtn').addEventListener('click', prev);
+document.getElementById('shuffleBtn').addEventListener('click', shuffleDeck);
+document.getElementById('rateAgain').addEventListener('click', ()=>rate('again'));
+document.getElementById('rateHard').addEventListener('click', ()=>rate('hard'));
+document.getElementById('rateGood').addEventListener('click', ()=>rate('good'));
+document.getElementById('resetLink').addEventListener('click', ()=>{
+  known = new Set();
+  saveProgress();
+  render();
+});
+
+/* Swipe support */
+let touchStartX = null, touchStartY = null;
+const stage = document.querySelector('.stage');
+stage.addEventListener('touchstart', e=>{
+  touchStartX = e.changedTouches[0].clientX;
+  touchStartY = e.changedTouches[0].clientY;
+}, {passive:true});
+stage.addEventListener('touchend', e=>{
+  if(touchStartX===null) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
+    if(dx < 0) next(); else prev();
+  }
+  touchStartX = null; touchStartY = null;
+}, {passive:true});
+
+/* Keyboard support (desktop) */
+document.addEventListener('keydown', e=>{
+  if(e.key==="ArrowRight") next();
+  else if(e.key==="ArrowLeft") prev();
+  else if(e.key===" "){ e.preventDefault(); flip(); }
+  else if(e.key==="1") rate('again');
+  else if(e.key==="2") rate('hard');
+  else if(e.key==="3") rate('good');
+});
+
+/* Init */
+loadProgress();
+buildTopicBar();
+setupDeck();
+</script>
+</body>
+</html>
