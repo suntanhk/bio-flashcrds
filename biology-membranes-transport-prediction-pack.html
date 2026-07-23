@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Biology Membranes A★ Prediction Pack — 9BI0</title>
+<style>
+  :root{
+    --bg:#0d1117;
+    --card-bg:#161b22;
+    --card-back:#1c2333;
+    --border:#2a3346;
+    --text:#e6edf3;
+    --text-dim:#8b96a5;
+    --accent:#4fd1c5;
+    --accent2:#a78bfa;
+    --good:#3fb950;
+    --warn:#f0b429;
+    --danger:#f85149;
+    --shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overscroll-behavior:none;
+  }
+  body{
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100vh;
+    min-height:-webkit-fill-available;
+    padding: env(safe-area-inset-top,16px) 16px calc(env(safe-area-inset-bottom,16px) + 12px);
+  }
+  header{
+    width:100%; max-width:520px; text-align:center; padding-top:10px;
+  }
+  h1{
+    font-size:1.05rem; font-weight:700; margin:4px 0 2px; letter-spacing:0.2px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .subtitle{ font-size:0.75rem; color:var(--text-dim); margin-bottom:10px;}
+
+  .topic-bar{
+    width:100%; max-width:520px;
+    display:flex; gap:6px; overflow-x:auto; padding:4px 2px 10px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .topic-bar::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto;
+    padding:7px 12px;
+    border-radius:20px;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    color:var(--text-dim);
+    font-size:0.72rem;
+    font-weight:600;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .chip.active{
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    color:#0d1117;
+    border-color:transparent;
+  }
+
+  .progress-row{
+    width:100%; max-width:520px;
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:0.72rem; color:var(--text-dim); margin-bottom:8px; padding:0 2px;
+  }
+  .progress-track{
+    flex:1; height:5px; background:var(--border); border-radius:4px; margin:0 10px; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); width:0%;
+    transition:width .25s ease;
+  }
+
+  .stage{
+    width:100%; max-width:520px;
+    flex:1;
+    display:flex; align-items:center; justify-content:center;
+    perspective:1400px;
+    margin: 6px 0 14px;
+    min-height:340px;
+  }
+  .card{
+    width:100%;
+    height:360px;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.2,.9,.3,1);
+    cursor:pointer;
+  }
+  .card.flipped{ transform:rotateY(180deg); }
+  .face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:20px;
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+    display:flex; flex-direction:column;
+    padding:22px;
+    overflow-y:auto;
+  }
+  .face::-webkit-scrollbar{width:4px;}
+  .face::-webkit-scrollbar-thumb{background:var(--border); border-radius:4px;}
+  .front{
+    background:radial-gradient(circle at 30% 20%, #1c2333, var(--card-bg) 70%);
+    justify-content:center; align-items:center; text-align:center;
+  }
+  .back{
+    background:radial-gradient(circle at 70% 20%, #232c44, var(--card-back) 70%);
+    transform:rotateY(180deg);
+    justify-content:flex-start; align-items:flex-start; text-align:left;
+  }
+  .tag{
+    position:absolute; top:14px; left:14px;
+    font-size:0.62rem; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;
+    color:var(--accent);
+    background:rgba(79,209,197,0.1);
+    border:1px solid rgba(79,209,197,0.3);
+    padding:3px 8px; border-radius:20px;
+  }
+  .card-index{
+    position:absolute; top:14px; right:14px;
+    font-size:0.65rem; color:var(--text-dim);
+  }
+  .q-text{
+    font-size:1.15rem; font-weight:600; line-height:1.4; margin-top:20px;
+  }
+  .tap-hint{
+    position:absolute; bottom:14px; left:0; right:0; text-align:center;
+    font-size:0.65rem; color:var(--text-dim);
+  }
+  .a-label{
+    font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;
+    color:var(--accent2); margin:20px 0 8px;
+  }
+  .a-text{
+    font-size:1rem; line-height:1.5; font-weight:500;
+  }
+  .a-text ul{ margin:6px 0 0 18px; padding:0; }
+  .a-text li{ margin-bottom:4px; }
+
+  .controls{
+    width:100%; max-width:520px;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:8px;
+  }
+  .btn{
+    flex:1;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:13px 10px;
+    border-radius:14px;
+    font-size:0.85rem;
+    font-weight:600;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    cursor:pointer;
+    -webkit-user-select:none; user-select:none;
+    transition:transform .1s ease, background .15s ease;
+  }
+  .btn:active{ transform:scale(0.96); background:#1e2635; }
+  .btn.wide{ flex:2; }
+  .btn.icon-only{ flex:0 0 52px; font-size:1.1rem; }
+
+  .rate-row{
+    width:100%; max-width:520px;
+    display:flex; gap:8px; margin-bottom:6px;
+  }
+  .rate-btn{
+    flex:1;
+    padding:11px 6px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--card-bg);
+    font-size:0.72rem;
+    font-weight:700;
+    text-align:center;
+    cursor:pointer;
+    -webkit-user-select:none; user-select:none;
+  }
+  .rate-btn.again{ color:var(--danger); }
+  .rate-btn.hard{ color:var(--warn); }
+  .rate-btn.good{ color:var(--good); }
+  .rate-btn:active{ transform:scale(0.96); }
+
+  .footer-row{
+    width:100%; max-width:520px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:0.68rem; color:var(--text-dim); margin-top:6px;
+  }
+  .footer-row span.link{
+    color:var(--accent); cursor:pointer; font-weight:600;
+  }
+
+  .done-screen{
+    width:100%; max-width:520px; text-align:center; padding:30px 10px;
+  }
+  .done-screen h2{ color:var(--good); font-size:1.3rem; margin-bottom:6px;}
+  .done-screen p{ color:var(--text-dim); font-size:0.85rem; }
+
+  @media (max-height:700px){
+    .card{ height:310px; }
+    .stage{ min-height:300px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Membranes &amp; Transport Pack</h1>
+  <div class="subtitle">★★★★★ Diffusion · Osmosis · Active Transport · Edexcel 9BI0</div>
+</header>
+
+<div class="topic-bar" id="topicBar"></div>
+
+<div class="progress-row">
+  <span id="progressLabel">1 / 1</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span id="knownLabel">✓ 0</span>
+</div>
+
+<div class="stage">
+  <div class="card" id="card">
+    <div class="face front">
+      <span class="tag" id="tagFront">Topic 1</span>
+      <span class="card-index" id="idxFront">1/1</span>
+      <div class="q-text" id="qText">Loading…</div>
+      <div class="tap-hint">tap to flip</div>
+    </div>
+    <div class="face back">
+      <span class="tag" id="tagBack">Topic 1</span>
+      <span class="card-index" id="idxBack">1/1</span>
+      <div class="a-label">Answer</div>
+      <div class="a-text" id="aText"></div>
+    </div>
+  </div>
+</div>
+
+<div class="rate-row" id="rateRow">
+  <div class="rate-btn again" id="rateAgain">✗ Again</div>
+  <div class="rate-btn hard" id="rateHard">~ Shaky</div>
+  <div class="rate-btn good" id="rateGood">✓ Got it</div>
+</div>
+
+<div class="controls">
+  <div class="btn icon-only" id="prevBtn">‹</div>
+  <div class="btn wide" id="shuffleBtn">🔀 Shuffle</div>
+  <div class="btn icon-only" id="nextBtn">›</div>
+</div>
+
+<div class="footer-row">
+  <span id="deckLabel">All Topics · 0 cards</span>
+  <span class="link" id="resetLink">reset progress</span>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const DECK = [];
+let uid = 0;
+function add(topic, q, a){ DECK.push({id: uid++, topic, q, a}); }
+
+/* ===== EXAM PROBABILITY ===== */
+const EP = "Exam Probability";
+add(EP,"How likely is this topic to appear in Paper 1?","Nearly every Edexcel Paper 1 contains at least one substantial question on membranes, diffusion, osmosis or active transport — directly or embedded in a practical/unfamiliar context.");
+add(EP,"Rate the exam probability of: fluid mosaic membrane, diffusion, osmosis, active transport, facilitated diffusion, membrane practical.","All ★★★★★ — every one of these is a top-probability sub-topic.");
+add(EP,"Name six other topics this one is commonly combined with in exam questions.","Enzymes, plant transport, gas exchange, kidney physiology, nerve cells, microbiology (plus practical investigations).");
+
+/* ===== CORE MODEL ANSWERS Q1-10 ===== */
+const CQ = "Core Questions Q1-10";
+add(CQ,"★★★★★ Q1 (6 marks). Explain how the structure of the plasma membrane enables selective permeability.","The membrane is a phospholipid bilayer (fluid mosaic model). Hydrophilic phosphate heads face the aqueous environments; hydrophobic fatty acid tails face inwards. Small non-polar molecules (O₂, CO₂) diffuse directly through the bilayer. Polar molecules and ions need specific channel or carrier proteins. This selective combination of phospholipids and proteins controls what moves into and out of the cell.");
+add(CQ,"Q1 — Examiner Notes: what 7 terms must you include for full marks?","Fluid mosaic model; phospholipid bilayer; hydrophilic heads; hydrophobic tails; channel proteins; carrier proteins; selective permeability.");
+add(CQ,"★★★★★ Q2 (6 marks). Compare diffusion, facilitated diffusion and active transport — 5 features.","Requires ATP: No / No / Yes. Protein needed: No / Yes / Yes. Direction: down gradient / down gradient / against gradient. Carrier proteins: No / Sometimes / Yes. Channel proteins: No / Yes / Sometimes.");
+add(CQ,"Q2 — Examiner Tip.","'Compare' questions need both similarities AND differences — don't just describe one process in isolation.");
+add(CQ,"★★★★★ Q3. Explain why active transport is essential in root hair cells.","Mineral ions in the soil are often at a lower concentration than inside root hair cells. Root hair cells use active transport to move mineral ions in against the concentration gradient. Carrier proteins use energy released from ATP hydrolysis to transport the ions.");
+add(CQ,"Q3 — Common Mistake.","❌ 'Water enters by active transport.' ✔ Water enters root hair cells mainly by osmosis (only mineral ions need active transport).");
+add(CQ,"★★★★★ Q4. Define osmosis precisely.","The net movement of water molecules from a region of higher water potential to a region of lower water potential, through a partially permeable membrane.");
+add(CQ,"Q4 — Examiner Keywords: which 5 terms must a full osmosis definition include?","Net movement; water molecules; higher water potential; lower water potential; partially permeable membrane.");
+add(CQ,"★★★★★ Q5. Explain why animal cells burst in a hypotonic solution but plant cells do not.","Water enters both cell types by osmosis in a hypotonic solution. Animal cells lack a cell wall, so excessive water uptake may cause the cell to burst (lysis). Plant cells have a strong cellulose cell wall that resists expansion; as water enters, the vacuole enlarges and presses the cytoplasm against the wall, generating turgor pressure — this prevents bursting.");
+add(CQ,"★★★★★ Q6. Explain why red blood cells shrink in a hypertonic solution.","The surrounding solution has a lower water potential than the cytoplasm. Water moves out of the red blood cell by osmosis through the partially permeable plasma membrane. The cell loses water and becomes crenated (shrinks).");
+add(CQ,"★★★★★ Q7. Explain why oxygen diffuses rapidly across the alveolar wall.","O₂ diffuses from the alveoli (high concentration) into the blood (lower concentration). The alveolar epithelium and capillary endothelium are each one cell thick, giving a short diffusion distance. The lungs have a very large surface area, and continuous ventilation + blood flow maintain a steep concentration gradient.");
+add(CQ,"★★★★☆ Q8. Explain why cholesterol is important in plasma membranes.","Cholesterol fits between phospholipid molecules and regulates membrane fluidity — it reduces excessive movement at high temperatures and prevents phospholipids packing too tightly at low temperatures. This maintains membrane stability and reduces permeability to some substances.");
+add(CQ,"★★★★★ Q9. Explain why ethanol increases membrane permeability.","Ethanol disrupts the hydrophobic interactions between phospholipid molecules, increasing membrane fluidity and permeability. At higher concentrations it may also disrupt membrane proteins. As a result, pigments such as betalain leak from cells more readily.");
+add(CQ,"★★★★★ Q10. Evaluate the beetroot membrane permeability practical — 6 typical improvements.","Use beetroot cylinders of identical diameter and length; wash discs thoroughly to remove pigment released during cutting; maintain constant temperature with a thermostatically controlled water bath; use equal volumes of ethanol or water; measure pigment concentration with a colorimeter (removes subjectivity); repeat each treatment and calculate a mean.");
+
+/* ===== TOP 10 MISCONCEPTIONS ===== */
+const MX = "Top 10 Misconceptions";
+add(MX,"❌ 'The cell wall controls transport.' What's correct?","✔ The plasma membrane controls transport — the cell wall is freely permeable and provides structural support, not selective control.");
+add(MX,"❌ 'Osmosis is movement of water only into cells.' What's correct?","✔ Osmosis is net movement of water in EITHER direction, depending on the water potential gradient.");
+add(MX,"❌ 'Diffusion requires energy.' What's correct?","✔ Diffusion is passive and does not require ATP.");
+add(MX,"❌ 'Active transport moves substances down a gradient.' What's correct?","✔ Active transport moves substances AGAINST a concentration gradient.");
+add(MX,"❌ 'All molecules cross membranes freely.' What's correct?","✔ Only small non-polar molecules diffuse directly through the bilayer — others need specific transport proteins.");
+add(MX,"❌ 'Channel and carrier proteins are the same.' What's correct?","✔ Channel proteins form pores; carrier proteins bind and transport specific molecules by changing shape.");
+add(MX,"❌ 'Cholesterol blocks transport completely.' What's correct?","✔ Cholesterol modulates membrane fluidity and permeability — it doesn't block transport outright.");
+add(MX,"❌ 'Osmosis occurs without a membrane.' What's correct?","✔ Osmosis specifically requires a partially permeable membrane.");
+add(MX,"❌ 'Plant cells cannot lose water.' What's correct?","✔ Plant cells DO lose water in hypertonic solutions and become plasmolysed.");
+add(MX,"❌ 'Water potential equals water concentration.' What's correct?","✔ Water potential reflects the tendency of water to move — it's influenced by both solute concentration and pressure, not concentration alone.");
+
+/* ===== A★ MEMORY CHECKLIST ===== */
+const MC = "A★ Memory Checklist";
+add(MC,"Define: Fluid mosaic model.","A model describing the cell membrane as a phospholipid bilayer with proteins scattered throughout, able to move — giving a fluid, mosaic-like structure.");
+add(MC,"Define: Selective permeability.","The property of a membrane allowing some substances to cross while restricting others.");
+add(MC,"Define: Water potential.","A measure of the tendency of water molecules to move out of a solution, influenced by solute concentration and pressure.");
+add(MC,"Define: Channel proteins vs Carrier proteins.","Channel proteins form pores allowing specific ions/molecules to diffuse through; carrier proteins bind a specific molecule and change shape to transport it across (facilitated diffusion or active transport).");
+add(MC,"Define: Turgor (pressure).","The pressure of the cell contents pressing against the cell wall in a plant cell that has absorbed water by osmosis — keeps the cell rigid.");
+add(MC,"Define: Plasmolysis.","The shrinking of a plant cell's cytoplasm away from the cell wall due to water loss by osmosis in a hypertonic (concentrated) solution.");
+add(MC,"Define: Crenation.","The shrinking/shrivelling of an animal cell (e.g. red blood cell) due to water loss by osmosis in a hypertonic solution.");
+add(MC,"Describe: the beetroot membrane practical in one line.","Investigates how a variable (e.g. temperature, ethanol concentration) affects membrane permeability by measuring pigment (betalain) leakage from beetroot tissue, usually with a colorimeter.");
+
+/* ===== EXAMINER'S FINAL ADVICE ===== */
+const FA = "Examiner's Final Advice";
+add(FA,"What 5 questions should you ask yourself for any unfamiliar-context membrane question?","1. What is moving? (water, ions, oxygen, glucose, etc.) 2. Which transport mechanism is involved? 3. What is the direction of movement relative to the concentration/water potential gradient? 4. Is ATP required? 5. Which membrane structures make the movement possible?");
+add(FA,"Why do many 6-mark membrane questions feel harder than they should be?","They often require applying the same core mechanisms (diffusion, osmosis, active transport) to an unfamiliar context — the biology is the same, but the scenario is new, so working through the 5-question checklist systematically is more reliable than trying to recall a memorised answer.");
+add(FA,"What comes next in the A★ Examiner Prediction Pack series?","Prediction 4: Respiration and ATP — the 20 highest-probability questions, full A★ model answers, ATP calculations and data interpretation, practical investigations, synoptic links with enzymes/membranes/exercise physiology, and the most common examiner traps.");
+
+/* ---------------- APP LOGIC ---------------- */
+const TOPICS = [EP, CQ, MX, MC, FA];
+let currentTopic = "All";
+let order = [];
+let pos = 0;
+let known = new Set();
+let flipped = false;
+
+const STORAGE_KEY = "bio_membranes_progress_v1";
+
+function loadProgress(){
+  try{
+    const raw = localStorageSafe.getItem(STORAGE_KEY);
+    if(raw){ known = new Set(JSON.parse(raw)); }
+  }catch(e){}
+}
+function saveProgress(){
+  try{ localStorageSafe.setItem(STORAGE_KEY, JSON.stringify([...known])); }catch(e){}
+}
+/* In-memory fallback (artifacts / private browsing safe) */
+const memStore = {};
+const localStorageSafe = {
+  getItem(k){ try{ return window.localStorage.getItem(k); }catch(e){ return memStore[k] || null; } },
+  setItem(k,v){ try{ window.localStorage.setItem(k,v); }catch(e){ memStore[k]=v; } }
+};
+
+function buildTopicBar(){
+  const bar = document.getElementById('topicBar');
+  const all = ["All", ...TOPICS];
+  bar.innerHTML = "";
+  all.forEach(t=>{
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (t===currentTopic ? ' active':'');
+    chip.textContent = t==="All" ? "All Topics" : t;
+    chip.onclick = ()=>{ currentTopic = t; setupDeck(); buildTopicBar(); };
+    bar.appendChild(chip);
+  });
+}
+
+function setupDeck(){
+  const filtered = currentTopic==="All" ? DECK : DECK.filter(c=>c.topic===currentTopic);
+  order = filtered.map(c=>c.id);
+  pos = 0;
+  flipped = false;
+  render();
+}
+
+function shuffleDeck(){
+  for(let i=order.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [order[i],order[j]] = [order[j],order[i]];
+  }
+  pos = 0;
+  flipped = false;
+  render();
+}
+
+function currentCard(){
+  const id = order[pos];
+  return DECK.find(c=>c.id===id);
+}
+
+function render(){
+  const card = currentCard();
+  const cardEl = document.getElementById('card');
+  cardEl.classList.remove('flipped');
+  flipped = false;
+  if(!card){
+    document.getElementById('qText').textContent = "No cards in this topic.";
+    document.getElementById('aText').innerHTML = "";
+    return;
+  }
+  document.getElementById('qText').innerHTML = card.q;
+  document.getElementById('aText').innerHTML = card.a;
+  const shortTag = card.topic;
+  document.getElementById('tagFront').textContent = shortTag;
+  document.getElementById('tagBack').textContent = shortTag;
+  document.getElementById('idxFront').textContent = (pos+1)+"/"+order.length;
+  document.getElementById('idxBack').textContent = (pos+1)+"/"+order.length;
+  document.getElementById('progressLabel').textContent = (pos+1)+" / "+order.length;
+  document.getElementById('progressFill').style.width = order.length ? (((pos+1)/order.length)*100)+"%" : "0%";
+  document.getElementById('knownLabel').textContent = "✓ "+[...known].filter(id=>order.includes(id)).length;
+  document.getElementById('deckLabel').textContent = (currentTopic==="All"?"All Topics":currentTopic) + " · " + order.length + " cards";
+}
+
+function flip(){
+  const cardEl = document.getElementById('card');
+  flipped = !flipped;
+  cardEl.classList.toggle('flipped', flipped);
+}
+
+function next(){
+  if(order.length===0) return;
+  pos = (pos+1) % order.length;
+  render();
+}
+function prev(){
+  if(order.length===0) return;
+  pos = (pos-1+order.length) % order.length;
+  render();
+}
+
+function rate(status){
+  const card = currentCard();
+  if(!card) return;
+  if(status==="good"){ known.add(card.id); }
+  else { known.delete(card.id); }
+  saveProgress();
+  next();
+}
+
+/* Events */
+document.getElementById('card').addEventListener('click', flip);
+document.getElementById('nextBtn').addEventListener('click', next);
+document.getElementById('prevBtn').addEventListener('click', prev);
+document.getElementById('shuffleBtn').addEventListener('click', shuffleDeck);
+document.getElementById('rateAgain').addEventListener('click', ()=>rate('again'));
+document.getElementById('rateHard').addEventListener('click', ()=>rate('hard'));
+document.getElementById('rateGood').addEventListener('click', ()=>rate('good'));
+document.getElementById('resetLink').addEventListener('click', ()=>{
+  known = new Set();
+  saveProgress();
+  render();
+});
+
+/* Swipe support */
+let touchStartX = null, touchStartY = null;
+const stage = document.querySelector('.stage');
+stage.addEventListener('touchstart', e=>{
+  touchStartX = e.changedTouches[0].clientX;
+  touchStartY = e.changedTouches[0].clientY;
+}, {passive:true});
+stage.addEventListener('touchend', e=>{
+  if(touchStartX===null) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
+    if(dx < 0) next(); else prev();
+  }
+  touchStartX = null; touchStartY = null;
+}, {passive:true});
+
+/* Keyboard support (desktop) */
+document.addEventListener('keydown', e=>{
+  if(e.key==="ArrowRight") next();
+  else if(e.key==="ArrowLeft") prev();
+  else if(e.key===" "){ e.preventDefault(); flip(); }
+  else if(e.key==="1") rate('again');
+  else if(e.key==="2") rate('hard');
+  else if(e.key==="3") rate('good');
+});
+
+/* Init */
+loadProgress();
+buildTopicBar();
+setupDeck();
+</script>
+</body>
+</html>
