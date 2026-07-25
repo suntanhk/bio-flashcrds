@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Volume 13 · A★ Recall Deck</title>
+<style>
+  :root{
+    --bg:#0b0f0e;
+    --surface:#121815;
+    --surface-2:#182019;
+    --line:#243128;
+    --ink:#eef3ee;
+    --ink-dim:#9db3a4;
+    --moss:#4f9d6e;
+    --moss-bright:#7fd99e;
+    --amber:#e0a94f;
+    --coral:#e0755f;
+    --serif:'Iowan Old Style','Georgia',serif;
+    --mono:'SF Mono','Menlo',monospace;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0; background:
+      radial-gradient(circle at 15% 0%, #14201a 0%, transparent 45%),
+      radial-gradient(circle at 100% 100%, #101a14 0%, transparent 50%),
+      var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100vh; padding:20px 16px 40px;
+    overflow-x:hidden;
+  }
+  .header{width:100%; max-width:520px; text-align:center; margin-bottom:14px;}
+  .eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.14em; color:var(--moss-bright); text-transform:uppercase;}
+  h1{font-family:var(--serif); font-weight:500; font-size:22px; margin:4px 0 2px; letter-spacing:.01em;}
+  .sub{font-size:12.5px; color:var(--ink-dim); line-height:1.5;}
+
+  .chips{display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin:14px 0 6px; max-width:520px;}
+  .chip{
+    font-family:var(--mono); font-size:10.5px; padding:6px 10px; border-radius:999px;
+    border:1px solid var(--line); color:var(--ink-dim); background:var(--surface);
+    cursor:pointer; user-select:none; transition:all .15s;
+  }
+  .chip.active{background:var(--moss); border-color:var(--moss); color:#06110a; font-weight:600;}
+
+  .progress-row{width:100%; max-width:520px; display:flex; align-items:center; gap:10px; margin:12px 0 8px; font-family:var(--mono); font-size:11px; color:var(--ink-dim);}
+  .bar{flex:1; height:4px; background:var(--surface-2); border-radius:4px; overflow:hidden;}
+  .bar-fill{height:100%; background:linear-gradient(90deg,var(--moss),var(--moss-bright)); width:0%; transition:width .3s;}
+
+  .stage{width:100%; max-width:520px; perspective:1400px; margin-top:6px;}
+  .card{
+    position:relative; width:100%; min-height:300px; border-radius:18px;
+    cursor:pointer; transform-style:preserve-3d; transition:transform .5s cubic-bezier(.4,.2,.2,1);
+  }
+  .card.flipped{transform:rotateY(180deg);}
+  .face{
+    position:absolute; inset:0; backface-visibility:hidden; border-radius:18px;
+    border:1px solid var(--line); padding:24px 22px; display:flex; flex-direction:column;
+  }
+  .front{background:var(--surface); box-shadow:0 12px 30px -14px rgba(0,0,0,.6);}
+  .back{background:var(--surface-2); transform:rotateY(180deg); box-shadow:0 12px 30px -14px rgba(0,0,0,.6);}
+
+  .kicker{font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--moss-bright); margin-bottom:14px; display:flex; justify-content:space-between;}
+  .kicker span.tag{color:var(--amber);}
+  .prompt{font-family:var(--serif); font-size:19px; line-height:1.42; flex:1; display:flex; align-items:center;}
+  .prompt.small{font-size:16.5px;}
+  .answer{font-size:15.5px; line-height:1.55; flex:1; display:flex; align-items:center;}
+  .answer b{color:var(--moss-bright); font-weight:600;}
+  .hint{font-family:var(--mono); font-size:10px; color:var(--ink-dim); text-align:center; margin-top:10px; opacity:.7;}
+
+  .controls{width:100%; max-width:520px; display:flex; gap:10px; margin-top:18px;}
+  .btn{
+    flex:1; padding:13px 10px; border-radius:12px; border:1px solid var(--line);
+    background:var(--surface); color:var(--ink); font-size:13px; font-weight:600;
+    display:flex; flex-direction:column; align-items:center; gap:2px; cursor:pointer;
+  }
+  .btn small{font-family:var(--mono); font-weight:400; font-size:10px; color:var(--ink-dim);}
+  .btn.again{border-color:#5a3327; color:var(--coral);}
+  .btn.good{border-color:#2f5a3f; color:var(--moss-bright);}
+  .btn.nav{max-width:44px; flex:none; font-size:16px;}
+
+  .deckdone{text-align:center; padding:50px 20px; font-family:var(--serif); font-size:18px; color:var(--moss-bright);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">9BI0 · Volume 13 A★ Exam Answer Book</div>
+  <h1>September Recall Deck</h1>
+  <div class="sub">40 cards built from the concise A★ model answers — self‑test recall, memory sentences and top marking‑point traps for Jody's five highest‑yield synoptic questions.</div>
+</div>
+
+<div class="chips" id="chips"></div>
+
+<div class="progress-row">
+  <span id="count">0 / 0</span>
+  <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+  <span id="knownCount">0 mastered</span>
+</div>
+
+<div class="stage">
+  <div class="card" id="card">
+    <div class="face front">
+      <div class="kicker"><span id="frontTopic">—</span><span class="tag" id="frontType">RECALL</span></div>
+      <div class="prompt" id="frontText">Loading…</div>
+      <div class="hint">tap card to flip</div>
+    </div>
+    <div class="face back">
+      <div class="kicker"><span id="backTopic">—</span><span class="tag">ANSWER</span></div>
+      <div class="answer" id="backText"></div>
+      <div class="hint">tap card to flip back</div>
+    </div>
+  </div>
+</div>
+
+<div class="controls" id="postFlip" style="display:none;">
+  <div class="btn again" onclick="grade(false)">Review again<small>saw it, unsure</small></div>
+  <div class="btn good" onclick="grade(true)">Got it<small>move on</small></div>
+</div>
+<div class="controls" id="preFlip">
+  <div class="btn nav" onclick="prevCard()">‹</div>
+  <div class="btn" onclick="flip()">Flip card</div>
+  <div class="btn nav" onclick="skipCard()">›</div>
+</div>
+
+<script>
+const DECK = [
+  // ---------------- Q1 · DROUGHT ----------------
+  {topic:"Q1 · Drought", type:"RECALL", front:"What happens to soil water potential during drought?", back:"It becomes <b>more negative (lower)</b>, reducing the water potential gradient between soil and root hair cells."},
+  {topic:"Q1 · Drought", type:"RECALL", front:"Why does osmosis into root hair cells decrease?", back:"The <b>water potential gradient</b> between soil and root hair cell is reduced, so less water enters by osmosis."},
+  {topic:"Q1 · Drought", type:"RECALL", front:"Why do stomata close?", back:"Guard cells <b>lose turgor pressure</b> and become flaccid, causing the stomata to close."},
+  {topic:"Q1 · Drought", type:"RECALL", front:"Why does photosynthesis decrease?", back:"Stomatal closure reduces <b>CO₂ diffusion</b> into the leaf, and CO₂ is a raw material for photosynthesis."},
+  {topic:"Q1 · Drought", type:"RECALL", front:"How does reduced photosynthesis affect ATP production?", back:"Less glucose is made, so less is available for <b>aerobic respiration</b> — ATP production decreases."},
+  {topic:"Q1 · Drought", type:"RECALL", front:"Why does plant growth decrease?", back:"Less ATP is available for <b>active transport, protein synthesis and cell division</b>."},
+  {topic:"Q1 · Drought", type:"SEQUENCE", front:"Recite the full drought memory sequence, start to finish.", back:"Soil ψ↓ → gradient↓ → osmosis↓ → xylem water↓ → transpiration↓ → guard cell turgor↓ → stomata close → CO₂↓ → photosynthesis↓ → glucose↓ → respiration↓ → <b>ATP↓ → growth↓</b>"},
+  {topic:"Q1 · Drought", type:"TRAP", front:"Top examiner trap for this question?", back:"Writing <b>'diffusion'</b> instead of osmosis for water entry, and saying 'less energy' instead of <b>'less ATP'</b>."},
+
+  // ---------------- Q2 · TYPE 1 DIABETES ----------------
+  {topic:"Q2 · Diabetes", type:"RECALL", front:"Why is little or no insulin produced in Type 1 diabetes?", back:"An <b>autoimmune response destroys the β-cells</b> of the pancreas."},
+  {topic:"Q2 · Diabetes", type:"RECALL", front:"Why does blood glucose concentration increase?", back:"Without insulin, body cells <b>cannot increase glucose uptake</b> from the blood."},
+  {topic:"Q2 · Diabetes", type:"RECALL", front:"Why do cells produce less ATP?", back:"Cells receive <b>less glucose for aerobic respiration</b>."},
+  {topic:"Q2 · Diabetes", type:"RECALL", front:"Why does glucose appear in the urine?", back:"Blood glucose exceeds the <b>kidney's reabsorption capacity</b>."},
+  {topic:"Q2 · Diabetes", type:"RECALL", front:"Why does dehydration occur?", back:"Water follows glucose into the urine <b>by osmosis</b>, causing frequent urination."},
+  {topic:"Q2 · Diabetes", type:"RECALL", front:"Why does weight loss occur?", back:"The body breaks down <b>fat and protein</b> as alternative respiratory substrates."},
+  {topic:"Q2 · Diabetes", type:"SEQUENCE", front:"Recite the full Type 1 diabetes memory sequence.", back:"Autoimmune attack → β-cells destroyed → insulin↓ → glucose uptake↓ → blood glucose↑ → respiration↓ → ATP↓ → glucose in urine → osmosis → <b>dehydration → fat breakdown → weight loss</b>"},
+  {topic:"Q2 · Diabetes", type:"TRAP", front:"Top examiner trap for this question?", back:"<b>Confusing Type 1 with Type 2</b>, and saying insulin 'breaks down' glucose (it doesn't)."},
+
+  // ---------------- Q3 · ENZYME TEMPERATURE ----------------
+  {topic:"Q3 · Enzymes", type:"RECALL", front:"Why does rising temperature initially increase enzyme activity?", back:"More <b>kinetic energy → more successful collisions → more enzyme-substrate complexes</b>."},
+  {topic:"Q3 · Enzymes", type:"RECALL", front:"What happens at the optimum temperature?", back:"The <b>greatest number of successful collisions</b> occurs — maximum reaction rate."},
+  {topic:"Q3 · Enzymes", type:"RECALL", front:"Which bonds are disrupted above the optimum temperature?", back:"<b>Hydrogen bonds</b> (and other weak bonds) maintaining the enzyme's tertiary structure."},
+  {topic:"Q3 · Enzymes", type:"RECALL", front:"Why does the active site change shape?", back:"Heat breaks the bonds holding the <b>tertiary structure</b>, so the active site is no longer complementary."},
+  {topic:"Q3 · Enzymes", type:"RECALL", front:"Why does the reaction rate then decrease?", back:"Substrate is no longer complementary, so <b>fewer enzyme-substrate complexes</b> form."},
+  {topic:"Q3 · Enzymes", type:"RECALL", front:"What does 'denatured' actually mean here?", back:"The active site's shape has <b>permanently changed</b> — it can no longer bind the substrate."},
+  {topic:"Q3 · Enzymes", type:"SEQUENCE", front:"Recite the full enzyme-temperature memory sequence.", back:"Temp↑ → kinetic energy↑ → more collisions → more ES complexes → rate↑ → optimum → H bonds break → active site changes → <b>substrate can't bind → denatured → rate↓</b>"},
+  {topic:"Q3 · Enzymes", type:"TRAP", front:"Top examiner trap for this question?", back:"Saying enzymes are 'used up', or that the <b>substrate</b> denatures instead of the enzyme."},
+
+  // ---------------- Q4 · GAS EXCHANGE ----------------
+  {topic:"Q4 · Gas exchange", type:"RECALL", front:"Why do alveoli provide a large surface area?", back:"There are <b>millions of alveoli</b> in the lungs."},
+  {topic:"Q4 · Gas exchange", type:"RECALL", front:"Why are alveolar and capillary walls only one cell thick?", back:"To create a <b>short diffusion distance</b> between air and blood."},
+  {topic:"Q4 · Gas exchange", type:"RECALL", front:"Why must the alveolar surface be moist?", back:"So oxygen can <b>dissolve</b> before diffusing across the alveolar wall."},
+  {topic:"Q4 · Gas exchange", type:"RECALL", front:"Why is a dense capillary network important?", back:"It continuously removes oxygenated blood, maintaining a <b>steep concentration gradient</b>."},
+  {topic:"Q4 · Gas exchange", type:"RECALL", front:"How does ventilation improve gas exchange?", back:"It replaces alveolar air, keeping <b>O₂ high and CO₂ low</b> in the alveoli."},
+  {topic:"Q4 · Gas exchange", type:"RECALL", front:"Why is a steep concentration gradient essential?", back:"It <b>maximises the rate of diffusion</b> of O₂ and CO₂."},
+  {topic:"Q4 · Gas exchange", type:"SEQUENCE", front:"Recite the full gas-exchange memory sentence.", back:"Large surface area + thin walls + moist surface + rich blood supply + continuous ventilation = <b>steep gradient = rapid gas exchange</b>"},
+  {topic:"Q4 · Gas exchange", type:"TRAP", front:"Top examiner trap for this question?", back:"Saying oxygen is 'actively transported' — it's <b>diffusion</b>. Always link structure → function → advantage."},
+
+  // ---------------- Q5 · DNA REPLICATION ----------------
+  {topic:"Q5 · DNA replication", type:"RECALL", front:"What does 'semi-conservative' mean?", back:"Each new DNA molecule contains <b>one original strand and one new strand</b>."},
+  {topic:"Q5 · DNA replication", type:"RECALL", front:"Which enzyme separates the DNA strands?", back:"<b>DNA helicase</b> breaks the hydrogen bonds between bases."},
+  {topic:"Q5 · DNA replication", type:"RECALL", front:"What is the role of the template strand?", back:"Free nucleotides pair against it by <b>complementary base pairing</b>."},
+  {topic:"Q5 · DNA replication", type:"RECALL", front:"What are the base-pairing rules?", back:"<b>A with T</b>, and <b>C with G</b>."},
+  {topic:"Q5 · DNA replication", type:"RECALL", front:"Which enzyme forms phosphodiester bonds?", back:"<b>DNA polymerase</b> joins adjacent nucleotides."},
+  {topic:"Q5 · DNA replication", type:"RECALL", front:"Why does replication produce identical daughter cells?", back:"Complementary base pairing ensures the <b>DNA sequence is copied accurately</b>."},
+  {topic:"Q5 · DNA replication", type:"SEQUENCE", front:"Recite the full DNA replication memory sentence.", back:"Helicase unzips DNA → each strand becomes a template → complementary bases pair → DNA polymerase joins nucleotides → <b>semi-conservative → two identical DNA molecules</b>"},
+  {topic:"Q5 · DNA replication", type:"TRAP", front:"Top examiner trap for this question?", back:"Saying <b>DNA polymerase</b> breaks hydrogen bonds (helicase does), or mixing replication up with transcription."},
+];
+
+let order = DECK.map((_,i)=>i);
+let pos = 0;
+let flipped = false;
+let mastered = new Set();
+let activeTopic = "ALL";
+
+const topics = ["ALL", ...Array.from(new Set(DECK.map(c=>c.topic)))];
+const chipsEl = document.getElementById('chips');
+topics.forEach(t=>{
+  const el = document.createElement('div');
+  el.className = 'chip' + (t==="ALL" ? " active" : "");
+  el.textContent = t==="ALL" ? "All 40" : t.split(" · ")[1];
+  el.onclick = ()=> setTopic(t, el);
+  chipsEl.appendChild(el);
+});
+
+function setTopic(t, el){
+  activeTopic = t;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  order = DECK.map((_,i)=>i).filter(i=> t==="ALL" || DECK[i].topic===t);
+  pos = 0;
+  render();
+}
+
+function render(){
+  const card = document.getElementById('card');
+  if(order.length === 0){
+    document.querySelector('.stage').innerHTML = '<div class="deckdone">Deck complete for this topic 🎉<br><span style="font-family:monospace;font-size:11px;color:#9db3a4;">pick another topic above</span></div>';
+    document.getElementById('preFlip').style.display='none';
+    document.getElementById('postFlip').style.display='none';
+    return;
+  }
+  const i = order[pos];
+  const c = DECK[i];
+  document.getElementById('frontTopic').textContent = c.topic;
+  document.getElementById('frontType').textContent = c.type;
+  document.getElementById('backTopic').textContent = c.topic;
+  document.getElementById('frontText').innerHTML = c.front;
+  document.getElementById('frontText').className = 'prompt' + (c.front.length>70 ? ' small':'');
+  document.getElementById('backText').innerHTML = c.back;
+  card.classList.remove('flipped');
+  flipped = false;
+  document.getElementById('preFlip').style.display='flex';
+  document.getElementById('postFlip').style.display='none';
+  updateProgress();
+}
+
+function updateProgress(){
+  document.getElementById('count').textContent = (pos+1) + " / " + order.length;
+  document.getElementById('knownCount').textContent = mastered.size + " mastered";
+  document.getElementById('barFill').style.width = (mastered.size / DECK.length * 100) + "%";
+}
+
+function flip(){
+  flipped = !flipped;
+  document.getElementById('card').classList.toggle('flipped', flipped);
+  document.getElementById('preFlip').style.display = flipped ? 'none' : 'flex';
+  document.getElementById('postFlip').style.display = flipped ? 'flex' : 'none';
+}
+
+function advance(){
+  if(pos < order.length - 1){ pos++; } else { pos = 0; }
+  render();
+}
+
+function grade(good){
+  const i = order[pos];
+  if(good){ mastered.add(i); } else { mastered.delete(i); }
+  advance();
+}
+
+function skipCard(){ advance(); }
+function prevCard(){ pos = (pos - 1 + order.length) % order.length; render(); }
+
+document.getElementById('card').addEventListener('click', flip);
+
+render();
+</script>
+</body>
+</html>
