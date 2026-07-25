@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Jody's Biology Revision Hub</title>
+<style>
+  :root{
+    --bg:#0d1117;
+    --card-bg:#161b22;
+    --border:#2a3346;
+    --text:#e6edf3;
+    --text-dim:#8b96a5;
+    --accent:#4fd1c5;
+    --accent2:#a78bfa;
+    --shadow: 0 8px 24px rgba(0,0,0,0.45);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html,body{
+    margin:0; padding:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  body{
+    padding: env(safe-area-inset-top,20px) 16px calc(env(safe-area-inset-bottom,20px) + 24px);
+    max-width:720px;
+    margin:0 auto;
+  }
+  header{
+    text-align:center;
+    padding: 14px 0 18px;
+  }
+  h1{
+    font-size:1.4rem; font-weight:800; margin:6px 0 4px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .subtitle{ font-size:0.8rem; color:var(--text-dim); }
+
+  .search-wrap{
+    position:sticky; top:0; z-index:5;
+    background:var(--bg);
+    padding:8px 0 12px;
+  }
+  #search{
+    width:100%;
+    padding:12px 14px;
+    border-radius:14px;
+    border:1px solid var(--border);
+    background:var(--card-bg);
+    color:var(--text);
+    font-size:0.95rem;
+    outline:none;
+  }
+  #search::placeholder{ color:var(--text-dim); }
+
+  .section{
+    margin-bottom: 22px;
+  }
+  .section-title{
+    display:flex; align-items:center; gap:8px;
+    font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.6px;
+    color:var(--accent);
+    margin: 4px 0 10px;
+  }
+  .section-title .count{
+    background:rgba(79,209,197,0.12);
+    border:1px solid rgba(79,209,197,0.3);
+    color:var(--accent);
+    padding:1px 8px;
+    border-radius:12px;
+    font-size:0.68rem;
+  }
+
+  .card-list{
+    display:flex; flex-direction:column; gap:8px;
+  }
+  a.item{
+    display:flex; align-items:center; gap:12px;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:13px 14px;
+    text-decoration:none;
+    color:var(--text);
+    transition: transform .1s ease, border-color .15s ease, background .15s ease;
+  }
+  a.item:active{ transform:scale(0.98); background:#1c2333; }
+  .icon{
+    flex:0 0 34px; height:34px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:10px;
+    background:rgba(167,139,250,0.12);
+    font-size:1.05rem;
+  }
+  .item-text{ flex:1; min-width:0; }
+  .item-title{
+    font-size:0.9rem; font-weight:600;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .item-sub{
+    font-size:0.72rem; color:var(--text-dim);
+    margin-top:2px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .chev{ color:var(--text-dim); font-size:1rem; flex:0 0 auto; }
+
+  .hidden{ display:none !important; }
+
+  footer{
+    text-align:center; color:var(--text-dim); font-size:0.68rem;
+    margin-top: 10px; padding-top:14px; border-top:1px solid var(--border);
+  }
+  #noResults{
+    text-align:center; color:var(--text-dim); font-size:0.85rem; padding:30px 0; display:none;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📘 Biology Revision Hub</h1>
+  <div class="subtitle">Edexcel A Level Biology B (9BI0) · All resources in one place</div>
+</header>
+
+<div class="search-wrap">
+  <input id="search" type="text" placeholder="Search resources…" autocomplete="off">
+</div>
+
+<div id="noResults">No matching resources found.</div>
+
+<div id="sections"></div>
+
+<footer>suntanhk.github.io/bio-flashcrds</footer>
+
+<script>
+/* Each resource: title, filename, subtitle/description, section, icon */
+const BASE_URL = "https://suntanhk.github.io/bio-flashcrds/";
+const RESOURCES = [
+  /* ===== A★ EXAMINER PREDICTION PACKS (Volume 11 series) ===== */
+  { title:"Prediction 1 — Membrane Structure & Fluid Mosaic", file:"biology-membrane-structure-fluid-mosaic-pack.html", sub:"Topic 1 · 20 facts + 20 tiered questions", section:"predictions", icon:"🧬" },
+  { title:"Prediction 2 — Enzymes", file:"biology-enzymes-prediction-pack.html", sub:"Highest-probability Paper 1 topic", section:"predictions", icon:"🧪" },
+  { title:"Prediction 3 — Membranes & Transport", file:"biology-membranes-transport-prediction-pack.html", sub:"Diffusion, osmosis, active transport", section:"predictions", icon:"🔬" },
+  { title:"Prediction 4 — Respiration & ATP", file:"biology-respiration-atp-prediction-pack.html", sub:"Glycolysis, Krebs, chemiosmosis", section:"predictions", icon:"⚡" },
+  { title:"Prediction 5 — DNA, Protein Synthesis & Cell Division", file:"biology-dna-protein-synthesis-cell-division-pack.html", sub:"Replication, transcription, mitosis, meiosis", section:"predictions", icon:"🧬" },
+  { title:"Prediction 6 — Gas Exchange & Cardiovascular System", file:"biology-gas-exchange-cardiovascular-pack.html", sub:"Alveoli, haemoglobin, heart, xylem/phloem", section:"predictions", icon:"❤️" },
+  { title:"Prediction 7 — Immunity & Microbiology", file:"biology-immunity-microbiology-pack.html", sub:"Immunity, vaccination, antibiotic resistance", section:"predictions", icon:"🦠" },
+  { title:"Prediction 8 — Genetics, Evolution & Biodiversity", file:"biology-genetics-evolution-biodiversity-pack.html", sub:"Inheritance, natural selection, conservation", section:"predictions", icon:"🌿" },
+
+  /* ===== TOPIC REVISION — PHASE 2 & MOCKS ===== */
+  { title:"Phase 2 Quick Revision — Topics 1-4", file:"biology-phase2-flashcards.html", sub:"High-yield A★ quick revision notes", section:"topics", icon:"📗" },
+  { title:"Mock Paper 1", file:"biology-mock-paper-1-flashcards.html", sub:"Full mock · mark scheme & A★ answers", section:"topics", icon:"📄" },
+  { title:"Topic 4 — Transport in Mammals", file:"topic42_transport_mammals.html", sub:"Topic 4.2 notes", section:"topics", icon:"📕" },
+  { title:"Topic 4 — A★ Revision (R1)", file:"topic4_astar_R1.html", sub:"Topic 4 A★ revision", section:"topics", icon:"📕" },
+  { title:"Synoptic Biology", file:"synoptic_biology.html", sub:"Cross-topic synoptic links", section:"topics", icon:"🔗" },
+
+  /* ===== QUESTION BANKS ===== */
+  { title:"100 High-Frequency Questions", file:"biology-100-high-frequency-questions.html", sub:"Topics 1-4 + mixed synoptic, A★ answers", section:"questions", icon:"❓" },
+  { title:"50 A★ Six-Mark Questions", file:"biology-50-six-mark-questions.html", sub:"Extended response + examiner guidance", section:"questions", icon:"✍️" },
+  { title:"Six-Mark Answers (100)", file:"100_sixmark_answers.html", sub:"Six-mark model answers", section:"questions", icon:"✅" },
+  { title:"Exam Questions 1–96", file:"exam_questions_1_96.html", sub:"Question bank part 1", section:"questions", icon:"📋" },
+  { title:"Exam Questions 97–200", file:"exam_questions_97_200.html", sub:"Question bank part 2", section:"questions", icon:"📋" },
+
+  /* ===== STUDY PLANS & CHECKLISTS ===== */
+  { title:"12-Week Study Plan", file:"12week_plan.html", sub:"Full revision schedule", section:"plans", icon:"🗓️" },
+  { title:"Predicted Grades Plan", file:"predicted_grades_plan.html", sub:"September predicted grade prep", section:"plans", icon:"🎯" },
+  { title:"Fullick Study System", file:"fullick_study_system.html", sub:"Textbook-based study system", section:"plans", icon:"📖" },
+  { title:"Spec Audit Flashcards", file:"spec_audit_flashcards.html", sub:"Specification coverage check", section:"plans", icon:"📝" },
+  { title:"A★ Checklist Flashcards", file:"astar_checklist_flashcards.html", sub:"A★ exam technique checklist", section:"plans", icon:"⭐" },
+  { title:"Active Recall Flashcards", file:"active_recall_flashcards.html", sub:"General active recall drills", section:"plans", icon:"🔄" },
+];
+
+const SECTIONS = [
+  { key:"predictions", title:"A★ Examiner Prediction Packs" },
+  { key:"topics",      title:"Topic Revision & Mock Papers" },
+  { key:"questions",   title:"Question Banks" },
+  { key:"plans",       title:"Study Plans & Checklists" },
+];
+
+function render(filterText){
+  const container = document.getElementById('sections');
+  container.innerHTML = "";
+  const q = (filterText || "").trim().toLowerCase();
+  let totalShown = 0;
+
+  SECTIONS.forEach(sec => {
+    const items = RESOURCES.filter(r => r.section === sec.key &&
+      (!q || r.title.toLowerCase().includes(q) || r.sub.toLowerCase().includes(q) || r.file.toLowerCase().includes(q)));
+    if(items.length === 0) return;
+    totalShown += items.length;
+
+    const sectionEl = document.createElement('div');
+    sectionEl.className = 'section';
+
+    const titleEl = document.createElement('div');
+    titleEl.className = 'section-title';
+    titleEl.innerHTML = `<span>${sec.title}</span><span class="count">${items.length}</span>`;
+    sectionEl.appendChild(titleEl);
+
+    const listEl = document.createElement('div');
+    listEl.className = 'card-list';
+    items.forEach(r => {
+      const a = document.createElement('a');
+      a.className = 'item';
+      a.href = BASE_URL + r.file;
+      a.innerHTML = `
+        <div class="icon">${r.icon}</div>
+        <div class="item-text">
+          <div class="item-title">${r.title}</div>
+          <div class="item-sub">${r.sub}</div>
+        </div>
+        <div class="chev">›</div>
+      `;
+      listEl.appendChild(a);
+    });
+    sectionEl.appendChild(listEl);
+    container.appendChild(sectionEl);
+  });
+
+  document.getElementById('noResults').style.display = totalShown === 0 ? 'block' : 'none';
+}
+
+document.getElementById('search').addEventListener('input', e => render(e.target.value));
+render("");
+</script>
+</body>
+</html>
