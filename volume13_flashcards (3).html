@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Volume 13 · A★ Recall Deck</title>
+<style>
+  :root{
+    --bg:#0b0f0e;
+    --surface:#121815;
+    --surface-2:#182019;
+    --line:#243128;
+    --ink:#eef3ee;
+    --ink-dim:#9db3a4;
+    --moss:#4f9d6e;
+    --moss-bright:#7fd99e;
+    --amber:#e0a94f;
+    --coral:#e0755f;
+    --serif:'Iowan Old Style','Georgia',serif;
+    --mono:'SF Mono','Menlo',monospace;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0; background:
+      radial-gradient(circle at 15% 0%, #14201a 0%, transparent 45%),
+      radial-gradient(circle at 100% 100%, #101a14 0%, transparent 50%),
+      var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100vh; padding:20px 16px 40px;
+    overflow-x:hidden;
+  }
+  .header{width:100%; max-width:520px; text-align:center; margin-bottom:14px;}
+  .eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.14em; color:var(--moss-bright); text-transform:uppercase;}
+  h1{font-family:var(--serif); font-weight:500; font-size:22px; margin:4px 0 2px; letter-spacing:.01em;}
+  .sub{font-size:12.5px; color:var(--ink-dim); line-height:1.5;}
+
+  .chips{display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin:14px 0 6px; max-width:520px;}
+  .chip{
+    font-family:var(--mono); font-size:10.5px; padding:6px 10px; border-radius:999px;
+    border:1px solid var(--line); color:var(--ink-dim); background:var(--surface);
+    cursor:pointer; user-select:none; transition:all .15s;
+  }
+  .chip.active{background:var(--moss); border-color:var(--moss); color:#06110a; font-weight:600;}
+
+  .progress-row{width:100%; max-width:520px; display:flex; align-items:center; gap:10px; margin:12px 0 8px; font-family:var(--mono); font-size:11px; color:var(--ink-dim);}
+  .bar{flex:1; height:4px; background:var(--surface-2); border-radius:4px; overflow:hidden;}
+  .bar-fill{height:100%; background:linear-gradient(90deg,var(--moss),var(--moss-bright)); width:0%; transition:width .3s;}
+
+  .stage{width:100%; max-width:520px; perspective:1400px; margin-top:6px;}
+  .card{
+    position:relative; width:100%; height:400px; border-radius:18px;
+    cursor:pointer; transform-style:preserve-3d; transition:transform .5s cubic-bezier(.4,.2,.2,1);
+  }
+  .card.flipped{transform:rotateY(180deg);}
+  .face{
+    position:absolute; inset:0; backface-visibility:hidden; border-radius:18px;
+    border:1px solid var(--line); padding:22px 22px 16px; display:flex; flex-direction:column;
+    overflow:hidden;
+  }
+  .front{background:var(--surface); box-shadow:0 12px 30px -14px rgba(0,0,0,.6);}
+  .back{background:var(--surface-2); transform:rotateY(180deg); box-shadow:0 12px 30px -14px rgba(0,0,0,.6);}
+
+  .kicker{font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--moss-bright); margin-bottom:12px; display:flex; justify-content:space-between; flex-shrink:0;}
+  .kicker span.tag{color:var(--amber);}
+  .prompt{font-family:var(--serif); font-size:19px; line-height:1.42; flex:1; display:flex; align-items:center; overflow-y:auto;}
+  .prompt.small{font-size:16.5px;}
+  .prompt.full{font-size:16px; align-items:flex-start;}
+  .answer{font-size:15.5px; line-height:1.55; flex:1; display:flex; align-items:center; overflow-y:auto; -webkit-overflow-scrolling:touch;}
+  .answer.long{font-size:13.5px; line-height:1.6; align-items:flex-start; text-align:left;}
+  .answer b{color:var(--moss-bright); font-weight:600;}
+  .hint{font-family:var(--mono); font-size:10px; color:var(--ink-dim); text-align:center; margin-top:10px; opacity:.7;}
+
+  .controls{width:100%; max-width:520px; display:flex; gap:10px; margin-top:18px;}
+  .btn{
+    flex:1; padding:13px 10px; border-radius:12px; border:1px solid var(--line);
+    background:var(--surface); color:var(--ink); font-size:13px; font-weight:600;
+    display:flex; flex-direction:column; align-items:center; gap:2px; cursor:pointer;
+  }
+  .btn small{font-family:var(--mono); font-weight:400; font-size:10px; color:var(--ink-dim);}
+  .btn.again{border-color:#5a3327; color:var(--coral);}
+  .btn.good{border-color:#2f5a3f; color:var(--moss-bright);}
+  .btn.nav{max-width:44px; flex:none; font-size:16px;}
+
+  .deckdone{text-align:center; padding:50px 20px; font-family:var(--serif); font-size:18px; color:var(--moss-bright);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">9BI0 · Volume 13 A★ Exam Answer Book</div>
+  <h1>September Recall Deck</h1>
+  <div class="sub">180 cards from the concise A★ model answers — full 10‑mark model answers, self‑test recall, memory sentences and top marking‑point traps for Jody's twenty highest‑yield synoptic questions.</div>
+</div>
+
+<div class="chips" id="chips"></div>
+
+<div class="progress-row">
+  <span id="count">0 / 0</span>
+  <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+  <span id="knownCount">0 mastered</span>
+</div>
+
+<div class="stage">
+  <div class="card" id="card">
+    <div class="face front">
+      <div class="kicker"><span id="frontTopic">—</span><span class="tag" id="frontType">RECALL</span></div>
+      <div class="prompt" id="frontText">Loading…</div>
+      <div class="hint">tap card to flip</div>
+    </div>
+    <div class="face back">
+      <div class="kicker"><span id="backTopic">—</span><span class="tag">ANSWER</span></div>
+      <div class="answer" id="backText"></div>
+      <div class="hint">tap card to flip back</div>
+    </div>
+  </div>
+</div>
+
+<div class="controls" id="postFlip" style="display:none;">
+  <div class="btn again" onclick="grade(false)">Review again<small>saw it, unsure</small></div>
+  <div class="btn good" onclick="grade(true)">Got it<small>move on</small></div>
+</div>
+<div class="controls" id="preFlip">
+  <div class="btn nav" onclick="prevCard()">‹</div>
+  <div class="btn" onclick="flip()">Flip card</div>
+  <div class="btn nav" onclick="skipCard()">›</div>
+</div>
+
+<script>
+const DECK = [
+  // ---------------- Q1 · DROUGHT ----------------
+  {topic:"Q1 · Drought", type:"FULL ANSWER", front:"A crop plant is exposed to prolonged drought conditions. Using your biological knowledge, explain how drought affects the plant from the cellular level to the whole organism. (10 marks)", back:"Drought causes the soil water potential to become more negative, reducing the water potential gradient between the soil and the root hair cells. Therefore, less water enters the root hair cells by osmosis through their partially permeable membranes.<br><br>Reduced water uptake decreases the flow of water through the xylem, slowing the transpiration stream. The guard cells lose turgor pressure, become flaccid and the stomata close, reducing water loss by transpiration.<br><br>However, stomatal closure also reduces the diffusion of carbon dioxide into the leaf. As carbon dioxide is a raw material for photosynthesis, the rate of photosynthesis decreases, producing less glucose.<br><br>Less glucose is available for aerobic respiration, so ATP production decreases. Consequently, less ATP is available for active transport, protein synthesis and cell division, reducing plant growth and biomass.<br><br>If drought continues, prolonged water shortage causes wilting, reduced growth and may eventually lead to plant death."},
+  {topic:"Q1 · Drought", type:"RECALL", front:"What happens to soil water potential during drought?", back:"It becomes <b>more negative (lower)</b>, reducing the water potential gradient between soil and root hair cells."},
+  {topic:"Q1 · Drought", type:"RECALL", front:"Why does osmosis into root hair cells decrease?", back:"The <b>water potential gradient</b> between soil and root hair cell is reduced, so less water enters by osmosis."},
+  {topic:"Q1 · Drought", type:"RECALL", front:"Why do stomata close?", back:"Guard cells <b>lose turgor pressure</b> and become flaccid, causing the stomata to close."},
+  {topic:"Q1 · Drought", type:"RECALL", front:"Why does photosynthesis decrease?", back:"Stomatal closure reduces <b>CO₂ diffusion</b> into the leaf, and CO₂ is a raw material for photosynthesis."},
+  {topic:"Q1 · Drought", type:"RECALL", front:"How does reduced photosynthesis affect ATP production?", back:"Less glucose is made, so less is available for <b>aerobic respiration</b> — ATP production decreases."},
+  {topic:"Q1 · Drought", type:"RECALL", front:"Why does plant growth decrease?", back:"Less ATP is available for <b>active transport, protein synthesis and cell division</b>."},
+  {topic:"Q1 · Drought", type:"SEQUENCE", front:"Recite the full drought memory sequence, start to finish.", back:"Soil ψ↓ → gradient↓ → osmosis↓ → xylem water↓ → transpiration↓ → guard cell turgor↓ → stomata close → CO₂↓ → photosynthesis↓ → glucose↓ → respiration↓ → <b>ATP↓ → growth↓</b>"},
+  {topic:"Q1 · Drought", type:"TRAP", front:"Top examiner trap for this question?", back:"Writing <b>'diffusion'</b> instead of osmosis for water entry, and saying 'less energy' instead of <b>'less ATP'</b>."},
+
+  // ---------------- Q2 · TYPE 1 DIABETES ----------------
+  {topic:"Q2 · Diabetes", type:"FULL ANSWER", front:"A patient has been diagnosed with Type 1 diabetes mellitus. Using your biological knowledge, explain how the disease affects the patient from the cellular level to the whole organism. (10 marks)", back:"In Type 1 diabetes mellitus, the β-cells of the pancreas are destroyed by an autoimmune response, so little or no insulin is produced.<br><br>Without insulin, many body cells cannot increase glucose uptake from the blood, so the blood glucose concentration remains high. Cells therefore receive less glucose for aerobic respiration, reducing ATP production.<br><br>The liver and muscle cells also store less glucose as glycogen, so blood glucose is not effectively regulated. When blood glucose exceeds the kidney's reabsorption capacity, glucose is excreted in the urine. Water follows the glucose by osmosis, causing frequent urination and dehydration.<br><br>Because cells cannot obtain enough glucose, the body breaks down fat and protein as alternative respiratory substrates, leading to weight loss. Without treatment, prolonged hyperglycaemia can damage blood vessels, nerves, kidneys and eyes, affecting the whole organism."},
+  {topic:"Q2 · Diabetes", type:"RECALL", front:"Why is little or no insulin produced in Type 1 diabetes?", back:"An <b>autoimmune response destroys the β-cells</b> of the pancreas."},
+  {topic:"Q2 · Diabetes", type:"RECALL", front:"Why does blood glucose concentration increase?", back:"Without insulin, body cells <b>cannot increase glucose uptake</b> from the blood."},
+  {topic:"Q2 · Diabetes", type:"RECALL", front:"Why do cells produce less ATP?", back:"Cells receive <b>less glucose for aerobic respiration</b>."},
+  {topic:"Q2 · Diabetes", type:"RECALL", front:"Why does glucose appear in the urine?", back:"Blood glucose exceeds the <b>kidney's reabsorption capacity</b>."},
+  {topic:"Q2 · Diabetes", type:"RECALL", front:"Why does dehydration occur?", back:"Water follows glucose into the urine <b>by osmosis</b>, causing frequent urination."},
+  {topic:"Q2 · Diabetes", type:"RECALL", front:"Why does weight loss occur?", back:"The body breaks down <b>fat and protein</b> as alternative respiratory substrates."},
+  {topic:"Q2 · Diabetes", type:"SEQUENCE", front:"Recite the full Type 1 diabetes memory sequence.", back:"Autoimmune attack → β-cells destroyed → insulin↓ → glucose uptake↓ → blood glucose↑ → respiration↓ → ATP↓ → glucose in urine → osmosis → <b>dehydration → fat breakdown → weight loss</b>"},
+  {topic:"Q2 · Diabetes", type:"TRAP", front:"Top examiner trap for this question?", back:"<b>Confusing Type 1 with Type 2</b>, and saying insulin 'breaks down' glucose (it doesn't)."},
+
+  // ---------------- Q3 · ENZYME TEMPERATURE ----------------
+  {topic:"Q3 · Enzymes", type:"FULL ANSWER", front:"Scientists investigated the effect of increasing temperature on enzyme activity. Using your biological knowledge, explain how increasing temperature affects enzyme activity and why the rate changes. (10 marks)", back:"Enzymes are globular proteins that act as biological catalysts, lowering the activation energy of biochemical reactions.<br><br>As temperature increases, enzyme and substrate molecules gain kinetic energy and move more rapidly. This increases the frequency of successful collisions and the formation of enzyme-substrate complexes, so the reaction rate increases.<br><br>The reaction reaches a maximum at the enzyme's optimum temperature, where the greatest number of successful collisions occurs.<br><br>Above the optimum temperature, heat breaks the hydrogen bonds and other weak bonds that maintain the enzyme's tertiary structure. The active site changes shape, so the substrate is no longer complementary to it.<br><br>Fewer enzyme-substrate complexes are formed, causing the reaction rate to decrease rapidly. At very high temperatures, the enzyme becomes denatured, and the reaction may stop because the active site can no longer bind the substrate."},
+  {topic:"Q3 · Enzymes", type:"RECALL", front:"Why does rising temperature initially increase enzyme activity?", back:"More <b>kinetic energy → more successful collisions → more enzyme-substrate complexes</b>."},
+  {topic:"Q3 · Enzymes", type:"RECALL", front:"What happens at the optimum temperature?", back:"The <b>greatest number of successful collisions</b> occurs — maximum reaction rate."},
+  {topic:"Q3 · Enzymes", type:"RECALL", front:"Which bonds are disrupted above the optimum temperature?", back:"<b>Hydrogen bonds</b> (and other weak bonds) maintaining the enzyme's tertiary structure."},
+  {topic:"Q3 · Enzymes", type:"RECALL", front:"Why does the active site change shape?", back:"Heat breaks the bonds holding the <b>tertiary structure</b>, so the active site is no longer complementary."},
+  {topic:"Q3 · Enzymes", type:"RECALL", front:"Why does the reaction rate then decrease?", back:"Substrate is no longer complementary, so <b>fewer enzyme-substrate complexes</b> form."},
+  {topic:"Q3 · Enzymes", type:"RECALL", front:"What does 'denatured' actually mean here?", back:"The active site's shape has <b>permanently changed</b> — it can no longer bind the substrate."},
+  {topic:"Q3 · Enzymes", type:"SEQUENCE", front:"Recite the full enzyme-temperature memory sequence.", back:"Temp↑ → kinetic energy↑ → more collisions → more ES complexes → rate↑ → optimum → H bonds break → active site changes → <b>substrate can't bind → denatured → rate↓</b>"},
+  {topic:"Q3 · Enzymes", type:"TRAP", front:"Top examiner trap for this question?", back:"Saying enzymes are 'used up', or that the <b>substrate</b> denatures instead of the enzyme."},
+
+  // ---------------- Q4 · GAS EXCHANGE ----------------
+  {topic:"Q4 · Gas exchange", type:"FULL ANSWER", front:"Explain how the structure of the mammalian alveoli and the ventilation system are adapted to maximise the efficiency of gas exchange. (10 marks)", back:"The alveoli are specialised for efficient gas exchange. There are millions of alveoli, providing a large surface area for diffusion.<br><br>The walls of the alveoli and surrounding capillaries are each one cell thick, creating a short diffusion distance between the air and the blood.<br><br>The alveolar surface is moist, allowing oxygen to dissolve before diffusing across the alveolar wall into the blood.<br><br>A dense capillary network continuously removes oxygenated blood and brings deoxygenated blood to the alveoli. This maintains a steep concentration gradient for both oxygen and carbon dioxide.<br><br>Ventilation continually replaces the air in the alveoli, ensuring that the oxygen concentration remains high and the carbon dioxide concentration remains low. At the same time, continuous blood flow maintains the diffusion gradient.<br><br>As a result, oxygen diffuses rapidly into the blood, while carbon dioxide diffuses rapidly into the alveoli to be exhaled, making gas exchange highly efficient."},
+  {topic:"Q4 · Gas exchange", type:"RECALL", front:"Why do alveoli provide a large surface area?", back:"There are <b>millions of alveoli</b> in the lungs."},
+  {topic:"Q4 · Gas exchange", type:"RECALL", front:"Why are alveolar and capillary walls only one cell thick?", back:"To create a <b>short diffusion distance</b> between air and blood."},
+  {topic:"Q4 · Gas exchange", type:"RECALL", front:"Why must the alveolar surface be moist?", back:"So oxygen can <b>dissolve</b> before diffusing across the alveolar wall."},
+  {topic:"Q4 · Gas exchange", type:"RECALL", front:"Why is a dense capillary network important?", back:"It continuously removes oxygenated blood, maintaining a <b>steep concentration gradient</b>."},
+  {topic:"Q4 · Gas exchange", type:"RECALL", front:"How does ventilation improve gas exchange?", back:"It replaces alveolar air, keeping <b>O₂ high and CO₂ low</b> in the alveoli."},
+  {topic:"Q4 · Gas exchange", type:"RECALL", front:"Why is a steep concentration gradient essential?", back:"It <b>maximises the rate of diffusion</b> of O₂ and CO₂."},
+  {topic:"Q4 · Gas exchange", type:"SEQUENCE", front:"Recite the full gas-exchange memory sentence.", back:"Large surface area + thin walls + moist surface + rich blood supply + continuous ventilation = <b>steep gradient = rapid gas exchange</b>"},
+  {topic:"Q4 · Gas exchange", type:"TRAP", front:"Top examiner trap for this question?", back:"Saying oxygen is 'actively transported' — it's <b>diffusion</b>. Always link structure → function → advantage."},
+
+  // ---------------- Q5 · DNA REPLICATION ----------------
+  {topic:"Q5 · DNA replication", type:"FULL ANSWER", front:"Explain how DNA replication ensures that genetic information is accurately passed from one cell generation to the next. (10 marks)", back:"Before cell division, DNA replicates by the semi-conservative replication mechanism. The DNA double helix unwinds and the hydrogen bonds between complementary bases are broken by DNA helicase, separating the two strands.<br><br>Each original DNA strand acts as a template. Free DNA nucleotides pair with the exposed bases by complementary base pairing, where adenine pairs with thymine and cytosine pairs with guanine.<br><br>DNA polymerase joins adjacent nucleotides together by forming phosphodiester bonds, producing a new sugar-phosphate backbone.<br><br>As replication is semi-conservative, each new DNA molecule contains one original strand and one newly synthesised strand. Complementary base pairing helps ensure that the DNA sequence is copied accurately, so each daughter cell receives the same genetic information after mitosis."},
+  {topic:"Q5 · DNA replication", type:"RECALL", front:"What does 'semi-conservative' mean?", back:"Each new DNA molecule contains <b>one original strand and one new strand</b>."},
+  {topic:"Q5 · DNA replication", type:"RECALL", front:"Which enzyme separates the DNA strands?", back:"<b>DNA helicase</b> breaks the hydrogen bonds between bases."},
+  {topic:"Q5 · DNA replication", type:"RECALL", front:"What is the role of the template strand?", back:"Free nucleotides pair against it by <b>complementary base pairing</b>."},
+  {topic:"Q5 · DNA replication", type:"RECALL", front:"What are the base-pairing rules?", back:"<b>A with T</b>, and <b>C with G</b>."},
+  {topic:"Q5 · DNA replication", type:"RECALL", front:"Which enzyme forms phosphodiester bonds?", back:"<b>DNA polymerase</b> joins adjacent nucleotides."},
+  {topic:"Q5 · DNA replication", type:"RECALL", front:"Why does replication produce identical daughter cells?", back:"Complementary base pairing ensures the <b>DNA sequence is copied accurately</b>."},
+  {topic:"Q5 · DNA replication", type:"SEQUENCE", front:"Recite the full DNA replication memory sentence.", back:"Helicase unzips DNA → each strand becomes a template → complementary bases pair → DNA polymerase joins nucleotides → <b>semi-conservative → two identical DNA molecules</b>"},
+  {topic:"Q5 · DNA replication", type:"TRAP", front:"Top examiner trap for this question?", back:"Saying <b>DNA polymerase</b> breaks hydrogen bonds (helicase does), or mixing replication up with transcription."},
+
+  // ---------------- Q6 · ANTIBIOTIC RESISTANCE ----------------
+  {topic:"Q6 · Antibiotic resistance", type:"FULL ANSWER", front:"Explain how natural selection can lead to the evolution of antibiotic-resistant bacteria. (10 marks)", back:"Random mutations may occur in bacterial DNA. Occasionally, a mutation gives a bacterium resistance to an antibiotic.<br><br>When the bacterial population is exposed to the antibiotic, non-resistant bacteria are killed, while resistant bacteria survive because they possess the advantageous allele.<br><br>The surviving bacteria continue to reproduce rapidly by binary fission, passing the resistance allele to their offspring.<br><br>As resistant bacteria produce many offspring, the frequency of the resistance allele increases within the population over successive generations.<br><br>The antibiotic acts as a selection pressure, favouring bacteria with the advantageous mutation. Over time, the population evolves so that a much higher proportion of bacteria are resistant to the antibiotic."},
+  {topic:"Q6 · Antibiotic resistance", type:"RECALL", front:"How does antibiotic resistance first arise?", back:"By a <b>random mutation</b> in bacterial DNA, occurring before any exposure to the antibiotic."},
+  {topic:"Q6 · Antibiotic resistance", type:"RECALL", front:"Why do some bacteria survive antibiotic treatment?", back:"They possess the <b>advantageous resistance allele</b>, so the antibiotic does not kill them."},
+  {topic:"Q6 · Antibiotic resistance", type:"RECALL", front:"What is meant by selection pressure?", back:"An environmental factor (the antibiotic) that <b>favours survival</b> of bacteria with the resistance allele."},
+  {topic:"Q6 · Antibiotic resistance", type:"RECALL", front:"How is resistance passed to future generations?", back:"Resistant bacteria reproduce by <b>binary fission</b>, passing the resistance allele to offspring."},
+  {topic:"Q6 · Antibiotic resistance", type:"RECALL", front:"Why does the frequency of the resistance allele increase?", back:"Resistant bacteria produce many more offspring than non-resistant bacteria over <b>successive generations</b>."},
+  {topic:"Q6 · Antibiotic resistance", type:"RECALL", front:"Why is this process called evolution by natural selection?", back:"The <b>allele frequency of the population changes</b> over generations due to differential survival and reproduction."},
+  {topic:"Q6 · Antibiotic resistance", type:"SEQUENCE", front:"Recite the full antibiotic resistance memory sequence.", back:"Random mutation → resistance allele → antibiotic applied → non-resistant bacteria die → resistant bacteria survive → binary fission → allele inherited → <b>allele frequency↑ → population becomes resistant</b>"},
+  {topic:"Q6 · Antibiotic resistance", type:"TRAP", front:"Top examiner trap for this question?", back:"Saying the <b>antibiotic causes the mutation</b>, or that bacteria 'choose' to become resistant — mutations occur randomly, before exposure."},
+
+  // ---------------- Q7 · VACCINATION ----------------
+  {topic:"Q7 · Vaccination", type:"FULL ANSWER", front:"Explain how vaccination produces immunity and reduces the spread of infectious diseases. (10 marks)", back:"A vaccine contains antigens from a weakened, inactivated or harmless form of a pathogen. These antigens are recognised as foreign by the immune system.<br><br>The antigens activate specific B lymphocytes, which divide by clonal expansion and differentiate into plasma cells. Plasma cells produce specific antibodies that bind to the antigen and help destroy the pathogen.<br><br>Some B lymphocytes become memory cells, which remain in the body for many years.<br><br>If the same pathogen enters the body again, the memory cells rapidly divide and produce large quantities of antibodies. This secondary immune response is faster and stronger than the primary response, destroying the pathogen before symptoms develop.<br><br>When a large proportion of the population is vaccinated, fewer people can transmit the pathogen. This reduces disease spread and provides herd immunity, helping to protect individuals who cannot be vaccinated."},
+  {topic:"Q7 · Vaccination", type:"RECALL", front:"What does a vaccine contain?", back:"<b>Antigens</b> from a weakened, inactivated or harmless form of a pathogen."},
+  {topic:"Q7 · Vaccination", type:"RECALL", front:"How are B lymphocytes activated?", back:"They recognise the antigens as <b>foreign</b>, triggering clonal expansion."},
+  {topic:"Q7 · Vaccination", type:"RECALL", front:"What is the role of plasma cells?", back:"They produce specific <b>antibodies</b> that bind to the antigen and help destroy the pathogen."},
+  {topic:"Q7 · Vaccination", type:"RECALL", front:"Why are memory cells important?", back:"They remain in the body for years and allow a <b>faster secondary response</b> if the pathogen returns."},
+  {topic:"Q7 · Vaccination", type:"RECALL", front:"Why is the secondary immune response faster?", back:"Memory cells <b>rapidly divide</b> and produce large quantities of antibodies before symptoms develop."},
+  {topic:"Q7 · Vaccination", type:"RECALL", front:"What is herd immunity?", back:"When enough of the population is vaccinated, <b>fewer people can transmit</b> the pathogen, protecting those who can't be vaccinated."},
+  {topic:"Q7 · Vaccination", type:"SEQUENCE", front:"Recite the full vaccination memory sequence.", back:"Vaccine → antigens → B lymphocytes activated → clonal expansion → plasma cells → antibodies → memory cells → second infection → rapid antibody production → <b>immunity → herd immunity</b>"},
+  {topic:"Q7 · Vaccination", type:"TRAP", front:"Top examiner trap for this question?", back:"Saying vaccines contain <b>antibodies</b> (they contain antigens), or forgetting to explain herd immunity as well as individual immunity."},
+
+  // ---------------- Q8 · PHOTOSYNTHESIS & LIGHT INTENSITY ----------------
+  {topic:"Q8 · Light & photosynthesis", type:"FULL ANSWER", front:"Explain how light intensity affects the rate of photosynthesis and why the rate eventually reaches a maximum. (10 marks)", back:"Photosynthesis uses light energy to produce glucose from carbon dioxide and water in chloroplasts.<br><br>At low light intensity, light is the limiting factor. As light intensity increases, more light energy is absorbed by chlorophyll, producing more ATP and reduced NADP during the light-dependent reaction. This increases the rate of photosynthesis.<br><br>As light intensity continues to increase, the rate of photosynthesis also increases because more light-dependent reactions occur.<br><br>Eventually, the rate reaches a maximum because light is no longer the limiting factor. Another factor, such as carbon dioxide concentration or temperature, becomes limiting.<br><br>Once another factor limits the process, increasing light intensity further does not increase the rate of photosynthesis."},
+  {topic:"Q8 · Light & photosynthesis", type:"RECALL", front:"Why is light a limiting factor at low intensity?", back:"Not enough light energy is absorbed by chlorophyll to drive the <b>light-dependent reaction</b> at full rate."},
+  {topic:"Q8 · Light & photosynthesis", type:"RECALL", front:"What is the role of chlorophyll?", back:"It <b>absorbs light energy</b>, which is used to produce ATP and reduced NADP."},
+  {topic:"Q8 · Light & photosynthesis", type:"RECALL", front:"Why does ATP production increase with light intensity?", back:"More light energy drives <b>more light-dependent reactions</b>."},
+  {topic:"Q8 · Light & photosynthesis", type:"RECALL", front:"Why does the rate eventually stop increasing?", back:"Light is <b>no longer the limiting factor</b> — another factor takes over."},
+  {topic:"Q8 · Light & photosynthesis", type:"RECALL", front:"Which factors may become limiting instead?", back:"<b>Carbon dioxide concentration</b> or <b>temperature</b>."},
+  {topic:"Q8 · Light & photosynthesis", type:"RECALL", front:"Why does the graph show a plateau?", back:"Once another factor is limiting, increasing light intensity <b>no longer increases</b> the rate of photosynthesis."},
+  {topic:"Q8 · Light & photosynthesis", type:"SEQUENCE", front:"Recite the full light-intensity memory sequence.", back:"Light↑ → more light absorbed → more ATP & reduced NADP → light-dependent reactions↑ → photosynthesis↑ → maximum rate → light no longer limiting → <b>CO₂/temperature becomes limiting → rate plateaus</b>"},
+  {topic:"Q8 · Light & photosynthesis", type:"TRAP", front:"Top examiner trap for this question?", back:"Saying light creates glucose <b>directly</b>, or forgetting to name the new limiting factor once the graph plateaus."},
+
+  // ---------------- Q9 · ACTIVE TRANSPORT ----------------
+  {topic:"Q9 · Active transport", type:"FULL ANSWER", front:"Explain how active transport enables cells to absorb substances against a concentration gradient, and explain why this process is important in living organisms. (10 marks)", back:"Active transport is the movement of substances across a cell membrane from a region of lower concentration to a region of higher concentration, against the concentration gradient.<br><br>This process requires energy in the form of ATP, which is produced by aerobic respiration. Specific carrier proteins in the cell membrane bind to the substance being transported.<br><br>ATP provides energy to change the shape of the carrier protein, allowing the substance to be moved across the membrane against its concentration gradient.<br><br>Active transport enables root hair cells to absorb mineral ions from soil even when the ion concentration is lower in the soil than inside the cells.<br><br>In the small intestine, active transport allows glucose and amino acids to be absorbed into epithelial cells when their concentration in the gut lumen is lower than inside the cells.<br><br>Without active transport, cells would be unable to maintain essential ion concentrations or absorb sufficient nutrients for normal metabolism and growth."},
+  {topic:"Q9 · Active transport", type:"RECALL", front:"What is active transport?", back:"Movement of substances across a membrane <b>against</b> the concentration gradient, using energy."},
+  {topic:"Q9 · Active transport", type:"RECALL", front:"Why is ATP required?", back:"It provides the energy to <b>change the shape</b> of the carrier protein so it can move the substance."},
+  {topic:"Q9 · Active transport", type:"RECALL", front:"What is the role of carrier proteins?", back:"They <b>bind to the specific substance</b> and change shape to move it across the membrane."},
+  {topic:"Q9 · Active transport", type:"RECALL", front:"Why do root hair cells use active transport?", back:"To absorb <b>mineral ions</b> from soil even when soil ion concentration is lower than inside the cell."},
+  {topic:"Q9 · Active transport", type:"RECALL", front:"Why does the small intestine use active transport?", back:"To absorb <b>glucose and amino acids</b> into epithelial cells against their concentration gradient."},
+  {topic:"Q9 · Active transport", type:"RECALL", front:"What would happen if active transport stopped?", back:"Cells couldn't maintain essential ion concentrations or absorb enough nutrients for <b>metabolism and growth</b>."},
+  {topic:"Q9 · Active transport", type:"SEQUENCE", front:"Recite the full active transport memory sequence.", back:"Low concentration → carrier protein → ATP from respiration → protein changes shape → substance moves against gradient → <b>root hair cells / small intestine → normal growth & metabolism</b>"},
+  {topic:"Q9 · Active transport", type:"TRAP", front:"Top examiner trap for this question?", back:"Calling it a type of <b>diffusion</b>, forgetting ATP is required, or omitting a named biological example (root hair cells / small intestine)."},
+
+  // ---------------- Q10 · MEIOSIS & GENETIC VARIATION ----------------
+  {topic:"Q10 · Meiosis & variation", type:"FULL ANSWER", front:"Explain how meiosis and fertilisation contribute to genetic variation within a population. (10 marks)", back:"Meiosis produces haploid gametes, reducing the chromosome number by half so that the diploid chromosome number is restored at fertilisation.<br><br>During Prophase I, homologous chromosomes pair and may exchange sections of DNA by crossing over. This creates new combinations of alleles on each chromosome.<br><br>During Metaphase I, homologous chromosome pairs line up randomly at the equator of the cell. Their random orientation leads to independent assortment, producing different combinations of maternal and paternal chromosomes in the gametes.<br><br>During fertilisation, one sperm fuses with one egg. Because fertilisation is random, any sperm can fertilise any egg, creating further genetic variation.<br><br>These processes produce genetically different offspring, providing the genetic variation on which natural selection acts. Individuals with advantageous alleles are more likely to survive and reproduce, allowing populations to evolve over time."},
+  {topic:"Q10 · Meiosis & variation", type:"RECALL", front:"Why does meiosis produce haploid cells?", back:"To halve the chromosome number so the <b>diploid number is restored</b> at fertilisation."},
+  {topic:"Q10 · Meiosis & variation", type:"RECALL", front:"What happens during crossing over?", back:"Homologous chromosomes exchange DNA sections in <b>Prophase I</b>, creating new allele combinations."},
+  {topic:"Q10 · Meiosis & variation", type:"RECALL", front:"What is independent assortment?", back:"The <b>random orientation</b> of homologous pairs at Metaphase I, producing different chromosome combinations in gametes."},
+  {topic:"Q10 · Meiosis & variation", type:"RECALL", front:"Why does random fertilisation increase variation?", back:"Because <b>any sperm can fertilise any egg</b>, creating further genetic variation."},
+  {topic:"Q10 · Meiosis & variation", type:"RECALL", front:"Why is genetic variation important?", back:"It provides the <b>raw material on which natural selection acts</b>."},
+  {topic:"Q10 · Meiosis & variation", type:"RECALL", front:"How does genetic variation lead to evolution?", back:"Individuals with advantageous alleles are <b>more likely to survive and reproduce</b>, so populations evolve over time."},
+  {topic:"Q10 · Meiosis & variation", type:"SEQUENCE", front:"Recite the full meiosis & variation memory sequence.", back:"Meiosis → crossing over → independent assortment → different gametes → random fertilisation → unique offspring → genetic variation → <b>natural selection → evolution</b>"},
+  {topic:"Q10 · Meiosis & variation", type:"TRAP", front:"Top examiner trap for this question?", back:"Saying crossing over occurs in <b>Metaphase I</b> (it's Prophase I), or forgetting to link variation to natural selection/evolution."},
+
+  // ---------------- Q11 · BLOOD GLUCOSE NEGATIVE FEEDBACK ----------------
+  {topic:"Q11 · Blood glucose feedback", type:"FULL ANSWER", front:"Explain how negative feedback maintains blood glucose concentration in humans. (10 marks)", back:"Blood glucose concentration is regulated by negative feedback to maintain a stable internal environment (homeostasis).<br><br>When blood glucose concentration increases, such as after a meal, the β-cells in the pancreas detect the increase and secrete insulin.<br><br>Insulin increases the uptake of glucose by body cells and stimulates liver and muscle cells to convert glucose into glycogen (glycogenesis). Blood glucose concentration therefore falls back towards the normal level.<br><br>When blood glucose concentration decreases, such as during fasting or exercise, the α-cells in the pancreas secrete glucagon.<br><br>Glucagon stimulates the breakdown of glycogen into glucose (glycogenolysis) in the liver and also promotes the formation of glucose from non-carbohydrate sources (gluconeogenesis). Glucose is released into the bloodstream, increasing blood glucose concentration.<br><br>Once the normal blood glucose concentration is restored, hormone secretion decreases. This is an example of negative feedback, where changes are reversed to maintain homeostasis."},
+  {topic:"Q11 · Blood glucose feedback", type:"RECALL", front:"What is negative feedback?", back:"A mechanism that <b>reverses a change</b> to restore the normal level, maintaining homeostasis."},
+  {topic:"Q11 · Blood glucose feedback", type:"RECALL", front:"What happens when blood glucose increases?", back:"<b>β-cells</b> in the pancreas detect the rise and secrete insulin."},
+  {topic:"Q11 · Blood glucose feedback", type:"RECALL", front:"What is the role of insulin?", back:"Increases <b>glucose uptake</b> by cells and stimulates <b>glycogenesis</b> in the liver/muscles."},
+  {topic:"Q11 · Blood glucose feedback", type:"RECALL", front:"What happens when blood glucose decreases?", back:"<b>α-cells</b> in the pancreas detect the fall and secrete glucagon."},
+  {topic:"Q11 · Blood glucose feedback", type:"RECALL", front:"What is the role of glucagon?", back:"Stimulates <b>glycogenolysis</b> and <b>gluconeogenesis</b> in the liver, releasing glucose into the blood."},
+  {topic:"Q11 · Blood glucose feedback", type:"RECALL", front:"How does this system maintain homeostasis?", back:"Once glucose returns to normal, hormone secretion decreases — the <b>change is reversed</b>."},
+  {topic:"Q11 · Blood glucose feedback", type:"SEQUENCE", front:"Recite the full blood glucose feedback sequence.", back:"High glucose → β-cells → insulin → uptake + glycogenesis → glucose↓<br>Low glucose → α-cells → glucagon → glycogenolysis + gluconeogenesis → <b>glucose↑ → homeostasis</b>"},
+  {topic:"Q11 · Blood glucose feedback", type:"TRAP", front:"Top examiner trap for this question?", back:"Confusing insulin and glucagon's functions, or forgetting <b>β-cells make insulin, α-cells make glucagon</b>. Always cover both pathways."},
+
+  // ---------------- Q12 · WATER TRANSPORT SOIL TO LEAF ----------------
+  {topic:"Q12 · Water transport", type:"FULL ANSWER", front:"Explain how water moves from the soil into a leaf and why transpiration is essential for plants. (10 marks)", back:"Water enters root hair cells from the soil by osmosis because the water potential of the soil is higher than that of the root hair cells.<br><br>Water then moves across the root cortex by the apoplast and symplast pathways until it reaches the xylem. The Casparian strip in the endodermis blocks the apoplast pathway, forcing water through cell membranes. This allows the plant to control which mineral ions enter the xylem.<br><br>Water moves upwards through the xylem in the transpiration stream. As water evaporates from the mesophyll cell walls and diffuses out through the stomata, a negative pressure (tension) is created in the xylem.<br><br>The cohesion between water molecules and adhesion between water molecules and the xylem walls maintain a continuous column of water, allowing water to be pulled from the roots to the leaves.<br><br>Transpiration supplies water for photosynthesis, transports mineral ions, maintains cell turgor for support, and helps cool the plant by evaporative cooling."},
+  {topic:"Q12 · Water transport", type:"RECALL", front:"Why does water enter root hair cells by osmosis?", back:"The <b>soil water potential is higher</b> than that of the root hair cells."},
+  {topic:"Q12 · Water transport", type:"RECALL", front:"What are the apoplast and symplast pathways?", back:"Routes across the cortex — apoplast through <b>cell walls</b>, symplast through the <b>cytoplasm/plasmodesmata</b>."},
+  {topic:"Q12 · Water transport", type:"RECALL", front:"What is the function of the Casparian strip?", back:"Blocks the apoplast pathway, forcing water through membranes so the plant can <b>control which mineral ions</b> enter the xylem."},
+  {topic:"Q12 · Water transport", type:"RECALL", front:"How is water pulled up the xylem?", back:"Evaporation from mesophyll cells creates <b>tension</b>, pulling the water column upward."},
+  {topic:"Q12 · Water transport", type:"RECALL", front:"What are cohesion and adhesion?", back:"Cohesion = water molecules attracting each other; adhesion = water attracted to <b>xylem walls</b> — together they maintain a continuous column."},
+  {topic:"Q12 · Water transport", type:"RECALL", front:"Why is transpiration important to plants?", back:"Supplies water for <b>photosynthesis</b>, transports minerals, maintains turgor, provides evaporative cooling."},
+  {topic:"Q12 · Water transport", type:"SEQUENCE", front:"Recite the full soil-to-leaf water transport sequence.", back:"Osmosis → root hair cells → cortex (apoplast/symplast) → Casparian strip → xylem → transpiration stream → evaporation → stomata → <b>cohesion & adhesion → water reaches leaf</b>"},
+  {topic:"Q12 · Water transport", type:"TRAP", front:"Top examiner trap for this question?", back:"Saying water enters root hair cells by <b>diffusion</b> instead of osmosis, or forgetting the Casparian strip."},
+
+  // ---------------- Q13 · PROTEIN SYNTHESIS ----------------
+  {topic:"Q13 · Protein synthesis", type:"FULL ANSWER", front:"Explain how genetic information in DNA is used to produce a functional protein. (10 marks)", back:"A gene is a sequence of DNA bases that codes for a polypeptide or functional RNA. During transcription, the DNA double helix unwinds and one DNA strand acts as a template.<br><br>RNA polymerase joins complementary RNA nucleotides together to produce a molecule of messenger RNA (mRNA). In RNA, uracil (U) pairs with adenine instead of thymine.<br><br>The mRNA leaves the nucleus through a nuclear pore and attaches to a ribosome in the cytoplasm.<br><br>During translation, the ribosome reads the mRNA in groups of three bases (codons). Each codon specifies a particular amino acid.<br><br>Transfer RNA (tRNA) molecules carry specific amino acids to the ribosome. Each tRNA has an anticodon that is complementary to an mRNA codon.<br><br>The ribosome joins adjacent amino acids together by peptide bonds, forming a polypeptide chain.<br><br>The polypeptide folds into a specific three-dimensional structure, producing a functional protein whose shape determines its biological function."},
+  {topic:"Q13 · Protein synthesis", type:"RECALL", front:"What is a gene?", back:"A sequence of <b>DNA bases</b> that codes for a polypeptide or functional RNA."},
+  {topic:"Q13 · Protein synthesis", type:"RECALL", front:"What happens during transcription?", back:"<b>RNA polymerase</b> synthesises mRNA using one DNA strand as a template."},
+  {topic:"Q13 · Protein synthesis", type:"RECALL", front:"What is the role of mRNA?", back:"Carries the genetic code from the <b>nucleus to the ribosome</b>."},
+  {topic:"Q13 · Protein synthesis", type:"RECALL", front:"What is the function of the ribosome?", back:"Reads mRNA in <b>codons</b> (groups of three bases) during translation."},
+  {topic:"Q13 · Protein synthesis", type:"RECALL", front:"What is the role of tRNA?", back:"Carries specific <b>amino acids</b> to the ribosome; its anticodon pairs with the mRNA codon."},
+  {topic:"Q13 · Protein synthesis", type:"RECALL", front:"Why is protein folding important?", back:"The 3D shape formed determines the protein's <b>biological function</b>."},
+  {topic:"Q13 · Protein synthesis", type:"SEQUENCE", front:"Recite the full protein synthesis memory sequence.", back:"DNA (gene) → transcription → mRNA → leaves nucleus → ribosome → translation → tRNA brings amino acids → peptide bonds → polypeptide → <b>protein folds → functional protein</b>"},
+  {topic:"Q13 · Protein synthesis", type:"TRAP", front:"Top examiner trap for this question?", back:"Saying ribosomes produce mRNA (RNA polymerase does), or forgetting RNA uses <b>uracil</b> instead of thymine."},
+
+  // ---------------- Q14 · CARBOHYDRATE DIGESTION & ABSORPTION ----------------
+  {topic:"Q14 · Carb digestion", type:"FULL ANSWER", front:"Explain how carbohydrates are digested and absorbed in the human digestive system. (10 marks)", back:"Digestion of carbohydrates begins in the mouth, where salivary amylase hydrolyses starch into maltose.<br><br>In the small intestine, pancreatic amylase continues the digestion of starch into maltose.<br><br>Maltase, which is attached to the epithelial cells of the small intestine, hydrolyses maltose into glucose.<br><br>The glucose produced is absorbed across the epithelium of the ileum. When the glucose concentration in the intestinal lumen is low, glucose enters epithelial cells by active transport using carrier proteins and ATP.<br><br>Glucose then moves into the blood by facilitated diffusion through carrier proteins.<br><br>The villi and microvilli provide a large surface area for absorption. The epithelial cells have many mitochondria to supply ATP for active transport.<br><br>The absorbed glucose enters the capillaries within the villi and is transported by the bloodstream to body tissues, where it is used in aerobic respiration to produce ATP or stored as glycogen in the liver and muscles."},
+  {topic:"Q14 · Carb digestion", type:"RECALL", front:"Where does carbohydrate digestion begin?", back:"The <b>mouth</b> — salivary amylase hydrolyses starch into maltose."},
+  {topic:"Q14 · Carb digestion", type:"RECALL", front:"What is the function of amylase?", back:"Hydrolyses <b>starch into maltose</b> (salivary and pancreatic)."},
+  {topic:"Q14 · Carb digestion", type:"RECALL", front:"What is the role of maltase?", back:"Hydrolyses <b>maltose into glucose</b> at the epithelium of the small intestine."},
+  {topic:"Q14 · Carb digestion", type:"RECALL", front:"How is glucose absorbed into epithelial cells?", back:"By <b>active transport</b> using carrier proteins and ATP, when the lumen concentration is low."},
+  {topic:"Q14 · Carb digestion", type:"RECALL", front:"Why do epithelial cells contain many mitochondria?", back:"To supply enough <b>ATP for active transport</b> of glucose."},
+  {topic:"Q14 · Carb digestion", type:"RECALL", front:"What happens to glucose after it enters the bloodstream?", back:"Used in <b>aerobic respiration</b> for ATP, or stored as <b>glycogen</b> in liver/muscles."},
+  {topic:"Q14 · Carb digestion", type:"SEQUENCE", front:"Recite the full carbohydrate digestion sequence.", back:"Starch → salivary amylase → maltose → pancreatic amylase → more maltose → maltase → glucose → active transport → facilitated diffusion → bloodstream → <b>respiration / glycogen</b>"},
+  {topic:"Q14 · Carb digestion", type:"TRAP", front:"Top examiner trap for this question?", back:"Saying amylase produces glucose directly (it produces maltose), or forgetting the role of <b>villi/microvilli and mitochondria</b>."},
+
+  // ---------------- Q15 · MITOSIS ----------------
+  {topic:"Q15 · Mitosis", type:"FULL ANSWER", front:"Explain the importance of mitosis in growth, tissue repair and asexual reproduction. (10 marks)", back:"Mitosis is a type of nuclear division that produces two genetically identical diploid daughter cells. Before mitosis, DNA is replicated by semi-conservative replication, ensuring that each chromosome consists of two identical sister chromatids.<br><br>During mitosis, the chromosomes condense, align at the equator of the cell and the sister chromatids separate to opposite poles. Cytokinesis then divides the cytoplasm to form two identical daughter cells.<br><br>Mitosis is essential for growth because it increases the number of cells while maintaining the same genetic information in every cell.<br><br>It is also important for tissue repair and replacement, replacing damaged or worn-out cells with genetically identical cells that perform the same function.<br><br>In asexual reproduction, mitosis produces offspring that are genetically identical to the parent, allowing rapid reproduction without the need for fertilisation.<br><br>Because mitosis preserves chromosome number and genetic information, it maintains genetic stability in multicellular organisms."},
+  {topic:"Q15 · Mitosis", type:"RECALL", front:"Why must DNA replicate before mitosis?", back:"So each chromosome has <b>two identical sister chromatids</b> ready to separate."},
+  {topic:"Q15 · Mitosis", type:"RECALL", front:"What happens to sister chromatids during mitosis?", back:"They <b>separate to opposite poles</b> of the cell."},
+  {topic:"Q15 · Mitosis", type:"RECALL", front:"Why are the daughter cells genetically identical?", back:"Each receives an identical copy of the <b>DNA/chromosomes</b>."},
+  {topic:"Q15 · Mitosis", type:"RECALL", front:"Why is mitosis important for growth?", back:"It <b>increases cell number</b> while keeping genetic information the same."},
+  {topic:"Q15 · Mitosis", type:"RECALL", front:"Why is mitosis important for tissue repair?", back:"It replaces <b>damaged or worn-out cells</b> with genetically identical ones."},
+  {topic:"Q15 · Mitosis", type:"RECALL", front:"Why is mitosis suitable for asexual reproduction?", back:"Produces offspring <b>genetically identical to the parent</b> without needing fertilisation."},
+  {topic:"Q15 · Mitosis", type:"SEQUENCE", front:"Recite the full mitosis memory sequence.", back:"DNA replication → chromosomes duplicate → mitosis → sister chromatids separate → cytokinesis → two identical diploid cells → <b>growth, repair, asexual reproduction</b>"},
+  {topic:"Q15 · Mitosis", type:"TRAP", front:"Top examiner trap for this question?", back:"Confusing mitosis with meiosis, or saying mitosis produces <b>haploid cells</b> or genetic variation."},
+
+  // ---------------- Q16 · ENERGY TRANSFER BETWEEN TROPHIC LEVELS ----------------
+  {topic:"Q16 · Energy transfer", type:"FULL ANSWER", front:"Explain why only a small proportion of energy is transferred from one trophic level to the next in an ecosystem. (10 marks)", back:"Energy enters most ecosystems when producers capture light energy during photosynthesis and convert it into chemical energy stored in organic molecules.<br><br>Only a proportion of this energy is transferred to the next trophic level because not all biomass is eaten. Some plant material, such as roots, bark or woody tissue, remains uneaten.<br><br>Of the biomass that is eaten, some cannot be digested because it contains substances such as cellulose. This material is egested in faeces and is not available to the next trophic level.<br><br>Organisms also use much of the absorbed energy in respiration to produce ATP for metabolic processes, including movement, active transport, protein synthesis and maintaining body temperature. Much of this energy is released as heat to the surroundings.<br><br>As a result, only a small proportion of the original energy is converted into new biomass, which is the energy available to the next trophic level.<br><br>This explains why energy transfer between trophic levels is inefficient, limiting the length of food chains and the number of organisms that can be supported at higher trophic levels."},
+  {topic:"Q16 · Energy transfer", type:"RECALL", front:"How does energy enter an ecosystem?", back:"Producers capture <b>light energy</b> via photosynthesis and store it as chemical energy."},
+  {topic:"Q16 · Energy transfer", type:"RECALL", front:"Why is some biomass not transferred to consumers?", back:"Some plant material (roots, bark, woody tissue) is <b>never eaten</b>."},
+  {topic:"Q16 · Energy transfer", type:"RECALL", front:"Why is some food not digested?", back:"It contains indigestible material like <b>cellulose</b>, which is egested in faeces."},
+  {topic:"Q16 · Energy transfer", type:"RECALL", front:"Why is respiration responsible for large energy losses?", back:"Energy is used to make ATP for metabolism, and much is <b>released as heat</b>."},
+  {topic:"Q16 · Energy transfer", type:"RECALL", front:"Why is heat energy unavailable to the next trophic level?", back:"It is <b>lost to the surroundings</b>, not stored in biomass."},
+  {topic:"Q16 · Energy transfer", type:"RECALL", front:"Why are food chains usually short?", back:"Energy loss at each level limits how much biomass can support <b>further trophic levels</b>."},
+  {topic:"Q16 · Energy transfer", type:"SEQUENCE", front:"Recite the full trophic energy transfer sequence.", back:"Sunlight → photosynthesis → producer biomass → not eaten + not digested + respiration + heat loss → <b>less new biomass → less energy transferred</b>"},
+  {topic:"Q16 · Energy transfer", type:"TRAP", front:"Top examiner trap for this question?", back:"Confusing <b>egestion with excretion</b>, or saying all plant biomass is eaten. Always conclude: only energy in new biomass transfers on."},
+
+  // ---------------- Q17 · HAEMOGLOBIN & OXYGEN TRANSPORT ----------------
+  {topic:"Q17 · Haemoglobin", type:"FULL ANSWER", front:"Explain how haemoglobin transports oxygen efficiently from the lungs to respiring tissues. (10 marks)", back:"Haemoglobin is the oxygen-carrying protein found in red blood cells. Each haemoglobin molecule consists of four polypeptide chains, each containing a haem group with an Fe²⁺ (iron) ion that can bind one oxygen molecule. Therefore, one haemoglobin molecule can carry up to four oxygen molecules, forming oxyhaemoglobin.<br><br>In the alveoli of the lungs, the partial pressure of oxygen is high, so oxygen diffuses into the blood and binds to haemoglobin. Oxygen binding is cooperative: when one oxygen molecule binds, the haemoglobin molecule changes shape slightly, increasing its affinity for oxygen and making it easier for additional oxygen molecules to bind. This produces the characteristic sigmoid oxygen dissociation curve.<br><br>In respiring tissues, the partial pressure of oxygen is low because oxygen is continuously used in aerobic respiration. Haemoglobin's affinity for oxygen decreases, causing oxyhaemoglobin to dissociate and release oxygen.<br><br>The released oxygen diffuses into body cells, where it is used in aerobic respiration to produce ATP.<br><br>This reversible binding allows haemoglobin to load oxygen efficiently in the lungs and unload oxygen efficiently in tissues, ensuring an adequate oxygen supply for metabolism."},
+  {topic:"Q17 · Haemoglobin", type:"RECALL", front:"Why can one haemoglobin molecule carry four oxygen molecules?", back:"It has <b>four haem groups</b>, each with an Fe²⁺ ion binding one O₂ molecule."},
+  {topic:"Q17 · Haemoglobin", type:"RECALL", front:"Why does oxygen bind readily in the lungs?", back:"The <b>partial pressure of oxygen (pO₂)</b> is high in the alveoli."},
+  {topic:"Q17 · Haemoglobin", type:"RECALL", front:"What is cooperative binding?", back:"Binding one O₂ changes Hb's shape, <b>increasing its affinity</b> for further oxygen molecules."},
+  {topic:"Q17 · Haemoglobin", type:"RECALL", front:"Why is oxygen released in respiring tissues?", back:"pO₂ is <b>low</b> there due to continuous aerobic respiration, so Hb's affinity for O₂ falls."},
+  {topic:"Q17 · Haemoglobin", type:"RECALL", front:"How is the released oxygen used by cells?", back:"In <b>aerobic respiration</b> to produce ATP."},
+  {topic:"Q17 · Haemoglobin", type:"RECALL", front:"Why is haemoglobin's oxygen binding described as reversible?", back:"It <b>loads</b> oxygen in the lungs and <b>unloads</b> it in tissues depending on local pO₂."},
+  {topic:"Q17 · Haemoglobin", type:"SEQUENCE", front:"Recite the full haemoglobin oxygen transport sequence.", back:"Alveoli → high pO₂ → Hb binds O₂ → oxyhaemoglobin → blood transport → tissues → low pO₂ → <b>O₂ released → aerobic respiration → ATP</b>"},
+  {topic:"Q17 · Haemoglobin", type:"TRAP", front:"Top examiner trap for this question?", back:"Confusing oxygen <b>concentration with partial pressure</b>, or forgetting cooperative binding."},
+
+  // ---------------- Q18 · ENZYME TEMPERATURE (FULL RANGE) ----------------
+  {topic:"Q18 · Enzyme temperature", type:"FULL ANSWER", front:"Explain how temperature affects enzyme activity. (10 marks)", back:"Enzymes are globular proteins that act as biological catalysts, increasing the rate of reactions by lowering the activation energy.<br><br>At low temperatures, enzyme and substrate molecules have less kinetic energy, so they move more slowly. As a result, there are fewer successful collisions between enzyme and substrate molecules, leading to fewer enzyme–substrate complexes and a lower rate of reaction.<br><br>As the temperature increases, molecules gain kinetic energy and move faster. This increases the frequency of successful collisions and the formation of enzyme–substrate complexes, so the rate of reaction increases until the enzyme reaches its optimum temperature.<br><br>Above the optimum temperature, the enzyme vibrates excessively, causing hydrogen bonds and ionic bonds that maintain its tertiary structure to break. The active site changes shape and is no longer complementary to the substrate.<br><br>The enzyme becomes denatured, so fewer or no enzyme–substrate complexes can form. As a result, the rate of reaction decreases rapidly and may eventually stop."},
+  {topic:"Q18 · Enzyme temperature", type:"RECALL", front:"Why is enzyme activity low at low temperatures?", back:"Less <b>kinetic energy</b> means fewer successful collisions between enzyme and substrate."},
+  {topic:"Q18 · Enzyme temperature", type:"RECALL", front:"Why does increasing temperature increase the reaction rate?", back:"More kinetic energy → more collisions → <b>more enzyme-substrate complexes</b>."},
+  {topic:"Q18 · Enzyme temperature", type:"RECALL", front:"What is the optimum temperature?", back:"The temperature at which the <b>reaction rate is highest</b>."},
+  {topic:"Q18 · Enzyme temperature", type:"RECALL", front:"Why does enzyme activity decrease above the optimum?", back:"The enzyme <b>denatures</b> — its active site changes shape."},
+  {topic:"Q18 · Enzyme temperature", type:"RECALL", front:"Which bonds are disrupted during denaturation?", back:"<b>Hydrogen and ionic bonds</b> maintaining tertiary structure (not peptide bonds)."},
+  {topic:"Q18 · Enzyme temperature", type:"RECALL", front:"Why can the substrate no longer bind after denaturation?", back:"The active site is <b>no longer complementary</b> to the substrate's shape."},
+  {topic:"Q18 · Enzyme temperature", type:"SEQUENCE", front:"Recite the full cold-to-hot enzyme temperature sequence.", back:"Low temp → low KE → fewer collisions → low rate | Rising temp → more KE → more ES complexes → optimum | Too hot → H/ionic bonds break → active site changes → <b>denatured → rate falls</b>"},
+  {topic:"Q18 · Enzyme temperature", type:"TRAP", front:"Top examiner trap for this question?", back:"Saying <b>peptide bonds</b> break during denaturation (they don't), or that high temperature 'kills' the enzyme."},
+
+  // ---------------- Q19 · ANTIBIOTIC RESISTANCE (ESSAY, RESPONSIBLE USE) ----------------
+  {topic:"Q19 · Antibiotic resistance II", type:"FULL ANSWER", front:"Explain how natural selection can lead to the evolution of antibiotic-resistant bacteria. (10 marks)", back:"Genetic variation exists within bacterial populations because random mutations can occur during DNA replication. Some mutations produce bacteria that are resistant to a particular antibiotic.<br><br>When an antibiotic is used, it acts as a selection pressure. Most bacteria that are susceptible to the antibiotic are killed, while resistant bacteria survive.<br><br>The surviving resistant bacteria continue to reproduce rapidly by binary fission, passing the resistance allele or gene to their offspring.<br><br>Over many generations, the proportion of resistant bacteria in the population increases because resistant bacteria produce more offspring than susceptible bacteria.<br><br>As a result, the bacterial population becomes increasingly resistant to the antibiotic. This is an example of natural selection, in which individuals with advantageous characteristics are more likely to survive and reproduce.<br><br>The evolution of antibiotic resistance can be slowed by the responsible use of antibiotics, including completing the full course of treatment, avoiding unnecessary antibiotic use, and reducing overuse in agriculture."},
+  {topic:"Q19 · Antibiotic resistance II", type:"RECALL", front:"How does a resistant bacterium arise?", back:"A <b>random mutation</b> during DNA replication, occurring before antibiotic exposure."},
+  {topic:"Q19 · Antibiotic resistance II", type:"RECALL", front:"Why don't antibiotics kill every bacterium?", back:"Resistant bacteria survive because they already possess the <b>advantageous allele</b>."},
+  {topic:"Q19 · Antibiotic resistance II", type:"RECALL", front:"What is meant by selection pressure?", back:"An environmental factor (the antibiotic) that <b>favours survival</b> of resistant individuals."},
+  {topic:"Q19 · Antibiotic resistance II", type:"RECALL", front:"Why do resistant bacteria become more common?", back:"They <b>reproduce more</b>, passing the resistance allele to offspring."},
+  {topic:"Q19 · Antibiotic resistance II", type:"RECALL", front:"Why is binary fission important in this process?", back:"It allows <b>rapid asexual reproduction</b>, spreading the resistance allele quickly through the population."},
+  {topic:"Q19 · Antibiotic resistance II", type:"RECALL", front:"How can antibiotic resistance be reduced?", back:"<b>Responsible use</b> — completing full courses, avoiding unnecessary use, reducing agricultural overuse."},
+  {topic:"Q19 · Antibiotic resistance II", type:"SEQUENCE", front:"Recite the full antibiotic resistance (essay) sequence.", back:"Mutation → resistant bacterium → antibiotic used → susceptible die → resistant survive → binary fission → resistance passed on → <b>population becomes resistant</b>"},
+  {topic:"Q19 · Antibiotic resistance II", type:"TRAP", front:"Top examiner trap for this question?", back:"Saying antibiotics <b>cause</b> mutations, or omitting the responsible-use mark point this version of the question rewards."},
+
+  // ---------------- Q20 · DNA REPLICATION (SEMI-CONSERVATIVE, S PHASE) ----------------
+  {topic:"Q20 · DNA replication II", type:"FULL ANSWER", front:"Explain how DNA is replicated by the semi-conservative mechanism. (10 marks)", back:"DNA replication occurs during the S phase of interphase before mitosis or meiosis.<br><br>The DNA double helix unwinds and unzips as the enzyme DNA helicase breaks the hydrogen bonds between complementary base pairs. This separates the two DNA strands.<br><br>Each original DNA strand acts as a template for the synthesis of a new complementary strand.<br><br>Free DNA nucleotides pair with exposed bases according to the complementary base-pairing rules: Adenine (A) pairs with Thymine (T); Cytosine (C) pairs with Guanine (G).<br><br>The enzyme DNA polymerase joins adjacent nucleotides together by forming phosphodiester bonds, producing the sugar-phosphate backbone of each new DNA strand.<br><br>The result is two identical DNA molecules, each consisting of one original (parental) strand and one newly synthesised strand. This is called semi-conservative replication.<br><br>Accurate DNA replication ensures that genetic information is passed to daughter cells, maintaining genetic continuity during cell division."},
+  {topic:"Q20 · DNA replication II", type:"RECALL", front:"During which stage of the cell cycle does DNA replication occur?", back:"The <b>S phase of interphase</b>, before mitosis or meiosis."},
+  {topic:"Q20 · DNA replication II", type:"RECALL", front:"What is the function of DNA helicase?", back:"Unwinds/unzips the DNA double helix by breaking <b>hydrogen bonds</b> between bases."},
+  {topic:"Q20 · DNA replication II", type:"RECALL", front:"Why does each original DNA strand act as a template?", back:"Free nucleotides pair against its exposed bases by <b>complementary base pairing</b>."},
+  {topic:"Q20 · DNA replication II", type:"RECALL", front:"What are the complementary base-pairing rules?", back:"<b>A with T</b>, and <b>C with G</b>."},
+  {topic:"Q20 · DNA replication II", type:"RECALL", front:"What is the role of DNA polymerase?", back:"Joins nucleotides via <b>phosphodiester bonds</b>, forming the sugar-phosphate backbone."},
+  {topic:"Q20 · DNA replication II", type:"RECALL", front:"Why is DNA replication called semi-conservative?", back:"Each new DNA molecule has <b>one original (parental) strand and one new strand</b>."},
+  {topic:"Q20 · DNA replication II", type:"SEQUENCE", front:"Recite the full S-phase DNA replication sequence.", back:"S phase → helicase → H bonds break → template strands → complementary base pairing → DNA polymerase → phosphodiester bonds → <b>semi-conservative DNA molecules</b>"},
+  {topic:"Q20 · DNA replication II", type:"TRAP", front:"Top examiner trap for this question?", back:"Confusing <b>helicase with polymerase</b>, or forgetting to name the S phase as when replication occurs."},
+];
+
+let order = DECK.map((_,i)=>i);
+let pos = 0;
+let flipped = false;
+let mastered = new Set();
+let activeTopic = "ALL";
+
+const topics = ["ALL", "FULL", ...Array.from(new Set(DECK.map(c=>c.topic)))];
+const chipsEl = document.getElementById('chips');
+topics.forEach(t=>{
+  const el = document.createElement('div');
+  el.className = 'chip' + (t==="ALL" ? " active" : "");
+  el.textContent = t==="ALL" ? "All 180" : (t==="FULL" ? "Full answers ×20" : t.split(" · ")[1]);
+  el.onclick = ()=> setTopic(t, el);
+  chipsEl.appendChild(el);
+});
+
+function setTopic(t, el){
+  activeTopic = t;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  if(t==="ALL"){ order = DECK.map((_,i)=>i); }
+  else if(t==="FULL"){ order = DECK.map((_,i)=>i).filter(i=> DECK[i].type==="FULL ANSWER"); }
+  else { order = DECK.map((_,i)=>i).filter(i=> DECK[i].topic===t); }
+  pos = 0;
+  render();
+}
+
+function render(){
+  const card = document.getElementById('card');
+  if(order.length === 0){
+    document.querySelector('.stage').innerHTML = '<div class="deckdone">Deck complete for this topic 🎉<br><span style="font-family:monospace;font-size:11px;color:#9db3a4;">pick another topic above</span></div>';
+    document.getElementById('preFlip').style.display='none';
+    document.getElementById('postFlip').style.display='none';
+    return;
+  }
+  const i = order[pos];
+  const c = DECK[i];
+  document.getElementById('frontTopic').textContent = c.topic;
+  document.getElementById('frontType').textContent = c.type;
+  document.getElementById('backTopic').textContent = c.topic;
+  document.getElementById('frontText').innerHTML = c.front;
+  document.getElementById('frontText').className = 'prompt' + (c.type==="FULL ANSWER" ? ' full' : (c.front.length>70 ? ' small':''));
+  document.getElementById('backText').innerHTML = c.back;
+  document.getElementById('backText').className = 'answer' + (c.type==="FULL ANSWER" ? ' long':'');
+  card.classList.remove('flipped');
+  flipped = false;
+  document.getElementById('preFlip').style.display='flex';
+  document.getElementById('postFlip').style.display='none';
+  updateProgress();
+}
+
+function updateProgress(){
+  document.getElementById('count').textContent = (pos+1) + " / " + order.length;
+  document.getElementById('knownCount').textContent = mastered.size + " mastered";
+  document.getElementById('barFill').style.width = (mastered.size / DECK.length * 100) + "%";
+}
+
+function flip(){
+  flipped = !flipped;
+  document.getElementById('card').classList.toggle('flipped', flipped);
+  document.getElementById('preFlip').style.display = flipped ? 'none' : 'flex';
+  document.getElementById('postFlip').style.display = flipped ? 'flex' : 'none';
+}
+
+function advance(){
+  if(pos < order.length - 1){ pos++; } else { pos = 0; }
+  render();
+}
+
+function grade(good){
+  const i = order[pos];
+  if(good){ mastered.add(i); } else { mastered.delete(i); }
+  advance();
+}
+
+function skipCard(){ advance(); }
+function prevCard(){ pos = (pos - 1 + order.length) % order.length; render(); }
+
+document.getElementById('card').addEventListener('click', flip);
+
+render();
+</script>
+</body>
+</html>
