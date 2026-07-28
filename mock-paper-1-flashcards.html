@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Mock Paper 1 · A* Flashcards</title>
+<style>
+  :root{
+    --bg:#0b1210;
+    --bg-2:#0f1815;
+    --panel:#141f1b;
+    --panel-2:#1a2622;
+    --line:#25352f;
+    --ink:#e8f2ec;
+    --ink-dim:#9fb5ab;
+    --ink-faint:#5f7a70;
+    --teal:#7fe3b4;
+    --teal-dim:#4d9a78;
+    --amber:#f2b84b;
+    --coral:#f2846b;
+    --violet:#b39ddb;
+    --serif: 'Iowan Old Style','Palatino Linotype','Georgia',serif;
+    --sans: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --mono: 'SF Mono','Menlo',monospace;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;height:100%;overflow-x:hidden;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(127,227,180,0.08), transparent 55%),
+      radial-gradient(ellipse at 90% 110%, rgba(179,157,219,0.06), transparent 50%),
+      var(--bg);
+    min-height:100vh;
+    padding-bottom:40px;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:22px 16px 10px;}
+
+  /* header */
+  .slidebar{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:14px;}
+  .slidebar .dot{width:5px;height:5px;border-radius:50%;background:var(--teal-dim);}
+  h1{font-family:var(--serif);font-weight:600;font-size:25px;line-height:1.15;margin:0 0 4px;
+    letter-spacing:.01em;color:var(--ink);}
+  .sub{font-size:12.5px;color:var(--ink-dim);margin-bottom:18px;font-family:var(--sans);}
+  .sub b{color:var(--teal);font-weight:600;}
+
+  /* section tabs */
+  .tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+  .tab{flex:1;min-width:0;background:var(--panel);border:1px solid var(--line);color:var(--ink-dim);
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+    padding:9px 6px;border-radius:8px;text-align:center;cursor:pointer;transition:.15s;}
+  .tab.active{background:var(--teal);color:#08130f;border-color:var(--teal);font-weight:700;}
+  .tab .n{display:block;font-size:9px;opacity:.75;margin-top:2px;}
+
+  /* progress */
+  .progress-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .progress-track{flex:1;height:4px;background:var(--line);border-radius:2px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--teal-dim),var(--teal));
+    border-radius:2px;transition:width .25s;}
+  .progress-label{font-family:var(--mono);font-size:11px;color:var(--ink-faint);white-space:nowrap;}
+
+  /* card */
+  .stage{perspective:1600px;margin-bottom:16px;}
+  .card{position:relative;width:100%;min-height:340px;transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.2,.8,.2,1);cursor:pointer;}
+  .card.flipped{transform:rotateY(180deg);}
+  .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;
+    border:1px solid var(--line);padding:22px 20px 18px;display:flex;flex-direction:column;
+    background:var(--panel);box-shadow:0 10px 30px -12px rgba(0,0,0,.5);}
+  .face.back{transform:rotateY(180deg);background:var(--panel-2);overflow-y:auto;max-height:520px;}
+
+  .tag-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+  .qnum{font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:.08em;}
+  .marks{font-family:var(--mono);font-size:10px;color:var(--ink-faint);border:1px solid var(--line);
+    padding:2px 8px;border-radius:20px;}
+  .sectiontag{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+    padding:2px 7px;border-radius:5px;}
+  .sectiontag.A{background:rgba(127,227,180,.12);color:var(--teal);}
+  .sectiontag.B{background:rgba(179,157,219,.14);color:var(--violet);}
+  .sectiontag.C{background:rgba(242,132,107,.14);color:var(--coral);}
+
+  .qtext{font-family:var(--serif);font-size:17px;line-height:1.5;color:var(--ink);flex:1;}
+  .qtext .opt{display:block;margin-top:9px;font-size:14.5px;color:var(--ink-dim);font-family:var(--sans);}
+  .qtext .opt b{color:var(--ink-faint);margin-right:6px;}
+  .hint{margin-top:16px;font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);
+    text-align:center;letter-spacing:.05em;}
+
+  .back .answer-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;
+    letter-spacing:.1em;color:var(--teal);margin-bottom:8px;}
+  .back .mcq-answer{font-family:var(--serif);font-size:18px;color:var(--teal);margin-bottom:6px;}
+  .back ul{margin:0 0 12px;padding-left:18px;}
+  .back li{font-size:14px;line-height:1.5;color:var(--ink);margin-bottom:6px;}
+  .back .reason{font-size:13px;color:var(--ink-dim);line-height:1.45;margin-bottom:4px;}
+  .tip-box{margin-top:auto;background:rgba(242,184,75,.08);border:1px solid rgba(242,184,75,.25);
+    border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.45;color:#e6c98a;}
+  .tip-box b{color:var(--amber);}
+
+  /* controls */
+  .controls{display:flex;gap:8px;margin-bottom:10px;}
+  .btn{flex:1;padding:13px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);
+    color:var(--ink);font-family:var(--sans);font-size:13.5px;font-weight:600;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s;}
+  .btn:active{transform:scale(.97);}
+  .btn.ghost{background:transparent;}
+  .nav-row{display:flex;gap:8px;margin-bottom:8px;}
+  .nav-row .btn{flex:0 0 auto;padding:12px 16px;}
+  .nav-row .btn.wide{flex:1;}
+
+  .self-test{display:none;gap:8px;margin-top:10px;}
+  .self-test.show{display:flex;}
+  .st-btn{flex:1;padding:13px 8px;border-radius:10px;border:1px solid var(--line);
+    font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;}
+  .st-btn.know{background:rgba(127,227,180,.12);color:var(--teal);border-color:rgba(127,227,180,.3);}
+  .st-btn.review{background:rgba(242,132,107,.12);color:var(--coral);border-color:rgba(242,132,107,.3);}
+
+  .stats{display:flex;justify-content:space-between;margin-top:18px;font-family:var(--mono);
+    font-size:10.5px;color:var(--ink-faint);border-top:1px solid var(--line);padding-top:12px;}
+  .stats span b{color:var(--ink);}
+
+  .done-panel{display:none;text-align:center;padding:40px 20px;}
+  .done-panel.show{display:block;}
+  .done-panel h2{font-family:var(--serif);font-size:22px;margin-bottom:6px;color:var(--teal);}
+  .done-panel p{color:var(--ink-dim);font-size:13.5px;margin-bottom:20px;}
+
+  ::-webkit-scrollbar{width:5px;}
+  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="slidebar"><span class="dot"></span> EDEXCEL 9BI0 &middot; PAPER 1 &middot; TOPICS 1&ndash;7</div>
+  <h1>Full Mock Paper 1 — A* Deck</h1>
+  <div class="sub">40 questions &middot; 90 marks &middot; tap a card to flip &middot; rate yourself to build your <b>revision list</b></div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="progress-row">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">1 / 40</div>
+  </div>
+
+  <div class="stage">
+    <div class="card" id="card">
+      <div class="face front" id="front"></div>
+      <div class="face back" id="back"></div>
+    </div>
+  </div>
+
+  <div class="self-test" id="selfTest">
+    <button class="st-btn review" id="btnReview">✕ Review again</button>
+    <button class="st-btn know" id="btnKnow">✓ Knew it</button>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn ghost" id="btnPrev">← Prev</button>
+    <button class="btn wide" id="btnFlip">Flip card</button>
+    <button class="btn ghost" id="btnNext">Next →</button>
+  </div>
+  <div class="controls">
+    <button class="btn ghost" id="btnShuffle">🔀 Shuffle</button>
+    <button class="btn ghost" id="btnReset">↺ Reset progress</button>
+  </div>
+
+  <div class="stats">
+    <span>Known: <b id="statKnow">0</b></span>
+    <span>To review: <b id="statReview">0</b></span>
+    <span>Seen: <b id="statSeen">0</b>/<b id="statTotal">40</b></span>
+  </div>
+
+  <div class="done-panel" id="donePanel">
+    <h2>Deck complete</h2>
+    <p id="doneSummary"></p>
+    <button class="btn" id="btnRestart" style="width:100%;">Go again from the top</button>
+  </div>
+
+</div>
+
+<script>
+const DATA = [
+// ---------------- SECTION A — MULTIPLE CHOICE (1 mark each) ----------------
+{s:'A',n:1,marks:1,type:'mcq',q:'Which biological molecule is the main source of immediate energy for respiration?',
+ opts:['Cellulose','Glycogen','Glucose','Triglyceride'],ans:'C. Glucose',
+ reason:'Glucose is small, soluble and directly oxidised in glycolysis — it is the immediate respiratory substrate, unlike storage forms (glycogen) or structural molecules (cellulose).'},
+{s:'A',n:2,marks:1,type:'mcq',q:'Which feature is found in both prokaryotic and eukaryotic cells?',
+ opts:['Nucleus','Mitochondria','Ribosomes','Chloroplasts'],ans:'C. Ribosomes',
+ reason:'Prokaryotes have 70S ribosomes and lack membrane-bound organelles (nucleus, mitochondria, chloroplasts).'},
+{s:'A',n:3,marks:1,type:'mcq',q:'Which type of bond forms between amino acids?',
+ opts:['Glycosidic bond','Ester bond','Peptide bond','Hydrogen bond'],ans:'C. Peptide bond',
+ reason:'Formed by condensation between the amine group of one amino acid and the carboxyl group of the next.'},
+{s:'A',n:4,marks:1,type:'mcq',q:'Water moves into a plant cell mainly by:',
+ opts:['Diffusion','Active transport','Osmosis','Facilitated diffusion'],ans:'C. Osmosis',
+ reason:'Osmosis is the diffusion of water across a partially permeable membrane down a water potential gradient.'},
+{s:'A',n:5,marks:1,type:'mcq',q:'Which molecule carries oxygen in mammalian red blood cells?',
+ opts:['Albumin','Haemoglobin','Myoglobin','Fibrinogen'],ans:'B. Haemoglobin',
+ reason:'Myoglobin stores oxygen in muscle; haemoglobin is the transport pigment in blood.'},
+{s:'A',n:6,marks:1,type:'mcq',q:'Which organelle is responsible for aerobic respiration?',
+ opts:['Golgi apparatus','Ribosome','Mitochondrion','Lysosome'],ans:'C. Mitochondrion',
+ reason:'Site of the Krebs cycle and oxidative phosphorylation.'},
+{s:'A',n:7,marks:1,type:'mcq',q:'Which process directly requires ATP?',
+ opts:['Diffusion','Osmosis','Active transport','Facilitated diffusion'],ans:'C. Active transport',
+ reason:'Moves substances against their concentration gradient, so energy input is needed.'},
+{s:'A',n:8,marks:1,type:'mcq',q:'The primary function of xylem vessels is to transport:',
+ opts:['Sucrose','Amino acids','Water and mineral ions','Oxygen'],ans:'C. Water and mineral ions',
+ reason:'Phloem carries organic solutes like sucrose and amino acids; xylem is one-way, root-to-shoot, for water and ions.'},
+{s:'A',n:9,marks:1,type:'mcq',q:'Which virus is a retrovirus?',
+ opts:['Influenza virus','HIV','Adenovirus','Tobacco mosaic virus'],ans:'B. HIV',
+ reason:'HIV carries RNA and reverse transcriptase, converting RNA into DNA inside the host cell.'},
+{s:'A',n:10,marks:1,type:'mcq',q:'Which level of protein structure is maintained mainly by hydrogen bonds?',
+ opts:['Primary','Secondary','Peptide','Covalent'],ans:'B. Secondary',
+ reason:'Alpha helices and beta-pleated sheets are held by hydrogen bonding between backbone C=O and N–H groups.'},
+{s:'A',n:11,marks:1,type:'mcq',q:'Which blood vessel has the highest blood pressure?',
+ opts:['Vena cava','Pulmonary vein','Aorta','Venule'],ans:'C. Aorta',
+ reason:'Leaves the left ventricle directly, which generates the greatest contractile force.'},
+{s:'A',n:12,marks:1,type:'mcq',q:'Which tissue is mainly responsible for gas exchange in leaves?',
+ opts:['Upper epidermis','Palisade mesophyll','Spongy mesophyll','Phloem'],ans:'C. Spongy mesophyll',
+ reason:'Loosely packed cells with large air spaces maximise the surface area for gas exchange.'},
+{s:'A',n:13,marks:1,type:'mcq',q:'Which feature increases the efficiency of the mammalian alveoli?',
+ opts:['Thick walls','Small surface area','Moist lining','Impermeable membrane'],ans:'C. Moist lining',
+ reason:'Gases must dissolve in moisture before they can diffuse across the alveolar membrane.'},
+{s:'A',n:14,marks:1,type:'mcq',q:'Which carbohydrate is the storage polysaccharide in animals?',
+ opts:['Cellulose','Starch','Glycogen','Chitin'],ans:'C. Glycogen',
+ reason:'Starch is the plant storage polysaccharide; glycogen is its highly-branched animal equivalent.'},
+{s:'A',n:15,marks:1,type:'mcq',q:'Which statement about enzymes is correct?',
+ opts:['They are consumed during reactions.','They increase activation energy.','They are biological catalysts.','They permanently change the products formed.'],
+ ans:'C. They are biological catalysts.',
+ reason:'Enzymes lower activation energy and are reusable — they are not consumed or altered by the reaction.'},
+{s:'A',n:16,marks:1,type:'mcq',q:'Which transport tissue contains sieve tube elements?',
+ opts:['Xylem','Phloem','Epidermis','Cortex'],ans:'B. Phloem',
+ reason:'Sieve tube elements, linked at sieve plates and supported by companion cells, form the phloem transport pathway.'},
+{s:'A',n:17,marks:1,type:'mcq',q:'Which molecule forms the basic structure of cell membranes?',
+ opts:['Triglycerides','Phospholipids','Cholesterol only','Glycogen'],ans:'B. Phospholipids',
+ reason:'The phospholipid bilayer is the fundamental membrane structure; cholesterol and proteins are embedded within it.'},
+{s:'A',n:18,marks:1,type:'mcq',q:'Which statement about antibodies is correct?',
+ opts:['They are produced by red blood cells.','They are proteins produced by B lymphocytes (plasma cells).','They destroy bacteria by phagocytosis.','They are made in the thymus.'],
+ ans:'B. They are proteins produced by B lymphocytes (plasma cells).',
+ reason:'Phagocytosis is carried out by phagocytes, not antibodies themselves — antibodies tag/neutralise pathogens.'},
+{s:'A',n:19,marks:1,type:'mcq',q:'The movement of sucrose through phloem is known as:',
+ opts:['Translocation','Transpiration','Diffusion','Evaporation'],ans:'A. Translocation',
+ reason:'Transpiration refers to water loss/movement in the xylem pathway, not organic solute transport.'},
+{s:'A',n:20,marks:1,type:'mcq',q:'Which factor directly increases the rate of diffusion?',
+ opts:['Decreasing concentration gradient','Increasing diffusion distance','Increasing surface area','Decreasing temperature'],
+ ans:'C. Increasing surface area',
+ reason:'Fick\'s Law: rate ∝ (surface area × concentration gradient) / diffusion distance. Increasing distance or decreasing temperature/gradient all reduce rate.'},
+
+// ---------------- SECTION B — SHORT ANSWER ----------------
+{s:'B',n:21,marks:3,type:'short',q:'Cellulose and glycogen are both polysaccharides.\n(a) State two structural differences between cellulose and glycogen. (2)\n(b) Explain how one of these differences relates to its biological function. (1)',
+ bullets:[
+   'Cellulose is made of β-glucose; glycogen is made of α-glucose.',
+   'Cellulose forms straight, unbranched chains; glycogen is highly branched.',
+   '(b) The branching in glycogen gives many ends for rapid glucose release during respiration.'
+ ]},
+{s:'B',n:22,marks:3,type:'short',q:'Describe three features of the fluid mosaic model of the cell surface membrane.',
+ bullets:[
+   'The membrane consists of a phospholipid bilayer.',
+   'Proteins are embedded within the phospholipid bilayer.',
+   'Phospholipids and many proteins can move laterally, making the membrane fluid.'
+ ]},
+{s:'B',n:23,marks:3,type:'calc',q:'A cell has an actual diameter of 20 μm. Its image measures 80 mm. Calculate the magnification.',
+ bullets:[
+   'Convert image size: 80 mm = 80,000 μm.',
+   'Magnification = image size ÷ actual size = 80,000 ÷ 20.',
+   'Answer = ×4000'
+ ]},
+{s:'B',n:24,marks:4,type:'short',q:'Explain why enzyme activity increases with temperature up to an optimum but decreases above the optimum.',
+ bullets:[
+   'Increasing temperature increases kinetic energy of enzyme and substrate molecules.',
+   'More frequent successful collisions occur, forming more enzyme–substrate complexes.',
+   'Above the optimum, bonds maintaining tertiary structure are disrupted.',
+   'The active site changes shape (denaturation), reducing substrate binding and reaction rate.'
+ ]},
+{s:'B',n:25,marks:3,type:'short',q:'State three adaptations of xylem vessels for transporting water.',
+ bullets:[
+   'Thick walls strengthened with lignin, preventing collapse.',
+   'Hollow lumen with no cytoplasm, reducing resistance to flow.',
+   'End walls lost/perforated, forming continuous tubes.'
+ ]},
+{s:'B',n:26,marks:4,type:'short',q:'Explain how alveoli are adapted for efficient gas exchange.',
+ bullets:[
+   'Very large surface area from millions of alveoli.',
+   'Walls one cell thick — short diffusion distance.',
+   'Moist lining allows gases to dissolve before diffusing.',
+   'Dense capillary network maintains a steep concentration gradient.'
+ ]},
+{s:'B',n:27,marks:2,type:'short',q:'State two differences between diffusion and active transport.',
+ bullets:[
+   'Active transport requires ATP; diffusion does not.',
+   'Active transport moves substances against the concentration gradient; diffusion moves down it.'
+ ]},
+{s:'B',n:28,marks:3,type:'short',q:'Explain why viruses are described as obligate intracellular parasites.',
+ bullets:[
+   'Viruses cannot reproduce independently.',
+   'They must infect living host cells.',
+   'They use the host cell\'s ribosomes, enzymes and ATP to replicate.'
+ ]},
+{s:'B',n:29,marks:3,type:'short',q:'A student repeats an investigation only once. Suggest three improvements to increase the reliability of the results.',
+ bullets:[
+   'Repeat the investigation several times.',
+   'Calculate the mean of the results.',
+   'Increase the sample size.'
+ ]},
+{s:'B',n:30,marks:4,type:'short',q:'Mean heights: Control = 18.4 cm, Fertiliser = 22.1 cm. A Student\'s t-test gives p = 0.018. Explain this result.',
+ bullets:[
+   'The p-value is less than 0.05.',
+   'The difference between the means is statistically significant.',
+   'Reject the null hypothesis.',
+   'The fertiliser is likely to have increased plant height rather than the difference occurring by chance.'
+ ]},
+{s:'B',n:31,marks:2,type:'short',q:'State two rules for producing a biological drawing.',
+ bullets:[
+   'Use clear, single pencil lines with no shading.',
+   'Include labels using straight ruled lines.'
+ ]},
+{s:'B',n:32,marks:3,type:'short',q:'Food sample: Benedict\'s test = Blue; after acid hydrolysis and neutralisation = brick-red precipitate. Identify the carbohydrate and explain.',
+ bullets:[
+   'The sample contains a non-reducing sugar, such as sucrose.',
+   'Initially Benedict\'s test is negative because the sugar is non-reducing.',
+   'After hydrolysis it is broken down into reducing sugars, producing a brick-red precipitate.'
+ ]},
+{s:'B',n:33,marks:3,type:'calc',q:'A potato cylinder: initial mass = 4.20 g, final mass = 4.62 g. Calculate the percentage change in mass.',
+ bullets:[
+   '% change = [(4.62 − 4.20) ÷ 4.20] × 100',
+   '= (0.42 ÷ 4.20) × 100',
+   'Answer = +10.0%'
+ ]},
+{s:'B',n:34,marks:2,type:'short',q:'Explain why random sampling is used when investigating plant populations.',
+ bullets:[
+   'It reduces sampling bias.',
+   'It increases the likelihood the sample is representative of the whole habitat.'
+ ]},
+{s:'B',n:35,marks:5,type:'short',q:'A student investigates the effect of light intensity on the rate of photosynthesis. Identify the IV, DV and three control variables.',
+ bullets:[
+   'IV: light intensity (or distance of lamp from plant).',
+   'DV: rate of photosynthesis (e.g. oxygen bubbles/min or volume produced).',
+   'Control variables (any 3): temperature, CO₂ concentration, species/length/mass of pondweed, volume of solution, time allowed, light wavelength.'
+ ]},
+
+// ---------------- SECTION C — EXTENDED RESPONSE ----------------
+{s:'C',n:36,marks:6,type:'long',q:'Explain how glucose is absorbed from the lumen of the small intestine into epithelial cells and then into the blood.',
+ bullets:[
+   'Glucose concentration in the lumen may be lower than inside epithelial cells, so it cannot always enter by diffusion.',
+   'Na⁺ is actively transported out of the epithelial cell into the blood by the Na⁺/K⁺ pump, using ATP.',
+   'This creates a low sodium ion concentration inside the epithelial cell.',
+   'Na⁺ diffuses back into the cell from the lumen through sodium–glucose co-transport proteins.',
+   'Glucose is carried into the cell together with Na⁺ by co-transport (secondary active transport).',
+   'Glucose then leaves the cell into the blood by facilitated diffusion, down its concentration gradient.'
+ ],
+ tip:'Do not say glucose is directly actively transported by ATP — the ATP powers the Na⁺/K⁺ pump, which creates the gradient that drives co-transport.'},
+{s:'C',n:37,marks:6,type:'long',q:'Explain how changes in substrate concentration affect the rate of an enzyme-controlled reaction.',
+ bullets:[
+   'At low substrate concentration, few substrate molecules are available.',
+   'Increasing substrate concentration increases the frequency of successful collisions with active sites.',
+   'More enzyme–substrate complexes form, so reaction rate increases.',
+   'Eventually all active sites become occupied — the enzyme is saturated.',
+   'Adding more substrate no longer increases rate; Vmax is reached.'
+ ],
+ tip:'Always explain the collision/complex-formation mechanism — don\'t just describe the graph shape.'},
+{s:'C',n:38,marks:6,type:'long',q:'Explain how the structure of mammalian red blood cells and haemoglobin enables efficient oxygen transport.',
+ bullets:[
+   'Biconcave shape gives a large surface area to volume ratio for rapid diffusion.',
+   'Thin centre reduces diffusion distance.',
+   'Mature RBCs lack a nucleus/most organelles, giving more space for haemoglobin.',
+   'Haemoglobin is a globular protein with four polypeptide chains.',
+   'Each molecule contains four haem groups, each with one Fe²⁺ ion.',
+   'Each Fe²⁺ binds one O₂ molecule, so each haemoglobin carries four oxygen molecules.'
+ ],
+ tip:'Link structure directly to function each time — "large SA:V ratio, which speeds diffusion" scores higher than a bare description.'},
+{s:'C',n:39,marks:6,type:'long',q:'Evaluate an investigation into the effect of temperature on enzyme activity, and suggest improvements.',
+ bullets:[
+   'Strengths: range of temperatures used; water baths controlled temperature; enzyme concentration kept constant.',
+   'Limitations: colour change judged subjectively; enzyme activity may change before solutions reach temperature; too few repeats.',
+   'Improvements: repeat each temperature ≥3 times and calculate the mean.',
+   'Use a thermostatically controlled water bath.',
+   'Use a colorimeter instead of visual assessment.',
+   'Use calibrated pipettes for measurement accuracy.'
+ ],
+ tip:'Structure evaluation answers as Strengths → Limitations → Improvements — examiners reward this clear organisation.'},
+{s:'C',n:40,marks:6,type:'long',q:'Discuss the importance of biological membranes in living organisms. (Synoptic essay)',
+ bullets:[
+   'Membranes regulate movement of substances into/out of cells and organelles.',
+   'The phospholipid bilayer is selectively permeable, maintaining stable internal conditions.',
+   'Membrane proteins enable facilitated diffusion, active transport and cell signalling.',
+   'Mitochondrial membranes hold the electron transport chain and ATP synthase for aerobic respiration.',
+   'Thylakoid membranes hold chlorophyll and electron carriers for light-dependent reactions.',
+   'Receptor proteins detect hormones/neurotransmitters, enabling cell-to-cell communication.'
+ ],
+ tip:'Synoptic essays reward breadth across topics — touch cell membranes, respiration AND photosynthesis AND signalling for full marks.'}
+];
+
+// ---------- state ----------
+let order = DATA.map((_,i)=>i);
+let pos = 0;
+let currentFilter = 'ALL';
+let flipped = false;
+let progressState = {}; // id -> 'know' | 'review'
+
+function cardId(i){ const d=DATA[i]; return d.s+d.n; }
+
+function visibleOrder(){
+  if(currentFilter==='ALL') return DATA.map((_,i)=>i);
+  return DATA.map((_,i)=>i).filter(i=>DATA[i].s===currentFilter);
+}
+
+const tabsEl = document.getElementById('tabs');
+const filters = [
+  {key:'ALL',label:'All',range:'40 cards'},
+  {key:'A',label:'Sec A · MCQ',range:'20 cards'},
+  {key:'B',label:'Sec B · Short',range:'15 cards'},
+  {key:'C',label:'Sec C · Extended',range:'5 cards'}
+];
+filters.forEach(f=>{
+  const b=document.createElement('div');
+  b.className='tab'+(f.key===currentFilter?' active':'');
+  b.innerHTML=f.label+'<span class="n">'+f.range+'</span>';
+  b.onclick=()=>{currentFilter=f.key;order=visibleOrder();pos=0;flipped=false;render();
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));b.classList.add('active');};
+  tabsEl.appendChild(b);
+});
+order = visibleOrder();
+
+const cardEl=document.getElementById('card');
+const frontEl=document.getElementById('front');
+const backEl=document.getElementById('back');
+
+function buildFront(d){
+  let html = '<div class="tag-row"><span class="qnum">Q'+d.n+'</span>'+
+    '<span class="sectiontag '+d.s+'">Section '+d.s+'</span>'+
+    '<span class="marks">'+d.marks+' mark'+(d.marks>1?'s':'')+'</span></div>';
+  html += '<div class="qtext">'+d.q.replace(/\n/g,'<br>')+'</div>';
+  if(d.type==='mcq'){
+    const letters=['A','B','C','D'];
+    html += '<div>'+d.opts.map((o,idx)=>'<span class="opt"><b>'+letters[idx]+'.</b>'+o+'</span>').join('')+'</div>';
+  }
+  html += '<div class="hint">tap to reveal answer</div>';
+  return html;
+}
+
+function buildBack(d){
+  let html = '<div class="answer-label">'+(d.type==='mcq'?'Correct answer':'A* model answer')+'</div>';
+  if(d.type==='mcq'){
+    html += '<div class="mcq-answer">'+d.ans+'</div>';
+    html += '<div class="reason">'+d.reason+'</div>';
+  } else {
+    html += '<ul>'+d.bullets.map(b=>'<li>'+b+'</li>').join('')+'</ul>';
+  }
+  if(d.tip){
+    html += '<div class="tip-box"><b>Examiner\'s tip —</b> '+d.tip+'</div>';
+  }
+  return html;
+}
+
+function render(){
+  if(order.length===0){ return; }
+  if(pos>=order.length){ showDone(); return; }
+  document.getElementById('donePanel').classList.remove('show');
+  document.getElementById('card').style.display='block';
+  document.querySelector('.controls').style.display='flex';
+  document.querySelector('.nav-row').style.display='flex';
+
+  const i = order[pos];
+  const d = DATA[i];
+  frontEl.innerHTML = buildFront(d);
+  backEl.innerHTML = buildBack(d);
+  cardEl.classList.toggle('flipped', flipped);
+  document.getElementById('selfTest').classList.toggle('show', flipped);
+
+  document.getElementById('progressLabel').textContent = (pos+1)+' / '+order.length;
+  document.getElementById('progressFill').style.width = (((pos+1)/order.length)*100)+'%';
+
+  updateStats();
+}
+
+function updateStats(){
+  let know=0, review=0, seen=0;
+  order.forEach(i=>{
+    const id=cardId(i);
+    if(progressState[id]==='know'){know++;seen++;}
+    else if(progressState[id]==='review'){review++;seen++;}
+  });
+  document.getElementById('statKnow').textContent=know;
+  document.getElementById('statReview').textContent=review;
+  document.getElementById('statSeen').textContent=seen;
+  document.getElementById('statTotal').textContent=order.length;
+}
+
+function showDone(){
+  document.getElementById('card').style.display='none';
+  document.querySelector('.controls').style.display='none';
+  document.querySelector('.nav-row').style.display='none';
+  document.getElementById('selfTest').classList.remove('show');
+  const dp=document.getElementById('donePanel');
+  dp.classList.add('show');
+  let know=0, review=0;
+  order.forEach(i=>{const id=cardId(i); if(progressState[id]==='know')know++; if(progressState[id]==='review')review++;});
+  document.getElementById('doneSummary').textContent = know+' known, '+review+' flagged for review out of '+order.length+' cards.';
+}
+
+cardEl.addEventListener('click', (e)=>{
+  flipped = !flipped;
+  render();
+});
+
+document.getElementById('btnFlip').onclick = (e)=>{e.stopPropagation();flipped=!flipped;render();};
+document.getElementById('btnNext').onclick = (e)=>{e.stopPropagation();pos++;flipped=false;render();};
+document.getElementById('btnPrev').onclick = (e)=>{e.stopPropagation();pos=Math.max(0,pos-1);flipped=false;render();};
+
+document.getElementById('btnKnow').onclick=(e)=>{
+  e.stopPropagation();
+  const id=cardId(order[pos]);
+  progressState[id]='know';
+  pos++; flipped=false; render();
+};
+document.getElementById('btnReview').onclick=(e)=>{
+  e.stopPropagation();
+  const id=cardId(order[pos]);
+  progressState[id]='review';
+  pos++; flipped=false; render();
+};
+
+document.getElementById('btnShuffle').onclick=(e)=>{
+  e.stopPropagation();
+  for(let i=order.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [order[i],order[j]]=[order[j],order[i]];
+  }
+  pos=0; flipped=false; render();
+};
+document.getElementById('btnReset').onclick=(e)=>{
+  e.stopPropagation();
+  progressState={};
+  order = visibleOrder();
+  pos=0; flipped=false; render();
+};
+document.getElementById('btnRestart').onclick=(e)=>{
+  pos=0; flipped=false; render();
+};
+
+render();
+</script>
+</body>
+</html>
