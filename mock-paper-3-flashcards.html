@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Mock Paper 3 · A* Flashcards</title>
+<style>
+  :root{
+    --bg:#0b1210;
+    --bg-2:#0f1815;
+    --panel:#141f1b;
+    --panel-2:#1a2622;
+    --line:#25352f;
+    --ink:#e8f2ec;
+    --ink-dim:#9fb5ab;
+    --ink-faint:#5f7a70;
+    --teal:#7fe3b4;
+    --teal-dim:#4d9a78;
+    --amber:#f2b84b;
+    --coral:#f2846b;
+    --violet:#b39ddb;
+    --serif: 'Iowan Old Style','Palatino Linotype','Georgia',serif;
+    --sans: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --mono: 'SF Mono','Menlo',monospace;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;height:100%;overflow-x:hidden;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(127,227,180,0.08), transparent 55%),
+      radial-gradient(ellipse at 90% 110%, rgba(179,157,219,0.06), transparent 50%),
+      var(--bg);
+    min-height:100vh;
+    padding-bottom:40px;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:22px 16px 10px;}
+
+  .slidebar{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:14px;}
+  .slidebar .dot{width:5px;height:5px;border-radius:50%;background:var(--teal-dim);}
+  h1{font-family:var(--serif);font-weight:600;font-size:25px;line-height:1.15;margin:0 0 4px;
+    letter-spacing:.01em;color:var(--ink);}
+  .sub{font-size:12.5px;color:var(--ink-dim);margin-bottom:18px;font-family:var(--sans);}
+  .sub b{color:var(--teal);font-weight:600;}
+
+  .tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+  .tab{flex:1;min-width:0;background:var(--panel);border:1px solid var(--line);color:var(--ink-dim);
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+    padding:9px 6px;border-radius:8px;text-align:center;cursor:pointer;transition:.15s;}
+  .tab.active{background:var(--teal);color:#08130f;border-color:var(--teal);font-weight:700;}
+  .tab .n{display:block;font-size:9px;opacity:.75;margin-top:2px;}
+
+  .progress-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .progress-track{flex:1;height:4px;background:var(--line);border-radius:2px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--teal-dim),var(--teal));
+    border-radius:2px;transition:width .25s;}
+  .progress-label{font-family:var(--mono);font-size:11px;color:var(--ink-faint);white-space:nowrap;}
+
+  .stage{perspective:1600px;margin-bottom:16px;}
+  .card{position:relative;width:100%;min-height:340px;transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.2,.8,.2,1);cursor:pointer;}
+  .card.flipped{transform:rotateY(180deg);}
+  .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;
+    border:1px solid var(--line);padding:22px 20px 18px;display:flex;flex-direction:column;
+    background:var(--panel);box-shadow:0 10px 30px -12px rgba(0,0,0,.5);}
+  .face.back{transform:rotateY(180deg);background:var(--panel-2);overflow-y:auto;max-height:520px;}
+
+  .tag-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:6px;}
+  .qnum{font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:.08em;}
+  .marks{font-family:var(--mono);font-size:10px;color:var(--ink-faint);border:1px solid var(--line);
+    padding:2px 8px;border-radius:20px;}
+  .sectiontag{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+    padding:2px 7px;border-radius:5px;}
+  .sectiontag.A{background:rgba(127,227,180,.12);color:var(--teal);}
+  .sectiontag.B{background:rgba(179,157,219,.14);color:var(--violet);}
+  .sectiontag.C{background:rgba(242,132,107,.14);color:var(--coral);}
+
+  .qtext{font-family:var(--serif);font-size:17px;line-height:1.5;color:var(--ink);flex:1;}
+  .qtext .opt{display:block;margin-top:9px;font-size:14.5px;color:var(--ink-dim);font-family:var(--sans);}
+  .qtext .opt b{color:var(--ink-faint);margin-right:6px;}
+  .hint{margin-top:16px;font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);
+    text-align:center;letter-spacing:.05em;}
+
+  .back .answer-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;
+    letter-spacing:.1em;color:var(--teal);margin-bottom:8px;}
+  .back .mcq-answer{font-family:var(--serif);font-size:18px;color:var(--teal);margin-bottom:6px;}
+  .back ul{margin:0 0 12px;padding-left:18px;}
+  .back li{font-size:14px;line-height:1.5;color:var(--ink);margin-bottom:6px;}
+  .back .reason{font-size:13px;color:var(--ink-dim);line-height:1.45;margin-bottom:4px;}
+  .back .calc-line{font-family:var(--mono);font-size:13.5px;color:var(--ink);background:rgba(127,227,180,.06);
+    border-left:2px solid var(--teal-dim);padding:6px 10px;margin-bottom:6px;border-radius:4px;}
+  .back h4{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--violet);margin:10px 0 4px;}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+  .chip{font-family:var(--mono);font-size:9.5px;letter-spacing:.03em;padding:3px 8px;border-radius:12px;
+    background:rgba(179,157,219,.12);color:var(--violet);border:1px solid rgba(179,157,219,.25);}
+  .tip-box{margin-top:auto;background:rgba(242,184,75,.08);border:1px solid rgba(242,184,75,.25);
+    border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.45;color:#e6c98a;}
+  .tip-box b{color:var(--amber);}
+
+  .controls{display:flex;gap:8px;margin-bottom:10px;}
+  .btn{flex:1;padding:13px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);
+    color:var(--ink);font-family:var(--sans);font-size:13.5px;font-weight:600;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s;}
+  .btn:active{transform:scale(.97);}
+  .btn.ghost{background:transparent;}
+  .nav-row{display:flex;gap:8px;margin-bottom:8px;}
+  .nav-row .btn{flex:0 0 auto;padding:12px 16px;}
+  .nav-row .btn.wide{flex:1;}
+
+  .self-test{display:none;gap:8px;margin-top:10px;}
+  .self-test.show{display:flex;}
+  .st-btn{flex:1;padding:13px 8px;border-radius:10px;border:1px solid var(--line);
+    font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;}
+  .st-btn.know{background:rgba(127,227,180,.12);color:var(--teal);border-color:rgba(127,227,180,.3);}
+  .st-btn.review{background:rgba(242,132,107,.12);color:var(--coral);border-color:rgba(242,132,107,.3);}
+
+  .stats{display:flex;justify-content:space-between;margin-top:18px;font-family:var(--mono);
+    font-size:10.5px;color:var(--ink-faint);border-top:1px solid var(--line);padding-top:12px;}
+  .stats span b{color:var(--ink);}
+
+  .done-panel{display:none;text-align:center;padding:40px 20px;}
+  .done-panel.show{display:block;}
+  .done-panel h2{font-family:var(--serif);font-size:22px;margin-bottom:6px;color:var(--teal);}
+  .done-panel p{color:var(--ink-dim);font-size:13.5px;margin-bottom:20px;}
+
+  ::-webkit-scrollbar{width:5px;}
+  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="slidebar"><span class="dot"></span> EDEXCEL 9BI0 &middot; PAPER 3 &middot; SYNOPTIC + PRACTICAL SKILLS</div>
+  <h1>Full Mock Paper 3 — A* Deck</h1>
+  <div class="sub">40 questions &middot; 90 marks &middot; all 10 topics, practical skills &amp; data analysis &middot; tap to flip</div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="progress-row">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">1 / 40</div>
+  </div>
+
+  <div class="stage">
+    <div class="card" id="card">
+      <div class="face front" id="front"></div>
+      <div class="face back" id="back"></div>
+    </div>
+  </div>
+
+  <div class="self-test" id="selfTest">
+    <button class="st-btn review" id="btnReview">✕ Review again</button>
+    <button class="st-btn know" id="btnKnow">✓ Knew it</button>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn ghost" id="btnPrev">← Prev</button>
+    <button class="btn wide" id="btnFlip">Flip card</button>
+    <button class="btn ghost" id="btnNext">Next →</button>
+  </div>
+  <div class="controls">
+    <button class="btn ghost" id="btnShuffle">🔀 Shuffle</button>
+    <button class="btn ghost" id="btnReset">↺ Reset progress</button>
+  </div>
+
+  <div class="stats">
+    <span>Known: <b id="statKnow">0</b></span>
+    <span>To review: <b id="statReview">0</b></span>
+    <span>Seen: <b id="statSeen">0</b>/<b id="statTotal">40</b></span>
+  </div>
+
+  <div class="done-panel" id="donePanel">
+    <h2>Deck complete</h2>
+    <p id="doneSummary"></p>
+    <button class="btn" id="btnRestart" style="width:100%;">Go again from the top</button>
+  </div>
+
+</div>
+
+<script>
+const DATA = [
+// ---------------- SECTION A — MULTIPLE CHOICE (1 mark each) ----------------
+{s:'A',n:1,marks:1,type:'mcq',q:'Which statement best describes a valid scientific hypothesis?',
+ opts:['A summary of the results.','A prediction that can be tested by investigation.','A conclusion based on observations.','An opinion supported by no evidence.'],
+ ans:'B',
+ reason:'A hypothesis must be a testable prediction made before data is collected, not a conclusion or summary drawn afterwards.'},
+{s:'A',n:2,marks:1,type:'mcq',q:'In a well-designed investigation, the dependent variable is:',
+ opts:['deliberately changed by the investigator.','kept constant throughout.','measured in response to the independent variable.','always the time taken.'],
+ ans:'C',
+ reason:'The IV is what you change; control variables are kept constant; the DV is what you measure as an outcome.'},
+{s:'A',n:3,marks:1,type:'mcq',q:'Which piece of equipment gives the greatest precision when measuring 5.00 cm³ of solution?',
+ opts:['Beaker','Measuring cylinder','Graduated pipette','Test tube'],ans:'C',
+ reason:'A graduated/volumetric pipette has finer graduations than a measuring cylinder and far finer than a beaker or test tube.'},
+{s:'A',n:4,marks:1,type:'mcq',q:'Which statistical test is most appropriate for investigating whether there is a correlation between two continuous variables?',
+ opts:['Student\'s t-test','Chi-squared test','Spearman\'s rank correlation coefficient','Simpson\'s Index of Diversity'],ans:'C',
+ reason:'t-tests compare two means; chi-squared tests categorical/observed-vs-expected data; correlation between two continuous variables needs Spearman\'s rank (or Pearson\'s).'},
+{s:'A',n:5,marks:1,type:'mcq',q:'Which graph is most suitable for displaying the relationship between enzyme activity and temperature?',
+ opts:['Pie chart','Scatter graph with line of best fit','Bar chart','Histogram'],ans:'B',
+ reason:'Both variables are continuous, so a scatter graph (with line/curve of best fit) is correct — bar charts suit categorical data.'},
+{s:'A',n:6,marks:1,type:'mcq',q:'A calculated p-value = 0.032 indicates that:',
+ opts:['the null hypothesis should be accepted.','there is no significant difference.','the observed difference is statistically significant at the 5% level.','the investigation is unreliable.'],
+ ans:'C',
+ reason:'p < 0.05 means the result is significant, so the null hypothesis is rejected — not accepted.'},
+{s:'A',n:7,marks:1,type:'mcq',q:'Why should a positive control be included in a food test?',
+ opts:['To increase the sample size.','To prove the unknown sample contains the substance.','To confirm that the reagent and procedure are functioning correctly.','To reduce random error.'],
+ ans:'C',
+ reason:'A positive control validates the method itself — if it doesn\'t give the expected result, the reagents/procedure are the problem, not the sample.'},
+{s:'A',n:8,marks:1,type:'mcq',q:'Which process contributes directly to the loading of sucrose into the phloem?',
+ opts:['Osmosis only','Active transport','Diffusion only','Endocytosis'],ans:'B',
+ reason:'Sucrose is actively loaded into companion cells/sieve tubes against its concentration gradient, using ATP.'},
+{s:'A',n:9,marks:1,type:'mcq',q:'Which statement about biological drawings is correct?',
+ opts:['Use coloured pencils to distinguish structures.','Include shading to show depth.','Use clear, single pencil lines with labels drawn using a ruler.','Sketch freehand labels.'],
+ ans:'C',
+ reason:'Biological drawing convention: no shading/colour, no freehand label lines — single clean pencil lines and ruled labels.'},
+{s:'A',n:10,marks:1,type:'mcq',q:'Which factor is most likely to reduce the validity of an investigation?',
+ opts:['Repeating measurements.','Changing more than one independent variable at the same time.','Calculating the mean.','Using calibrated equipment.'],
+ ans:'B',
+ reason:'If more than one variable changes at once, you can\'t attribute the effect to a single cause — this undermines validity, not reliability.'},
+{s:'A',n:11,marks:1,type:'mcq',q:'When using a light microscope, the specimen should first be focused using:',
+ opts:['High-power objective.','Oil immersion lens.','Low-power objective.','Eyepiece only.'],ans:'C',
+ reason:'Always start on low power to locate and roughly focus the specimen before moving to higher magnifications.'},
+{s:'A',n:12,marks:1,type:'mcq',q:'In chromatography, the stationary phase is:',
+ opts:['The solvent.','The pigment.','The chromatography paper.','The capillary tube.'],ans:'C',
+ reason:'The paper (or the medium it\'s made of) stays fixed while the solvent (mobile phase) moves through it, carrying pigments at different rates.'},
+{s:'A',n:13,marks:1,type:'mcq',q:'Which investigation would most appropriately use the Lincoln Index?',
+ opts:['Estimating bacterial population size.','Estimating the population size of mobile animals.','Measuring plant density.','Comparing species diversity.'],
+ ans:'B',
+ reason:'The Lincoln Index (mark-release-recapture) is specifically for mobile animal populations, not static organisms like plants.'},
+{s:'A',n:14,marks:1,type:'mcq',q:'An anomalous result should:',
+ opts:['Always be removed from the data.','Always be included without comment.','Be investigated and only excluded if there is valid scientific justification.','Be replaced by the mean value.'],
+ ans:'C',
+ reason:'You must never discard data purely for being inconvenient — only exclude with a justified, stated reason (e.g. identified procedural error).'},
+{s:'A',n:15,marks:1,type:'mcq',q:'Which factor increases the reliability of experimental results?',
+ opts:['Increasing the number of repeats.','Changing the independent variable.','Using different methods for each repeat.','Recording only one result.'],
+ ans:'A',
+ reason:'Reliability is about consistency — more repeats (using the SAME method) let you check that results are reproducible.'},
+{s:'A',n:16,marks:1,type:'mcq',q:'A colorimeter is commonly used to:',
+ opts:['Measure electrical current.','Measure changes in light absorbance.','Measure oxygen concentration directly.','Measure DNA sequence length.'],
+ ans:'B',
+ reason:'A colorimeter measures how much light of a specific wavelength is absorbed/transmitted by a solution — used e.g. to track colour change objectively.'},
+{s:'A',n:17,marks:1,type:'mcq',q:'Which statement about random sampling is correct?',
+ opts:['Samples are chosen where organisms are easiest to find.','Every location has an equal chance of being sampled.','Quadrats are always placed in a straight line.','Only large organisms can be sampled.'],
+ ans:'B',
+ reason:'Choosing "easy" spots or a straight-line transect (systematic sampling) both introduce bias — true random sampling gives every point equal chance.'},
+{s:'A',n:18,marks:1,type:'mcq',q:'Which practical investigation is most likely to require the calculation of an Rf value?',
+ opts:['Enzyme activity.','Chromatography of plant pigments.','Food tests.','Osmosis.'],ans:'B',
+ reason:'Rf = distance travelled by pigment ÷ distance travelled by solvent front — specific to chromatography.'},
+{s:'A',n:19,marks:1,type:'mcq',q:'A variable that is deliberately kept constant throughout an investigation is called a:',
+ opts:['Dependent variable.','Independent variable.','Control variable.','Confounding variable.'],ans:'C',
+ reason:'A confounding variable is one that varies uncontrolled and affects results — different from a control variable, which is deliberately fixed.'},
+{s:'A',n:20,marks:1,type:'mcq',q:'Which statement best describes scientific reliability?',
+ opts:['Results are close to the true value.','Results can be consistently repeated.','Results support the hypothesis.','Results contain no anomalies.'],
+ ans:'B',
+ reason:'"Close to the true value" describes accuracy, not reliability — reliability is purely about consistency/repeatability.'},
+
+// ---------------- SECTION B — SYNOPTIC STRUCTURED QUESTIONS ----------------
+{s:'B',n:21,marks:4,type:'short',q:'A student investigates the effect of light intensity on the rate of photosynthesis using pondweed.\n(a) State the independent variable (1) and dependent variable (1).\n(b) State two control variables. (2)',
+ bullets:[
+   'IV: light intensity (or distance of the lamp from the pondweed).',
+   'DV: rate of photosynthesis (e.g. oxygen volume produced per minute or oxygen bubbles per minute).',
+   'Control variables (any 2): temperature, CO₂ concentration, species of pondweed, length/mass of pondweed, volume of solution, duration of measurement.'
+ ]},
+{s:'B',n:22,marks:3,type:'short',q:'Suggest three improvements to increase the reliability of the pondweed investigation.',
+ bullets:[
+   'Repeat each measurement at least three times.',
+   'Calculate the mean result.',
+   'Increase the number of pondweed samples tested.'
+ ]},
+{s:'B',n:23,marks:3,type:'calc',q:'A cell image measures 36 mm. The actual cell diameter is 18 μm. Calculate the magnification.',
+ bullets:[
+   'Convert image size: 36 mm = 36,000 μm.',
+   'Magnification = image size ÷ actual size = 36,000 ÷ 18.',
+   'Answer = ×2000'
+ ]},
+{s:'B',n:24,marks:3,type:'short',q:'A Student\'s t-test produced p = 0.008. Explain the meaning of this result.',
+ bullets:[
+   'The p-value is less than 0.05.',
+   'The difference between the groups is statistically significant.',
+   'Reject the null hypothesis because the observed difference is unlikely to have occurred by chance.'
+ ]},
+{s:'B',n:25,marks:3,type:'calc',q:'A pigment travelled 5.2 cm. The solvent front travelled 8.0 cm. Calculate the Rf value.',
+ bullets:[
+   'Rf = distance travelled by pigment ÷ distance travelled by solvent = 5.2 ÷ 8.0.',
+   'Answer: Rf = 0.65',
+   'Note: Rf has no units.'
+ ]},
+{s:'B',n:26,marks:4,type:'short',q:'Explain why enzyme activity decreases rapidly above the optimum temperature.',
+ bullets:[
+   'High temperatures increase molecular vibration.',
+   'Hydrogen bonds and ionic bonds maintaining the enzyme\'s tertiary structure are disrupted.',
+   'The active site changes shape.',
+   'The substrate can no longer bind effectively, reducing the rate of enzyme–substrate complex formation.'
+ ]},
+{s:'B',n:27,marks:4,type:'short',q:'Explain why surface area to volume ratio is important in both exchange surfaces and cells.',
+ bullets:[
+   'A large surface area to volume ratio increases the rate of diffusion.',
+   'Exchange surfaces such as alveoli absorb gases more rapidly because of their extensive surface area.',
+   'Small cells have a larger surface area relative to their volume.',
+   'This allows nutrients, gases and wastes to move into and out of cells efficiently.'
+ ]},
+{s:'B',n:28,marks:3,type:'short',q:'Explain why random sampling is essential when using quadrats.',
+ bullets:[
+   'It reduces investigator bias.',
+   'Every location has an equal chance of being selected.',
+   'The sample is more representative of the whole habitat.'
+ ]},
+{s:'B',n:29,marks:4,type:'short',q:'Explain how negative feedback helps maintain body temperature.',
+ bullets:[
+   'Thermoreceptors detect changes in body temperature.',
+   'The hypothalamus compares body temperature with the set point.',
+   'If too high: vasodilation and sweating increase heat loss.',
+   'If too low: vasoconstriction and shivering reduce heat loss and increase heat production, returning temperature towards the set point.'
+ ]},
+{s:'B',n:30,marks:3,type:'short',q:'A graph shows enzyme activity increasing with substrate concentration before reaching a plateau. Explain why the plateau occurs.',
+ bullets:[
+   'All enzyme active sites become occupied.',
+   'The enzyme is saturated.',
+   'Adding more substrate cannot increase the reaction rate because enzyme concentration is now the limiting factor.'
+ ]},
+{s:'B',n:31,marks:3,type:'short',q:'State three rules for producing a biological drawing.',
+ bullets:[
+   'Use sharp pencil lines only.',
+   'Do not shade or sketch.',
+   'Draw straight label lines with a ruler and include a title or magnification where appropriate.'
+ ]},
+{s:'B',n:32,marks:3,type:'short',q:'Explain why potato cylinders lose mass in a concentrated sucrose solution.',
+ bullets:[
+   'The sucrose solution has a lower (more negative) water potential than the potato cells.',
+   'Water moves out of the potato cells by osmosis through partially permeable membranes.',
+   'The loss of water reduces the mass of the potato cylinders.'
+ ]},
+{s:'B',n:33,marks:3,type:'short',q:'State three reasons why control variables must be kept constant.',
+ bullets:[
+   'To ensure only the independent variable affects the dependent variable.',
+   'To improve the validity of the investigation.',
+   'To allow fair comparison between results.'
+ ]},
+{s:'B',n:34,marks:4,type:'short',q:'A student investigates photosynthesis using different coloured filters. Explain why the colour of light affects the rate of photosynthesis.',
+ bullets:[
+   'Different pigments absorb different wavelengths of light.',
+   'Chlorophyll absorbs red and blue light most efficiently.',
+   'Green light is mostly reflected rather than absorbed.',
+   'Therefore, photosynthesis is usually faster under red or blue light than under green light.'
+ ]},
+{s:'B',n:35,marks:3,type:'short',q:'A student obtained one result that was very different from all the others. Explain how this result should be treated.',
+ bullets:[
+   'Check whether an experimental or recording error occurred.',
+   'Repeat the measurement if possible.',
+   'Exclude the result only if there is a scientifically justified reason, and report any exclusion.'
+ ]},
+
+// ---------------- SECTION C — SYNOPTIC EXTENDED RESPONSE ----------------
+{s:'C',n:36,marks:6,type:'long',q:'During vigorous exercise, muscle cells require ATP at a much faster rate. Explain how enzymes are involved in increasing ATP production during exercise.',
+ links:['Topic 1: Biological Molecules','Topic 4: Exchange & Transport','Topic 5: Energy for Biological Processes','Topic 9: Control Systems'],
+ bullets:[
+   'ATP is produced by enzyme-controlled metabolic pathways.',
+   'During exercise, the rate of respiration increases to meet the increased demand for ATP.',
+   'Enzymes lower activation energy, allowing reactions to occur more rapidly.',
+   'Increased oxygen delivery to muscles supports a higher rate of aerobic respiration.',
+   'If oxygen supply becomes insufficient, anaerobic respiration occurs, producing lactate.',
+   'The coordinated action of many enzymes ensures rapid ATP production required for muscle contraction.'
+ ]},
+{s:'C',n:37,marks:6,type:'long',q:'Explain how photosynthesis contributes to both the carbon cycle and ecosystem stability.',
+ links:['Topic 4: Exchange','Topic 5: Photosynthesis','Topic 10: Ecosystems'],
+ bullets:[
+   'Photosynthesis removes carbon dioxide from the atmosphere.',
+   'Plants convert carbon dioxide into organic molecules such as glucose.',
+   'Carbon becomes incorporated into biomass.',
+   'Producers form the base of food chains and food webs.',
+   'Energy captured from sunlight is transferred through trophic levels.',
+   'By providing both energy and organic matter, photosynthesis supports ecosystem stability and regulates atmospheric CO₂ concentrations.'
+ ]},
+{s:'C',n:38,marks:6,type:'long',q:'Discuss how genetic variation contributes to biodiversity.',
+ bullets:[
+   'Genetic variation arises through mutation, meiosis and fertilisation.',
+   'Different alleles produce variation between individuals.',
+   'Natural selection acts on this variation.',
+   'Populations adapt to changing environmental conditions.',
+   'Over long periods, reproductive isolation may result in speciation.',
+   'The formation of new species increases biodiversity and contributes to ecosystem resilience.'
+ ],
+ tip:'Always mention all five core points: mutation, meiosis, fertilisation, natural selection, speciation — examiners mark against this checklist specifically.'},
+{s:'C',n:39,marks:6,type:'long',q:'A student investigated the effect of pH on enzyme activity. Evaluate the investigation and suggest improvements.',
+ bullets:[
+   'Strengths: a range of pH values was tested; the same enzyme concentration was used throughout; pH was controlled using buffer solutions.',
+   'Limitations: results may be affected by human reaction time; temperature fluctuations could influence enzyme activity; insufficient repeats may reduce reliability.',
+   'Improvements: use a thermostatically controlled water bath.',
+   'Repeat each pH several times and calculate the mean.',
+   'Use a colorimeter or data logger to reduce subjective measurements.',
+   'Increase the sample size.'
+ ],
+ tip:'Close with a conclusion line: the investigation shows pH affects enzyme activity, but reliability and accuracy could be improved through greater control and repetition — this earns the final evaluation mark.'},
+{s:'C',n:40,marks:6,type:'long',q:'Explain the importance of membranes in living organisms. (Paper 3 synoptic essay)',
+ bullets:[
+   'The phospholipid bilayer forms selectively permeable barriers regulating movement of substances into/out of cells.',
+   'Membrane proteins allow transport by facilitated diffusion, active transport and co-transport.',
+   'Cell signalling depends on receptor proteins embedded in membranes, detecting hormones and neurotransmitters.',
+   'In mitochondria, membranes contain electron transport chains and ATP synthase for oxidative phosphorylation.',
+   'In chloroplasts, thylakoid membranes contain photosystems, electron carriers and ATP synthase for the light-dependent stage of photosynthesis.',
+   'Membranes therefore play essential roles in transport, energy transfer, cell communication and homeostasis.'
+ ],
+ tip:'Use the 5-step synoptic structure: state the principle → explain the mechanism → give evidence/examples → link to another topic → conclude with overall significance.'}
+];
+
+// ---------- state ----------
+let order = DATA.map((_,i)=>i);
+let pos = 0;
+let currentFilter = 'ALL';
+let flipped = false;
+let progressState = {};
+
+function cardId(i){ const d=DATA[i]; return d.s+d.n; }
+
+function visibleOrder(){
+  if(currentFilter==='ALL') return DATA.map((_,i)=>i);
+  return DATA.map((_,i)=>i).filter(i=>DATA[i].s===currentFilter);
+}
+
+const tabsEl = document.getElementById('tabs');
+const filters = [
+  {key:'ALL',label:'All',range:'40 cards'},
+  {key:'A',label:'Sec A · MCQ',range:'20 cards'},
+  {key:'B',label:'Sec B · Synoptic',range:'15 cards'},
+  {key:'C',label:'Sec C · Extended',range:'5 cards'}
+];
+filters.forEach(f=>{
+  const b=document.createElement('div');
+  b.className='tab'+(f.key===currentFilter?' active':'');
+  b.innerHTML=f.label+'<span class="n">'+f.range+'</span>';
+  b.onclick=()=>{currentFilter=f.key;order=visibleOrder();pos=0;flipped=false;render();
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));b.classList.add('active');};
+  tabsEl.appendChild(b);
+});
+order = visibleOrder();
+
+const cardEl=document.getElementById('card');
+const frontEl=document.getElementById('front');
+const backEl=document.getElementById('back');
+
+function buildFront(d){
+  let html = '<div class="tag-row"><span class="qnum">Q'+d.n+'</span>'+
+    '<span class="sectiontag '+d.s+'">Section '+d.s+'</span>'+
+    '<span class="marks">'+d.marks+' mark'+(d.marks>1?'s':'')+'</span></div>';
+  html += '<div class="qtext">'+d.q.replace(/\n/g,'<br>')+'</div>';
+  if(d.type==='mcq'){
+    const letters=['A','B','C','D'];
+    html += '<div>'+d.opts.map((o,idx)=>'<span class="opt"><b>'+letters[idx]+'.</b>'+o+'</span>').join('')+'</div>';
+  }
+  html += '<div class="hint">tap to reveal answer</div>';
+  return html;
+}
+
+function buildBack(d){
+  let html = '<div class="answer-label">'+(d.type==='mcq'?'Correct answer':'A* model answer')+'</div>';
+  if(d.type==='mcq'){
+    const letters=['A','B','C','D'];
+    const idx=letters.indexOf(d.ans);
+    html += '<div class="mcq-answer">'+d.ans+'. '+d.opts[idx]+'</div>';
+    html += '<div class="reason">'+d.reason+'</div>';
+  } else if(d.type==='calc'){
+    html += d.bullets.map(b=>'<div class="calc-line">'+b+'</div>').join('');
+  } else {
+    if(d.links){
+      html += '<h4>Synoptic links</h4><div class="chips">'+d.links.map(l=>'<span class="chip">'+l+'</span>').join('')+'</div>';
+    }
+    html += '<ul>'+d.bullets.map(b=>'<li>'+b+'</li>').join('')+'</ul>';
+  }
+  if(d.tip){
+    html += '<div class="tip-box"><b>Examiner\'s tip —</b> '+d.tip+'</div>';
+  }
+  return html;
+}
+
+function render(){
+  if(order.length===0){ return; }
+  if(pos>=order.length){ showDone(); return; }
+  document.getElementById('donePanel').classList.remove('show');
+  document.getElementById('card').style.display='block';
+  document.querySelector('.controls').style.display='flex';
+  document.querySelector('.nav-row').style.display='flex';
+
+  const i = order[pos];
+  const d = DATA[i];
+  frontEl.innerHTML = buildFront(d);
+  backEl.innerHTML = buildBack(d);
+  cardEl.classList.toggle('flipped', flipped);
+  document.getElementById('selfTest').classList.toggle('show', flipped);
+
+  document.getElementById('progressLabel').textContent = (pos+1)+' / '+order.length;
+  document.getElementById('progressFill').style.width = (((pos+1)/order.length)*100)+'%';
+
+  updateStats();
+}
+
+function updateStats(){
+  let know=0, review=0, seen=0;
+  order.forEach(i=>{
+    const id=cardId(i);
+    if(progressState[id]==='know'){know++;seen++;}
+    else if(progressState[id]==='review'){review++;seen++;}
+  });
+  document.getElementById('statKnow').textContent=know;
+  document.getElementById('statReview').textContent=review;
+  document.getElementById('statSeen').textContent=seen;
+  document.getElementById('statTotal').textContent=order.length;
+}
+
+function showDone(){
+  document.getElementById('card').style.display='none';
+  document.querySelector('.controls').style.display='none';
+  document.querySelector('.nav-row').style.display='none';
+  document.getElementById('selfTest').classList.remove('show');
+  const dp=document.getElementById('donePanel');
+  dp.classList.add('show');
+  let know=0, review=0;
+  order.forEach(i=>{const id=cardId(i); if(progressState[id]==='know')know++; if(progressState[id]==='review')review++;});
+  document.getElementById('doneSummary').textContent = know+' known, '+review+' flagged for review out of '+order.length+' cards.';
+}
+
+cardEl.addEventListener('click', (e)=>{
+  flipped = !flipped;
+  render();
+});
+
+document.getElementById('btnFlip').onclick = (e)=>{e.stopPropagation();flipped=!flipped;render();};
+document.getElementById('btnNext').onclick = (e)=>{e.stopPropagation();pos++;flipped=false;render();};
+document.getElementById('btnPrev').onclick = (e)=>{e.stopPropagation();pos=Math.max(0,pos-1);flipped=false;render();};
+
+document.getElementById('btnKnow').onclick=(e)=>{
+  e.stopPropagation();
+  const id=cardId(order[pos]);
+  progressState[id]='know';
+  pos++; flipped=false; render();
+};
+document.getElementById('btnReview').onclick=(e)=>{
+  e.stopPropagation();
+  const id=cardId(order[pos]);
+  progressState[id]='review';
+  pos++; flipped=false; render();
+};
+
+document.getElementById('btnShuffle').onclick=(e)=>{
+  e.stopPropagation();
+  for(let i=order.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [order[i],order[j]]=[order[j],order[i]];
+  }
+  pos=0; flipped=false; render();
+};
+document.getElementById('btnReset').onclick=(e)=>{
+  e.stopPropagation();
+  progressState={};
+  order = visibleOrder();
+  pos=0; flipped=false; render();
+};
+document.getElementById('btnRestart').onclick=(e)=>{
+  pos=0; flipped=false; render();
+};
+
+render();
+</script>
+</body>
+</html>
