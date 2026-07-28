@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Mock Paper 2 · A* Flashcards</title>
+<style>
+  :root{
+    --bg:#0b1210;
+    --bg-2:#0f1815;
+    --panel:#141f1b;
+    --panel-2:#1a2622;
+    --line:#25352f;
+    --ink:#e8f2ec;
+    --ink-dim:#9fb5ab;
+    --ink-faint:#5f7a70;
+    --teal:#7fe3b4;
+    --teal-dim:#4d9a78;
+    --amber:#f2b84b;
+    --coral:#f2846b;
+    --violet:#b39ddb;
+    --serif: 'Iowan Old Style','Palatino Linotype','Georgia',serif;
+    --sans: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --mono: 'SF Mono','Menlo',monospace;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;height:100%;overflow-x:hidden;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(127,227,180,0.08), transparent 55%),
+      radial-gradient(ellipse at 90% 110%, rgba(179,157,219,0.06), transparent 50%),
+      var(--bg);
+    min-height:100vh;
+    padding-bottom:40px;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:22px 16px 10px;}
+
+  .slidebar{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:14px;}
+  .slidebar .dot{width:5px;height:5px;border-radius:50%;background:var(--teal-dim);}
+  h1{font-family:var(--serif);font-weight:600;font-size:25px;line-height:1.15;margin:0 0 4px;
+    letter-spacing:.01em;color:var(--ink);}
+  .sub{font-size:12.5px;color:var(--ink-dim);margin-bottom:18px;font-family:var(--sans);}
+  .sub b{color:var(--teal);font-weight:600;}
+
+  .tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+  .tab{flex:1;min-width:0;background:var(--panel);border:1px solid var(--line);color:var(--ink-dim);
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+    padding:9px 6px;border-radius:8px;text-align:center;cursor:pointer;transition:.15s;}
+  .tab.active{background:var(--teal);color:#08130f;border-color:var(--teal);font-weight:700;}
+  .tab .n{display:block;font-size:9px;opacity:.75;margin-top:2px;}
+
+  .progress-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .progress-track{flex:1;height:4px;background:var(--line);border-radius:2px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--teal-dim),var(--teal));
+    border-radius:2px;transition:width .25s;}
+  .progress-label{font-family:var(--mono);font-size:11px;color:var(--ink-faint);white-space:nowrap;}
+
+  .stage{perspective:1600px;margin-bottom:16px;}
+  .card{position:relative;width:100%;min-height:340px;transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.2,.8,.2,1);cursor:pointer;}
+  .card.flipped{transform:rotateY(180deg);}
+  .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;
+    border:1px solid var(--line);padding:22px 20px 18px;display:flex;flex-direction:column;
+    background:var(--panel);box-shadow:0 10px 30px -12px rgba(0,0,0,.5);}
+  .face.back{transform:rotateY(180deg);background:var(--panel-2);overflow-y:auto;max-height:520px;}
+
+  .tag-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+  .qnum{font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:.08em;}
+  .marks{font-family:var(--mono);font-size:10px;color:var(--ink-faint);border:1px solid var(--line);
+    padding:2px 8px;border-radius:20px;}
+  .sectiontag{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+    padding:2px 7px;border-radius:5px;}
+  .sectiontag.A{background:rgba(127,227,180,.12);color:var(--teal);}
+  .sectiontag.B{background:rgba(179,157,219,.14);color:var(--violet);}
+  .sectiontag.C{background:rgba(242,132,107,.14);color:var(--coral);}
+
+  .qtext{font-family:var(--serif);font-size:17px;line-height:1.5;color:var(--ink);flex:1;}
+  .qtext .opt{display:block;margin-top:9px;font-size:14.5px;color:var(--ink-dim);font-family:var(--sans);}
+  .qtext .opt b{color:var(--ink-faint);margin-right:6px;}
+  .hint{margin-top:16px;font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);
+    text-align:center;letter-spacing:.05em;}
+
+  .back .answer-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;
+    letter-spacing:.1em;color:var(--teal);margin-bottom:8px;}
+  .back .mcq-answer{font-family:var(--serif);font-size:18px;color:var(--teal);margin-bottom:6px;}
+  .back ul{margin:0 0 12px;padding-left:18px;}
+  .back li{font-size:14px;line-height:1.5;color:var(--ink);margin-bottom:6px;}
+  .back .reason{font-size:13px;color:var(--ink-dim);line-height:1.45;margin-bottom:4px;}
+  .back table{width:100%;border-collapse:collapse;margin-bottom:10px;font-size:13px;}
+  .back td{border:1px solid var(--line);padding:6px 8px;color:var(--ink);vertical-align:top;}
+  .back td.hd{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--teal);background:rgba(127,227,180,.06);}
+  .tip-box{margin-top:auto;background:rgba(242,184,75,.08);border:1px solid rgba(242,184,75,.25);
+    border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.45;color:#e6c98a;}
+  .tip-box b{color:var(--amber);}
+
+  .controls{display:flex;gap:8px;margin-bottom:10px;}
+  .btn{flex:1;padding:13px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);
+    color:var(--ink);font-family:var(--sans);font-size:13.5px;font-weight:600;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s;}
+  .btn:active{transform:scale(.97);}
+  .btn.ghost{background:transparent;}
+  .nav-row{display:flex;gap:8px;margin-bottom:8px;}
+  .nav-row .btn{flex:0 0 auto;padding:12px 16px;}
+  .nav-row .btn.wide{flex:1;}
+
+  .self-test{display:none;gap:8px;margin-top:10px;}
+  .self-test.show{display:flex;}
+  .st-btn{flex:1;padding:13px 8px;border-radius:10px;border:1px solid var(--line);
+    font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;}
+  .st-btn.know{background:rgba(127,227,180,.12);color:var(--teal);border-color:rgba(127,227,180,.3);}
+  .st-btn.review{background:rgba(242,132,107,.12);color:var(--coral);border-color:rgba(242,132,107,.3);}
+
+  .stats{display:flex;justify-content:space-between;margin-top:18px;font-family:var(--mono);
+    font-size:10.5px;color:var(--ink-faint);border-top:1px solid var(--line);padding-top:12px;}
+  .stats span b{color:var(--ink);}
+
+  .done-panel{display:none;text-align:center;padding:40px 20px;}
+  .done-panel.show{display:block;}
+  .done-panel h2{font-family:var(--serif);font-size:22px;margin-bottom:6px;color:var(--teal);}
+  .done-panel p{color:var(--ink-dim);font-size:13.5px;margin-bottom:20px;}
+
+  ::-webkit-scrollbar{width:5px;}
+  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="slidebar"><span class="dot"></span> EDEXCEL 9BI0 &middot; PAPER 2 &middot; TOPICS 1&ndash;4 &amp; 8&ndash;10</div>
+  <h1>Full Mock Paper 2 — A* Deck</h1>
+  <div class="sub">40 questions &middot; 90 marks &middot; genetics, evolution, control systems &amp; ecosystems &middot; tap to flip</div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="progress-row">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">1 / 40</div>
+  </div>
+
+  <div class="stage">
+    <div class="card" id="card">
+      <div class="face front" id="front"></div>
+      <div class="face back" id="back"></div>
+    </div>
+  </div>
+
+  <div class="self-test" id="selfTest">
+    <button class="st-btn review" id="btnReview">✕ Review again</button>
+    <button class="st-btn know" id="btnKnow">✓ Knew it</button>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn ghost" id="btnPrev">← Prev</button>
+    <button class="btn wide" id="btnFlip">Flip card</button>
+    <button class="btn ghost" id="btnNext">Next →</button>
+  </div>
+  <div class="controls">
+    <button class="btn ghost" id="btnShuffle">🔀 Shuffle</button>
+    <button class="btn ghost" id="btnReset">↺ Reset progress</button>
+  </div>
+
+  <div class="stats">
+    <span>Known: <b id="statKnow">0</b></span>
+    <span>To review: <b id="statReview">0</b></span>
+    <span>Seen: <b id="statSeen">0</b>/<b id="statTotal">40</b></span>
+  </div>
+
+  <div class="done-panel" id="donePanel">
+    <h2>Deck complete</h2>
+    <p id="doneSummary"></p>
+    <button class="btn" id="btnRestart" style="width:100%;">Go again from the top</button>
+  </div>
+
+</div>
+
+<script>
+const DATA = [
+// ---------------- SECTION A — MULTIPLE CHOICE (1 mark each) ----------------
+{s:'A',n:1,marks:1,type:'mcq',q:'DNA replication is described as semi-conservative because:',
+ opts:['both strands are newly synthesised','each daughter DNA molecule contains one original strand and one newly synthesised strand','DNA replication occurs only during mitosis','only one DNA strand is copied'],
+ ans:'B',
+ reason:'Each new DNA double helix "conserves" one original template strand, paired with one newly made strand — hence semi-conservative.'},
+{s:'A',n:2,marks:1,type:'mcq',q:'Which process produces genetic variation during meiosis?',
+ opts:['Binary fission','Crossing over','Mitosis','Translation'],ans:'B',
+ reason:'Crossing over exchanges DNA between homologous chromosomes in prophase I, creating new allele combinations.'},
+{s:'A',n:3,marks:1,type:'mcq',q:'Which hormone lowers blood glucose concentration?',
+ opts:['Adrenaline','Glucagon','Insulin','Thyroxine'],ans:'C',
+ reason:'Glucagon and adrenaline both raise blood glucose; insulin is the only one of the four that lowers it.'},
+{s:'A',n:4,marks:1,type:'mcq',q:'Natural selection occurs because:',
+ opts:['organisms choose beneficial mutations','all individuals survive equally well','individuals with advantageous alleles leave more offspring','mutations always improve survival'],
+ ans:'C',
+ reason:'Selection acts on differential reproductive success, not conscious choice — mutations are random, not directed.'},
+{s:'A',n:5,marks:1,type:'mcq',q:'Which structure detects changes in blood carbon dioxide concentration?',
+ opts:['Pacinian corpuscles','Chemoreceptors','Rod cells','Muscle spindles'],ans:'B',
+ reason:'Chemoreceptors (e.g. in the medulla and carotid bodies) monitor blood CO₂/pH.'},
+{s:'A',n:6,marks:1,type:'mcq',q:'Which process returns carbon dioxide to the atmosphere?',
+ opts:['Photosynthesis','Respiration','Nitrogen fixation','Translocation'],ans:'B',
+ reason:'Photosynthesis removes CO₂; respiration (and decomposition) releases it back.'},
+{s:'A',n:7,marks:1,type:'mcq',q:'Which statement about succession is correct?',
+ opts:['Primary succession begins where soil is already present.','Secondary succession begins on newly formed volcanic rock.','Primary succession begins on bare surfaces without soil.','Succession always ends after grasses become established.'],
+ ans:'C',
+ reason:'Primary succession starts on lifeless substrate (e.g. bare rock); secondary succession starts where soil already exists but vegetation was cleared.'},
+{s:'A',n:8,marks:1,type:'mcq',q:'Which type of receptor detects light?',
+ opts:['Thermoreceptor','Mechanoreceptor','Photoreceptor','Chemoreceptor'],ans:'C',
+ reason:'Rods and cones are photoreceptors, specific to light stimuli.'},
+{s:'A',n:9,marks:1,type:'mcq',q:'A mutation is best defined as:',
+ opts:['any change in phenotype','a permanent change in the DNA base sequence','chromosome movement during meiosis','protein synthesis'],
+ ans:'B',
+ reason:'Phenotype can change without a DNA change (e.g. environment) — the defining feature of mutation is a change at the DNA base-sequence level.'},
+{s:'A',n:10,marks:1,type:'mcq',q:'Which ecological relationship benefits both species?',
+ opts:['Competition','Predation','Mutualism','Parasitism'],ans:'C',
+ reason:'Mutualism is a +/+ interaction; predation and parasitism benefit one species at the other\'s expense, competition is -/-.'},
+{s:'A',n:11,marks:1,type:'mcq',q:'Which part of the brain coordinates balance and posture?',
+ opts:['Cerebrum','Medulla oblongata','Cerebellum','Hypothalamus'],ans:'C',
+ reason:'The medulla controls involuntary functions like heart rate/breathing; the cerebellum specifically coordinates balance and fine motor control.'},
+{s:'A',n:12,marks:1,type:'mcq',q:'Which process increases genetic variation?',
+ opts:['Fertilisation','Binary fission','Mitosis','Budding'],ans:'A',
+ reason:'Fertilisation randomly combines two genetically different gametes; the other three are asexual/clonal processes.'},
+{s:'A',n:13,marks:1,type:'mcq',q:'Which hormone is secreted by the adrenal medulla?',
+ opts:['Insulin','Adrenaline','Oestrogen','ADH'],ans:'B',
+ reason:'The adrenal medulla secretes adrenaline as part of the fight-or-flight response.'},
+{s:'A',n:14,marks:1,type:'mcq',q:'Biodiversity can be measured using:',
+ opts:['Benedict\'s test','Simpson\'s Index of Diversity','Lincoln Index only','Chi-squared test only'],ans:'B',
+ reason:'Simpson\'s Index combines species richness and evenness into a single diversity measure.'},
+{s:'A',n:15,marks:1,type:'mcq',q:'Which event occurs during an action potential?',
+ opts:['Sodium channels remain permanently closed.','Voltage-gated sodium channels open, allowing sodium ions to enter the neurone.','Potassium ions enter the neurone during depolarisation.','ATP is released into the synapse.'],
+ ans:'B',
+ reason:'Depolarisation is caused by Na⁺ influx through voltage-gated sodium channels; K⁺ efflux causes repolarisation, not entry.'},
+{s:'A',n:16,marks:1,type:'mcq',q:'Which organ secretes glucagon?',
+ opts:['Liver','Pancreas','Pituitary gland','Thyroid gland'],ans:'B',
+ reason:'α cells in the pancreatic islets of Langerhans secrete glucagon; the liver responds to it but does not secrete it.'},
+{s:'A',n:17,marks:1,type:'mcq',q:'A gene pool refers to:',
+ opts:['all genes present in a population','all alleles present in a population','all chromosomes in one individual','all mutations in one generation'],
+ ans:'B',
+ reason:'Precise definition matters: it is the total of all alleles (not just genes) carried by all individuals in a population.'},
+{s:'A',n:18,marks:1,type:'mcq',q:'Which process removes nitrate from soil?',
+ opts:['Nitrification','Nitrogen fixation','Denitrification','Ammonification'],ans:'C',
+ reason:'Denitrifying bacteria convert soil nitrate back to atmospheric N₂, removing it from the soil.'},
+{s:'A',n:19,marks:1,type:'mcq',q:'Homeostasis is the maintenance of:',
+ opts:['constant body temperature only','a stable internal environment despite external changes','blood pressure only','constant oxygen concentration only'],
+ ans:'B',
+ reason:'Homeostasis is the general principle covering temperature, glucose, water potential, pH etc. — not any single variable alone.'},
+{s:'A',n:20,marks:1,type:'mcq',q:'Which structure contains receptors that detect blood osmotic pressure?',
+ opts:['Kidney','Pancreas','Hypothalamus','Adrenal gland'],ans:'C',
+ reason:'Osmoreceptors in the hypothalamus detect changes in blood water potential and trigger ADH release from the pituitary.'},
+
+// ---------------- SECTION B — STRUCTURED SHORT-ANSWER ----------------
+{s:'B',n:21,marks:3,type:'short',q:'Describe the process of semi-conservative DNA replication.',
+ bullets:[
+   'DNA helicase breaks the hydrogen bonds between complementary bases, separating the two strands.',
+   'Each original strand acts as a template for synthesis of a new complementary strand.',
+   'DNA polymerase joins free DNA nucleotides together, forming the new strand via phosphodiester bonds.'
+ ]},
+{s:'B',n:22,marks:3,type:'short',q:'State three ways in which meiosis increases genetic variation.',
+ bullets:[
+   'Crossing over between homologous chromosomes during prophase I.',
+   'Independent assortment (random orientation) of homologous pairs during metaphase I.',
+   'Random fertilisation combines genetically different gametes.'
+ ]},
+{s:'B',n:23,marks:2,type:'short',q:'Define the term gene mutation and explain one possible consequence.',
+ bullets:[
+   'Definition: a permanent change in the sequence of DNA bases within a gene.',
+   'Consequence: may alter the amino acid sequence of a protein, changing its structure and function.'
+ ]},
+{s:'B',n:24,marks:4,type:'short',q:'Explain how natural selection can lead to evolution.',
+ bullets:[
+   'Mutations produce genetic variation within a population.',
+   'Some individuals possess advantageous alleles.',
+   'These individuals are more likely to survive and reproduce.',
+   'Beneficial alleles are passed to offspring and become more common over generations — evolution.'
+ ]},
+{s:'B',n:25,marks:3,type:'short',q:'Explain why DNA sequencing is often more reliable than comparing physical characteristics when classifying organisms.',
+ bullets:[
+   'DNA provides direct evidence of genetic similarity.',
+   'Physical characteristics may evolve independently due to similar environmental pressures (convergent evolution).',
+   'DNA comparisons are less affected by environment, so give more reliable evolutionary evidence.'
+ ]},
+{s:'B',n:26,marks:3,type:'table',q:'State the three types of neurone and give the function of each.',
+ rows:[['Sensory neurone','Carries impulses from receptors to the CNS'],
+       ['Relay neurone','Transmits impulses within the CNS'],
+       ['Motor neurone','Carries impulses from the CNS to effectors']]},
+{s:'B',n:27,marks:4,type:'short',q:'Explain how a nerve impulse passes across a cholinergic synapse.',
+ bullets:[
+   'An action potential reaches the presynaptic membrane.',
+   'Voltage-gated calcium channels open and Ca²⁺ enters the presynaptic neurone.',
+   'Synaptic vesicles fuse with the presynaptic membrane and release acetylcholine by exocytosis.',
+   'Acetylcholine diffuses across the cleft, binds to receptors on the postsynaptic membrane, and initiates a new action potential if threshold is reached.'
+ ]},
+{s:'B',n:28,marks:3,type:'short',q:'Explain how insulin lowers blood glucose concentration.',
+ bullets:[
+   'Increases glucose uptake by muscle and adipose cells.',
+   'Stimulates conversion of glucose into glycogen in liver and muscle cells (glycogenesis).',
+   'Inhibits the breakdown of glycogen to glucose.'
+ ]},
+{s:'B',n:29,marks:3,type:'short',q:'State three reasons why maintaining biodiversity is important.',
+ bullets:[
+   'Conserves genetic resources for future use.',
+   'Maintains stable ecosystems and food webs.',
+   'Provides economic benefits such as medicines, agriculture and tourism.'
+ ]},
+{s:'B',n:30,marks:3,type:'short',q:'Describe three processes involved in the carbon cycle.',
+ bullets:[
+   'Photosynthesis removes carbon dioxide from the atmosphere.',
+   'Respiration releases carbon dioxide back into the atmosphere.',
+   'Decomposition releases carbon dioxide as microorganisms break down organic matter.'
+ ]},
+{s:'B',n:31,marks:3,type:'short',q:'Explain the role of nitrifying bacteria.',
+ bullets:[
+   'Oxidise ammonium ions to nitrite ions.',
+   'Oxidise nitrite ions to nitrate ions.',
+   'Nitrate ions can then be absorbed by plant roots.'
+ ]},
+{s:'B',n:32,marks:3,type:'short',q:'Explain why quadrats should be placed randomly.',
+ bullets:[
+   'Random placement reduces investigator bias.',
+   'Every location has an equal chance of being sampled.',
+   'The sample is more representative of the habitat.'
+ ]},
+{s:'B',n:33,marks:2,type:'short',q:'State the function of ADH.',
+ bullets:[
+   'Increases the permeability of the collecting ducts to water.',
+   'More water is reabsorbed into the blood, producing a smaller volume of more concentrated urine.'
+ ]},
+{s:'B',n:34,marks:4,type:'short',q:'A scientist compares plant growth under two light intensities. A Student\'s t-test gives p = 0.21. Explain what this result means.',
+ bullets:[
+   'The p-value is greater than 0.05.',
+   'The difference between the means is not statistically significant.',
+   'The null hypothesis should not be rejected.',
+   'Any observed difference is likely to have occurred by chance.'
+ ]},
+{s:'B',n:35,marks:5,type:'short',q:'A student investigates the effect of soil pH on seed germination. Identify the IV, DV and three control variables.',
+ bullets:[
+   'IV: soil pH.',
+   'DV: percentage germination (or number of seeds germinated).',
+   'Control variables (any 3): plant species, number of seeds, temperature, light intensity, water volume, duration, soil type (other than pH).'
+ ]},
+
+// ---------------- SECTION C — EXTENDED RESPONSE ----------------
+{s:'C',n:36,marks:6,type:'long',q:'Explain how mutation and natural selection lead to the evolution of a population.',
+ bullets:[
+   'Mutations are random, permanent changes in the DNA base sequence that create new alleles.',
+   'Most mutations are neutral or harmful, but some are advantageous.',
+   'Individuals with advantageous alleles have a greater chance of surviving and reproducing.',
+   'These individuals pass the advantageous alleles to their offspring.',
+   'Over many generations, the frequency of advantageous alleles increases within the population.',
+   'This change in allele frequency over time is evolution by natural selection.'
+ ],
+ tip:'Never say organisms "mutate because they need to adapt." Mutations occur randomly, not in response to environmental need.'},
+{s:'C',n:37,marks:6,type:'table',q:'Compare the nervous system with the endocrine (hormonal) system.',
+ rows:[['Signal type','Electrical impulses vs. chemical hormones'],
+       ['Transmission route','Along neurones vs. in the bloodstream'],
+       ['Speed of response','Very rapid vs. slower'],
+       ['Duration of effect','Short-lasting vs. longer-lasting'],
+       ['Target','Specific effectors vs. many organs with matching receptors'],
+       ['Typical use','Rapid changes (reflexes) vs. long-term regulation (growth, metabolism)']],
+ tip:'Close with a one-line conclusion: both systems coordinate body functions and maintain homeostasis, but differ in speed, duration and method of communication — this earns the final "compare" mark.'},
+{s:'C',n:38,marks:6,type:'long',q:'Discuss the importance of conserving biodiversity.',
+ bullets:[
+   'Biodiversity maintains stable and resilient ecosystems.',
+   'High biodiversity increases the stability of food webs and nutrient cycles.',
+   'Genetic diversity provides a source of alleles for adaptation to changing environments.',
+   'Many medicines are derived from naturally occurring organisms.',
+   'Biodiversity supports agriculture through crop improvement and pollination.',
+   'Conservation protects ecosystems for future generations and reduces extinction risk.'
+ ],
+ tip:'For full marks, cover ecological, genetic, economic AND ethical reasons — a one-dimensional answer caps the mark.'},
+{s:'C',n:39,marks:6,type:'long',q:'Explain how blood glucose concentration is regulated by negative feedback.',
+ bullets:[
+   'After a meal, blood glucose concentration rises.',
+   'The pancreas detects the increase and β cells release insulin.',
+   'Insulin stimulates uptake of glucose by body cells.',
+   'It also stimulates conversion of glucose to glycogen in the liver and muscles.',
+   'Blood glucose concentration falls back towards normal.',
+   'If glucose becomes too low, α cells release glucagon, stimulating glycogen breakdown and glucose release — restoring normal concentration (negative feedback: the response reverses the original change).'
+ ],
+ tip:'Explicitly name the mechanism as "negative feedback" and explain why (the response reverses the original change) — this is a common lost mark.'},
+{s:'C',n:40,marks:6,type:'long',q:'Explain how interactions between organisms contribute to the stability of ecosystems. (Synoptic essay)',
+ bullets:[
+   'Organisms interact through feeding relationships, competition, mutualism, predation and decomposition.',
+   'Producers capture light energy and form the base of food chains.',
+   'Consumers transfer energy through feeding; decomposers recycle nutrients back into the environment.',
+   'Predation regulates population sizes, preventing overpopulation of prey species.',
+   'Competition limits resource use, while mutualism (e.g. pollination) increases reproductive success.',
+   'Together these interactions maintain nutrient cycling, energy flow and balanced population sizes, contributing to long-term ecosystem stability.'
+ ],
+ tip:'Synoptic essays reward breadth — touch feeding relationships, nutrient cycling AND population regulation, not just one strand.'}
+];
+
+// ---------- state ----------
+let order = DATA.map((_,i)=>i);
+let pos = 0;
+let currentFilter = 'ALL';
+let flipped = false;
+let progressState = {};
+
+function cardId(i){ const d=DATA[i]; return d.s+d.n; }
+
+function visibleOrder(){
+  if(currentFilter==='ALL') return DATA.map((_,i)=>i);
+  return DATA.map((_,i)=>i).filter(i=>DATA[i].s===currentFilter);
+}
+
+const tabsEl = document.getElementById('tabs');
+const filters = [
+  {key:'ALL',label:'All',range:'40 cards'},
+  {key:'A',label:'Sec A · MCQ',range:'20 cards'},
+  {key:'B',label:'Sec B · Short',range:'15 cards'},
+  {key:'C',label:'Sec C · Extended',range:'5 cards'}
+];
+filters.forEach(f=>{
+  const b=document.createElement('div');
+  b.className='tab'+(f.key===currentFilter?' active':'');
+  b.innerHTML=f.label+'<span class="n">'+f.range+'</span>';
+  b.onclick=()=>{currentFilter=f.key;order=visibleOrder();pos=0;flipped=false;render();
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));b.classList.add('active');};
+  tabsEl.appendChild(b);
+});
+order = visibleOrder();
+
+const cardEl=document.getElementById('card');
+const frontEl=document.getElementById('front');
+const backEl=document.getElementById('back');
+
+function buildFront(d){
+  let html = '<div class="tag-row"><span class="qnum">Q'+d.n+'</span>'+
+    '<span class="sectiontag '+d.s+'">Section '+d.s+'</span>'+
+    '<span class="marks">'+d.marks+' mark'+(d.marks>1?'s':'')+'</span></div>';
+  html += '<div class="qtext">'+d.q.replace(/\n/g,'<br>')+'</div>';
+  if(d.type==='mcq'){
+    const letters=['A','B','C','D'];
+    html += '<div>'+d.opts.map((o,idx)=>'<span class="opt"><b>'+letters[idx]+'.</b>'+o+'</span>').join('')+'</div>';
+  }
+  html += '<div class="hint">tap to reveal answer</div>';
+  return html;
+}
+
+function buildBack(d){
+  let html = '<div class="answer-label">'+(d.type==='mcq'?'Correct answer':'A* model answer')+'</div>';
+  if(d.type==='mcq'){
+    const letters=['A','B','C','D'];
+    const idx=letters.indexOf(d.ans);
+    html += '<div class="mcq-answer">'+d.ans+'. '+d.opts[idx]+'</div>';
+    html += '<div class="reason">'+d.reason+'</div>';
+  } else if(d.type==='table'){
+    html += '<table>'+d.rows.map(r=>'<tr><td class="hd">'+r[0]+'</td><td>'+r[1]+'</td></tr>').join('')+'</table>';
+  } else {
+    html += '<ul>'+d.bullets.map(b=>'<li>'+b+'</li>').join('')+'</ul>';
+  }
+  if(d.tip){
+    html += '<div class="tip-box"><b>Examiner\'s tip —</b> '+d.tip+'</div>';
+  }
+  return html;
+}
+
+function render(){
+  if(order.length===0){ return; }
+  if(pos>=order.length){ showDone(); return; }
+  document.getElementById('donePanel').classList.remove('show');
+  document.getElementById('card').style.display='block';
+  document.querySelector('.controls').style.display='flex';
+  document.querySelector('.nav-row').style.display='flex';
+
+  const i = order[pos];
+  const d = DATA[i];
+  frontEl.innerHTML = buildFront(d);
+  backEl.innerHTML = buildBack(d);
+  cardEl.classList.toggle('flipped', flipped);
+  document.getElementById('selfTest').classList.toggle('show', flipped);
+
+  document.getElementById('progressLabel').textContent = (pos+1)+' / '+order.length;
+  document.getElementById('progressFill').style.width = (((pos+1)/order.length)*100)+'%';
+
+  updateStats();
+}
+
+function updateStats(){
+  let know=0, review=0, seen=0;
+  order.forEach(i=>{
+    const id=cardId(i);
+    if(progressState[id]==='know'){know++;seen++;}
+    else if(progressState[id]==='review'){review++;seen++;}
+  });
+  document.getElementById('statKnow').textContent=know;
+  document.getElementById('statReview').textContent=review;
+  document.getElementById('statSeen').textContent=seen;
+  document.getElementById('statTotal').textContent=order.length;
+}
+
+function showDone(){
+  document.getElementById('card').style.display='none';
+  document.querySelector('.controls').style.display='none';
+  document.querySelector('.nav-row').style.display='none';
+  document.getElementById('selfTest').classList.remove('show');
+  const dp=document.getElementById('donePanel');
+  dp.classList.add('show');
+  let know=0, review=0;
+  order.forEach(i=>{const id=cardId(i); if(progressState[id]==='know')know++; if(progressState[id]==='review')review++;});
+  document.getElementById('doneSummary').textContent = know+' known, '+review+' flagged for review out of '+order.length+' cards.';
+}
+
+cardEl.addEventListener('click', (e)=>{
+  flipped = !flipped;
+  render();
+});
+
+document.getElementById('btnFlip').onclick = (e)=>{e.stopPropagation();flipped=!flipped;render();};
+document.getElementById('btnNext').onclick = (e)=>{e.stopPropagation();pos++;flipped=false;render();};
+document.getElementById('btnPrev').onclick = (e)=>{e.stopPropagation();pos=Math.max(0,pos-1);flipped=false;render();};
+
+document.getElementById('btnKnow').onclick=(e)=>{
+  e.stopPropagation();
+  const id=cardId(order[pos]);
+  progressState[id]='know';
+  pos++; flipped=false; render();
+};
+document.getElementById('btnReview').onclick=(e)=>{
+  e.stopPropagation();
+  const id=cardId(order[pos]);
+  progressState[id]='review';
+  pos++; flipped=false; render();
+};
+
+document.getElementById('btnShuffle').onclick=(e)=>{
+  e.stopPropagation();
+  for(let i=order.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [order[i],order[j]]=[order[j],order[i]];
+  }
+  pos=0; flipped=false; render();
+};
+document.getElementById('btnReset').onclick=(e)=>{
+  e.stopPropagation();
+  progressState={};
+  order = visibleOrder();
+  pos=0; flipped=false; render();
+};
+document.getElementById('btnRestart').onclick=(e)=>{
+  pos=0; flipped=false; render();
+};
+
+render();
+</script>
+</body>
+</html>
