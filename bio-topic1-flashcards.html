@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A Level Biology — Topic 1: Biological Molecules</title>
+<style>
+  :root{
+    --bg:#0f1416;
+    --panel:#171f22;
+    --panel-2:#1d272b;
+    --border:#2a373c;
+    --text:#e8eef0;
+    --muted:#8fa3a9;
+    --accent:#4fd1a5;
+    --accent-dim:#2a6b56;
+    --trap:#e8a23d;
+    --trap-bg:#3a2c15;
+    --know:#4fd1a5;
+    --review:#e8626a;
+    --card-front:#1a2327;
+    --card-back:#16232a;
+    font-size:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  header{
+    padding:22px 16px 14px;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, #131b1e 0%, var(--bg) 100%);
+  }
+  header h1{
+    margin:0 0 4px;
+    font-size:1.35rem;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  header p{
+    margin:0;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+  .deck-stats{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    margin-top:12px;
+    font-size:0.78rem;
+    color:var(--muted);
+  }
+  .deck-stats b{color:var(--accent);font-size:0.95rem;}
+
+  nav.tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:6px;
+    padding:12px 12px 8px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    flex:0 0 auto;
+    background:var(--panel);
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 13px;
+    border-radius:20px;
+    font-size:0.78rem;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .tab-btn .count{
+    display:inline-block;
+    margin-left:6px;
+    font-size:0.68rem;
+    color:var(--accent);
+    opacity:0.85;
+  }
+  .tab-btn.active{
+    background:var(--accent-dim);
+    border-color:var(--accent);
+    color:#eafff6;
+  }
+
+  .progress-wrap{
+    padding:0 16px 4px;
+  }
+  .progress-bar{
+    height:6px;
+    background:var(--panel);
+    border-radius:4px;
+    overflow:hidden;
+    border:1px solid var(--border);
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--accent-dim), var(--accent));
+    transition:width .3s ease;
+  }
+  .progress-label{
+    font-size:0.72rem;
+    color:var(--muted);
+    margin-top:4px;
+    display:flex;
+    justify-content:space-between;
+  }
+
+  main{
+    max-width:640px;
+    margin:0 auto;
+    padding:14px 16px 8px;
+  }
+
+  .card{
+    position:relative;
+    background:var(--card-front);
+    border:1px solid var(--border);
+    border-radius:14px;
+    margin-bottom:14px;
+    min-height:150px;
+    cursor:pointer;
+    transition:border-color .2s ease, transform .12s ease;
+    overflow:hidden;
+  }
+  .card:active{transform:scale(0.99);}
+  .card.flipped{background:var(--card-back);border-color:var(--accent-dim);}
+  .card.known{border-color:var(--know);}
+  .card.review{border-color:var(--review);}
+
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:12px 16px 0;
+  }
+  .card-id{
+    font-size:0.68rem;
+    color:var(--muted);
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+  }
+  .status-chip{
+    font-size:0.65rem;
+    padding:2px 8px;
+    border-radius:10px;
+    background:var(--panel-2);
+    color:var(--muted);
+  }
+  .status-chip.known{background:rgba(79,209,165,0.15);color:var(--know);}
+  .status-chip.review{background:rgba(232,98,106,0.15);color:var(--review);}
+
+  .trap-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-size:0.68rem;
+    color:var(--trap);
+    background:var(--trap-bg);
+    padding:2px 8px;
+    border-radius:10px;
+    margin:8px 16px 0;
+    width:fit-content;
+    font-weight:600;
+  }
+
+  .card-body{
+    padding:10px 16px 16px;
+    font-size:0.95rem;
+    line-height:1.5;
+  }
+  .card-body.answer{
+    color:#cfe8de;
+  }
+  .card-body .label{
+    display:block;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .hint{
+    text-align:center;
+    font-size:0.72rem;
+    color:var(--muted);
+    padding:0 16px 12px;
+  }
+
+  .self-test{
+    display:flex;
+    gap:8px;
+    padding:0 16px 16px;
+  }
+  .st-btn{
+    flex:1;
+    padding:9px 0;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    color:var(--text);
+    font-size:0.82rem;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .st-btn.know-btn{color:var(--know);border-color:var(--accent-dim);}
+  .st-btn.review-btn{color:var(--review);border-color:#5a2c30;}
+  .st-btn:active{opacity:0.7;}
+
+  footer{
+    max-width:640px;
+    margin:10px auto 0;
+    padding:10px 16px 30px;
+    text-align:center;
+  }
+  .reset-btn{
+    background:none;
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 16px;
+    border-radius:10px;
+    font-size:0.75rem;
+    cursor:pointer;
+  }
+
+  .section-note{
+    font-size:0.78rem;
+    color:var(--muted);
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 14px;
+    margin-bottom:14px;
+    line-height:1.5;
+  }
+  .section-note b{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Topic 1 — Biological Molecules</h1>
+  <p>Edexcel Biology B (9BI0) · Spec points 1.1–1.7</p>
+  <div class="deck-stats">
+    <div><b id="statTotal">0</b> cards</div>
+    <div><b id="statKnown">0</b> known</div>
+    <div><b id="statReview">0</b> to review</div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabBar"></nav>
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-label"><span id="progressText">0 / 0 known in this tab</span><span id="tabTitle"></span></div>
+</div>
+
+<main id="cardContainer"></main>
+
+<footer>
+  <button class="reset-btn" onclick="resetProgress()">Reset all progress</button>
+</footer>
+
+<script>
+/* ---------------------------------------------------------
+   DATA: 84 cards across 7 subtopics, 1.1–1.7
+   trap:true marks a card built around a common exam misconception
+--------------------------------------------------------- */
+const DECK = [
+
+// ===================== 1.1 CARBOHYDRATES =====================
+{t:"1.1", id:"1.1-01", front:"Define monosaccharide, disaccharide and polysaccharide.", back:"Monosaccharide: a single sugar unit (e.g. glucose, fructose, ribose). Disaccharide: two monosaccharides joined by a glycosidic bond (e.g. maltose, sucrose, lactose). Polysaccharide: many monosaccharides joined together (e.g. starch, glycogen, cellulose)."},
+{t:"1.1", id:"1.1-02", front:"Where does the –OH group sit on carbon 1 in α-glucose?", back:"In α-glucose, the OH on carbon 1 points DOWN (below the plane of the ring). This is the isomer used to build starch and glycogen."},
+{t:"1.1", id:"1.1-03", front:"Where does the –OH group sit on carbon 1 in β-glucose?", back:"In β-glucose, the OH on carbon 1 points UP (above the plane of the ring). This is the isomer used to build cellulose."},
+{t:"1.1", id:"1.1-04", front:"Give two structural differences between ribose and glucose.", back:"1) Ribose is a pentose (5-carbon sugar); glucose is a hexose (6-carbon sugar). 2) Ribose forms a 5-membered ring; glucose forms a 6-membered ring."},
+{t:"1.1", id:"1.1-05", front:"How are two monosaccharides joined to form a disaccharide?", back:"By a condensation reaction: an –OH group on one monosaccharide reacts with an –OH group on another, releasing a water molecule and forming a glycosidic bond."},
+{t:"1.1", id:"1.1-06", front:"How is a disaccharide broken down into its monosaccharides?", back:"By hydrolysis: a water molecule is added across the glycosidic bond, splitting it and regenerating the two free –OH groups."},
+{t:"1.1", id:"1.1-07", front:"Describe the structure of starch and explain how it relates to its function.", back:"Starch = amylose (unbranched, coiled/helical chain of α-glucose, 1,4-glycosidic bonds) + amylopectin (branched, 1,4 and 1,6-glycosidic bonds). Compact and insoluble → doesn't affect water potential of the cell; branching in amylopectin gives many terminal ends for rapid hydrolysis when energy is needed. Good storage molecule in plants."},
+{t:"1.1", id:"1.1-08", front:"Describe the structure of glycogen and explain how it relates to its function.", back:"Glycogen is made of α-glucose, highly branched (more branches than amylopectin) with 1,4 and 1,6-glycosidic bonds. Compact for storage in animal liver/muscle cells; the high degree of branching gives many terminal ends, allowing very rapid hydrolysis to release glucose quickly when energy demand rises."},
+{t:"1.1", id:"1.1-09", front:"Describe the structure of cellulose and explain how it relates to its function in plant cell walls.", back:"Cellulose is made of β-glucose monomers joined by 1,4-glycosidic bonds, forming long straight (unbranched) chains. Alternate glucose units are rotated 180°, allowing many hydrogen bonds to form between adjacent parallel chains, bundling them into strong microfibrils. This gives cellulose high tensile strength, supporting the plant cell wall."},
+{t:"1.1", id:"1.1-10", front:"How would you test whether a sugar is a reducing sugar?", back:"Add Benedict's reagent (blue) and heat. A reducing sugar (all monosaccharides + maltose/lactose) produces a red/brick precipitate. A non-reducing sugar (e.g. sucrose) stays blue unless first hydrolysed with acid, then neutralised, before repeating the test."},
+{t:"1.1", id:"1.1-11", front:"⚠ EXAMINER TRAP: What's the most common mistake with α- vs β-glucose in exam answers?", back:"Students state 'glucose forms cellulose/starch' without specifying WHICH isomer. Always name α-glucose for starch/glycogen and β-glucose for cellulose — mixing these up is one of the most heavily penalised errors in Topic 1.", trap:true},
+{t:"1.1", id:"1.1-12", front:"⚠ EXAMINER TRAP: For 'explain how structure relates to function' questions, what must every marking point include?", back:"A structural feature AND the functional consequence, linked by 'so that' / 'this means' / 'allowing'. E.g. NOT just 'cellulose has hydrogen bonds' but 'hydrogen bonds cross-link adjacent chains into microfibrils, giving cellulose high tensile strength'.", trap:true},
+
+// ===================== 1.2 LIPIDS =====================
+{t:"1.2", id:"1.2-01", front:"Describe how a triglyceride is synthesised.", back:"One glycerol molecule reacts with three fatty acid molecules. Each reaction is a condensation reaction between a –OH group on glycerol and the –COOH group of a fatty acid, forming an ester bond and releasing water. Three ester bonds form in total."},
+{t:"1.2", id:"1.2-02", front:"What structurally distinguishes a saturated from an unsaturated fatty acid?", back:"Saturated: no C=C double bonds in the hydrocarbon tail — a straight chain. Unsaturated: contains one or more C=C double bonds, which creates a 'kink' in the chain."},
+{t:"1.2", id:"1.2-03", front:"Why do unsaturated lipids generally have lower melting points than saturated lipids?", back:"The C=C double bond kinks the fatty acid chain, so unsaturated molecules can't pack as closely together as straight saturated chains. This reduces the strength of intermolecular (van der Waals) forces between chains, lowering the melting point."},
+{t:"1.2", id:"1.2-04", front:"Describe the structure of a phospholipid.", back:"A phospholipid has a hydrophilic 'head' (a phosphate group replacing one fatty acid on glycerol) and two hydrophobic 'tails' (fatty acid chains). This gives the molecule both water-attracting and water-repelling regions."},
+{t:"1.2", id:"1.2-05", front:"Explain why phospholipids arrange into a bilayer in water.", back:"The hydrophilic phosphate heads orientate towards the aqueous environment (inside and outside the cell) while the hydrophobic fatty acid tails face each other, away from water — minimising contact between the tails and water. This forms the fluid mosaic cell surface membrane."},
+{t:"1.2", id:"1.2-06", front:"Why are lipids a good energy storage molecule compared to carbohydrates?", back:"Lipids contain proportionally more carbon–hydrogen bonds than carbohydrates and are non-polar/insoluble, so they don't cause osmotic problems and yield more energy per gram when oxidised. They also have very low water content compared with carbohydrate stores like glycogen, so they're more efficient for storage mass."},
+{t:"1.2", id:"1.2-07", front:"Give two other biological roles of lipids besides energy storage.", back:"Waterproofing (e.g. waxy cuticle on leaves, sebum on skin) and thermal insulation (e.g. subcutaneous adipose fat reduces heat loss)."},
+{t:"1.2", id:"1.2-08", front:"⚠ EXAMINER TRAP: Which type of bond joins glycerol to fatty acids, and how is this different from carbohydrate bonding?", back:"An ESTER bond (not a glycosidic bond — glycosidic bonds only join sugar monomers). Mixing up 'ester' and 'glycosidic' is a very common cross-topic slip when a paper mixes lipid and carbohydrate content in the same question.", trap:true},
+{t:"1.2", id:"1.2-09", front:"⚠ EXAMINER TRAP: A student says 'unsaturated fats have double bonds so they melt at lower temperatures.' What's missing for full marks?", back:"The mechanism. Full marks need: double bond → kink in chain → molecules pack less closely → weaker intermolecular forces between chains → less energy needed to separate them → lower melting point. Stating the double bond alone without the packing/force explanation loses marks.", trap:true},
+
+// ===================== 1.3 PROTEINS =====================
+{t:"1.3", id:"1.3-01", front:"Describe the general structure of an amino acid.", back:"A central carbon atom bonded to: an amine group (–NH2), a carboxyl group (–COOH), a hydrogen atom, and a variable R group (side chain) that differs between the 20 amino acids."},
+{t:"1.3", id:"1.3-02", front:"How is a peptide bond formed?", back:"By a condensation reaction between the carboxyl group (–COOH) of one amino acid and the amine group (–NH2) of another, releasing a water molecule."},
+{t:"1.3", id:"1.3-03", front:"What is the primary structure of a protein?", back:"The specific sequence of amino acids joined by peptide bonds in a polypeptide chain. This sequence, determined by the gene, ultimately dictates all higher levels of structure."},
+{t:"1.3", id:"1.3-04", front:"What is the secondary structure of a protein, and what bonds hold it together?", back:"Regions of the polypeptide chain folding into an α-helix or β-pleated sheet, held together ONLY by hydrogen bonds between the C=O and N–H groups of the peptide backbone."},
+{t:"1.3", id:"1.3-05", front:"What is the tertiary structure of a protein, and what bonds hold it together?", back:"The overall 3D folding of a single polypeptide chain, determined by interactions between R groups: hydrogen bonds, ionic bonds (between charged R groups), disulfide bonds (covalent, between two cysteine R groups) and hydrophobic/hydrophilic interactions."},
+{t:"1.3", id:"1.3-06", front:"What is the quaternary structure of a protein? Give an example.", back:"The arrangement of two or more polypeptide chains (and any non-protein/prosthetic groups) together to form a functional protein. Example: haemoglobin, made of four polypeptide chains plus four haem groups."},
+{t:"1.3", id:"1.3-07", front:"Distinguish fibrous and globular proteins.", back:"Fibrous: long, insoluble, structural proteins (e.g. collagen) — regular, repetitive structure. Globular: compact, roughly spherical, generally soluble, functional proteins (e.g. enzymes, haemoglobin) — folded to expose hydrophilic R groups on the surface."},
+{t:"1.3", id:"1.3-08", front:"Describe how the structure of collagen relates to its function.", back:"Three polypeptide chains wind together into a triple helix, held by hydrogen bonds. Many collagen triple helices are cross-linked (covalent bonds) into fibres. This gives collagen very high tensile strength, suiting its role as a structural protein in tendons, skin and connective tissue."},
+{t:"1.3", id:"1.3-09", front:"Describe how the structure of haemoglobin relates to its function.", back:"Haemoglobin is a globular protein with a quaternary structure of four polypeptide chains, each bound to a haem group containing an Fe²⁺ ion. Each haem group can reversibly bind one oxygen molecule, allowing one haemoglobin molecule to carry up to four O₂ molecules for transport in red blood cells."},
+{t:"1.3", id:"1.3-10", front:"What type of bond is a disulfide bond, and where does it form?", back:"A strong COVALENT bond, formed between the sulfur atoms of two cysteine R groups. It significantly stabilises tertiary (and quaternary) structure, and is not broken by the same mild conditions that break hydrogen/ionic bonds."},
+{t:"1.3", id:"1.3-11", front:"Why is a globular protein like an enzyme generally soluble in water?", back:"During folding, hydrophilic R groups are oriented on the outer surface of the molecule (in contact with water) while hydrophobic R groups are folded into the interior, away from water — making the overall molecule water-soluble."},
+{t:"1.3", id:"1.3-12", front:"Explain why a change to the primary structure of a protein can change its properties.", back:"The primary sequence determines which R groups are present and where, which determines the hydrogen, ionic, disulfide and hydrophobic interactions possible during folding. Changing even one amino acid can change the resulting 3D shape (tertiary/quaternary structure), which can alter or destroy the protein's function (e.g. loss of enzyme active site shape, or altered receptor binding)."},
+{t:"1.3", id:"1.3-13", front:"⚠ EXAMINER TRAP: A student writes 'hydrogen bonds hold the protein together' as their whole answer on structure. Why does this lose marks?", back:"It doesn't specify WHICH level of structure. Hydrogen bonds alone = secondary structure. If ionic bonds, disulfide bonds and hydrophobic interactions are also present, that's tertiary structure. Always name the level of structure explicitly, not just 'bonds'.", trap:true},
+{t:"1.3", id:"1.3-14", front:"⚠ EXAMINER TRAP: 'Describe' vs 'Explain' the structure of a protein — what's the difference examiners expect?", back:"'Describe' wants WHAT the structure is (e.g. 'four polypeptide chains, held by hydrogen and ionic bonds'). 'Explain' wants WHY that structure produces a property or function (e.g. 'this compact folding makes it soluble because hydrophilic groups face outward'). Answering a 'describe' question with only function, or an 'explain' question with only description, loses marks.", trap:true},
+
+// ===================== 1.4 DNA & PROTEIN SYNTHESIS =====================
+{t:"1.4", id:"1.4-01", front:"Describe the basic structure of DNA.", back:"A double helix of two antiparallel strands, each a sugar-phosphate backbone (deoxyribose + phosphate, linked by phosphodiester bonds) with nitrogenous bases projecting inwards. Complementary bases on opposite strands pair via hydrogen bonds."},
+{t:"1.4", id:"1.4-02", front:"Name the two purines and two pyrimidines in DNA, and give one structural difference between purines and pyrimidines.", back:"Purines: adenine (A), guanine (G) — double-ring structure. Pyrimidines: cytosine (C), thymine (T) — single-ring structure. A purine always pairs with a pyrimidine to keep the helix width constant."},
+{t:"1.4", id:"1.4-03", front:"State the DNA base-pairing rule and how many hydrogen bonds form in each pair.", back:"Adenine pairs with thymine (A–T) via 2 hydrogen bonds. Cytosine pairs with guanine (C–G) via 3 hydrogen bonds."},
+{t:"1.4", id:"1.4-04", front:"What type of bond links adjacent nucleotides within one DNA strand?", back:"A phosphodiester bond, between the phosphate group of one nucleotide and the deoxyribose sugar of the next, forming the sugar-phosphate backbone."},
+{t:"1.4", id:"1.4-05", front:"What does 'semi-conservative replication' mean?", back:"Each of the two new DNA molecules produced consists of one original (parental) strand and one newly synthesised strand — the genetic information is conserved by using each old strand as a template."},
+{t:"1.4", id:"1.4-06", front:"Describe the role of DNA helicase in replication.", back:"Helicase unwinds the DNA double helix and breaks the hydrogen bonds between complementary base pairs, separating the two strands to expose them as templates."},
+{t:"1.4", id:"1.4-07", front:"Describe the role of DNA polymerase in replication.", back:"DNA polymerase moves along each exposed template strand, adding free complementary nucleotides in sequence (base-pairing rules) and joining them via new phosphodiester bonds to build the new strand."},
+{t:"1.4", id:"1.4-08", front:"Describe the role of DNA ligase in replication.", back:"Ligase joins together fragments of newly synthesised DNA (e.g. Okazaki fragments on the lagging strand) by sealing gaps in the sugar-phosphate backbone with phosphodiester bonds."},
+{t:"1.4", id:"1.4-09", front:"Define a gene.", back:"A sequence of bases on a DNA molecule that codes for the sequence of amino acids in a polypeptide chain."},
+{t:"1.4", id:"1.4-10", front:"Describe the structure of mRNA and how it differs from DNA.", back:"mRNA is a single strand of nucleotides with a sugar-phosphate backbone (ribose, not deoxyribose) and uses uracil (U) instead of thymine (T). It's synthesised as a complementary copy of one DNA strand during transcription."},
+{t:"1.4", id:"1.4-11", front:"Describe the structure of tRNA.", back:"A single strand folded into a clover-leaf shape via internal hydrogen bonding, with an anticodon (a triplet of bases) at one end that pairs with a complementary codon on mRNA, and an amino-acid-binding site at the other end."},
+{t:"1.4", id:"1.4-12", front:"Describe the process of transcription.", back:"Occurs in the nucleus. RNA polymerase binds to DNA and unwinds a section of the double helix. It moves along the antisense (template) strand, using base-pairing rules (with U pairing to A) to synthesise a complementary strand of pre-mRNA/mRNA, which then leaves the nucleus."},
+{t:"1.4", id:"1.4-13", front:"Describe the process of translation.", back:"Occurs at the ribosome. mRNA is read in triplets (codons). Complementary tRNA anticodons bring specific amino acids to the ribosome. Adjacent amino acids are joined by peptide bonds (condensation reactions), building the polypeptide chain in the sequence dictated by the mRNA codons, until a stop codon is reached."},
+{t:"1.4", id:"1.4-14", front:"List four key properties of the genetic code.", back:"1) Triplet — each codon is 3 bases. 2) Degenerate — most amino acids are coded for by more than one codon. 3) Non-overlapping — each base is only read as part of one codon. 4) Universal (with start codons for 'start' and specific stop codons that don't code for an amino acid)."},
+{t:"1.4", id:"1.4-15", front:"Distinguish base substitution, insertion and deletion mutations.", back:"Substitution: one base is replaced by another — may change only one codon/amino acid. Insertion: an extra base is added. Deletion: a base is removed. Insertions and deletions cause a FRAMESHIFT — every codon downstream of the mutation is read differently, usually causing much greater disruption to the protein than a substitution."},
+{t:"1.4", id:"1.4-16", front:"Explain how a point mutation causes sickle cell anaemia.", back:"A single base substitution in the gene for the β-globin chain of haemoglobin changes the codon for glutamic acid to a codon for valine. This changes one amino acid in the primary structure of β-globin, which alters the tertiary/quaternary structure of haemoglobin, causing red blood cells to distort into a sickle shape under low oxygen conditions."},
+{t:"1.4", id:"1.4-17", front:"⚠ EXAMINER TRAP: Where does transcription happen, and where does translation happen? Why do students lose marks here?", back:"Transcription happens in the NUCLEUS (making mRNA from DNA). Translation happens at the RIBOSOME in the cytoplasm (making protein from mRNA). Students very commonly swap these two locations, or describe the wrong molecules being made/read at each stage.", trap:true},
+
+// ===================== 1.5 ENZYMES =====================
+{t:"1.5", id:"1.5-01", front:"What type of molecule are enzymes, and what feature allows them to catalyse reactions?", back:"Enzymes are globular proteins. Each has an active site — a specific 3D region (formed by tertiary/quaternary folding) whose shape is complementary to the shape of its substrate."},
+{t:"1.5", id:"1.5-02", front:"Explain enzyme specificity in terms of the induced fit hypothesis.", back:"The active site is not a rigid perfect match but changes shape slightly as the substrate binds, moulding around it to form a better fit (the enzyme-substrate complex). Only substrates with a compatible shape can induce this fit — giving each enzyme high specificity for its substrate(s)."},
+{t:"1.5", id:"1.5-03", front:"How do enzymes speed up reactions in terms of activation energy?", back:"Enzymes lower the activation energy needed for a reaction to proceed (e.g. by straining bonds in the substrate, or bringing reactants into the correct orientation), meaning more reactant molecules have enough energy to react at a given temperature, increasing the rate of reaction."},
+{t:"1.5", id:"1.5-04", front:"Explain the effect of increasing temperature on enzyme activity below the optimum.", back:"Increasing temperature gives molecules more kinetic energy, so enzyme and substrate molecules move faster and collide more frequently, and more of those collisions have enough energy to react (activation energy is reached more often) — increasing the rate of reaction."},
+{t:"1.5", id:"1.5-05", front:"Explain why enzyme activity falls sharply above the optimum temperature.", back:"Excess kinetic energy causes bonds maintaining the enzyme's tertiary structure (hydrogen bonds, ionic bonds) to break. The active site changes shape and is no longer complementary to the substrate — the enzyme is denatured and activity falls, eventually to zero."},
+{t:"1.5", id:"1.5-06", front:"Explain the effect of pH away from the optimum on enzyme activity.", back:"Changes in H⁺ concentration disrupt the ionic and hydrogen bonds holding the tertiary structure together (by interfering with charged R groups), changing the active site's shape so the substrate no longer binds effectively — denaturing the enzyme at extreme pH."},
+{t:"1.5", id:"1.5-07", front:"Describe the effect of increasing substrate concentration on the rate of an enzyme-controlled reaction (with enzyme concentration fixed).", back:"Rate increases as substrate concentration increases, because more successful enzyme-substrate collisions occur — until all active sites are saturated/working continuously, at which point rate plateaus and further substrate has no effect."},
+{t:"1.5", id:"1.5-08", front:"Describe the effect of increasing enzyme concentration on rate (with excess substrate).", back:"Rate increases roughly linearly with enzyme concentration, because more active sites are available for the substrate to bind to — provided substrate remains in excess so it is never the limiting factor."},
+{t:"1.5", id:"1.5-09", front:"Explain competitive inhibition.", back:"An inhibitor with a shape similar to the substrate binds reversibly to the active site, blocking the substrate from binding. Because it competes directly for the same site, its effect CAN be reduced by increasing substrate concentration (out-competing the inhibitor)."},
+{t:"1.5", id:"1.5-10", front:"Explain non-competitive inhibition.", back:"An inhibitor binds to a site OTHER than the active site (an allosteric site), changing the enzyme's overall tertiary structure so the active site's shape is distorted and no longer complementary to the substrate. Because it doesn't compete for the active site directly, its effect CANNOT be overcome by increasing substrate concentration."},
+{t:"1.5", id:"1.5-11", front:"What is end-product inhibition?", back:"A form of feedback inhibition where the final product of a metabolic pathway acts as an inhibitor of an enzyme earlier in that same pathway, preventing overproduction of the product once enough has accumulated."},
+{t:"1.5", id:"1.5-12", front:"Why should the INITIAL rate of an enzyme-controlled reaction be measured, rather than rate over a longer period?", back:"As a reaction proceeds, substrate concentration falls (becoming limiting) and product may accumulate or inhibit the enzyme, so the rate slows over time. Measuring only the initial rate (before substrate becomes limiting) gives a fair, comparable measure of enzyme activity under the specific conditions being tested."},
+{t:"1.5", id:"1.5-13", front:"Core Practical 1 — outline how you would investigate a factor affecting the initial rate of an enzyme-controlled reaction.", back:"Set up a named enzyme + substrate reaction (e.g. amylase + starch, or catalase + hydrogen peroxide). Vary ONE factor systematically (e.g. temperature via water baths) while controlling all others (pH, concentrations, volumes). Measure a suitable indicator of rate (e.g. gas volume produced, colour change time) at fixed short time intervals, and repeat each condition to calculate a mean and improve reliability."},
+{t:"1.5", id:"1.5-14", front:"What is a cofactor?", back:"A non-protein molecule or ion (e.g. Mg²⁺, Ca²⁺, Zn²⁺) that must bind to an enzyme (or its substrate) for the enzyme to function correctly."},
+{t:"1.5", id:"1.5-15", front:"⚠ EXAMINER TRAP: How does competitive inhibition affect Vmax and apparent Km, compared with non-competitive inhibition?", back:"Competitive: Vmax is UNCHANGED (enough substrate can always out-compete the inhibitor) but apparent Km INCREASES (more substrate needed to reach half-Vmax). Non-competitive: Vmax DECREASES (some active sites permanently blocked/distorted, unaffected by substrate concentration) but Km stays roughly the same. Mixing these two patterns up is one of the highest-frequency errors on enzyme graph questions.", trap:true},
+{t:"1.5", id:"1.5-16", front:"⚠ EXAMINER TRAP: For 'criticise the method' or 'devise an investigation' enzyme questions, what do students most often forget?", back:"Naming SPECIFIC control variables with HOW they'd be controlled (not just 'control temperature' but 'use a water bath at a stated temperature, e.g. 25°C'), specifying repeats for a mean, and identifying a precise, measurable dependent variable (e.g. 'volume of oxygen collected in a specific time' rather than just 'measure the rate'). Vague method answers lose the majority of marks even if the general idea is right.", trap:true},
+
+// ===================== 1.6 INORGANIC IONS =====================
+{t:"1.6", id:"1.6-01", front:"What is the role of nitrate ions in plants?", back:"Nitrate ions (NO3⁻) provide nitrogen needed to synthesise amino acids (and therefore proteins) and DNA/nucleotides."},
+{t:"1.6", id:"1.6-02", front:"What is the role of calcium ions in plants?", back:"Calcium ions (Ca²⁺) are needed to form calcium pectate, which helps bind adjacent cell walls together at the middle lamella."},
+{t:"1.6", id:"1.6-03", front:"What is the role of magnesium ions in plants?", back:"Magnesium ions (Mg²⁺) are required to produce chlorophyll — magnesium sits at the centre of the chlorophyll molecule."},
+{t:"1.6", id:"1.6-04", front:"What is the role of phosphate ions in plants?", back:"Phosphate ions are needed to make ADP and ATP (energy transfer), and also form part of the sugar-phosphate backbone of DNA and RNA nucleotides."},
+{t:"1.6", id:"1.6-05", front:"A plant grown in nitrate-deficient soil shows stunted growth and pale leaves. Explain the pale leaves.", back:"Without sufficient nitrate, the plant cannot synthesise enough amino acids/proteins — including enzymes involved in chlorophyll synthesis and cell division pathways — contributing to reduced pigment production and pale colouring, alongside restricted overall growth from limited protein synthesis."},
+{t:"1.6", id:"1.6-06", front:"By what process are mineral ions typically absorbed into root hair cells from the soil, and why?", back:"By active transport, using carrier proteins and ATP. This is necessary because ion concentration is usually HIGHER inside the root hair cell than in the surrounding soil solution, so ions must move against their concentration gradient."},
+{t:"1.6", id:"1.6-07", front:"⚠ EXAMINER TRAP: 'Magnesium helps photosynthesis' — why does this answer lose marks?", back:"It's too vague to gain credit. The precise marking point requires naming the specific molecule: magnesium is needed to PRODUCE CHLOROPHYLL (not just 'helps photosynthesis' generally). Always name the specific biological molecule the ion is required to build.", trap:true},
+
+// ===================== 1.7 WATER =====================
+{t:"1.7", id:"1.7-01", front:"Explain the dipole nature of a water molecule.", back:"Oxygen is more electronegative than hydrogen, pulling shared electrons in the O–H covalent bonds towards itself. This gives the oxygen atom a slightly negative charge (δ⁻) and each hydrogen atom a slightly positive charge (δ⁺), making water a polar (dipolar) molecule. This allows hydrogen bonds to form between adjacent water molecules."},
+{t:"1.7", id:"1.7-02", front:"Explain why water has a high specific heat capacity, and why this matters to organisms.", back:"A large amount of energy is needed to break the many hydrogen bonds between water molecules before the molecules can move faster (i.e. before temperature rises). This means water bodies resist rapid temperature change, providing a thermally stable environment for aquatic organisms and helping buffer body temperature in organisms with high water content."},
+{t:"1.7", id:"1.7-03", front:"Explain why water is a good polar solvent, and why this matters biologically.", back:"Water's dipole allows it to surround and separate charged ions and other polar molecules (dissolving them), forming hydrogen bonds with them. This allows metabolic reactions to occur in aqueous solution, and allows solutes (ions, glucose, etc.) to be transported dissolved in blood plasma, xylem and phloem."},
+{t:"1.7", id:"1.7-04", front:"Explain how water's properties produce surface tension.", back:"Hydrogen bonds pull water molecules at the surface together and downward/sideways, since there are no water molecules above to bond with — this cohesion between surface molecules creates a 'skin'-like tension strong enough to support small organisms, e.g. pond skaters."},
+{t:"1.7", id:"1.7-05", front:"Explain why water is described as incompressible, and give a biological significance.", back:"Water molecules are packed closely due to hydrogen bonding and don't compress easily under pressure. This allows water to act as a supporting medium, e.g. providing a hydrostatic skeleton in earthworms, and turgor pressure in plant cells pressing the cytoplasm against the cell wall."},
+{t:"1.7", id:"1.7-06", front:"Why is water's maximum density at 4°C (rather than at 0°C) biologically significant?", back:"As water cools below 4°C towards freezing, it becomes LESS dense, so ice forms at the surface and floats, insulating the liquid water below. This allows aquatic organisms to survive under a frozen surface layer in cold conditions rather than freezing solid throughout."},
+{t:"1.7", id:"1.7-07", front:"Explain the role of cohesion and adhesion in water transport up a plant (cohesion-tension).", back:"Cohesion (hydrogen bonding between water molecules) keeps the water column continuous/unbroken in the xylem as it's pulled upward by transpiration. Adhesion (hydrogen bonding between water molecules and the xylem walls) helps counteract gravity, supporting the water column."},
+{t:"1.7", id:"1.7-08", front:"⚠ EXAMINER TRAP: A student lists 'high specific heat capacity, good solvent, cohesive' as their whole answer on water's importance. Why does this lose most of the marks?", back:"Listing the properties alone (bookwork recall) rarely scores well — the mark scheme almost always wants the causal CHAIN: dipole/hydrogen bonding → the named property → the specific biological consequence in the context given (e.g. named organism or process in the question). Skipping the 'why' (hydrogen bonding) or the 'so what' (biological significance) loses marks even if the property named is correct.", trap:true},
+];
+
+/* ---------------------------------------------------------
+   TAB CONFIG
+--------------------------------------------------------- */
+const TABS = [
+  {key:"1.1", label:"1.1 Carbohydrates"},
+  {key:"1.2", label:"1.2 Lipids"},
+  {key:"1.3", label:"1.3 Proteins"},
+  {key:"1.4", label:"1.4 DNA & Synthesis"},
+  {key:"1.5", label:"1.5 Enzymes"},
+  {key:"1.6", label:"1.6 Inorganic Ions"},
+  {key:"1.7", label:"1.7 Water"},
+];
+
+const STORAGE_KEY = "bioT1MoleculesProgress";
+let progress = {};
+let activeTab = TABS[0].key;
+let flippedIds = new Set();
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    progress = raw ? JSON.parse(raw) : {};
+  }catch(e){ progress = {}; }
+}
+function saveProgress(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
+  catch(e){ /* storage unavailable — continue silently */ }
+}
+
+function renderTabs(){
+  const bar = document.getElementById("tabBar");
+  bar.innerHTML = "";
+  TABS.forEach(tab=>{
+    const cards = DECK.filter(c=>c.t===tab.key);
+    const known = cards.filter(c=>progress[c.id]==="know").length;
+    const btn = document.createElement("button");
+    btn.className = "tab-btn" + (tab.key===activeTab ? " active" : "");
+    btn.innerHTML = tab.label + `<span class="count">${known}/${cards.length}</span>`;
+    btn.onclick = ()=>{ activeTab = tab.key; flippedIds.clear(); renderAll(); };
+    bar.appendChild(btn);
+  });
+}
+
+function renderProgressBar(){
+  const cards = DECK.filter(c=>c.t===activeTab);
+  const known = cards.filter(c=>progress[c.id]==="know").length;
+  const pct = cards.length ? Math.round((known/cards.length)*100) : 0;
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressText").textContent = `${known} / ${cards.length} known in this tab`;
+  document.getElementById("tabTitle").textContent = TABS.find(t=>t.key===activeTab).label;
+}
+
+function renderStats(){
+  const total = DECK.length;
+  const known = DECK.filter(c=>progress[c.id]==="know").length;
+  const review = DECK.filter(c=>progress[c.id]==="review").length;
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statKnown").textContent = known;
+  document.getElementById("statReview").textContent = review;
+}
+
+function renderCards(){
+  const container = document.getElementById("cardContainer");
+  container.innerHTML = "";
+
+  if(activeTab==="1.5"){
+    const note = document.createElement("div");
+    note.className = "section-note";
+    note.innerHTML = "<b>Note:</b> Enzymes (1.5) is the single most exam-active subtopic in Topic 1 across recent papers — worth extra repetition time, especially the inhibition-graph and practical-design cards.";
+    container.appendChild(note);
+  }
+
+  const cards = DECK.filter(c=>c.t===activeTab);
+  cards.forEach(c=>{
+    const state = progress[c.id]; // "know" | "review" | undefined
+    const isFlipped = flippedIds.has(c.id);
+
+    const el = document.createElement("div");
+    el.className = "card" + (isFlipped ? " flipped" : "") + (state==="know" ? " known" : "") + (state==="review" ? " review" : "");
+
+    const top = document.createElement("div");
+    top.className = "card-top";
+    const idEl = document.createElement("span");
+    idEl.className = "card-id";
+    idEl.textContent = c.id;
+    top.appendChild(idEl);
+    if(state){
+      const chip = document.createElement("span");
+      chip.className = "status-chip " + state;
+      chip.textContent = state==="know" ? "✓ Known" : "↻ Review";
+      top.appendChild(chip);
+    }
+    el.appendChild(top);
+
+    if(c.trap){
+      const badge = document.createElement("div");
+      badge.className = "trap-badge";
+      badge.textContent = "⚠ Examiner Trap";
+      el.appendChild(badge);
+    }
+
+    const body = document.createElement("div");
+    body.className = "card-body" + (isFlipped ? " answer" : "");
+    if(!isFlipped){
+      body.innerHTML = `<span class="label">Question</span>${c.front}`;
+    } else {
+      body.innerHTML = `<span class="label">Answer</span>${c.back}`;
+    }
+    el.appendChild(body);
+
+    const hint = document.createElement("div");
+    hint.className = "hint";
+    hint.textContent = isFlipped ? "Tap to flip back" : "Tap card to reveal answer";
+    el.appendChild(hint);
+
+    el.onclick = (e)=>{
+      if(e.target.closest(".st-btn")) return;
+      if(flippedIds.has(c.id)) flippedIds.delete(c.id); else flippedIds.add(c.id);
+      renderCards();
+    };
+
+    if(isFlipped){
+      const st = document.createElement("div");
+      st.className = "self-test";
+      const knowBtn = document.createElement("button");
+      knowBtn.className = "st-btn know-btn";
+      knowBtn.textContent = "✓ I know this";
+      knowBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="know"; saveProgress(); renderAll(); };
+      const reviewBtn = document.createElement("button");
+      reviewBtn.className = "st-btn review-btn";
+      reviewBtn.textContent = "↻ Review again";
+      reviewBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="review"; saveProgress(); renderAll(); };
+      st.appendChild(knowBtn);
+      st.appendChild(reviewBtn);
+      el.appendChild(st);
+    }
+
+    container.appendChild(el);
+  });
+}
+
+function renderAll(){
+  renderTabs();
+  renderProgressBar();
+  renderStats();
+  renderCards();
+}
+
+function resetProgress(){
+  if(confirm("Reset all self-test progress for this deck? This can't be undone.")){
+    progress = {};
+    saveProgress();
+    renderAll();
+  }
+}
+
+loadProgress();
+renderAll();
+</script>
+</body>
+</html>
