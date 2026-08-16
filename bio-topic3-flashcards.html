@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A Level Biology — Topic 3: Classification & Biodiversity</title>
+<style>
+  :root{
+    --bg:#0f1416;
+    --panel:#171f22;
+    --panel-2:#1d272b;
+    --border:#2a373c;
+    --text:#e8eef0;
+    --muted:#8fa3a9;
+    --accent:#4fd1a5;
+    --accent-dim:#2a6b56;
+    --trap:#e8a23d;
+    --trap-bg:#3a2c15;
+    --know:#4fd1a5;
+    --review:#e8626a;
+    --card-front:#1a2327;
+    --card-back:#16232a;
+    font-size:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  header{
+    padding:22px 16px 14px;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, #131b1e 0%, var(--bg) 100%);
+  }
+  header h1{
+    margin:0 0 4px;
+    font-size:1.3rem;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  header p{
+    margin:0;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+  .deck-stats{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    margin-top:12px;
+    font-size:0.78rem;
+    color:var(--muted);
+  }
+  .deck-stats b{color:var(--accent);font-size:0.95rem;}
+
+  nav.tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:6px;
+    padding:12px 12px 8px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    flex:0 0 auto;
+    background:var(--panel);
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 13px;
+    border-radius:20px;
+    font-size:0.76rem;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .tab-btn .count{
+    display:inline-block;
+    margin-left:6px;
+    font-size:0.68rem;
+    color:var(--accent);
+    opacity:0.85;
+  }
+  .tab-btn.active{
+    background:var(--accent-dim);
+    border-color:var(--accent);
+    color:#eafff6;
+  }
+
+  .progress-wrap{
+    padding:0 16px 4px;
+  }
+  .progress-bar{
+    height:6px;
+    background:var(--panel);
+    border-radius:4px;
+    overflow:hidden;
+    border:1px solid var(--border);
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--accent-dim), var(--accent));
+    transition:width .3s ease;
+  }
+  .progress-label{
+    font-size:0.72rem;
+    color:var(--muted);
+    margin-top:4px;
+    display:flex;
+    justify-content:space-between;
+  }
+
+  main{
+    max-width:640px;
+    margin:0 auto;
+    padding:14px 16px 8px;
+  }
+
+  .card{
+    position:relative;
+    background:var(--card-front);
+    border:1px solid var(--border);
+    border-radius:14px;
+    margin-bottom:14px;
+    min-height:150px;
+    cursor:pointer;
+    transition:border-color .2s ease, transform .12s ease;
+    overflow:hidden;
+  }
+  .card:active{transform:scale(0.99);}
+  .card.flipped{background:var(--card-back);border-color:var(--accent-dim);}
+  .card.known{border-color:var(--know);}
+  .card.review{border-color:var(--review);}
+
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:12px 16px 0;
+  }
+  .card-id{
+    font-size:0.68rem;
+    color:var(--muted);
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+  }
+  .status-chip{
+    font-size:0.65rem;
+    padding:2px 8px;
+    border-radius:10px;
+    background:var(--panel-2);
+    color:var(--muted);
+  }
+  .status-chip.known{background:rgba(79,209,165,0.15);color:var(--know);}
+  .status-chip.review{background:rgba(232,98,106,0.15);color:var(--review);}
+
+  .trap-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-size:0.68rem;
+    color:var(--trap);
+    background:var(--trap-bg);
+    padding:2px 8px;
+    border-radius:10px;
+    margin:8px 16px 0;
+    width:fit-content;
+    font-weight:600;
+  }
+
+  .card-body{
+    padding:10px 16px 16px;
+    font-size:0.95rem;
+    line-height:1.5;
+  }
+  .card-body.answer{
+    color:#cfe8de;
+  }
+  .card-body .label{
+    display:block;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .hint{
+    text-align:center;
+    font-size:0.72rem;
+    color:var(--muted);
+    padding:0 16px 12px;
+  }
+
+  .self-test{
+    display:flex;
+    gap:8px;
+    padding:0 16px 16px;
+  }
+  .st-btn{
+    flex:1;
+    padding:9px 0;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    color:var(--text);
+    font-size:0.82rem;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .st-btn.know-btn{color:var(--know);border-color:var(--accent-dim);}
+  .st-btn.review-btn{color:var(--review);border-color:#5a2c30;}
+  .st-btn:active{opacity:0.7;}
+
+  footer{
+    max-width:640px;
+    margin:10px auto 0;
+    padding:10px 16px 30px;
+    text-align:center;
+  }
+  .reset-btn{
+    background:none;
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 16px;
+    border-radius:10px;
+    font-size:0.75rem;
+    cursor:pointer;
+  }
+
+  .section-note{
+    font-size:0.78rem;
+    color:var(--muted);
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 14px;
+    margin-bottom:14px;
+    line-height:1.5;
+  }
+  .section-note b{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Topic 3 — Classification & Biodiversity</h1>
+  <p>Edexcel Biology B (9BI0) · Spec points 3.1–3.3</p>
+  <div class="deck-stats">
+    <div><b id="statTotal">0</b> cards</div>
+    <div><b id="statKnown">0</b> known</div>
+    <div><b id="statReview">0</b> to review</div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabBar"></nav>
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-label"><span id="progressText">0 / 0 known in this tab</span><span id="tabTitle"></span></div>
+</div>
+
+<main id="cardContainer"></main>
+
+<footer>
+  <button class="reset-btn" onclick="resetProgress()">Reset all progress</button>
+</footer>
+
+<script>
+/* ---------------------------------------------------------
+   DATA: cards across 3 subtopics, 3.1–3.3
+   trap:true marks a card built around a common exam misconception
+--------------------------------------------------------- */
+const DECK = [
+
+// ===================== 3.1 CLASSIFICATION =====================
+{t:"3.1", id:"3.1-01", front:"State the full classification hierarchy from largest to smallest group.", back:"Domain, Kingdom, Phylum, Class, Order, Family, Genus, Species."},
+{t:"3.1", id:"3.1-02", front:"Name the three domains in the three-domain system of classification.", back:"Bacteria, Archaea, and Eukarya (Eukaryota)."},
+{t:"3.1", id:"3.1-03", front:"What is binomial nomenclature?", back:"A naming system in which every organism is given a two-part scientific name: the genus name (capitalised) followed by the species name (lowercase), e.g. Homo sapiens — both parts are conventionally italicised."},
+{t:"3.1", id:"3.1-04", front:"Give a definition of the term 'species'.", back:"A group of organisms with similar features/characteristics that can interbreed to produce fertile offspring."},
+{t:"3.1", id:"3.1-05", front:"Explain how the 'wholphin' (dolphin × killer whale hybrid that itself produced fertile offspring) illustrates a limitation of the species definition.", back:"The standard species definition assumes different species cannot produce fertile offspring together. Since a dolphin and killer whale (normally classified as separate species) produced a hybrid that was ITSELF fertile, this shows the interbreeding criterion doesn't always give a clear-cut boundary between species in practice."},
+{t:"3.1", id:"3.1-06", front:"Outline the evidence that led to the three-domain model replacing the five-kingdom model.", back:"Carl Woese compared ribosomal RNA (rRNA) sequences and other biochemical features (e.g. cell membrane lipid structure, RNA polymerase type) across many organisms. This revealed that what had been classified as one kingdom (prokaryotes/Monera) actually contained two biochemically very distinct groups — Bacteria and Archaea — which are as different from each other as either is from Eukarya, justifying splitting them into separate domains."},
+{t:"3.1", id:"3.1-07", front:"How do scientists reach agreement on a new classification model or a newly discovered species?", back:"The scientist publishes their findings (e.g. in a peer-reviewed scientific journal), allowing other scientists to scrutinise the methodology and evidence, attempt to replicate the results, and debate the conclusions — a new model or species becomes generally accepted once enough of the scientific community is convinced by the weight of repeated, verified evidence."},
+{t:"3.1", id:"3.1-08", front:"Explain how gel electrophoresis separates DNA fragments.", back:"DNA fragments are loaded into wells in an agarose gel, and an electric current is passed across the gel. DNA is negatively charged (due to its phosphate groups), so fragments migrate towards the positive electrode. Smaller fragments move faster/further through the gel matrix than larger fragments in a given time, separating the fragments by size."},
+{t:"3.1", id:"3.1-09", front:"On a gel electrophoresis image, which band represents the smallest DNA fragment — the one closest to or furthest from the wells?", back:"The band that has travelled FURTHEST from the wells (closest to the positive electrode) represents the SMALLEST fragment, since smaller fragments move fastest through the gel."},
+{t:"3.1", id:"3.1-10", front:"Explain how gel electrophoresis (DNA banding patterns) can be used to determine evolutionary relationships between species.", back:"The more DNA (or protein) bands two species share in common, the more similar their DNA/protein sequences are, indicating a more recent common ancestor and a closer evolutionary relationship. Species with fewer shared bands are more distantly related, having diverged from a common ancestor longer ago."},
+{t:"3.1", id:"3.1-11", front:"Why must protein samples be treated differently from DNA before gel electrophoresis?", back:"Unlike DNA, proteins don't have a uniform charge (their charge varies by amino acid composition and 3D shape) and don't separate purely by size. Protein samples must first be denatured and treated with a charged detergent (e.g. SDS) to unfold them and give every protein molecule a uniform negative charge proportional to its length, so that they then separate by size in the same way DNA does."},
+{t:"3.1", id:"3.1-12", front:"What types of evidence can scientists use to classify a newly discovered organism as a new species?", back:"Morphological/anatomical features (physical characteristics), genetic/molecular evidence (DNA or protein sequence comparison via gel electrophoresis or sequencing), and behavioural evidence (e.g. mating calls/courtship behaviour), along with testing whether it can interbreed with related species to produce fertile offspring."},
+{t:"3.1", id:"3.1-13", front:"Explain why it can be difficult to classify a newly discovered or fossilised organism as belonging to a separate species.", back:"It may not be possible to test whether the organism can interbreed with related species (e.g. if it is extinct/fossilised, or only a single specimen is available), morphological similarities to existing species may be inconclusive, and DNA may be degraded or unavailable for very old fossil specimens — making it hard to gather enough independent evidence to confidently distinguish a new species from an existing one."},
+{t:"3.1", id:"3.1-14", front:"What is molecular phylogeny?", back:"The analysis of molecular differences (e.g. in DNA, RNA or protein sequences) between organisms to determine the degree of relatedness and evolutionary relationships between them."},
+{t:"3.1", id:"3.1-15", front:"⚠ EXAMINER TRAP: What's the most common error when recalling the classification hierarchy?", back:"Getting Order and Class the wrong way round, or forgetting Domain sits above Kingdom. The full correct order (largest to smallest) is: Domain, Kingdom, Phylum, Class, Order, Family, Genus, Species — a common mnemonic trick can help, but always double-check Class comes before Order, not after.", trap:true},
+{t:"3.1", id:"3.1-16", front:"⚠ EXAMINER TRAP: A student says the band furthest from the wells on a gel is the LARGEST fragment. Why is this backwards, and why do students make this error?", back:"It's the opposite: the fragment that travels FURTHEST is the SMALLEST, because smaller fragments move through the gel matrix more easily/faster. Students sometimes assume 'travelled further = bigger/heavier', reasoning by analogy to physical size in the real world, which is the wrong intuition for gel electrophoresis — smaller molecules are more mobile in the gel, not less.", trap:true},
+
+// ===================== 3.2 NATURAL SELECTION =====================
+{t:"3.2", id:"3.2-01", front:"Outline the process of evolution by natural selection.", back:"1) There is genetic variation within a population (e.g. due to mutation). 2) Organisms produce more offspring than the environment can support, creating competition for limited resources. 3) Individuals with alleles/characteristics better suited to the environment (a selective advantage) are more likely to survive and reproduce. 4) These advantageous alleles are passed on to offspring more frequently, so their frequency in the population increases over generations."},
+{t:"3.2", id:"3.2-02", front:"Define evolution.", back:"A gradual change in allele frequency within a population's gene pool over time, typically driven by natural selection."},
+{t:"3.2", id:"3.2-03", front:"What is a selection pressure?", back:"An environmental factor (e.g. predation, disease, competition for resources, climate) that affects an organism's chance of survival and reproduction, driving natural selection by favouring individuals with certain characteristics over others."},
+{t:"3.2", id:"3.2-04", front:"Give an example of an anatomical (structural) adaptation, and explain what this type of adaptation is.", back:"An anatomical adaptation is a structural/physical feature that improves an organism's chance of survival, e.g. limb structure in primates adapted for grip and movement through trees."},
+{t:"3.2", id:"3.2-05", front:"Give an example of a physiological adaptation, and explain what this type of adaptation is.", back:"A physiological adaptation is an internal process/function that improves survival, e.g. venom production in snakes to subdue prey or deter predators."},
+{t:"3.2", id:"3.2-06", front:"Give an example of a behavioural adaptation, and explain what this type of adaptation is.", back:"A behavioural adaptation is an action or pattern of behaviour that improves survival or reproductive success, e.g. courtship display in sticklebacks to attract a mate."},
+{t:"3.2", id:"3.2-07", front:"Describe allopatric speciation.", back:"A population becomes geographically separated (e.g. by a physical barrier such as a mountain range, river or ocean), preventing gene flow between the two groups. Different selection pressures/random mutations in each separate environment cause the gene pools to diverge over time until the two populations become so genetically different they can no longer interbreed to produce fertile offspring — forming two distinct species."},
+{t:"3.2", id:"3.2-08", front:"Describe sympatric speciation.", back:"A new species arises WITHOUT geographical separation — populations remain in the same physical area, but become reproductively isolated by other means (e.g. behavioural differences such as different mating calls/courtship, different feeding times, or a sudden genetic change such as polyploidy), preventing interbreeding and allowing the gene pools to diverge into separate species."},
+{t:"3.2", id:"3.2-09", front:"Explain how polyploidy can cause near-instant sympatric speciation, using the tetraploid lizard example.", back:"An error during cell division can produce offspring with a doubled chromosome number (e.g. tetraploid, 4n, instead of diploid, 2n). This individual usually cannot produce viable/fertile offspring by mating with the normal diploid population (different chromosome numbers disrupt meiosis), but tetraploid individuals CAN interbreed with each other — creating instant reproductive isolation and a new species in a single generation, without any geographical separation."},
+{t:"3.2", id:"3.2-10", front:"Explain how insecticide/antibiotic resistance evolves in a population through natural selection.", back:"Within the pest/bacterial population, there is already genetic variation, including some individuals with an allele conferring resistance. When the insecticide/antibiotic is applied, susceptible individuals are killed, but resistant individuals survive and reproduce, passing the resistance allele to their offspring. Over successive generations, the frequency of the resistance allele increases in the population, making the insecticide/antibiotic progressively less effective."},
+{t:"3.2", id:"3.2-11", front:"Using the Fritillaria delavayi plant (which turns greyish-brown for camouflage where heavily collected by humans), explain how this coloration evolved by natural selection.", back:"In areas of heavy human collection, brightly-coloured plants are more easily spotted and picked (a strong selection pressure from humans, acting like a predator), so they are removed from the population before they can reproduce. Plants with a duller, more camouflaged greyish-brown colour allele are less likely to be spotted and collected, so they survive to reproduce more successfully, passing on the camouflage allele — over generations this increases the frequency of the camouflage allele in heavily-collected populations."},
+{t:"3.2", id:"3.2-12", front:"In the tawny owl example, explain how climate change (less snow cover) could lead to directional selection favouring the brown feather allele.", back:"With less snow cover due to climate change, grey-feathered owls become more visible/less camouflaged against the (now more often snow-free) brown ground, making them easier for predators to spot or reducing their own hunting success, while brown-feathered owls are better camouflaged. Brown owls therefore have a survival advantage in these conditions, are more likely to survive and reproduce, increasing the frequency of the brown allele in the population over time — a directional shift in allele frequency."},
+{t:"3.2", id:"3.2-13", front:"Explain why the Northern elephant seal population (recovered from ~20 individuals) shows health problems like weak immune systems, despite population numbers recovering to over 100,000.", back:"When the population was reduced to only about 20 individuals, this created a genetic bottleneck — only the alleles present in those few survivors could be passed on, drastically reducing genetic diversity. Even though the population has since grown numerically, all current individuals descend from that small gene pool, so genetic diversity remains low, resulting in a higher frequency of harmful recessive alleles being expressed (e.g. weakened immune function) and reduced ability to adapt to new challenges like disease."},
+{t:"3.2", id:"3.2-14", front:"Explain why habitat fragmentation (e.g. isolated forest patches for tigers) increases the frequency of inherited genetic disorders.", back:"When a population is split into small, isolated patches, each subpopulation has a limited gene pool and individuals are more likely to mate with close relatives (inbreeding) due to a shortage of unrelated mates. Inbreeding increases the chance that offspring inherit two copies of the same harmful recessive allele, increasing the frequency of genetic disorders in the population."},
+{t:"3.2", id:"3.2-15", front:"Using the bowerbird, explain how elaborate courtship/bower-building behaviour could have evolved by sexual selection.", back:"Females likely prefer to mate with males that build more elaborate, well-decorated bowers (perhaps as an indicator of the male's fitness, resourcefulness or genetic quality). Males with genes for better bower-building/decorating behaviour are chosen more often as mates and so produce more offspring, passing on these genes — over generations this increases the frequency of alleles for elaborate bower-building behaviour in the population."},
+{t:"3.2", id:"3.2-16", front:"Give one way a scientist could inform the wider scientific community about the discovery of a new species.", back:"Publish the findings (with supporting evidence) in a peer-reviewed scientific journal, or present the findings at a scientific conference, so that other scientists can evaluate, question and attempt to verify the evidence."},
+{t:"3.2", id:"3.2-17", front:"⚠ EXAMINER TRAP: Compare and contrast allopatric and sympatric speciation — what's the key distinguishing feature examiners look for?", back:"The KEY distinguishing feature is whether GEOGRAPHICAL separation is involved: allopatric speciation requires a physical barrier separating populations; sympatric speciation occurs with populations remaining in the same geographical area, reproductively isolated by other means (behavioural, genetic/polyploidy, ecological). Both processes still rely on the same underlying mechanism — reproductive isolation leading to divergent gene pools via natural selection/genetic drift — so full marks require stating both the similarity (both lead to genetically distinct, reproductively isolated populations via selection) AND the geographical difference.", trap:true},
+{t:"3.2", id:"3.2-18", front:"⚠ EXAMINER TRAP: A student writes 'organisms adapt to their environment to survive.' Why is this phrasing penalised, and what should be said instead?", back:"This phrasing implies organisms actively change/adapt themselves in response to need (a Lamarckian misconception — inheritance of acquired characteristics), which is NOT how natural selection works. The correct explanation is that variation already exists in the population BEFORE the selection pressure acts; individuals that already happen to have an advantageous allele are more likely to survive and reproduce — the environment does not cause the useful variation to appear, it simply selects among variation that's already there.", trap:true},
+{t:"3.2", id:"3.2-19", front:"⚠ EXAMINER TRAP: How do students commonly mix up anatomical, physiological and behavioural adaptations in exam answers?", back:"Anatomical = a physical/structural feature you could point to (shape, size, colour). Physiological = an internal bodily process or function (not visible structure). Behavioural = something the organism DOES (an action). Students often mislabel a behaviour that has a physical component (e.g. venom production is physiological — making the venom — not behavioural, even though 'using' venom might seem action-like) or a structural feature that enables a behaviour. Always ask: is this a structure, a bodily process, or an action?", trap:true},
+
+// ===================== 3.3 BIODIVERSITY =====================
+{t:"3.3", id:"3.3-01", front:"Define biodiversity, and name the three levels at which it can be considered.", back:"Biodiversity is the variety of living organisms in an area. It can be considered at three levels: habitat diversity (variety of habitats/ecosystems in an area), species diversity (variety and abundance of species within a habitat), and genetic diversity (variation in alleles within a species/population)."},
+{t:"3.3", id:"3.3-02", front:"Distinguish species richness from species evenness.", back:"Species richness is simply the NUMBER of different species present in a habitat. Species evenness is a measure of how EQUALLY ABUNDANT those species are relative to each other (e.g. a habitat with 5 species all at similar population sizes has higher evenness than one dominated by one species with the other 4 species rare)."},
+{t:"3.3", id:"3.3-03", front:"Define genetic diversity.", back:"A measure of the genetic variation within a particular species — in other words, the number/variety of different alleles present in the gene pool of that species."},
+{t:"3.3", id:"3.3-04", front:"State the formula for the index of diversity (D), and define N and n.", back:"D = N(N−1) ÷ Σn(n−1), where N = the total number of organisms of ALL species in the sample, and n = the number of organisms of EACH particular species (summed across all species, Σ)."},
+{t:"3.3", id:"3.3-05", front:"Outline the steps to calculate the index of diversity from raw species-count data.", back:"For each species, calculate n(n−1) using its individual count, then sum these values across all species to get Σn(n−1). Calculate N (the total count of all organisms of all species) and then N(N−1). Finally, divide N(N−1) by Σn(n−1) to get D."},
+{t:"3.3", id:"3.3-06", front:"Explain why the index of diversity is considered a better measure of biodiversity than simply counting the number of species present.", back:"Counting species alone (species richness) ignores how the individuals are distributed between species (evenness) — a habitat could have many species but be dominated by just one or two, which is less biodiverse in practice than a habitat with the same number of species more evenly represented. The index of diversity accounts for both the number of species AND how evenly individuals are distributed among them."},
+{t:"3.3", id:"3.3-07", front:"Outline how quadrats are used to sample plant species diversity in a habitat.", back:"A quadrat (a frame of known area) is placed at a series of points within the habitat — ideally using a method that avoids bias (e.g. random coordinates or a systematic transect line) — and the number of individuals of each plant species within the quadrat is counted and recorded. This is repeated at multiple locations to build a representative sample of the habitat."},
+{t:"3.3", id:"3.3-08", front:"Why is random (or otherwise unbiased) sampling important when surveying biodiversity?", back:"If a surveyor chooses sample locations subjectively (e.g. picking obviously species-rich patches), the results will overestimate the true biodiversity of the habitat and won't be representative. Random or systematic sampling removes this selection bias, giving a fairer estimate of the actual species distribution across the whole habitat."},
+{t:"3.3", id:"3.3-09", front:"Give three ways a biodiversity survey method could be criticised as likely to underestimate the true biodiversity index.", back:"Sampling only at certain times of day or a certain season (missing nocturnal or seasonal species); too small a sample size or too few sampling points/small quadrat area; sampling only along an easily accessible path or edge habitat (missing interior species); or restricting sampling to fixed weather conditions (e.g. only warm, low-wind days), which may bias which species are recorded as active/visible."},
+{t:"3.3", id:"3.3-10", front:"What is in-situ conservation? Give an example.", back:"Conservation of a species within its natural habitat, e.g. setting up a protected nature reserve or national park where a species can live and reproduce undisturbed in its normal ecosystem."},
+{t:"3.3", id:"3.3-11", front:"What is ex-situ conservation? Give an example.", back:"Conservation of a species AWAY from its natural habitat, e.g. captive breeding programmes in zoos, or storing seeds in seed banks."},
+{t:"3.3", id:"3.3-12", front:"Give one advantage and one disadvantage of ex-situ conservation compared with in-situ conservation.", back:"Advantage: individuals are protected from poaching, predation and habitat loss, and breeding can be closely controlled/monitored. Disadvantage: a captive-bred population is often founded from very few individuals, so it typically has much lower genetic diversity than a protected wild population, and reintroduced individuals may lack the natural behaviours/skills needed to survive in the wild."},
+{t:"3.3", id:"3.3-13", front:"Describe the conditions seeds are typically stored under in a seed bank, and why.", back:"Seeds are dried to a low moisture content (e.g. below 8%) and stored at low temperature (e.g. around −20°C) in airtight containers (e.g. sealed glass) at controlled low humidity. These conditions slow down metabolism and enzyme activity within the seed, preventing premature germination, decay, or damage from moisture/pests, allowing seeds to remain viable for long-term storage."},
+{t:"3.3", id:"3.3-14", front:"Why do seed banks test a sample of, e.g., 50 seeds for percentage germination rather than testing every seed in storage?", back:"Testing every seed would destroy the entire stock (germination testing uses up the seeds). Using a reasonably large sample size (e.g. 50) gives a statistically reliable estimate of the viability of the whole batch while preserving the vast majority of the stored seeds for future use."},
+{t:"3.3", id:"3.3-15", front:"What role do international treaties such as CITES play in maintaining global biodiversity?", back:"CITES (Convention on International Trade in Endangered Species) regulates and restricts international trade in endangered species and their products, helping to reduce the pressure of hunting/poaching/trade on vulnerable populations and supporting international cooperation on conservation."},
+{t:"3.3", id:"3.3-16", front:"Explain why planting habitat corridors (strips of trees/forest) linking fragmented populations can reduce the frequency of genetic disorders.", back:"Corridors allow individuals to migrate and interbreed between previously isolated subpopulations, increasing gene flow and the effective size of the breeding population. This increases genetic diversity and reduces the likelihood of close relatives mating (inbreeding), thereby reducing the frequency of harmful recessive genetic disorders appearing in offspring."},
+{t:"3.3", id:"3.3-17", front:"Name the four types of ecosystem services that justify conserving biodiversity.", back:"Provisioning services (e.g. food, water, raw materials), regulating services (e.g. climate regulation, pollination, water purification), supporting services (e.g. nutrient cycling, soil formation), and cultural services (e.g. recreational, aesthetic, educational or spiritual value)."},
+{t:"3.3", id:"3.3-18", front:"What key considerations should be weighed when evaluating whether 'zoos are successful at protecting endangered species from extinction'?", back:"On one hand: zoos protect individuals from poaching/habitat loss, enable captive breeding, and support public education/funding for conservation. On the other hand: captive populations often have low genetic diversity from a small founder population, animals can struggle to survive/breed successfully when reintroduced to the wild, and captivity doesn't address the underlying cause of decline (e.g. habitat loss) in the wild — a balanced evaluation should weigh both the benefits and these significant limitations rather than giving a one-sided answer."},
+{t:"3.3", id:"3.3-19", front:"Describe the general relationship typically found between the percentage of land protected from deforestation and the percentage of species conserved.", back:"Protecting a greater percentage of land from deforestation generally leads to a higher percentage of species conserved, but the relationship shows diminishing returns — species conserved increases steeply at first with small amounts of protection, then levels off, meaning that beyond a certain point, protecting additional land yields comparatively smaller increases in the percentage of species conserved."},
+{t:"3.3", id:"3.3-20", front:"⚠ EXAMINER TRAP: In the index of diversity formula, what's the most common mix-up between N and n?", back:"N is the TOTAL number of organisms of ALL species combined; n is the count of ONE particular species at a time (used separately for each species, then combined via Σn(n−1)). Students frequently substitute the wrong value into the wrong part of the formula, e.g. using a single species' count where N (the grand total) is needed, or vice versa — always double check which one you're calculating at each step.", trap:true},
+{t:"3.3", id:"3.3-21", front:"⚠ EXAMINER TRAP: How do students commonly reverse the definitions of in-situ and ex-situ conservation?", back:"In-situ = IN the original/natural habitat (think 'in situation' = staying where it naturally is). Ex-situ = OUT of/away from the natural habitat (think 'exit' the habitat, e.g. a zoo or seed bank). A simple way to avoid the mix-up: 'ex' as in 'exit' — ex-situ conservation means the organism has exited its natural habitat.", trap:true},
+{t:"3.3", id:"3.3-22", front:"⚠ EXAMINER TRAP: Why is 'biodiversity just means lots of species' an incomplete answer that loses marks?", back:"This only captures species richness, missing the other two levels the specification requires: habitat diversity (variety of habitats in an area) and genetic diversity (variation WITHIN a species). A question asking to 'state what is meant by biodiversity' typically wants recognition that biodiversity spans all three levels — habitat, species AND genetic — not species count alone.", trap:true},
+];
+
+/* ---------------------------------------------------------
+   TAB CONFIG
+--------------------------------------------------------- */
+const TABS = [
+  {key:"3.1", label:"3.1 Classification"},
+  {key:"3.2", label:"3.2 Natural Selection"},
+  {key:"3.3", label:"3.3 Biodiversity"},
+];
+
+const STORAGE_KEY = "bioT3ClassificationProgress";
+let progress = {};
+let activeTab = TABS[0].key;
+let flippedIds = new Set();
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    progress = raw ? JSON.parse(raw) : {};
+  }catch(e){ progress = {}; }
+}
+function saveProgress(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
+  catch(e){ /* storage unavailable — continue silently */ }
+}
+
+function renderTabs(){
+  const bar = document.getElementById("tabBar");
+  bar.innerHTML = "";
+  TABS.forEach(tab=>{
+    const cards = DECK.filter(c=>c.t===tab.key);
+    const known = cards.filter(c=>progress[c.id]==="know").length;
+    const btn = document.createElement("button");
+    btn.className = "tab-btn" + (tab.key===activeTab ? " active" : "");
+    btn.innerHTML = tab.label + `<span class="count">${known}/${cards.length}</span>`;
+    btn.onclick = ()=>{ activeTab = tab.key; flippedIds.clear(); renderAll(); };
+    bar.appendChild(btn);
+  });
+}
+
+function renderProgressBar(){
+  const cards = DECK.filter(c=>c.t===activeTab);
+  const known = cards.filter(c=>progress[c.id]==="know").length;
+  const pct = cards.length ? Math.round((known/cards.length)*100) : 0;
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressText").textContent = `${known} / ${cards.length} known in this tab`;
+  document.getElementById("tabTitle").textContent = TABS.find(t=>t.key===activeTab).label;
+}
+
+function renderStats(){
+  const total = DECK.length;
+  const known = DECK.filter(c=>progress[c.id]==="know").length;
+  const review = DECK.filter(c=>progress[c.id]==="review").length;
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statKnown").textContent = known;
+  document.getElementById("statReview").textContent = review;
+}
+
+function renderCards(){
+  const container = document.getElementById("cardContainer");
+  container.innerHTML = "";
+
+  if(activeTab==="3.3"){
+    const note = document.createElement("div");
+    note.className = "section-note";
+    note.innerHTML = "<b>Note:</b> 3.3 leans heavily on index-of-diversity calculations and 'criticise the method' / 'evaluate' style extended questions — practice the N vs n formula until it's automatic, and rehearse balanced two-sided answers for the conservation evaluation questions.";
+    container.appendChild(note);
+  }
+
+  const cards = DECK.filter(c=>c.t===activeTab);
+  cards.forEach(c=>{
+    const state = progress[c.id]; // "know" | "review" | undefined
+    const isFlipped = flippedIds.has(c.id);
+
+    const el = document.createElement("div");
+    el.className = "card" + (isFlipped ? " flipped" : "") + (state==="know" ? " known" : "") + (state==="review" ? " review" : "");
+
+    const top = document.createElement("div");
+    top.className = "card-top";
+    const idEl = document.createElement("span");
+    idEl.className = "card-id";
+    idEl.textContent = c.id;
+    top.appendChild(idEl);
+    if(state){
+      const chip = document.createElement("span");
+      chip.className = "status-chip " + state;
+      chip.textContent = state==="know" ? "✓ Known" : "↻ Review";
+      top.appendChild(chip);
+    }
+    el.appendChild(top);
+
+    if(c.trap){
+      const badge = document.createElement("div");
+      badge.className = "trap-badge";
+      badge.textContent = "⚠ Examiner Trap";
+      el.appendChild(badge);
+    }
+
+    const body = document.createElement("div");
+    body.className = "card-body" + (isFlipped ? " answer" : "");
+    if(!isFlipped){
+      body.innerHTML = `<span class="label">Question</span>${c.front}`;
+    } else {
+      body.innerHTML = `<span class="label">Answer</span>${c.back}`;
+    }
+    el.appendChild(body);
+
+    const hint = document.createElement("div");
+    hint.className = "hint";
+    hint.textContent = isFlipped ? "Tap to flip back" : "Tap card to reveal answer";
+    el.appendChild(hint);
+
+    el.onclick = (e)=>{
+      if(e.target.closest(".st-btn")) return;
+      if(flippedIds.has(c.id)) flippedIds.delete(c.id); else flippedIds.add(c.id);
+      renderCards();
+    };
+
+    if(isFlipped){
+      const st = document.createElement("div");
+      st.className = "self-test";
+      const knowBtn = document.createElement("button");
+      knowBtn.className = "st-btn know-btn";
+      knowBtn.textContent = "✓ I know this";
+      knowBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="know"; saveProgress(); renderAll(); };
+      const reviewBtn = document.createElement("button");
+      reviewBtn.className = "st-btn review-btn";
+      reviewBtn.textContent = "↻ Review again";
+      reviewBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="review"; saveProgress(); renderAll(); };
+      st.appendChild(knowBtn);
+      st.appendChild(reviewBtn);
+      el.appendChild(st);
+    }
+
+    container.appendChild(el);
+  });
+}
+
+function renderAll(){
+  renderTabs();
+  renderProgressBar();
+  renderStats();
+  renderCards();
+}
+
+function resetProgress(){
+  if(confirm("Reset all self-test progress for this deck? This can't be undone.")){
+    progress = {};
+    saveProgress();
+    renderAll();
+  }
+}
+
+loadProgress();
+renderAll();
+</script>
+</body>
+</html>
