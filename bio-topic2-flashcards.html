@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A Level Biology — Topic 2: Cells, Viruses & Reproduction</title>
+<style>
+  :root{
+    --bg:#0f1416;
+    --panel:#171f22;
+    --panel-2:#1d272b;
+    --border:#2a373c;
+    --text:#e8eef0;
+    --muted:#8fa3a9;
+    --accent:#4fd1a5;
+    --accent-dim:#2a6b56;
+    --trap:#e8a23d;
+    --trap-bg:#3a2c15;
+    --know:#4fd1a5;
+    --review:#e8626a;
+    --card-front:#1a2327;
+    --card-back:#16232a;
+    font-size:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  header{
+    padding:22px 16px 14px;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, #131b1e 0%, var(--bg) 100%);
+  }
+  header h1{
+    margin:0 0 4px;
+    font-size:1.3rem;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  header p{
+    margin:0;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+  .deck-stats{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    margin-top:12px;
+    font-size:0.78rem;
+    color:var(--muted);
+  }
+  .deck-stats b{color:var(--accent);font-size:0.95rem;}
+
+  nav.tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:6px;
+    padding:12px 12px 8px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    flex:0 0 auto;
+    background:var(--panel);
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 13px;
+    border-radius:20px;
+    font-size:0.76rem;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .tab-btn .count{
+    display:inline-block;
+    margin-left:6px;
+    font-size:0.68rem;
+    color:var(--accent);
+    opacity:0.85;
+  }
+  .tab-btn.active{
+    background:var(--accent-dim);
+    border-color:var(--accent);
+    color:#eafff6;
+  }
+
+  .progress-wrap{
+    padding:0 16px 4px;
+  }
+  .progress-bar{
+    height:6px;
+    background:var(--panel);
+    border-radius:4px;
+    overflow:hidden;
+    border:1px solid var(--border);
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--accent-dim), var(--accent));
+    transition:width .3s ease;
+  }
+  .progress-label{
+    font-size:0.72rem;
+    color:var(--muted);
+    margin-top:4px;
+    display:flex;
+    justify-content:space-between;
+  }
+
+  main{
+    max-width:640px;
+    margin:0 auto;
+    padding:14px 16px 8px;
+  }
+
+  .card{
+    position:relative;
+    background:var(--card-front);
+    border:1px solid var(--border);
+    border-radius:14px;
+    margin-bottom:14px;
+    min-height:150px;
+    cursor:pointer;
+    transition:border-color .2s ease, transform .12s ease;
+    overflow:hidden;
+  }
+  .card:active{transform:scale(0.99);}
+  .card.flipped{background:var(--card-back);border-color:var(--accent-dim);}
+  .card.known{border-color:var(--know);}
+  .card.review{border-color:var(--review);}
+
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:12px 16px 0;
+  }
+  .card-id{
+    font-size:0.68rem;
+    color:var(--muted);
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+  }
+  .status-chip{
+    font-size:0.65rem;
+    padding:2px 8px;
+    border-radius:10px;
+    background:var(--panel-2);
+    color:var(--muted);
+  }
+  .status-chip.known{background:rgba(79,209,165,0.15);color:var(--know);}
+  .status-chip.review{background:rgba(232,98,106,0.15);color:var(--review);}
+
+  .trap-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-size:0.68rem;
+    color:var(--trap);
+    background:var(--trap-bg);
+    padding:2px 8px;
+    border-radius:10px;
+    margin:8px 16px 0;
+    width:fit-content;
+    font-weight:600;
+  }
+
+  .card-body{
+    padding:10px 16px 16px;
+    font-size:0.95rem;
+    line-height:1.5;
+  }
+  .card-body.answer{
+    color:#cfe8de;
+  }
+  .card-body .label{
+    display:block;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .hint{
+    text-align:center;
+    font-size:0.72rem;
+    color:var(--muted);
+    padding:0 16px 12px;
+  }
+
+  .self-test{
+    display:flex;
+    gap:8px;
+    padding:0 16px 16px;
+  }
+  .st-btn{
+    flex:1;
+    padding:9px 0;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    color:var(--text);
+    font-size:0.82rem;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .st-btn.know-btn{color:var(--know);border-color:var(--accent-dim);}
+  .st-btn.review-btn{color:var(--review);border-color:#5a2c30;}
+  .st-btn:active{opacity:0.7;}
+
+  footer{
+    max-width:640px;
+    margin:10px auto 0;
+    padding:10px 16px 30px;
+    text-align:center;
+  }
+  .reset-btn{
+    background:none;
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 16px;
+    border-radius:10px;
+    font-size:0.75rem;
+    cursor:pointer;
+  }
+
+  .section-note{
+    font-size:0.78rem;
+    color:var(--muted);
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 14px;
+    margin-bottom:14px;
+    line-height:1.5;
+  }
+  .section-note b{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Topic 2 — Cells, Viruses & Reproduction</h1>
+  <p>Edexcel Biology B (9BI0) · Spec points 2.1–2.5</p>
+  <div class="deck-stats">
+    <div><b id="statTotal">0</b> cards</div>
+    <div><b id="statKnown">0</b> known</div>
+    <div><b id="statReview">0</b> to review</div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabBar"></nav>
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-label"><span id="progressText">0 / 0 known in this tab</span><span id="tabTitle"></span></div>
+</div>
+
+<main id="cardContainer"></main>
+
+<footer>
+  <button class="reset-btn" onclick="resetProgress()">Reset all progress</button>
+</footer>
+
+<script>
+/* ---------------------------------------------------------
+   DATA: cards across 5 subtopics, 2.1–2.5
+   trap:true marks a card built around a common exam misconception
+--------------------------------------------------------- */
+const DECK = [
+
+// ===================== 2.1 EUKARYOTIC & PROKARYOTIC CELL STRUCTURE =====================
+{t:"2.1", id:"2.1-01", front:"State cell theory.", back:"Cell theory states that cells are the fundamental unit of structure, function and organisation in all living organisms."},
+{t:"2.1", id:"2.1-02", front:"Describe the organisational hierarchy from cell to organ system.", back:"Cells are organised into tissues (groups of similar cells with a shared function), tissues into organs (structures made of different tissues working together), and organs into organ systems (groups of organs working together for a body function)."},
+{t:"2.1", id:"2.1-03", front:"List the key ultrastructural features of a prokaryotic cell.", back:"Nucleoid (region containing circular DNA, not membrane-bound), plasmids (small circular DNA loops), 70S ribosomes (smaller than eukaryotic ribosomes), and a cell wall made of peptidoglycan (not cellulose)."},
+{t:"2.1", id:"2.1-04", front:"Describe the cell wall structure of a Gram positive bacterium.", back:"A thick layer of peptidoglycan on the outside of the cell surface membrane, with no outer membrane. This thick peptidoglycan retains the crystal violet stain in Gram staining."},
+{t:"2.1", id:"2.1-05", front:"Describe the cell wall structure of a Gram negative bacterium.", back:"A thin layer of peptidoglycan, surrounded by an additional outer membrane. The thin peptidoglycan doesn't retain crystal violet stain, so Gram negative bacteria appear pink/red (counterstained) rather than purple."},
+{t:"2.1", id:"2.1-06", front:"Explain why Gram positive and Gram negative bacteria react differently to some antibiotics.", back:"Antibiotics that target peptidoglycan synthesis (e.g. penicillin) affect Gram positive bacteria more because they rely on a thick peptidoglycan layer. Gram negative bacteria have an additional outer membrane that can block some antibiotics from reaching the peptidoglycan or entering the cell at all, making them resistant to antibiotics that work in Gram positive bacteria."},
+{t:"2.1", id:"2.1-07", front:"Explain why antibiotics do not affect viruses.", back:"Antibiotics work by targeting structures or processes specific to living bacterial cells (e.g. cell wall synthesis, bacterial ribosomes). Viruses are not living cells — they have no cell wall, no ribosomes of their own, and no independent metabolism — so there is no bacterial target for antibiotics to act on."},
+{t:"2.1", id:"2.1-08", front:"List the key organelles found in a eukaryotic cell and one function of each: nucleus, nucleolus, rough ER, smooth ER.", back:"Nucleus: contains DNA, controls the cell, surrounded by a double membrane (nuclear envelope). Nucleolus: produces ribosomal RNA and assembles ribosomes. Rough endoplasmic reticulum (RER): studded with ribosomes, folds and processes proteins for secretion. Smooth endoplasmic reticulum (SER): synthesises and processes lipids and steroids."},
+{t:"2.1", id:"2.1-09", front:"Describe the function of the Golgi apparatus, and explain why secretory cells contain a lot of it.", back:"The Golgi apparatus modifies, sorts and packages proteins (e.g. adding carbohydrate groups) received from the RER, then packages them into vesicles for secretion. Secretory cells (e.g. pancreatic cells producing digestive enzymes) contain large amounts of Golgi apparatus because they need to process and export large quantities of protein continuously."},
+{t:"2.1", id:"2.1-10", front:"Describe the function of lysosomes.", back:"Lysosomes are vesicles containing digestive (hydrolytic) enzymes, bound by a single membrane. They break down worn-out organelles, digest material taken in by the cell (e.g. bacteria engulfed by phagocytes), and can break down the whole cell (autolysis)."},
+{t:"2.1", id:"2.1-11", front:"Explain why cells with a high energy demand (e.g. sperm midpiece, rod cells) contain large numbers of mitochondria.", back:"Mitochondria are the site of aerobic respiration, producing ATP. Cells with high energy demands need a continuous, large supply of ATP to power their specific function (e.g. flagellum movement in sperm, phototransduction in rod cells), so they contain many mitochondria to meet this demand."},
+{t:"2.1", id:"2.1-12", front:"How do magnification and resolution differ?", back:"Magnification is how many times larger an image is compared with the real object (image size ÷ actual size). Resolution is the ability to distinguish between two separate points as distinct — i.e. the minimum distance between two points at which they can still be seen as separate. You can magnify an image further without gaining any extra resolution (detail)."},
+{t:"2.1", id:"2.1-13", front:"Give the formula used to calculate magnification, and state the units rule.", back:"Magnification = image size ÷ actual size. Both sizes MUST be converted to the same units before dividing (a very common source of lost marks is mixing mm and μm)."},
+{t:"2.1", id:"2.1-14", front:"Explain why an electron microscope achieves higher resolution than a light microscope.", back:"Electron microscopes use a beam of electrons, which has a much shorter wavelength than visible light used in light microscopes. Because resolution is limited by the wavelength used, the shorter wavelength of electrons allows much smaller structures to be distinguished as separate."},
+{t:"2.1", id:"2.1-15", front:"Explain why stains are used when preparing a sample for light microscopy.", back:"Most cell structures are transparent/colourless and have similar refractive indices to their surroundings, so they are difficult to see under a light microscope. Stains bind to specific structures, adding contrast/colour so that they can be distinguished from the rest of the cell and from each other."},
+{t:"2.1", id:"2.1-16", front:"Core Practical 2 — outline how an eyepiece graticule and stage micrometer are used to measure a cell's actual size.", back:"The stage micrometer (a slide with a scale of known real length) is used to calibrate the eyepiece graticule (an arbitrary scale in the eyepiece) at a specific magnification, working out what real distance one eyepiece unit represents at that magnification. The stage micrometer is then replaced with the specimen slide, and the number of eyepiece units the structure spans is converted into a real measurement using the calibration."},
+{t:"2.1", id:"2.1-17", front:"Describe how density gradient centrifugation is used to separate cell organelles.", back:"Cells are broken open in a cold, buffered, isotonic solution. The resulting mixture (homogenate) is layered on top of a density gradient (e.g. sucrose solutions of increasing density) and spun in an ultracentrifuge. Organelles separate into distinct bands/layers according to their density — denser organelles (e.g. nuclei) travel further down the tube than less dense ones (e.g. ribosomes, ER fragments)."},
+{t:"2.1", id:"2.1-18", front:"Which organelles have a double membrane?", back:"The nucleus, mitochondria and (in plant cells) chloroplasts all have a double membrane (envelope). Most other membrane-bound organelles (lysosomes, Golgi, ER, vesicles) have a single membrane."},
+{t:"2.1", id:"2.1-19", front:"What is the tonoplast?", back:"The single membrane that surrounds the permanent (central) vacuole in a plant cell, controlling what enters and leaves the vacuole."},
+{t:"2.1", id:"2.1-20", front:"⚠ EXAMINER TRAP: A student says 'the electron microscope has higher magnification so you can see more detail.' What's wrong with this reasoning?", back:"Higher magnification alone does NOT mean more detail is visible — that requires higher RESOLUTION. You can magnify a blurry image as much as you like and it just gets bigger and blurrier ('empty magnification'). The electron microscope reveals more detail because of its superior resolution (shorter wavelength), not simply because it can magnify more.", trap:true},
+{t:"2.1", id:"2.1-21", front:"⚠ EXAMINER TRAP: In a magnification calculation, a student mixes mm and μm and gets the wrong answer by a factor of 1000. What's the fix?", back:"ALWAYS convert both the image size and actual size to the SAME unit before dividing. A very common error is measuring the image in mm but being given the actual size in μm (or vice versa) — check units first, every time, before calculating.", trap:true},
+
+// ===================== 2.2 VIRUSES =====================
+{t:"2.2", id:"2.2-01", front:"On what two features is virus classification based?", back:"Virus structure (e.g. capsid shape — helical, polyhedral/complex — and presence/absence of an envelope) and nucleic acid type (DNA or RNA, single or double stranded)."},
+{t:"2.2", id:"2.2-02", front:"Give an example of a DNA virus and its capsid structure.", back:"λ (lambda) phage — a DNA virus with a complex protein capsid (head-and-tail structure) that infects bacteria."},
+{t:"2.2", id:"2.2-03", front:"Give an example of an RNA virus with a helical capsid.", back:"Tobacco mosaic virus (TMV) — an RNA virus with a helical protein capsid, no envelope."},
+{t:"2.2", id:"2.2-04", front:"Give an example of an enveloped RNA virus, and one linked to a serious outbreak.", back:"Ebola — an enveloped RNA virus responsible for a major outbreak in West Africa in 2014, with a very high mortality rate."},
+{t:"2.2", id:"2.2-05", front:"What distinguishes HIV from most other RNA viruses?", back:"HIV is an RNA retrovirus — it contains the enzyme reverse transcriptase, which converts its RNA genome into DNA once inside a host cell (the reverse of normal transcription), allowing it to integrate into the host's DNA."},
+{t:"2.2", id:"2.2-06", front:"Describe the lytic cycle of a virus.", back:"The virus attaches to and injects its genetic material into a host cell. The host cell's machinery is used to replicate the viral genetic material and synthesise viral proteins. New virus particles assemble inside the host cell, and the host cell then lyses (bursts), releasing many new virus particles to infect further cells."},
+{t:"2.2", id:"2.2-07", front:"What is meant by viral latency?", back:"A period during which the virus's genetic material remains present/integrated within the host cell (e.g. inserted into the host genome) without actively replicating or producing new virus particles or symptoms — the virus can later be reactivated into the lytic cycle."},
+{t:"2.2", id:"2.2-08", front:"Explain why viruses are not classified as living cells.", back:"Viruses lack a cell surface membrane of their own metabolism, cannot carry out respiration or protein synthesis independently, and cannot reproduce without hijacking a host cell's machinery — they are obligate intracellular parasites, not independently functioning cells."},
+{t:"2.2", id:"2.2-09", front:"Explain why antiviral drugs must work differently from antibiotics.", back:"Since viruses use the host cell's own machinery to replicate (rather than having independent bacterial-type structures like a cell wall or 70S ribosomes), antivirals must instead target virus-specific processes — e.g. blocking viral entry into cells, inhibiting viral enzymes (like reverse transcriptase) or preventing assembly/release of new virus particles — while leaving the host cell's own processes unaffected."},
+{t:"2.2", id:"2.2-10", front:"Why did disease-control efforts during the 2014 Ebola outbreak focus on preventing spread rather than only on treatment?", back:"Because Ebola virus (like most viruses) is difficult to treat effectively once infection is established, and at the time no proven vaccine or cure existed. Preventing transmission (e.g. isolation, contact tracing, safe burial practices, protective equipment) was therefore the most effective way to reduce the impact of the outbreak."},
+{t:"2.2", id:"2.2-11", front:"What kinds of factors should be considered when evaluating the ethics of using an untested drug during an epidemic?", back:"Balancing the potential benefit (saving lives when there's no proven alternative and mortality is very high) against the risk of unknown/severe side effects, the ability of patients to give informed consent under crisis conditions, fairness of access to a limited drug supply, and the scientific value of any data collected."},
+{t:"2.2", id:"2.2-12", front:"⚠ EXAMINER TRAP: Which pairs of the four named viruses (λ phage, TMV, Ebola, HIV) share an envelope, and which share a helical capsid — and why do students lose marks here?", back:"Ebola and HIV both have an envelope; TMV and λ phage do NOT. TMV has a helical capsid; λ phage has a complex capsid — they do NOT share capsid shape despite both being 'classic' virus examples. Students frequently pair viruses by 'similar sounding' features rather than checking the specific structural facts for each of the four named examples — always check envelope and capsid shape separately, they don't always align the way you'd expect.", trap:true},
+
+// ===================== 2.3 EUKARYOTIC CELL CYCLE AND DIVISION =====================
+{t:"2.3", id:"2.3-01", front:"Name the three main stages of the cell cycle.", back:"Interphase (growth and DNA replication), mitosis or meiosis (nuclear division), and cytokinesis (division of the cytoplasm to form separate daughter cells)."},
+{t:"2.3", id:"2.3-02", front:"Outline what happens during the three sub-stages of interphase (G1, S, G2).", back:"G1: cell grows, synthesises proteins and increases organelle number in preparation for division. S (synthesis): DNA replicates, so each chromosome now consists of two identical sister chromatids. G2: further growth and protein synthesis, and the cell checks for DNA replication errors before entering mitosis."},
+{t:"2.3", id:"2.3-03", front:"Briefly describe what happens during each stage of mitosis: prophase, metaphase, anaphase, telophase.", back:"Prophase: chromosomes condense and become visible, the nuclear envelope breaks down, spindle fibres begin to form. Metaphase: chromosomes line up individually along the equator of the cell, attached to spindle fibres at the centromere. Anaphase: sister chromatids are pulled apart to opposite poles of the cell by spindle fibres. Telophase: chromosomes decondense, and a nuclear envelope reforms around each set of chromosomes at each pole."},
+{t:"2.3", id:"2.3-04", front:"State three biological roles of mitosis.", back:"Growth (increasing cell number in a developing organism), repair (replacing damaged or worn-out cells/tissues), and asexual reproduction (producing genetically identical offspring in some organisms)."},
+{t:"2.3", id:"2.3-05", front:"Core Practical 3 — outline the method for making a root tip squash to observe mitosis.", back:"Cut a small section from a growing root tip and place it in dilute hydrochloric acid (to soften the cell walls and hydrolyse the middle lamella, halting cell division). Transfer to a slide, add a suitable stain (e.g. toluidine blue, orcein or acetic carmine) to bind to the chromosomes, and leave to stain. Use a mounted needle to gently break up/flatten the tissue into a single layer of cells, add a coverslip, and press down firmly (squash) to spread the cells thinly for viewing under a light microscope."},
+{t:"2.3", id:"2.3-06", front:"Give the formula for mitotic index, and state what it measures.", back:"Mitotic index = (number of cells in mitosis) ÷ (total number of cells observed). It measures the proportion of cells actively dividing in a sample, giving an indication of the rate of cell division in that tissue."},
+{t:"2.3", id:"2.3-07", front:"What is the outcome of meiosis, and how many divisions does it involve?", back:"Meiosis produces four haploid gametes from one diploid parent cell, via two successive nuclear divisions (meiosis I and meiosis II), without DNA replication occurring between the two divisions."},
+{t:"2.3", id:"2.3-08", front:"What is the key difference between what happens in meiosis I and meiosis II?", back:"In meiosis I, homologous chromosome PAIRS separate (each daughter cell gets one chromosome from each homologous pair, still made of two sister chromatids — this halves the chromosome number). In meiosis II, sister CHROMATIDS separate (similar to mitosis), producing four haploid cells in total."},
+{t:"2.3", id:"2.3-09", front:"Explain how independent assortment contributes to genetic variation.", back:"During meiosis I, homologous chromosome pairs line up randomly at the equator, and which chromosome of each pair goes to which pole is independent of the others. This random orientation means many different combinations of maternal and paternal chromosomes can end up in each gamete."},
+{t:"2.3", id:"2.3-10", front:"Explain how crossing over contributes to genetic variation, and state when it occurs.", back:"During prophase I of meiosis, homologous chromosomes pair up (forming a bivalent) and segments of DNA can be exchanged between non-sister chromatids at points called chiasmata. This creates new combinations of alleles on a single chromosome that weren't present in either parent."},
+{t:"2.3", id:"2.3-11", front:"How is recombination frequency calculated, and what does a HIGHER frequency suggest about two genes?", back:"Recombination frequency = (number of offspring with recombinant phenotype ÷ total number of offspring) × 100%. A higher recombination frequency suggests the two genes are further apart on the chromosome (more opportunity for a crossover to occur between them)."},
+{t:"2.3", id:"2.3-12", front:"What is a chromosome translocation?", back:"A type of chromosome mutation where a section of one chromosome breaks off and joins onto a different, non-homologous chromosome."},
+{t:"2.3", id:"2.3-13", front:"Explain how non-disjunction causes Down's syndrome.", back:"Non-disjunction is the failure of chromosome pairs (or sister chromatids) to separate properly during meiosis. This can result in a gamete with an extra copy of chromosome 21. If this gamete is fertilised by a normal gamete, the resulting zygote has three copies of chromosome 21 (trisomy 21/polysomy) instead of two, causing Down's syndrome."},
+{t:"2.3", id:"2.3-14", front:"Explain how non-disjunction causes Turner's syndrome.", back:"Non-disjunction during meiosis can produce a gamete missing a sex chromosome. If this gamete is fertilised by a normal gamete, the resulting zygote has only one X chromosome (XO) instead of two — a monosomy — causing Turner's syndrome."},
+{t:"2.3", id:"2.3-15", front:"What information does a karyotype show, and how is it used diagnostically?", back:"A karyotype is an image showing all the chromosomes in a cell, arranged in matching homologous pairs by size and banding pattern. It's used to diagnose chromosomal abnormalities in number (e.g. trisomy/monosomy) or structure (e.g. translocations) by comparing against the expected normal set of chromosomes."},
+{t:"2.3", id:"2.3-16", front:"Give three differences between mitosis and meiosis.", back:"1) Mitosis produces 2 genetically identical (diploid) daughter cells; meiosis produces 4 genetically varied (haploid) daughter cells. 2) Mitosis involves one division; meiosis involves two. 3) Mitosis has no crossing over/independent assortment of homologous pairs; meiosis does, generating genetic variation."},
+{t:"2.3", id:"2.3-17", front:"⚠ EXAMINER TRAP: Why is a maximum recombination frequency of 50% expected for two genes on the SAME chromosome, even if they're far apart?", back:"If two genes are far enough apart that crossing over occurs between them essentially every time, the alleles effectively assort as if on different chromosomes — giving a 1:1:1:1 ratio of parental:recombinant gametes, i.e. 50% recombinant. Recombination frequency can approach but not exceed 50% for linked genes; 50%+ would be indistinguishable from genes on separate chromosomes entirely (independent assortment).", trap:true},
+{t:"2.3", id:"2.3-18", front:"⚠ EXAMINER TRAP: A student says 'mitosis produces genetically different cells like meiosis.' What's the correct distinction, and why does this error happen?", back:"Mitosis produces genetically IDENTICAL daughter cells (no crossing over or independent assortment of homologous pairs occurs) — it's meiosis that introduces variation. Students sometimes confuse this because both processes involve chromosome movement and spindle fibres, but the genetic OUTCOME is fundamentally different and is a very common exam distinction question.", trap:true},
+{t:"2.3", id:"2.3-19", front:"⚠ EXAMINER TRAP: What's the most common calculation error when working out time spent in a cell cycle stage from cell counts?", back:"Forgetting that the proportion of cells observed in a given stage is only proportional to the TIME spent in that stage if you assume a constant cell cycle length across the sample. Students often skip stating this assumption, or make an arithmetic slip converting the proportion (e.g. cells in anaphase ÷ total cells) into a time in minutes using the total cell cycle time given in the question.", trap:true},
+{t:"2.3", id:"2.3-20", front:"⚠ EXAMINER TRAP: Non-disjunction vs translocation — how do students confuse these as causes of genetic disorders?", back:"Non-disjunction is a failure of chromosomes to separate during meiosis, causing an abnormal NUMBER of chromosomes (polysomy/monosomy, e.g. Down's/Turner's). Translocation is a piece of one chromosome breaking off and joining another chromosome — a change in chromosome STRUCTURE, not necessarily number. Exam questions often give a karyotype or scenario and ask you to identify which process caused it — check whether the chromosome count is wrong (non-disjunction) or the chromosome structure/composition is wrong (translocation).", trap:true},
+
+// ===================== 2.4 SEXUAL REPRODUCTION IN MAMMALS =====================
+{t:"2.4", id:"2.4-01", front:"Outline the process of oogenesis.", back:"Diploid primordial germ cells (oogonia) divide by mitosis to increase in number, then grow into primary oocytes. Each primary oocyte begins meiosis I (which arrests until puberty), completing to form a secondary oocyte and a first polar body. The secondary oocyte begins meiosis II, which is only completed if fertilisation occurs, producing a mature ovum and a second polar body."},
+{t:"2.4", id:"2.4-02", front:"Outline the process of spermatogenesis.", back:"Diploid spermatogonia divide by mitosis to increase in number, then grow into primary spermatocytes. Each primary spermatocyte undergoes meiosis I to form two secondary spermatocytes, which undergo meiosis II to form four haploid spermatids. Spermatids then differentiate (grow a tail, form the acrosome, lose most cytoplasm) into mature spermatozoa."},
+{t:"2.4", id:"2.4-03", front:"Why is mitosis significant in the early stage of both spermatogenesis and oogenesis?", back:"Mitosis increases the number of diploid germ cells (spermatogonia/oogonia) available, providing a much larger pool of cells that can then go on to undergo meiosis, maximising the potential number of gametes produced."},
+{t:"2.4", id:"2.4-04", front:"Explain the importance of the acrosome in a sperm cell.", back:"The acrosome is a vesicle at the head of the sperm containing digestive (hydrolytic) enzymes. On contact with an egg, the acrosome releases these enzymes (the acrosome reaction) to digest a path through the zona pellucida/egg coatings, allowing the sperm to reach and fuse with the egg cell membrane."},
+{t:"2.4", id:"2.4-05", front:"Explain the role of the centrioles brought into the egg by the sperm following fertilisation.", back:"Human egg cells do not retain functional centrioles, so the centrioles contributed by the sperm organise the spindle fibres needed for the mitotic divisions of the resulting zygote/early embryo — without them, the first cell divisions could not take place correctly."},
+{t:"2.4", id:"2.4-06", front:"Describe the key events of fertilisation resulting in a zygote.", back:"A sperm cell binds to and fuses with the egg cell membrane after the acrosome reaction allows it to penetrate the egg's outer coatings. This triggers the cortical reaction, which changes the egg surface to prevent polyspermy (more than one sperm entering). The nuclei of the sperm and egg then fuse, combining their haploid genetic material to restore the diploid chromosome number, forming a zygote."},
+{t:"2.4", id:"2.4-07", front:"Describe the development of a zygote into a blastocyst.", back:"The zygote undergoes repeated rounds of mitotic cell division (cleavage) without much overall growth in size, first forming a solid ball of cells (morula), which then develops a fluid-filled cavity to become a blastocyst — a hollow ball of cells including an inner cell mass (which will form the embryo) and an outer layer (which will contribute to the placenta)."},
+{t:"2.4", id:"2.4-08", front:"Compare the products of oogenesis and spermatogenesis.", back:"Spermatogenesis produces four equally-sized, functional haploid sperm from each primary spermatocyte. Oogenesis produces only ONE functional haploid ovum from each primary oocyte — the other products are much smaller polar bodies which are non-functional and eventually degenerate. This asymmetry conserves cytoplasm and nutrients in the single ovum to support the early embryo."},
+{t:"2.4", id:"2.4-09", front:"What is PGD (pre-implantation genetic diagnosis), and what is it used for?", back:"A screening technique used during IVF in which one cell is removed from a four-cell stage embryo and its chromosomes analysed for abnormalities, before deciding which embryo(s) to implant into the mother's uterus — allowing embryos with chromosomal disorders to be identified before implantation."},
+{t:"2.4", id:"2.4-10", front:"Why is mitochondrial DNA only inherited from the mother, unlike nuclear DNA?", back:"Sperm mitochondria are located in the midpiece and are generally destroyed or excluded after fertilisation, so essentially all of the mitochondria (and therefore mitochondrial DNA) in the zygote come from the egg cell's cytoplasm — meaning mitochondrial disorders are passed only from mother to offspring, while nuclear DNA mutations can be inherited from either parent."},
+{t:"2.4", id:"2.4-11", front:"⚠ EXAMINER TRAP: Why does oogenesis produce only 1 functional gamete from each primary oocyte, while spermatogenesis produces 4 — and why do students lose marks explaining this?", back:"Students often just state the numbers without explaining WHY: during the two meiotic divisions in oogenesis, the cytoplasm divides very unequally each time, concentrating almost all cytoplasm/nutrients/organelles into one large cell (destined to become the ovum) while the rest is discarded as small, non-functional polar bodies. This asymmetric division maximises the resources available to support a future embryo — full marks require stating both the process (unequal cytoplasmic division) AND the functional reason (resource conservation for the embryo).", trap:true},
+
+// ===================== 2.5 SEXUAL REPRODUCTION IN PLANTS =====================
+{t:"2.5", id:"2.5-01", front:"Describe how a pollen grain forms in the anther.", back:"Diploid microspore mother cells (pollen mother cells) within the anther undergo meiosis to form four haploid microspores. Each microspore then undergoes mitosis, developing into a pollen grain that (typically) contains a generative nucleus and a tube nucleus."},
+{t:"2.5", id:"2.5-02", front:"Describe how the embryo sac forms in the ovule.", back:"A diploid megaspore mother cell within the ovule undergoes meiosis to produce four haploid megaspores, three of which typically degenerate. The surviving megaspore undergoes repeated mitotic divisions to form the embryo sac, containing the egg cell, two polar nuclei, and other haploid nuclei."},
+{t:"2.5", id:"2.5-03", front:"Describe how the male nuclei travel from the pollen grain to the embryo sac.", back:"After pollination, the tube nucleus in the pollen grain controls the growth of a pollen tube down through the style towards the ovule, digesting a path using enzymes released from the tube tip. The generative nucleus divides by mitosis to form two male (sperm) nuclei, which travel down the pollen tube and are released into the embryo sac when the tube reaches it."},
+{t:"2.5", id:"2.5-04", front:"Describe the process of double fertilisation in flowering plants.", back:"One of the two male nuclei fuses with the egg cell nucleus to form a diploid zygote. The other male nucleus fuses with the two polar nuclei in the embryo sac to form a triploid endosperm nucleus — hence 'double' fertilisation, as two separate fusion events occur."},
+{t:"2.5", id:"2.5-05", front:"What is the endosperm, and what is its function?", back:"The endosperm is a triploid tissue formed from the fusion of one male nucleus with the two polar nuclei. It develops into a nutrient-rich food store that supports the growth of the embryo during seed development and germination."},
+{t:"2.5", id:"2.5-06", front:"Core Practical 4 — outline how you would investigate the effect of sucrose concentration on pollen tube growth.", back:"Prepare a range of sucrose solutions of different concentrations. Place pollen grains from the same source onto separate microscope slides/wells, each with a different sucrose concentration, and incubate under identical conditions (same temperature, same time). Measure pollen tube length (e.g. using a light microscope with a calibrated eyepiece graticule) for a sample of pollen grains at each concentration, and calculate a mean length for comparison — repeating each concentration for reliability."},
+{t:"2.5", id:"2.5-07", front:"Describe the role of enzymes in pollen tube growth.", back:"Enzymes released from the tip of the growing pollen tube digest a path through the tissue of the stigma and style, allowing the tube to grow down towards the ovule and deliver the male nuclei to the embryo sac."},
+{t:"2.5", id:"2.5-08", front:"Explain why RNAase enzymes secreted by the style of some plants prevent self-fertilisation.", back:"In self-incompatible plants, if pollen from the SAME plant germinates on the stigma, the style recognises this and secretes RNAase enzymes that break down RNA inside the growing pollen tube, preventing protein synthesis and halting/killing pollen tube growth before it can reach the ovule — a mechanism that promotes cross-pollination and greater genetic variation."},
+{t:"2.5", id:"2.5-09", front:"⚠ EXAMINER TRAP: Which nuclei fuse to form the ZYGOTE, and which fuse to form the ENDOSPERM — why do students mix these up?", back:"Zygote = one male nucleus + the egg cell nucleus (diploid, 2n). Endosperm = the OTHER male nucleus + the two polar nuclei (triploid, 3n). Students often forget there are two SEPARATE fusion events happening with different partners and different chromosome-number outcomes — always specify which male nucleus fuses with which structure, and state the resulting ploidy (diploid vs triploid) for full marks.", trap:true},
+];
+
+/* ---------------------------------------------------------
+   TAB CONFIG
+--------------------------------------------------------- */
+const TABS = [
+  {key:"2.1", label:"2.1 Cell Structure"},
+  {key:"2.2", label:"2.2 Viruses"},
+  {key:"2.3", label:"2.3 Cell Cycle & Division"},
+  {key:"2.4", label:"2.4 Mammal Reproduction"},
+  {key:"2.5", label:"2.5 Plant Reproduction"},
+];
+
+const STORAGE_KEY = "bioT2CellsProgress";
+let progress = {};
+let activeTab = TABS[0].key;
+let flippedIds = new Set();
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    progress = raw ? JSON.parse(raw) : {};
+  }catch(e){ progress = {}; }
+}
+function saveProgress(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
+  catch(e){ /* storage unavailable — continue silently */ }
+}
+
+function renderTabs(){
+  const bar = document.getElementById("tabBar");
+  bar.innerHTML = "";
+  TABS.forEach(tab=>{
+    const cards = DECK.filter(c=>c.t===tab.key);
+    const known = cards.filter(c=>progress[c.id]==="know").length;
+    const btn = document.createElement("button");
+    btn.className = "tab-btn" + (tab.key===activeTab ? " active" : "");
+    btn.innerHTML = tab.label + `<span class="count">${known}/${cards.length}</span>`;
+    btn.onclick = ()=>{ activeTab = tab.key; flippedIds.clear(); renderAll(); };
+    bar.appendChild(btn);
+  });
+}
+
+function renderProgressBar(){
+  const cards = DECK.filter(c=>c.t===activeTab);
+  const known = cards.filter(c=>progress[c.id]==="know").length;
+  const pct = cards.length ? Math.round((known/cards.length)*100) : 0;
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressText").textContent = `${known} / ${cards.length} known in this tab`;
+  document.getElementById("tabTitle").textContent = TABS.find(t=>t.key===activeTab).label;
+}
+
+function renderStats(){
+  const total = DECK.length;
+  const known = DECK.filter(c=>progress[c.id]==="know").length;
+  const review = DECK.filter(c=>progress[c.id]==="review").length;
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statKnown").textContent = known;
+  document.getElementById("statReview").textContent = review;
+}
+
+function renderCards(){
+  const container = document.getElementById("cardContainer");
+  container.innerHTML = "";
+
+  if(activeTab==="2.1"){
+    const note = document.createElement("div");
+    note.className = "section-note";
+    note.innerHTML = "<b>Note:</b> 2.1 is the single largest question bank in Topic 2 — heavy on magnification/resolution calculations and Gram positive vs Gram negative bacteria. Worth extra repetition, especially the two unit-conversion trap cards.";
+    container.appendChild(note);
+  }
+  if(activeTab==="2.3"){
+    const note = document.createElement("div");
+    note.className = "section-note";
+    note.innerHTML = "<b>Note:</b> 2.3 mixes calculation questions (mitotic index, recombination frequency, cell-cycle timing) with conceptual mitosis-vs-meiosis questions — both styles come up often, so don't skip either type when revising.";
+    container.appendChild(note);
+  }
+
+  const cards = DECK.filter(c=>c.t===activeTab);
+  cards.forEach(c=>{
+    const state = progress[c.id]; // "know" | "review" | undefined
+    const isFlipped = flippedIds.has(c.id);
+
+    const el = document.createElement("div");
+    el.className = "card" + (isFlipped ? " flipped" : "") + (state==="know" ? " known" : "") + (state==="review" ? " review" : "");
+
+    const top = document.createElement("div");
+    top.className = "card-top";
+    const idEl = document.createElement("span");
+    idEl.className = "card-id";
+    idEl.textContent = c.id;
+    top.appendChild(idEl);
+    if(state){
+      const chip = document.createElement("span");
+      chip.className = "status-chip " + state;
+      chip.textContent = state==="know" ? "✓ Known" : "↻ Review";
+      top.appendChild(chip);
+    }
+    el.appendChild(top);
+
+    if(c.trap){
+      const badge = document.createElement("div");
+      badge.className = "trap-badge";
+      badge.textContent = "⚠ Examiner Trap";
+      el.appendChild(badge);
+    }
+
+    const body = document.createElement("div");
+    body.className = "card-body" + (isFlipped ? " answer" : "");
+    if(!isFlipped){
+      body.innerHTML = `<span class="label">Question</span>${c.front}`;
+    } else {
+      body.innerHTML = `<span class="label">Answer</span>${c.back}`;
+    }
+    el.appendChild(body);
+
+    const hint = document.createElement("div");
+    hint.className = "hint";
+    hint.textContent = isFlipped ? "Tap to flip back" : "Tap card to reveal answer";
+    el.appendChild(hint);
+
+    el.onclick = (e)=>{
+      if(e.target.closest(".st-btn")) return;
+      if(flippedIds.has(c.id)) flippedIds.delete(c.id); else flippedIds.add(c.id);
+      renderCards();
+    };
+
+    if(isFlipped){
+      const st = document.createElement("div");
+      st.className = "self-test";
+      const knowBtn = document.createElement("button");
+      knowBtn.className = "st-btn know-btn";
+      knowBtn.textContent = "✓ I know this";
+      knowBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="know"; saveProgress(); renderAll(); };
+      const reviewBtn = document.createElement("button");
+      reviewBtn.className = "st-btn review-btn";
+      reviewBtn.textContent = "↻ Review again";
+      reviewBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="review"; saveProgress(); renderAll(); };
+      st.appendChild(knowBtn);
+      st.appendChild(reviewBtn);
+      el.appendChild(st);
+    }
+
+    container.appendChild(el);
+  });
+}
+
+function renderAll(){
+  renderTabs();
+  renderProgressBar();
+  renderStats();
+  renderCards();
+}
+
+function resetProgress(){
+  if(confirm("Reset all self-test progress for this deck? This can't be undone.")){
+    progress = {};
+    saveProgress();
+    renderAll();
+  }
+}
+
+loadProgress();
+renderAll();
+</script>
+</body>
+</html>
