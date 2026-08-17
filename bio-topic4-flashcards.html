@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A Level Biology — Topic 4: Exchange and Transport</title>
+<style>
+  :root{
+    --bg:#0f1416;
+    --panel:#171f22;
+    --panel-2:#1d272b;
+    --border:#2a373c;
+    --text:#e8eef0;
+    --muted:#8fa3a9;
+    --accent:#4fd1a5;
+    --accent-dim:#2a6b56;
+    --trap:#e8a23d;
+    --trap-bg:#3a2c15;
+    --know:#4fd1a5;
+    --review:#e8626a;
+    --card-front:#1a2327;
+    --card-back:#16232a;
+    font-size:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  header{
+    padding:22px 16px 14px;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, #131b1e 0%, var(--bg) 100%);
+  }
+  header h1{
+    margin:0 0 4px;
+    font-size:1.25rem;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  header p{
+    margin:0;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+  .deck-stats{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    margin-top:12px;
+    font-size:0.78rem;
+    color:var(--muted);
+  }
+  .deck-stats b{color:var(--accent);font-size:0.95rem;}
+
+  nav.tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:6px;
+    padding:12px 12px 8px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    flex:0 0 auto;
+    background:var(--panel);
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 12px;
+    border-radius:20px;
+    font-size:0.72rem;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .tab-btn .count{
+    display:inline-block;
+    margin-left:6px;
+    font-size:0.66rem;
+    color:var(--accent);
+    opacity:0.85;
+  }
+  .tab-btn.active{
+    background:var(--accent-dim);
+    border-color:var(--accent);
+    color:#eafff6;
+  }
+
+  .progress-wrap{
+    padding:0 16px 4px;
+  }
+  .progress-bar{
+    height:6px;
+    background:var(--panel);
+    border-radius:4px;
+    overflow:hidden;
+    border:1px solid var(--border);
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--accent-dim), var(--accent));
+    transition:width .3s ease;
+  }
+  .progress-label{
+    font-size:0.72rem;
+    color:var(--muted);
+    margin-top:4px;
+    display:flex;
+    justify-content:space-between;
+  }
+
+  main{
+    max-width:640px;
+    margin:0 auto;
+    padding:14px 16px 8px;
+  }
+
+  .card{
+    position:relative;
+    background:var(--card-front);
+    border:1px solid var(--border);
+    border-radius:14px;
+    margin-bottom:14px;
+    min-height:150px;
+    cursor:pointer;
+    transition:border-color .2s ease, transform .12s ease;
+    overflow:hidden;
+  }
+  .card:active{transform:scale(0.99);}
+  .card.flipped{background:var(--card-back);border-color:var(--accent-dim);}
+  .card.known{border-color:var(--know);}
+  .card.review{border-color:var(--review);}
+
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:12px 16px 0;
+  }
+  .card-id{
+    font-size:0.68rem;
+    color:var(--muted);
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+  }
+  .status-chip{
+    font-size:0.65rem;
+    padding:2px 8px;
+    border-radius:10px;
+    background:var(--panel-2);
+    color:var(--muted);
+  }
+  .status-chip.known{background:rgba(79,209,165,0.15);color:var(--know);}
+  .status-chip.review{background:rgba(232,98,106,0.15);color:var(--review);}
+
+  .trap-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-size:0.68rem;
+    color:var(--trap);
+    background:var(--trap-bg);
+    padding:2px 8px;
+    border-radius:10px;
+    margin:8px 16px 0;
+    width:fit-content;
+    font-weight:600;
+  }
+
+  .card-body{
+    padding:10px 16px 16px;
+    font-size:0.95rem;
+    line-height:1.5;
+  }
+  .card-body.answer{
+    color:#cfe8de;
+  }
+  .card-body .label{
+    display:block;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .hint{
+    text-align:center;
+    font-size:0.72rem;
+    color:var(--muted);
+    padding:0 16px 12px;
+  }
+
+  .self-test{
+    display:flex;
+    gap:8px;
+    padding:0 16px 16px;
+  }
+  .st-btn{
+    flex:1;
+    padding:9px 0;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    color:var(--text);
+    font-size:0.82rem;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .st-btn.know-btn{color:var(--know);border-color:var(--accent-dim);}
+  .st-btn.review-btn{color:var(--review);border-color:#5a2c30;}
+  .st-btn:active{opacity:0.7;}
+
+  footer{
+    max-width:640px;
+    margin:10px auto 0;
+    padding:10px 16px 30px;
+    text-align:center;
+  }
+  .reset-btn{
+    background:none;
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 16px;
+    border-radius:10px;
+    font-size:0.75rem;
+    cursor:pointer;
+  }
+
+  .section-note{
+    font-size:0.78rem;
+    color:var(--muted);
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 14px;
+    margin-bottom:14px;
+    line-height:1.5;
+  }
+  .section-note b{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Topic 4 — Exchange and Transport</h1>
+  <p>Edexcel Biology B (9BI0) · Spec points 4.1–4.7</p>
+  <div class="deck-stats">
+    <div><b id="statTotal">0</b> cards</div>
+    <div><b id="statKnown">0</b> known</div>
+    <div><b id="statReview">0</b> to review</div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabBar"></nav>
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-label"><span id="progressText">0 / 0 known in this tab</span><span id="tabTitle"></span></div>
+</div>
+
+<main id="cardContainer"></main>
+
+<footer>
+  <button class="reset-btn" onclick="resetProgress()">Reset all progress</button>
+</footer>
+
+<script>
+const DECK = [
+
+// ===================== 4.1 SURFACE AREA TO VOLUME RATIO =====================
+{t:"4.1", id:"4.1-01", front:"Explain why single-celled organisms do not need a specialised gas exchange system.", back:"Single-celled organisms have a large surface area to volume ratio, so the distance from the outside environment to the centre of the cell is very short. This means diffusion alone is fast enough to supply the whole cell's oxygen/nutrient needs and remove waste, without needing specialised exchange structures."},
+{t:"4.1", id:"4.1-02", front:"What happens to the surface area to volume ratio as an organism increases in size?", back:"As an organism increases in size (volume), its surface area to volume ratio DECREASES — because volume increases faster (as a cube of linear dimensions) than surface area (which increases as a square of linear dimensions)."},
+{t:"4.1", id:"4.1-03", front:"Explain why larger, multicellular organisms need specialised exchange surfaces and transport systems.", back:"As organisms get larger, their surface area to volume ratio decreases, so diffusion alone across the outer body surface becomes too slow to meet the metabolic demands of all the internal cells, and the diffusion distance to the innermost cells becomes too great. Specialised exchange surfaces (e.g. lungs, gills) provide a large surface area for gas/nutrient exchange, and transport systems (e.g. blood) then carry substances the rest of the way to and from cells."},
+{t:"4.1", id:"4.1-04", front:"Give the formula for surface area to volume ratio, and explain how it is calculated for a simple shape.", back:"Surface area to volume ratio = surface area ÷ volume. For a sphere: surface area = 4πr², volume = (4/3)πr³. Both are calculated separately using the object's dimensions, then surface area is divided by volume to give the ratio."},
+{t:"4.1", id:"4.1-05", front:"Explain the relationship between an animal's body mass and its oxygen consumption rate per unit mass.", back:"Smaller animals have a higher surface area to volume ratio, so they lose heat more rapidly relative to their mass and must maintain a higher metabolic rate to compensate — this means smaller animals typically have a HIGHER oxygen consumption rate per kg of body mass than larger animals, which have a lower SA:V ratio and lose heat more slowly relative to their size."},
+{t:"4.1", id:"4.1-06", front:"⚠ EXAMINER TRAP: A student says 'as animals get bigger, their surface area decreases.' What's wrong with this statement?", back:"Surface area does NOT decrease as an animal gets bigger — surface area still increases with size, just more slowly than volume does. The correct statement is that the surface area to VOLUME RATIO decreases as size increases (both SA and volume increase, but volume increases faster) — don't confuse 'ratio decreasing' with 'surface area decreasing'.", trap:true},
+
+// ===================== 4.2 CELL TRANSPORT MECHANISMS =====================
+{t:"4.2", id:"4.2-01", front:"Describe the structure of the fluid mosaic model of the cell membrane.", back:"A phospholipid bilayer forms the basic structure, described as 'fluid' because the phospholipids and proteins can move sideways within the layer. Various proteins (transport proteins, receptors, enzymes) are embedded within or across the bilayer, giving a 'mosaic' pattern when viewed from above."},
+{t:"4.2", id:"4.2-02", front:"Define diffusion, and state whether it requires energy from the cell.", back:"Diffusion is the net movement of particles from a region of higher concentration to a region of lower concentration (down a concentration gradient), until evenly distributed. It does NOT require energy from the cell (passive process) — driven by the random kinetic movement of particles."},
+{t:"4.2", id:"4.2-03", front:"Explain facilitated diffusion, and how it differs from simple diffusion.", back:"Facilitated diffusion is the movement of substances (typically large or polar/charged molecules that cannot cross the phospholipid bilayer directly) down their concentration gradient, through specific channel or carrier proteins in the membrane. Unlike simple diffusion, it requires specific membrane proteins, but like simple diffusion it is passive (no ATP required) and moves substances DOWN their concentration gradient."},
+{t:"4.2", id:"4.2-04", front:"Define active transport, and state what it requires.", back:"Active transport is the movement of substances across a membrane AGAINST their concentration gradient (from low to high concentration), using carrier proteins and requiring energy in the form of ATP (from respiration)."},
+{t:"4.2", id:"4.2-05", front:"Define osmosis.", back:"The net movement of water molecules from a region of higher water potential to a region of lower water potential, through a partially permeable membrane."},
+{t:"4.2", id:"4.2-06", front:"Give the equation linking water potential, pressure potential and osmotic (solute) potential in a plant cell.", back:"Ψ (water potential) = P (pressure/turgor potential) + π (osmotic/solute potential). Water potential of pure water is defined as 0 kPa; solute potential is always negative (or zero); pressure potential is usually positive (or zero) in a walled plant cell."},
+{t:"4.2", id:"4.2-07", front:"Describe endocytosis and exocytosis, and state whether each requires energy.", back:"Endocytosis: the cell membrane engulfs material from outside the cell, forming a vesicle that moves large particles INTO the cell. Exocytosis: vesicles inside the cell fuse with the cell membrane, releasing their contents OUT of the cell (e.g. secretion of hormones/enzymes). Both are forms of active transport and require ATP."},
+{t:"4.2", id:"4.2-08", front:"Explain why a bipolar (archaeal) lipid monolayer is a suitable structure for a cell membrane.", back:"A bipolar lipid has a hydrophilic group at BOTH ends of the molecule (rather than just one hydrophilic head), allowing the lipid to span the entire membrane as a single molecule forming a monolayer, with hydrophilic ends facing the aqueous environment on both sides and the hydrophobic region in between — this still creates a stable barrier that is impermeable to polar/charged substances, just via a monolayer rather than a bilayer arrangement."},
+{t:"4.2", id:"4.2-09", front:"Explain why the lipid composition of a prokaryotic cell membrane needs to change in response to a change in environmental temperature.", back:"Membrane fluidity and permeability change with temperature (higher temperature increases fluidity/permeability; lower temperature decreases it, risking a membrane too rigid to function). Prokaryotes adjust the proportion of branched-chain or unsaturated fatty acids in their membrane lipids to maintain an appropriate, stable fluidity and permeability across a range of environmental temperatures, protecting normal membrane function (e.g. controlled transport, structural integrity)."},
+{t:"4.2", id:"4.2-10", front:"Explain the effect of increasing temperature on membrane permeability, and why.", back:"As temperature increases, membrane permeability increases. This is because phospholipids and membrane proteins gain more kinetic energy and move more, increasing the fluidity of the membrane and creating more gaps for substances to pass through; at very high temperatures, membrane proteins can also denature, further increasing (uncontrolled) permeability."},
+{t:"4.2", id:"4.2-11", front:"Describe how mineral (inorganic) ions are taken up by plant root hair cells via active transport.", back:"Carrier proteins in the root hair cell membrane bind to a specific mineral ion. ATP (from respiration in the root hair cell) is hydrolysed to provide energy, causing a conformational (shape) change in the carrier protein that moves the ion across the membrane and into the cytoplasm — this occurs against the ion's concentration gradient, since ion concentration is usually higher inside the root hair cell than in the soil solution."},
+{t:"4.2", id:"4.2-12", front:"Explain why red blood cells placed in a hypotonic (low concentration) solution can lyse (burst).", back:"The solution outside the cell has a higher water potential than inside the cell, so water moves into the cell by osmosis, down the water potential gradient. Since red blood cells have no cell wall to resist this influx (unlike plant cells), if enough water enters, the cell swells until the membrane can no longer withstand the pressure and it bursts (haemolysis)."},
+{t:"4.2", id:"4.2-13", front:"In an investigation of plant cell water potential (potato/onion cells and sucrose solutions), why is the plant tissue left in the solution for a set period of time (e.g. 10 minutes) before observing/weighing?", back:"To allow enough time for the cells and the surrounding solution to reach water potential equilibrium (i.e. for osmosis to occur fully and complete any net water movement), ensuring the results reflect the maximum/final effect of that sucrose concentration rather than a partway measurement."},
+{t:"4.2", id:"4.2-14", front:"Describe how you could determine the water potential of a plant tissue (e.g. potato) using percentage change in mass.", back:"Cut equal-sized pieces of the tissue, weigh each, and place into a range of different sucrose concentrations for a fixed time. Reweigh each piece and calculate the percentage change in mass for each concentration. Plot percentage change in mass (y-axis) against sucrose concentration (x-axis) — the concentration at which the line crosses zero percentage change (where mass doesn't increase or decrease) has the same water potential as the tissue."},
+{t:"4.2", id:"4.2-15", front:"⚠ EXAMINER TRAP: Which factors must be standardised/controlled in a water potential investigation to obtain valid results?", back:"Size/shape/surface area of tissue pieces (cut from the same source plant/potato where possible), temperature, time left in solution, volume of solution used, and blotting method before weighing (removing surface moisture consistently). Missing any one of these is a very common reason marks are lost on 'devise/justify improvements to this investigation' questions — always check ALL variables that could affect diffusion/osmosis rate, not just the obvious ones.", trap:true},
+{t:"4.2", id:"4.2-16", front:"⚠ EXAMINER TRAP: A student says glucose is a small molecule so it enters cells by simple diffusion through the phospholipid bilayer. Why is this often wrong?", back:"Glucose is a polar molecule, so despite being relatively small it cannot easily pass directly through the hydrophobic core of the phospholipid bilayer — it typically requires facilitated diffusion (via specific carrier proteins) or active transport (e.g. co-transport with sodium ions in intestinal/kidney cells), not simple diffusion. Non-polar or very small uncharged molecules (e.g. oxygen, carbon dioxide, small lipid-soluble molecules) can use simple diffusion; polar/charged/large molecules generally need protein-mediated transport.", trap:true},
+
+// ===================== 4.3 GAS EXCHANGE =====================
+{t:"4.3", id:"4.3-01", front:"Explain how having many millions of alveoli (rather than fewer, larger air sacs) increases the efficiency of gas exchange in the lungs.", back:"Millions of small alveoli provide a much greater total surface area for gas exchange than the same volume arranged as fewer, larger spheres would provide (smaller spheres have a higher surface area to volume ratio) — this increases the rate of diffusion of oxygen into the blood and carbon dioxide out."},
+{t:"4.3", id:"4.3-02", front:"Describe three structural features of alveoli (besides their large number) that enable efficient diffusion of gases.", back:"1) Alveoli walls are only one cell thick (thin epithelium), minimising diffusion distance. 2) They are surrounded by a dense network of capillaries (also one cell thick), further minimising diffusion distance and maintaining a steep concentration gradient by constantly bringing in blood low in oxygen/high in CO2. 3) The alveoli and capillary walls are moist, allowing gases to dissolve for diffusion, and the good blood supply/ventilation maintains steep concentration gradients for oxygen and carbon dioxide."},
+{t:"4.3", id:"4.3-03", front:"Describe the structural features common to gas exchange surfaces in both insects (tracheal system) and mammals (lungs).", back:"Both have: a large surface area (many alveoli in mammals; many branching tracheoles in insects) to maximise the rate of diffusion; a short diffusion distance/thin exchange surface (one cell thick in alveoli; thin tracheole walls close to cells); and a mechanism to maintain a concentration gradient (ventilation/blood flow in mammals; movement of air along tracheae, sometimes assisted by muscular pumping, in insects)."},
+{t:"4.3", id:"4.3-04", front:"Describe the structure of the insect tracheal gas exchange system, from spiracle to cell.", back:"Air enters through spiracles (small openings in the exoskeleton), which can open/close to control water loss. Air travels along tracheae (larger tubes, reinforced with rings to prevent collapse), which branch into smaller tracheoles that extend close to individual respiring cells, where gas exchange occurs directly by diffusion into the cells."},
+{t:"4.3", id:"4.3-05", front:"Explain the role of air sacs in the insect gas exchange system.", back:"Air sacs are enlarged, thin-walled sections of the tracheal system that can be compressed and expanded (e.g. by body movements) to help draw air into and push air out of the tracheal system more effectively, aiding ventilation especially during periods of high activity/oxygen demand."},
+{t:"4.3", id:"4.3-06", front:"Explain how gills are adapted for efficient gas exchange in fish.", back:"Gills consist of many gill filaments, each covered in many thin gill lamellae, providing a very large surface area. The lamellae have thin walls (short diffusion distance) and a dense network of blood capillaries. Water flows continuously over the gills (maintained by ventilation movements), maintaining a concentration gradient for diffusion."},
+{t:"4.3", id:"4.3-07", front:"Explain how the countercurrent flow system in fish gills increases the efficiency of oxygen uptake.", back:"Blood in the gill capillaries flows in the OPPOSITE direction to the water flowing over the gill lamellae. This means that as blood becomes more oxygenated moving along the lamella, it is still meeting water that has an even higher oxygen concentration than the blood at that point — maintaining a favourable diffusion gradient along the ENTIRE length of the gill lamella, allowing much more oxygen to be extracted than if flow were in the same direction (concurrent flow, where the gradient would run out partway along)."},
+{t:"4.3", id:"4.3-08", front:"Explain how the leaf structure of a xerophyte (e.g. marram grass) helps maintain a high water potential in leaf cells in dry conditions.", back:"Features such as a rolled leaf shape, sunken stomata in pits/grooves, and a covering of hairs trap a layer of still, humid air close to the stomata. This reduces the water potential gradient between the leaf's internal air spaces and the external atmosphere, reducing the rate of water loss by diffusion/transpiration through the stomata, helping to maintain a higher water potential in the leaf cells."},
+{t:"4.3", id:"4.3-09", front:"Explain why xerophytic plants such as marram grass often contain extra xylem tissue in their leaves.", back:"Marram grass grows in dry, sandy conditions where water availability is often limited/unpredictable and wind exposure is high, increasing transpirational water loss and physical stress on the leaf. Extra xylem provides additional strengthening/structural support to the leaf (thickened, lignified tissue resists wilting and mechanical damage) as well as extra capacity to transport whatever water is available efficiently to leaf cells."},
+{t:"4.3", id:"4.3-10", front:"Explain the mechanism controlling stomatal opening involving guard cells.", back:"In light, guard cells actively transport hydrogen ions out of the cell (using ATP), which drives potassium ions into the guard cell (and malate/starch is converted to increase solute concentration inside). This lowers the water potential inside the guard cells, so water moves in by osmosis, and the guard cells become turgid. Because the inner (stoma-facing) wall of the guard cell is less flexible/more thickened than the outer wall, the guard cells bow outward as they swell, widening the stomatal aperture."},
+{t:"4.3", id:"4.3-11", front:"Explain why babies with Acute Respiratory Distress Syndrome (ARDS), who lack sufficient surfactant, struggle to inhale effectively.", back:"Surfactant normally reduces the surface tension of the fluid lining the alveoli, preventing the alveoli walls from sticking together and allowing them to expand easily. Without enough surfactant, high surface tension causes the alveoli to resist expansion (or collapse after exhaling), requiring much greater effort to inhale and reducing the surface area available for gas exchange, lowering blood oxygen levels."},
+{t:"4.3", id:"4.3-12", front:"⚠ EXAMINER TRAP: When asked to 'explain features of alveoli that enable efficient diffusion', what mistake do students commonly make?", back:"Students often just LIST features (thin walls, good blood supply, large surface area) without explaining HOW each feature increases the rate of diffusion (linking to Fick's law: diffusion rate is proportional to surface area and concentration gradient, and inversely proportional to diffusion distance). Full marks require connecting each structural feature to its effect on diffusion rate, not just naming the feature.", trap:true},
+
+// ===================== 4.4 CIRCULATION =====================
+{t:"4.4", id:"4.4-01", front:"Explain why the heart is divided into a left and right side.", back:"To keep oxygenated blood (from the lungs, pumped by the left side to the body) completely separate from deoxygenated blood (returning from the body, pumped by the right side to the lungs) — this maintains a high concentration of oxygen in the blood delivered to body tissues, which would be diluted if oxygenated and deoxygenated blood were allowed to mix."},
+{t:"4.4", id:"4.4-02", front:"Explain why the wall of the left ventricle is thicker than the wall of the right ventricle.", back:"The left ventricle must pump blood at high pressure all the way around the body (the systemic circulation), a much longer and higher-resistance route than the right ventricle's job of pumping blood only to the nearby lungs (pulmonary circulation). The left ventricle therefore needs more powerful, thicker muscle to generate the higher pressure required."},
+{t:"4.4", id:"4.4-03", front:"Describe how the structure of an artery relates to its function.", back:"Arteries carry blood at high pressure away from the heart. They have a thick wall relative to their lumen, containing a thick layer of smooth muscle and elastic tissue, which allows the vessel to withstand and help maintain high pressure, and to stretch and recoil to smooth out the pulsing flow from the heart."},
+{t:"4.4", id:"4.4-04", front:"Describe how the structure of a vein relates to its function.", back:"Veins carry blood at low pressure back towards the heart. They have a thinner wall (less muscle and elastic tissue) relative to a larger lumen (reducing resistance to flow at low pressure), and contain valves at intervals to prevent the backflow of blood, since blood flow relies partly on surrounding skeletal muscle contraction (the 'muscle pump') rather than heart pressure alone."},
+{t:"4.4", id:"4.4-05", front:"Describe how the structure of a capillary relates to its function.", back:"Capillaries are the site of exchange between blood and tissues. They have a wall that is only one cell thick (endothelium), minimising the diffusion distance for substances moving between blood and tissue fluid, and a very small diameter/lumen, which slows blood flow and allows time for exchange, and means capillaries can permeate closely between individual cells."},
+{t:"4.4", id:"4.4-06", front:"Outline the cardiac cycle: describe what happens during atrial systole, ventricular systole and diastole.", back:"Diastole: both atria and ventricles are relaxed; blood flows passively into the atria and through into the ventricles. Atrial systole: the atria contract, pushing the remaining blood into the ventricles. Ventricular systole: the ventricles contract, increasing pressure until it exceeds the pressure in the atria (closing the atrioventricular valves) and then the arteries (opening the semilunar valves), ejecting blood into the pulmonary artery/aorta."},
+{t:"4.4", id:"4.4-07", front:"Describe the sequence of electrical stimulation during one cardiac cycle (myogenic stimulation).", back:"The sinoatrial node (SAN), the heart's natural pacemaker in the wall of the right atrium, generates an electrical impulse that spreads across both atria, causing them to contract (atrial systole). The impulse reaches the atrioventricular node (AVN), which briefly delays the signal (allowing the atria to finish emptying into the ventricles) before passing it down the bundle of His and Purkyne fibres in the septum and ventricle walls, causing the ventricles to contract from the base upwards (ventricular systole)."},
+{t:"4.4", id:"4.4-08", front:"What does an ECG (electrocardiogram) trace show, and what do the P wave and QRS complex represent?", back:"An ECG shows the electrical activity of the heart over time. The P wave represents the electrical impulse spreading across the atria (causing atrial contraction). The QRS complex represents the electrical impulse spreading through the ventricles (causing ventricular contraction/systole)."},
+{t:"4.4", id:"4.4-09", front:"Give the formula linking cardiac output, stroke volume and heart rate.", back:"Cardiac output = stroke volume × heart rate (where stroke volume is the volume of blood pumped by the left ventricle per beat, and heart rate is the number of beats per minute)."},
+{t:"4.4", id:"4.4-10", front:"Explain why Olympic endurance athletes often have a low resting heart rate.", back:"Regular endurance training increases the size and strength of the heart muscle (cardiac hypertrophy), particularly the left ventricle, increasing the volume of blood that can be ejected per beat (stroke volume). Since cardiac output (which must meet the body's resting oxygen demand) = stroke volume × heart rate, a higher stroke volume means fewer beats per minute are needed to deliver the same cardiac output, resulting in a lower resting heart rate."},
+{t:"4.4", id:"4.4-11", front:"Describe how atherosclerosis develops in the coronary arteries.", back:"Damage to the artery endothelium (e.g. from high blood pressure) allows white blood cells and cholesterol/lipids to accumulate beneath the lining, forming a fatty streak that develops into an atheroma (plaque). This plaque hardens/calcifies over time, narrowing the artery lumen, reducing blood flow and oxygen supply to the heart muscle, and increasing the risk of a blood clot forming and completely blocking the artery (causing a heart attack)."},
+{t:"4.4", id:"4.4-12", front:"Explain why an atrioventricular valve that leaks makes exercise difficult.", back:"A leaking valve allows some blood to flow backwards during ventricular systole, reducing the effective stroke volume/cardiac output delivered to the body for a given amount of cardiac work. To meet the increased oxygen demand of exercising muscles, the heart must work much harder (faster rate) to compensate for this inefficiency, making sustained exercise more difficult and tiring."},
+{t:"4.4", id:"4.4-13", front:"Compare and contrast a single circulatory system (e.g. fish) with a double circulatory system (e.g. mammals).", back:"In a single circulatory system, blood passes through the heart once per full circuit of the body (heart → gills → body → heart). In a double circulatory system, blood passes through the heart twice per circuit — once to the lungs (pulmonary circuit) and once around the rest of the body (systemic circuit), being re-pressurised by the heart between the two circuits. This means a double circulatory system can maintain a much higher blood pressure/flow rate to the body, since pressure isn't lost by first passing through the (low-resistance) gas exchange organ before travelling round the body, as it is in fish."},
+{t:"4.4", id:"4.4-14", front:"Describe the role of red blood cells (erythrocytes) and state one structural feature that suits their function.", back:"Red blood cells transport oxygen bound to haemoglobin. They have a biconcave disc shape, which increases their surface area to volume ratio for efficient gas diffusion, and lack a nucleus, maximising the internal space available for haemoglobin."},
+{t:"4.4", id:"4.4-15", front:"Describe the role of platelets in blood clotting.", back:"Platelets are cell fragments that, when a blood vessel is damaged, become activated and release clotting factors that trigger a cascade of reactions, converting the inactive enzyme prothrombin to the active enzyme thrombin, which converts soluble fibrinogen into insoluble fibrin threads that form a mesh, trapping blood cells to form a clot and seal the wound."},
+{t:"4.4", id:"4.4-16", front:"⚠ EXAMINER TRAP: A student mixes up which valves are open/closed during ventricular systole. What's the correct rule?", back:"During ventricular systole, ventricular pressure rises above atrial pressure — this CLOSES the atrioventricular (AV) valves (preventing backflow into the atria) — and once ventricular pressure exceeds arterial pressure, this OPENS the semilunar valves, allowing ejection into the pulmonary artery/aorta. A simple rule: valves open/close based on which side of them has HIGHER pressure at that moment — pressure always pushes a valve open on the downstream side and shut on the upstream/backflow side.", trap:true},
+{t:"4.4", id:"4.4-17", front:"⚠ EXAMINER TRAP: In the sequence of electrical stimulation, students often get the order of SAN, AVN and bundle of His wrong. What's the correct order?", back:"Sinoatrial node (SAN) → atrioventricular node (AVN) → bundle of His (then Purkyne fibres). The SAN always initiates the impulse (it's the natural pacemaker in the right atrium); the AVN is a relay/delay point between atria and ventricles; the bundle of His then conducts the impulse down through the septum to the ventricle walls. Getting this order backwards is one of the most common multiple-choice errors in this subtopic.", trap:true},
+
+// ===================== 4.5 TRANSPORT OF GASES IN THE BLOOD =====================
+{t:"4.5", id:"4.5-01", front:"Describe the shape of the oxygen dissociation curve for haemoglobin, and explain why it is S-shaped (sigmoidal).", back:"The curve is S-shaped (sigmoidal) because haemoglobin's four haem groups (quaternary structure) bind oxygen cooperatively: binding the first oxygen molecule changes the shape of haemoglobin slightly, making it easier for the second and third oxygen molecules to bind (steep, rising part of the curve), but as the molecule approaches full saturation with all four sites occupied, it becomes progressively harder to bind further oxygen (the curve flattens at high partial pressures of oxygen)."},
+{t:"4.5", id:"4.5-02", front:"Explain the Bohr effect, and its significance for oxygen delivery to respiring tissues.", back:"An increase in carbon dioxide concentration (and the resulting decrease in pH) shifts the oxygen dissociation curve to the RIGHT, decreasing haemoglobin's affinity for oxygen at a given partial pressure of oxygen. In actively respiring tissue, high CO2 production shifts the curve right, causing haemoglobin to release MORE oxygen to the tissue at that tissue's partial pressure of oxygen than it otherwise would — matching oxygen delivery to where it's needed most."},
+{t:"4.5", id:"4.5-03", front:"Explain why fetal haemoglobin has a higher affinity for oxygen than adult haemoglobin (dissociation curve positioned to the left of the adult curve).", back:"The fetus obtains its oxygen from the mother's blood across the placenta, where the maternal blood already has a somewhat lowered partial pressure of oxygen (some oxygen having been used by maternal tissues). Fetal haemoglobin's higher affinity for oxygen (curve shifted left) allows it to bind oxygen more readily than adult (maternal) haemoglobin even at these lower partial pressures — enabling oxygen to be effectively 'pulled' from the mother's blood across into the fetal blood."},
+{t:"4.5", id:"4.5-04", front:"Explain why myoglobin's oxygen dissociation curve lies to the left of (above) haemoglobin's curve, and why myoglobin's curve is NOT S-shaped.", back:"Myoglobin has only ONE haem group (a single polypeptide, no quaternary structure), so there is no cooperative binding effect between subunits — it simply binds oxygen with very high affinity even at low partial pressures, giving a curve that rises steeply and is hyperbolic rather than S-shaped. This very high affinity means myoglobin only releases its oxygen at very low partial pressures (e.g. during intense muscle activity when local oxygen is nearly depleted), suiting its role as an oxygen store within muscle cells."},
+{t:"4.5", id:"4.5-05", front:"Explain why animals adapted to high altitude (low atmospheric oxygen) often have a haemoglobin dissociation curve shifted to the LEFT compared with lowland relatives.", back:"A leftward-shifted curve means haemoglobin has a HIGHER affinity for oxygen, allowing it to become more fully saturated even at the lower partial pressures of oxygen found at high altitude — ensuring the blood can still pick up sufficient oxygen in the lungs/gills despite the reduced oxygen availability in the environment."},
+{t:"4.5", id:"4.5-06", front:"Explain why diving mammals (e.g. seals) have a high concentration of haemoglobin/myoglobin, and why this is significant for their diving ability.", back:"A higher concentration of oxygen-binding proteins (haemoglobin in blood, myoglobin in muscle) increases the total amount of oxygen that can be stored in the body per dive. This provides a larger oxygen reserve to sustain aerobic respiration in tissues while the animal is submerged and unable to breathe, allowing longer dive times."},
+{t:"4.5", id:"4.5-07", front:"Using the graph relationship, explain why the dissociation curve for a small mammal (e.g. mouse) lies to the right of a large mammal's (e.g. elephant's) curve.", back:"Smaller mammals have a higher surface area to volume ratio and lose heat faster, so they have a higher metabolic rate and greater oxygen demand per unit mass. A rightward-shifted curve (lower oxygen affinity) means haemoglobin releases oxygen MORE readily to respiring tissues at a given partial pressure of oxygen, better meeting this higher metabolic/oxygen demand."},
+{t:"4.5", id:"4.5-08", front:"State the formula for calculating the volume of oxygen carried by haemoglobin, given the concentration of haemoglobin and its oxygen-carrying capacity per gram.", back:"Volume of oxygen = (concentration of haemoglobin) × (% saturation, as a decimal) × (volume of oxygen carried per gram of fully saturated haemoglobin). All values must be converted to consistent units (e.g. g per dm³, cm³ oxygen per g haemoglobin) before multiplying."},
+{t:"4.5", id:"4.5-09", front:"⚠ EXAMINER TRAP: A student says a rightward-shifted dissociation curve means haemoglobin 'holds onto oxygen more strongly.' What's the correct interpretation?", back:"This is backwards. A curve shifted to the RIGHT means LOWER affinity for oxygen — haemoglobin releases oxygen more easily/readily at a given partial pressure. A curve shifted to the LEFT means HIGHER affinity — haemoglobin holds onto oxygen more strongly and only releases it at very low partial pressures. Always double-check which direction corresponds to which affinity before writing an explanation — this is one of the most frequently reversed concepts in this subtopic.", trap:true},
+
+// ===================== 4.6 TRANSFER BETWEEN CIRCULATORY SYSTEM AND CELLS (TISSUE FLUID) =====================
+{t:"4.6", id:"4.6-01", front:"State how tissue fluid is formed.", back:"At the arterial end of a capillary, the hydrostatic pressure of the blood (generated by the heart's pumping) is higher than the opposing (osmotic/oncotic) pressure pulling water back in, forcing plasma fluid (water, dissolved glucose, amino acids, ions and small molecules — but not large plasma proteins or blood cells) out through small gaps in the capillary wall into the spaces around cells, forming tissue fluid."},
+{t:"4.6", id:"4.6-02", front:"Give two differences between the composition of blood plasma and tissue fluid.", back:"1) Tissue fluid contains little to no large plasma proteins (they are too large to pass through the capillary wall and remain in the blood), whereas plasma has a high protein concentration. 2) Tissue fluid has no red blood cells or platelets (too large to pass through capillary walls), while blood plasma is part of whole blood that does contain these cells."},
+{t:"4.6", id:"4.6-03", front:"Explain how tissue fluid is returned to the blood capillaries at the venous end.", back:"As fluid leaves the capillary along its length, the hydrostatic pressure inside the capillary progressively decreases. Meanwhile, the concentration of plasma proteins remaining in the capillary creates a (relatively constant) oncotic/osmotic pressure pulling water back in by osmosis. By the venous end, hydrostatic pressure has fallen below the oncotic pressure, so the net movement of water is now back INTO the capillary, returning most of the tissue fluid to the blood."},
+{t:"4.6", id:"4.6-04", front:"What happens to tissue fluid that is NOT reabsorbed directly back into the blood capillaries?", back:"It drains into blind-ending lymph capillaries, forming lymph, which is transported through the lymphatic system (moved by the squeezing action of surrounding body muscles, with valves preventing backflow) and eventually returned to the blood circulatory system via a large vein near the heart."},
+{t:"4.6", id:"4.6-05", front:"Explain why a lack of dietary protein (e.g. in kwashiorkor) causes an excess accumulation of tissue fluid (oedema).", back:"Low dietary protein intake results in a lower concentration of plasma proteins in the blood, reducing the oncotic/osmotic pressure that normally pulls tissue fluid back into the capillaries at the venous end. With less water being reabsorbed, more fluid remains in the tissues, causing a build-up (oedema), typically visible as swelling."},
+{t:"4.6", id:"4.6-06", front:"Explain how a blockage of lymphatic vessels (e.g. by parasitic roundworms causing lymphatic filariasis) leads to swelling (lymphoedema).", back:"Lymphatic vessels normally drain excess tissue fluid, including proteins that have leaked out of blood capillaries, back towards the blood system. If the vessels are blocked, tissue fluid (and the proteins within it) cannot drain away and accumulates in the tissues; the trapped proteins also lower the tissue fluid's own water potential, drawing in even more water by osmosis from the surrounding capillaries, worsening the swelling."},
+{t:"4.6", id:"4.6-07", front:"⚠ EXAMINER TRAP: What is the key difference in HOW fluid moves through a vein compared with a lymph vessel?", back:"Fluid in a vein is under (low, residual) hydrostatic pressure originally generated by the heart, assisted by the skeletal muscle pump and valves. Lymph, by contrast, has NO pressure directly from the heart at all — its movement relies ENTIRELY on the squeezing action of surrounding skeletal muscles (and some smooth muscle contraction in larger lymph vessels) plus one-way valves to prevent backflow. Students often assume lymph flow is driven similarly to venous flow by residual heart pressure — it is not; the heart plays no direct role in lymph movement.", trap:true},
+
+// ===================== 4.7 TRANSPORT IN PLANTS =====================
+{t:"4.7", id:"4.7-01", front:"Relate the structure of xylem vessels to their function.", back:"Xylem vessels are long, continuous, hollow tubes made of dead cells joined end-to-end (no cell contents or cross-walls), allowing unimpeded, continuous transport of water. Their walls are thickened with lignin, providing structural support and preventing collapse under tension, and contain pits (unlignified areas) that allow water to move sideways between adjacent vessels if one becomes blocked."},
+{t:"4.7", id:"4.7-02", front:"Relate the structure of phloem (sieve tube elements and companion cells) to their function.", back:"Sieve tube elements are living cells joined end-to-end with perforated sieve plates between them, allowing mass flow of sap, but they lack a nucleus and most organelles to maximise space for flow. Each sieve tube element is linked to an adjacent companion cell (via plasmodesmata) which retains a full set of organelles and carries out the metabolic activity (e.g. active loading of sucrose) needed to support translocation in the sieve tube, which cannot sustain this activity alone."},
+{t:"4.7", id:"4.7-03", front:"Outline the pathway of water movement through a plant, from root hair to leaf (the transpiration stream).", back:"Water is absorbed by root hair cells (large surface area) by osmosis, moves across the root cortex via the apoplast (through cell walls) and/or symplast (through the cytoplasm, via plasmodesmata) pathways, enters the xylem in the root, is pulled up the stem in xylem vessels by the transpiration pull (cohesion-tension), and moves into leaf cells before evaporating from the leaf's mesophyll cell surfaces into the air spaces and diffusing out through open stomata (transpiration)."},
+{t:"4.7", id:"4.7-04", front:"Explain the cohesion-tension theory of water transport up the xylem.", back:"Water evaporates from leaf mesophyll cells (transpiration) at the top of the plant, reducing the water potential there and creating a 'pull' (tension) on the water column below. Water molecules are held together by hydrogen bonds (cohesion), so this tension is transmitted down the continuous, unbroken water column in the xylem, pulling more water up from the roots to replace what was lost — adhesion between water molecules and the xylem walls also helps support the water column against gravity."},
+{t:"4.7", id:"4.7-05", front:"Describe how sucrose is loaded into the phloem at a source (e.g. a leaf) by active transport / co-transport.", back:"Companion cells use ATP to actively pump hydrogen ions OUT of the cell into the surrounding tissue, creating a concentration gradient. Hydrogen ions then diffuse back into the companion cell down this gradient through co-transporter proteins, which simultaneously carry sucrose molecules INTO the companion cell/sieve tube against its own concentration gradient — this active loading lowers the water potential inside the sieve tube."},
+{t:"4.7", id:"4.7-06", front:"Explain how mass flow occurs along the phloem once sucrose has been loaded at the source.", back:"Active loading of sucrose into the sieve tube at the source lowers the water potential there, so water enters from the adjacent xylem by osmosis, raising the hydrostatic pressure at the source end. At the sink (e.g. a growing fruit, root or storage organ), sucrose is removed/used, raising the water potential there and lowering hydrostatic pressure. This pressure difference (high at source, low at sink) drives a mass flow of sap (water plus dissolved sucrose and other solutes) through the sieve tubes from source to sink."},
+{t:"4.7", id:"4.7-07", front:"Explain why a potometer measures the RATE OF WATER UPTAKE by a shoot, rather than directly measuring the rate of transpiration.", back:"A potometer measures the rate at which water is taken up into the cut shoot via the xylem (tracked by the movement of an air bubble in the capillary tube). This is generally assumed to be approximately equal to the rate of transpiration (water lost from the leaves), since most water taken up is lost by transpiration — but a small proportion of water taken up is retained for photosynthesis/cell processes/growth, so it is a very close estimate, not a perfect direct measurement, of transpiration rate."},
+{t:"4.7", id:"4.7-08", front:"Describe how you would use a potometer to compare the rate of transpiration under two different environmental conditions (e.g. still air vs moving air).", back:"Set up the potometer with a leafy shoot, ensuring no air bubbles in the apparatus and all joints airtight/sealed with waterproof jelly (petroleum jelly) to prevent water loss elsewhere. Introduce a single air bubble into the capillary tube and measure the distance it moves in a set time under one condition (e.g. still air), then repeat under the second condition (e.g. using a fan to create moving air), keeping all other variables (light intensity, humidity, temperature) constant. Repeat each condition multiple times to calculate a mean rate of water uptake for comparison."},
+{t:"4.7", id:"4.7-09", front:"Give two ways to modify a potometer investigation to validly compare water loss from the upper and lower surfaces of a leaf.", back:"Apply a thin layer of waterproof substance (e.g. petroleum jelly) to coat and block the stomata on one surface only (e.g. upper surface) for one shoot, and coat the opposite surface (lower surface) on an identical comparison shoot — then compare the rate of water uptake for each; alternatively/additionally, ensure both shoots are otherwise identical in leaf number/area and tested under the same environmental conditions, so any difference observed can be attributed specifically to which surface's stomata remain open."},
+{t:"4.7", id:"4.7-10", front:"⚠ EXAMINER TRAP: Why is it important to cut the shoot underwater and quickly transfer it into the potometer when setting up the apparatus?", back:"Cutting underwater (and keeping the cut end submerged during transfer) prevents air from being drawn into the xylem vessels at the cut surface. Since water transport up the xylem relies on a continuous, unbroken column of water (cohesion-tension theory), even a small air bubble entering the xylem can break this column and prevent water uptake, giving inaccurate/invalid results — this setup detail is a very commonly examined practical point.", trap:true},
+{t:"4.7", id:"4.7-11", front:"⚠ EXAMINER TRAP: A student explains phloem transport purely as 'diffusion of sucrose from source to sink.' Why does this lose marks?", back:"Translocation in phloem occurs by MASS FLOW (bulk movement of the whole solution due to a pressure gradient), not by diffusion of individual sucrose molecules. While active transport/co-transport IS used to actively LOAD sucrose into the phloem at the source (creating the pressure gradient), the actual long-distance movement along the sieve tube is driven by hydrostatic pressure differences, not by sucrose diffusing molecule-by-molecule down its own concentration gradient over that whole distance.", trap:true},
+];
+
+const TABS = [
+  {key:"4.1", label:"4.1 SA:V Ratio"},
+  {key:"4.2", label:"4.2 Cell Transport"},
+  {key:"4.3", label:"4.3 Gas Exchange"},
+  {key:"4.4", label:"4.4 Circulation"},
+  {key:"4.5", label:"4.5 Gas Transport"},
+  {key:"4.6", label:"4.6 Tissue Fluid"},
+  {key:"4.7", label:"4.7 Plant Transport"},
+];
+
+const STORAGE_KEY = "bioT4ExchangeProgress";
+let progress = {};
+let activeTab = TABS[0].key;
+let flippedIds = new Set();
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    progress = raw ? JSON.parse(raw) : {};
+  }catch(e){ progress = {}; }
+}
+function saveProgress(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
+  catch(e){ /* storage unavailable — continue silently */ }
+}
+
+function renderTabs(){
+  const bar = document.getElementById("tabBar");
+  bar.innerHTML = "";
+  TABS.forEach(tab=>{
+    const cards = DECK.filter(c=>c.t===tab.key);
+    const known = cards.filter(c=>progress[c.id]==="know").length;
+    const btn = document.createElement("button");
+    btn.className = "tab-btn" + (tab.key===activeTab ? " active" : "");
+    btn.innerHTML = tab.label + `<span class="count">${known}/${cards.length}</span>`;
+    btn.onclick = ()=>{ activeTab = tab.key; flippedIds.clear(); renderAll(); };
+    bar.appendChild(btn);
+  });
+}
+
+function renderProgressBar(){
+  const cards = DECK.filter(c=>c.t===activeTab);
+  const known = cards.filter(c=>progress[c.id]==="know").length;
+  const pct = cards.length ? Math.round((known/cards.length)*100) : 0;
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressText").textContent = `${known} / ${cards.length} known in this tab`;
+  document.getElementById("tabTitle").textContent = TABS.find(t=>t.key===activeTab).label;
+}
+
+function renderStats(){
+  const total = DECK.length;
+  const known = DECK.filter(c=>progress[c.id]==="know").length;
+  const review = DECK.filter(c=>progress[c.id]==="review").length;
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statKnown").textContent = known;
+  document.getElementById("statReview").textContent = review;
+}
+
+function renderCards(){
+  const container = document.getElementById("cardContainer");
+  container.innerHTML = "";
+
+  if(activeTab==="4.2"){
+    const note = document.createElement("div");
+    note.className = "section-note";
+    note.innerHTML = "<b>Note:</b> 4.2 is the largest question bank in Topic 4 — water potential practicals (potato/onion cell investigations) come up constantly. Get the &Psi; = P + &pi; equation and the 'devise/justify improvements' style answers automatic.";
+    container.appendChild(note);
+  }
+  if(activeTab==="4.5"){
+    const note = document.createElement("div");
+    note.className = "section-note";
+    note.innerHTML = "<b>Note:</b> 4.5 is almost entirely dissociation-curve interpretation questions (left/right shifts, Bohr effect, fetal/myoglobin comparisons). Practice reading curves fast — it's the same skill tested with different animals each time.";
+    container.appendChild(note);
+  }
+
+  const cards = DECK.filter(c=>c.t===activeTab);
+  cards.forEach(c=>{
+    const state = progress[c.id];
+    const isFlipped = flippedIds.has(c.id);
+
+    const el = document.createElement("div");
+    el.className = "card" + (isFlipped ? " flipped" : "") + (state==="know" ? " known" : "") + (state==="review" ? " review" : "");
+
+    const top = document.createElement("div");
+    top.className = "card-top";
+    const idEl = document.createElement("span");
+    idEl.className = "card-id";
+    idEl.textContent = c.id;
+    top.appendChild(idEl);
+    if(state){
+      const chip = document.createElement("span");
+      chip.className = "status-chip " + state;
+      chip.textContent = state==="know" ? "✓ Known" : "↻ Review";
+      top.appendChild(chip);
+    }
+    el.appendChild(top);
+
+    if(c.trap){
+      const badge = document.createElement("div");
+      badge.className = "trap-badge";
+      badge.textContent = "⚠ Examiner Trap";
+      el.appendChild(badge);
+    }
+
+    const body = document.createElement("div");
+    body.className = "card-body" + (isFlipped ? " answer" : "");
+    if(!isFlipped){
+      body.innerHTML = `<span class="label">Question</span>${c.front}`;
+    } else {
+      body.innerHTML = `<span class="label">Answer</span>${c.back}`;
+    }
+    el.appendChild(body);
+
+    const hint = document.createElement("div");
+    hint.className = "hint";
+    hint.textContent = isFlipped ? "Tap to flip back" : "Tap card to reveal answer";
+    el.appendChild(hint);
+
+    el.onclick = (e)=>{
+      if(e.target.closest(".st-btn")) return;
+      if(flippedIds.has(c.id)) flippedIds.delete(c.id); else flippedIds.add(c.id);
+      renderCards();
+    };
+
+    if(isFlipped){
+      const st = document.createElement("div");
+      st.className = "self-test";
+      const knowBtn = document.createElement("button");
+      knowBtn.className = "st-btn know-btn";
+      knowBtn.textContent = "✓ I know this";
+      knowBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="know"; saveProgress(); renderAll(); };
+      const reviewBtn = document.createElement("button");
+      reviewBtn.className = "st-btn review-btn";
+      reviewBtn.textContent = "↻ Review again";
+      reviewBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="review"; saveProgress(); renderAll(); };
+      st.appendChild(knowBtn);
+      st.appendChild(reviewBtn);
+      el.appendChild(st);
+    }
+
+    container.appendChild(el);
+  });
+}
+
+function renderAll(){
+  renderTabs();
+  renderProgressBar();
+  renderStats();
+  renderCards();
+}
+
+function resetProgress(){
+  if(confirm("Reset all self-test progress for this deck? This can't be undone.")){
+    progress = {};
+    saveProgress();
+    renderAll();
+  }
+}
+
+loadProgress();
+renderAll();
+</script>
+</body>
+</html>
