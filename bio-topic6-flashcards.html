@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A Level Biology — Topic 6: Microbiology and Pathogens</title>
+<style>
+  :root{
+    --bg:#0f1416;
+    --panel:#171f22;
+    --panel-2:#1d272b;
+    --border:#2a373c;
+    --text:#e8eef0;
+    --muted:#8fa3a9;
+    --accent:#4fd1a5;
+    --accent-dim:#2a6b56;
+    --trap:#e8a23d;
+    --trap-bg:#3a2c15;
+    --know:#4fd1a5;
+    --review:#e8626a;
+    --card-front:#1a2327;
+    --card-back:#16232a;
+    font-size:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  header{
+    padding:22px 16px 14px;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, #131b1e 0%, var(--bg) 100%);
+  }
+  header h1{
+    margin:0 0 4px;
+    font-size:1.25rem;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  header p{
+    margin:0;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+  .deck-stats{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    margin-top:12px;
+    font-size:0.78rem;
+    color:var(--muted);
+  }
+  .deck-stats b{color:var(--accent);font-size:0.95rem;}
+
+  nav.tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:6px;
+    padding:12px 12px 8px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    flex:0 0 auto;
+    background:var(--panel);
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 12px;
+    border-radius:20px;
+    font-size:0.72rem;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .tab-btn .count{
+    display:inline-block;
+    margin-left:6px;
+    font-size:0.66rem;
+    color:var(--accent);
+    opacity:0.85;
+  }
+  .tab-btn.active{
+    background:var(--accent-dim);
+    border-color:var(--accent);
+    color:#eafff6;
+  }
+
+  .progress-wrap{
+    padding:0 16px 4px;
+  }
+  .progress-bar{
+    height:6px;
+    background:var(--panel);
+    border-radius:4px;
+    overflow:hidden;
+    border:1px solid var(--border);
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--accent-dim), var(--accent));
+    transition:width .3s ease;
+  }
+  .progress-label{
+    font-size:0.72rem;
+    color:var(--muted);
+    margin-top:4px;
+    display:flex;
+    justify-content:space-between;
+  }
+
+  main{
+    max-width:640px;
+    margin:0 auto;
+    padding:14px 16px 8px;
+  }
+
+  .card{
+    position:relative;
+    background:var(--card-front);
+    border:1px solid var(--border);
+    border-radius:14px;
+    margin-bottom:14px;
+    min-height:150px;
+    cursor:pointer;
+    transition:border-color .2s ease, transform .12s ease;
+    overflow:hidden;
+  }
+  .card:active{transform:scale(0.99);}
+  .card.flipped{background:var(--card-back);border-color:var(--accent-dim);}
+  .card.known{border-color:var(--know);}
+  .card.review{border-color:var(--review);}
+
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:12px 16px 0;
+  }
+  .card-id{
+    font-size:0.68rem;
+    color:var(--muted);
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+  }
+  .status-chip{
+    font-size:0.65rem;
+    padding:2px 8px;
+    border-radius:10px;
+    background:var(--panel-2);
+    color:var(--muted);
+  }
+  .status-chip.known{background:rgba(79,209,165,0.15);color:var(--know);}
+  .status-chip.review{background:rgba(232,98,106,0.15);color:var(--review);}
+
+  .trap-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-size:0.68rem;
+    color:var(--trap);
+    background:var(--trap-bg);
+    padding:2px 8px;
+    border-radius:10px;
+    margin:8px 16px 0;
+    width:fit-content;
+    font-weight:600;
+  }
+
+  .card-body{
+    padding:10px 16px 16px;
+    font-size:0.95rem;
+    line-height:1.5;
+  }
+  .card-body.answer{
+    color:#cfe8de;
+  }
+  .card-body .label{
+    display:block;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .hint{
+    text-align:center;
+    font-size:0.72rem;
+    color:var(--muted);
+    padding:0 16px 12px;
+  }
+
+  .self-test{
+    display:flex;
+    gap:8px;
+    padding:0 16px 16px;
+  }
+  .st-btn{
+    flex:1;
+    padding:9px 0;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    color:var(--text);
+    font-size:0.82rem;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .st-btn.know-btn{color:var(--know);border-color:var(--accent-dim);}
+  .st-btn.review-btn{color:var(--review);border-color:#5a2c30;}
+  .st-btn:active{opacity:0.7;}
+
+  footer{
+    max-width:640px;
+    margin:10px auto 0;
+    padding:10px 16px 30px;
+    text-align:center;
+  }
+  .reset-btn{
+    background:none;
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 16px;
+    border-radius:10px;
+    font-size:0.75rem;
+    cursor:pointer;
+  }
+
+  .section-note{
+    font-size:0.78rem;
+    color:var(--muted);
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 14px;
+    margin-bottom:14px;
+    line-height:1.5;
+  }
+  .section-note b{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Topic 6 — Microbiology and Pathogens</h1>
+  <p>Edexcel Biology B (9BI0) · Spec points 6.1–6.7</p>
+  <div class="deck-stats">
+    <div><b id="statTotal">0</b> cards</div>
+    <div><b id="statKnown">0</b> known</div>
+    <div><b id="statReview">0</b> to review</div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabBar"></nav>
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-label"><span id="progressText">0 / 0 known in this tab</span><span id="tabTitle"></span></div>
+</div>
+
+<main id="cardContainer"></main>
+
+<footer>
+  <button class="reset-btn" onclick="resetProgress()">Reset all progress</button>
+</footer>
+
+<script>
+const DECK = [
+
+// ===================== 6.1 MICROBIAL TECHNIQUES =====================
+{t:"6.1", id:"6.1-01", front:"Name the four phases of a typical bacterial growth curve, in order.", back:"1) Lag phase (cells adjusting, synthesising enzymes, little/no division), 2) Log/exponential phase (rapid, exponential cell division at maximum rate), 3) Stationary phase (rate of division equals rate of death, population size roughly constant, due to nutrient depletion/waste build-up), 4) Death/decline phase (death rate exceeds division rate, population decreases)."},
+{t:"6.1", id:"6.1-02", front:"Give the formula for calculating the exponential growth rate constant (k) of a bacterial culture.", back:"k = (log₁₀N − log₁₀N₀) ÷ (0.301 × t), where N₀ is the initial number of cells, N is the number of cells after time t, and t is the time elapsed — this formula is derived from the exponential growth equation N = N₀ × 2^(kt)."},
+{t:"6.1", id:"6.1-03", front:"Explain the effect on the calculated growth rate constant (k) if the lag phase duration is not accounted for (i.e. t is measured from inoculation, not from when exponential growth actually began).", back:"Including lag-phase time (during which little/no division occurs) as part of t makes the calculated time period longer than the period over which growth actually happened exponentially. This makes the calculated k value an UNDERESTIMATE of the true exponential growth rate constant, since the same amount of population increase is being divided by an inflated time value."},
+{t:"6.1", id:"6.1-04", front:"Describe how a haemocytometer is used to count the number of cells in a liquid culture, and state the counting rule for cells overlapping the square's boundary.", back:"A haemocytometer is a slide with an etched grid of known area, and a coverslip creating a chamber of known depth above it (so each square has a known, fixed volume). A sample of the culture is added, and cells within (and touching two specific edges of) each counting square are counted under a microscope. By convention, cells fully inside a square AND those touching the top or left-hand boundary lines are counted; cells touching the bottom or right-hand boundary are NOT counted — this avoids double-counting cells that straddle the border between adjacent squares."},
+{t:"6.1", id:"6.1-05", front:"Give two sources of inaccuracy when counting cells using a haemocytometer.", back:"Uneven distribution of cells within the chamber (cells not perfectly randomly mixed/settled, e.g. due to clumping or incomplete mixing before sampling), and human error/subjectivity in judging which cells are 'on the boundary line' consistently, especially with small or overlapping cells."},
+{t:"6.1", id:"6.1-06", front:"Compare dilution plating and optical (turbidity) methods for estimating bacterial population size.", back:"Dilution plating: a serial dilution of the culture is spread on agar plates; after incubation, the number of visible colonies is counted (each colony assumed to have grown from one viable cell), giving an estimate of VIABLE (living) cell count, but this is slow (requires incubation time) and only detects cells able to grow on that particular medium. Optical/turbidity methods: measure how cloudy (turbid) the liquid culture is using a colorimeter, since more cells scatter more light — this is much faster and can give continuous real-time readings, but cannot distinguish living from dead cells (measures total cell mass/number, not viability)."},
+{t:"6.1", id:"6.1-07", front:"Describe the aseptic technique steps for transferring bacteria from an agar plate to a sterile broth using an inoculating loop.", back:"Sterilise the inoculating loop by passing it through a Bunsen burner flame until red hot, then allow it to cool briefly (without touching any surface) to avoid killing the bacteria on contact. Lift the lid of the agar plate only slightly (not fully removing it) and briefly pass the container opening/tube neck through the flame before and after use. Use the sterile, cooled loop to pick up a small sample of bacterial colony, then flame the neck of the sterile broth tube, quickly insert the loop and mix, then re-flame the tube neck before replacing its cap/lid — all work should be carried out near a Bunsen burner flame, which creates an updraft of warm air reducing the chance of airborne contamination settling into open containers."},
+{t:"6.1", id:"6.1-08", front:"Justify two aseptic techniques (other than UV radiation) used to prevent contamination when culturing bacteria.", back:"1) Flaming the inoculating loop (and container openings) before and after use — kills any bacteria present on the loop/rim, preventing cross-contamination between samples or introduction of unwanted microorganisms. 2) Working near a Bunsen burner flame — the rising convection current of hot air carries airborne microorganisms/dust upwards and away from open containers, reducing the chance of them settling into the culture."},
+{t:"6.1", id:"6.1-09", front:"Explain why glucose and sucrose (used as separate energy sources for bacteria) can produce different bacterial growth curves.", back:"Bacteria may need to first synthesise an inducible enzyme (e.g. a specific enzyme to hydrolyse sucrose into its component monosaccharides, glucose and fructose, before they can be used) if that sugar is not their preferred/default substrate, resulting in a longer lag phase and/or a slower growth rate for sucrose compared with glucose, which can typically be metabolised more directly and rapidly."},
+{t:"6.1", id:"6.1-10", front:"Explain the results when comparing yeast respiring glucose vs maltose (a disaccharide of two glucose units).", back:"Yeast can respire glucose directly, giving a relatively fast/immediate rate of CO2 production. To use maltose, yeast must first hydrolyse it (using the enzyme maltase) into two glucose molecules before these can enter glycolysis — this extra hydrolysis step typically causes a delay (longer lag) and/or an initially slower rate of CO2 production compared with glucose, though the maltose may eventually yield MORE total CO2 since each maltose molecule provides two glucose units once hydrolysed."},
+{t:"6.1", id:"6.1-11", front:"Explain why yeast cultured with lactose (a disaccharide of glucose and galactose) might show little or no CO2 production compared with glucose.", back:"Saccharomyces cerevisiae (brewer's/baker's yeast) typically lacks the enzyme lactase needed to hydrolyse lactose into its component monosaccharides (glucose and galactose), so it cannot access lactose as a respiratory substrate at all — resulting in little to no CO2 production compared with the positive control using glucose, similar to the water-only negative control."},
+{t:"6.1", id:"6.1-12", front:"Explain why streak plating onto a selective medium is a suitable method for isolating one target bacterial species (e.g. Salmonella) from a mixed culture.", back:"Streak plating progressively dilutes the sample as it is spread in a zig-zag pattern across successive sections of the agar plate using a sterile loop, so that in later sections the bacteria are spread far enough apart to grow as separate, well-isolated single colonies (each derived from one original cell) rather than one confluent lawn. A SELECTIVE medium additionally contains specific nutrients/inhibitory substances that only allow the target species (e.g. Salmonella) to grow, suppressing the growth of other, non-target bacterial species present in the mixed sample — combining both techniques allows pure, isolated colonies of just the target organism to be identified and picked."},
+{t:"6.1", id:"6.1-13", front:"Explain why there is a time delay before the number of lysed host cells starts to increase in a viral growth curve (e.g. λ phage infecting bacteria).", back:"After a virus first infects a host cell, there is a period (the eclipse/latent period) during which the virus takes over the host cell's machinery to replicate its genetic material and synthesise new viral protein components, assembling new virus particles inside the cell — this takes a certain amount of time before the host cell eventually lyses (bursts) to release the newly assembled viruses, causing the initial delay before the count of lysed cells begins to rise."},
+{t:"6.1", id:"6.1-14", front:"⚠ EXAMINER TRAP: A student calculates bacterial doubling time from just two data points (e.g. cell counts at 2 hours and 6 hours) and assumes this doubling rate applies throughout the whole culture period. Why might this conclusion not be valid?", back:"Bacterial growth only follows a constant exponential (doubling) pattern during the LOG PHASE of the growth curve — the rate is much slower during lag phase and can plateau or decline during stationary/death phase. A doubling-time calculation based on only two points assumes the whole culture is in log phase throughout, which is often not a valid assumption, especially if the time period spans the lag phase or approaches stationary phase — always check where on the growth curve the data points actually fall before generalising a constant growth/doubling rate.", trap:true},
+
+// ===================== 6.2 BACTERIA AS PATHOGENS =====================
+{t:"6.2", id:"6.2-01", front:"Distinguish endotoxins from exotoxins in terms of which bacteria produce them and how they are released.", back:"Endotoxins are components of the outer membrane (lipopolysaccharide) of GRAM NEGATIVE bacteria, released only when the bacterial cell dies/breaks apart (not actively secreted). Exotoxins are proteins actively SECRETED by living bacterial cells (produced by both Gram positive and Gram negative bacteria) while the bacteria are alive and growing."},
+{t:"6.2", id:"6.2-02", front:"Give two further differences between endotoxins and exotoxins (besides how/when they are released).", back:"Exotoxins are generally MORE toxic (lower LD50/lethal dose) and more SPECIFIC in their mode of action (often targeting a specific cell type or process), while endotoxins are generally LESS toxic and cause more GENERAL effects (e.g. fever, inflammation) not targeted at one specific mechanism. Exotoxins can often be converted into safe toxoids for use in vaccines; endotoxins generally cannot."},
+{t:"6.2", id:"6.2-03", front:"Which type of bacteria (Gram positive or Gram negative) release endotoxins, and why?", back:"Gram NEGATIVE bacteria release endotoxins, because the endotoxin (lipopolysaccharide) is a structural component of their additional outer membrane — a structure that Gram positive bacteria (which lack an outer membrane) do not possess."},
+{t:"6.2", id:"6.2-04", front:"Explain why a food poisoning outbreak with symptoms appearing very rapidly (within 1-6 hours of eating) is more likely to be caused by Staphylococcus than by Salmonella.", back:"Staphylococcus food poisoning is typically caused by a pre-formed EXOTOXIN already present in the contaminated food (secreted by the bacteria as they grew in the food before consumption) — this toxin acts almost immediately once ingested. Salmonella food poisoning, by contrast, is caused by the live bacteria themselves needing to first infect and multiply within the gut before symptoms develop, meaning there is typically a much longer incubation period (12-72 hours) before symptoms appear."},
+{t:"6.2", id:"6.2-05", front:"Describe techniques microbiologists could use to confirm that a case of food poisoning was caused specifically by Staphylococcus.", back:"Take a sample from the contaminated food or from a patient, and culture it on a suitable (potentially selective/differential) agar medium under appropriate conditions; identify colonies by their characteristic colony appearance/colour, perform a Gram stain to confirm Gram positive status and characteristic shape/clustering (e.g. clusters of cocci) under the microscope, and use biochemical tests (e.g. coagulase test, which is positive for Staphylococcus aureus) to confirm the specific species identification."},
+{t:"6.2", id:"6.2-06", front:"⚠ EXAMINER TRAP: A student says Salmonella (a Gram negative bacterium) has a thick peptidoglycan cell wall. Why is this an error, and what's the correct pairing of cell wall thickness with endotoxin/exotoxin production?", back:"Gram negative bacteria (like Salmonella) have a THIN peptidoglycan layer (plus an additional outer membrane containing the endotoxin, lipopolysaccharide) — a THICK peptidoglycan layer is the defining feature of GRAM POSITIVE bacteria instead. The correct combination for Salmonella is: thin peptidoglycan cell wall AND produces endotoxins (consistent with it being Gram negative) — mixing up which wall thickness goes with which Gram stain result, and which toxin type follows from that, is a very common multiple-choice error.", trap:true},
+
+// ===================== 6.3-6.4 ACTION OF ANTIBIOTICS & ANTIBIOTIC RESISTANCE =====================
+{t:"6.3-6.4", id:"6.3-01", front:"Describe two different targets/mechanisms by which antibiotics act on bacterial cells.", back:"1) Inhibiting bacterial cell wall synthesis (e.g. penicillin prevents formation of peptidoglycan cross-links) — this only affects actively dividing/growing cells and doesn't affect human cells (which have no cell wall). 2) Inhibiting bacterial protein synthesis, by binding to the bacterial 70S ribosome (e.g. tetracycline) — this doesn't affect the human cell's own 80S cytoplasmic ribosomes, though it can still affect mitochondrial 70S ribosomes."},
+{t:"6.3-6.4", id:"6.3-02", front:"State what is meant by 'bactericidal', and how this differs from 'bacteriostatic'.", back:"Bactericidal antibiotics directly KILL bacteria. Bacteriostatic antibiotics INHIBIT the growth/reproduction of bacteria (stopping the population from increasing) without necessarily killing the existing cells outright — the body's own immune system is then relied upon to clear the surviving, non-dividing bacteria."},
+{t:"6.3-6.4", id:"6.3-03", front:"Explain how the overuse of antibiotics (e.g. in animal feed, or unnecessary human prescriptions) contributes to the spread of antibiotic resistance.", back:"Within any bacterial population, some individuals may already carry a randomly-occurring mutation conferring antibiotic resistance. When antibiotics are used, susceptible (non-resistant) bacteria are killed, but any resistant individuals survive and reproduce without competition, increasing the frequency of the resistance allele in the surviving population (natural selection). Frequent/unnecessary antibiotic use increases the number of opportunities for this selection pressure to act, accelerating the spread of resistance alleles through bacterial populations (and resistance genes can also spread between different bacteria via horizontal gene transfer, e.g. plasmid conjugation)."},
+{t:"6.3-6.4", id:"6.3-04", front:"Explain why avoiding unnecessary prescriptions of antibiotics (e.g. for illnesses that don't require them) helps reduce the spread of antibiotic resistance.", back:"Every unnecessary use of an antibiotic creates an additional selection pressure favouring any resistant bacteria present (including harmless commensal bacteria naturally present in/on the body, not just the target pathogen), increasing the opportunity for resistant strains to be selected for and multiply. Reducing unnecessary antibiotic use reduces the frequency and scale of this selection pressure, slowing the rate at which resistance alleles increase in frequency across bacterial populations."},
+{t:"6.3-6.4", id:"6.3-05", front:"Explain why targeting a bacteria-specific enzyme (e.g. a bacterial version of acetyl CoA carboxylase, structurally different from the human version) could be useful for developing new antibiotics.", back:"If the bacterial version of the enzyme has a significantly different structure from the human equivalent (e.g. different number/arrangement of polypeptide subunits), it may be possible to design an inhibitor that binds specifically and selectively to the bacterial enzyme's unique structure/active site without significantly affecting the corresponding human enzyme — this would disrupt an essential bacterial metabolic process (potentially killing or inhibiting the bacteria) while minimising side effects/toxicity to the human patient's own cells."},
+{t:"6.3-6.4", id:"6.3-06", front:"Explain why the predatory bacterium Bdellovibrio bacteriovorus has been suggested as a potential 'living antibiotic'.", back:"Bdellovibrio preys specifically on Gram negative bacteria (entering their periplasmic space and consuming their contents, ultimately killing the prey bacterium), while being harmless to human cells. Because it is a living, self-replicating predator (rather than a static chemical), it could potentially continue to seek out, multiply, and kill target bacteria within an infected site, and — being a fundamentally different killing mechanism (predation, not a chemical/enzymatic target) — bacteria are less likely to have pre-existing resistance mechanisms against it compared with conventional antibiotics."},
+{t:"6.3-6.4", id:"6.3-07", front:"⚠ EXAMINER TRAP: A student assumes that a strong correlation shown in a data table (e.g. antibiotic use in animal feed correlating with higher resistance rates in that animal's bacteria) proves the use of antibiotics in feed CAUSES antibiotic resistance. What's the correct, more cautious way to evaluate this claim?", back:"A correlation in observational data does not, by itself, prove causation — other explanatory factors could be involved (e.g. resistant strains might have been introduced to that population via a different route, or other environmental/husbandry differences between animal groups could be confounding factors). Full-mark 'evaluate the extent to which this data supports the idea' answers should note the correlation IS consistent with (supports) the causal hypothesis, while also acknowledging its limitations — that correlation alone cannot fully confirm causation, and identifying what further evidence (e.g. controlled experimental data) would strengthen the causal claim.", trap:true},
+
+// ===================== 6.5-6.6 OTHER PATHOGENIC AGENTS AND CONTROLLING ENDEMIC DISEASE =====================
+{t:"6.5-6.6", id:"6.5-01", front:"Name the pathogen genus responsible for malaria, and state what type of organism it is.", back:"Plasmodium — a protoctistan (protozoan) parasite, not a bacterium, fungus or virus."},
+{t:"6.5-6.6", id:"6.5-02", front:"Name the genus responsible for stem rust disease in cereal crops, and state what type of organism it is.", back:"Puccinia — a fungus (specifically causing 'stem rust', a serious fungal disease of cereal crops such as wheat)."},
+{t:"6.5-6.6", id:"6.5-03", front:"Explain how stem rust fungus infection leads to a reduction in grain yield.", back:"The fungus infects and damages the leaf and stem tissue of the cereal plant (forming characteristic rust-coloured pustules), reducing the photosynthetic leaf area available and disrupting the transport of water and nutrients (e.g. damaging xylem/phloem or surrounding tissue) up the stem. This reduces the amount of photosynthesis and the plant's ability to transport the products of photosynthesis to the developing grain, reducing the energy/resources available for grain filling and therefore reducing overall grain yield."},
+{t:"6.5-6.6", id:"6.5-04", front:"Describe the general structure of norovirus, and state its main mode of transmission.", back:"Norovirus is a single-stranded RNA virus with a non-enveloped (naked) protein capsid. It is mainly transmitted via the faecal-oral route (e.g. contaminated food/water, contact with contaminated surfaces, or person-to-person contact), causing gastroenteritis."},
+{t:"6.5-6.6", id:"6.5-05", front:"Describe what happens inside cells of the small intestine that have taken up norovirus.", back:"The virus's RNA genome is released into the host cell and used directly (since it is already in mRNA-equivalent form for a positive-sense RNA virus, or first transcribed if negative-sense) to hijack the host cell's ribosomes and enzymes to synthesise viral proteins and replicate the viral RNA genome, assembling many new virus particles; the host cell is eventually destroyed (lysed) as newly-formed viruses are released to infect further intestinal cells, damaging the intestinal lining and disrupting normal digestion/absorption, contributing to the symptoms of gastroenteritis."},
+{t:"6.5-6.6", id:"6.5-06", front:"Explain why using a fungus that protects mosquitoes from Plasmodium infection (without killing the mosquitoes) is considered less controversial than using a genetically modified fungus that kills mosquitoes with a spider toxin.", back:"A method that does not kill the mosquitoes avoids removing them from the ecosystem, reducing concerns about unintended ecological consequences (e.g. disruption of food webs/other species that rely on mosquitoes, or removal of any pollination role) and avoids introducing a genetically modified, toxin-producing organism into the environment (which raises separate ethical/regulatory/public-acceptance concerns around GM organisms) — the protective (non-lethal, non-GM) approach achieves disease control while posing fewer of these additional ecological and ethical risks."},
+{t:"6.5-6.6", id:"6.5-07", front:"Give two methods used to control the spread of malaria, and briefly explain how each reduces transmission.", back:"1) Insecticide-treated bed nets — physically prevent mosquitoes from biting people while they sleep, and the insecticide kills mosquitoes that land on the net, reducing mosquito population and biting rate. 2) Indoor residual spraying of insecticide on walls — kills adult mosquitoes that rest on treated surfaces after feeding, reducing the mosquito population able to transmit the parasite between infected and uninfected people."},
+{t:"6.5-6.6", id:"6.5-08", front:"Explain one implication/consideration of using insecticide-treated bed nets to control malaria.", back:"Widespread, repeated use of the same insecticide creates a strong selection pressure favouring any mosquitoes with alleles conferring insecticide resistance, so over time the mosquito population can evolve resistance, reducing the long-term effectiveness of this control method (an implication that must be weighed against its short/medium-term benefits, alongside considerations like cost, distribution logistics, and community compliance in actually using the nets correctly)."},
+{t:"6.5-6.6", id:"6.5-09", front:"⚠ EXAMINER TRAP: Why do students often incorrectly place Plasmodium and Puccinia in the wrong classification kingdom?", back:"Plasmodium is a PROTOCTISTAN (protozoan) parasite — not a bacterium, and not a fungus, despite sometimes being casually described alongside 'germs' generally. Puccinia (stem rust) IS a fungus. Students commonly confuse these two named organisms with each other, or default to assuming any disease-causing microorganism must be either 'bacteria' or 'virus' — always check which of the specifically-named exemplar organisms belongs to which kingdom (bacteria, fungi, protoctista, or virus, which isn't even classified within the three domains of life) rather than guessing by association.", trap:true},
+
+// ===================== 6.7 RESPONSE TO INFECTION =====================
+{t:"6.7", id:"6.7-01", front:"Describe the process by which a macrophage engulfs a bacterium (phagocytosis).", back:"The macrophage's cell surface receptors recognise and bind to antigens on the surface of the pathogen (often aided by antibodies or complement proteins coating the pathogen, a process called opsonisation). The macrophage membrane extends pseudopodia (formed by actin filament rearrangement) around the pathogen, engulfing it into a vesicle called a phagosome. This phagosome fuses with a lysosome (forming a phagolysosome), and hydrolytic (digestive) enzymes break down the pathogen."},
+{t:"6.7", id:"6.7-02", front:"Describe how macrophages present antigens to T helper cells.", back:"After partially digesting an engulfed pathogen, the macrophage displays fragments of the pathogen's antigens on its own cell surface membrane, bound to MHC (major histocompatibility complex) proteins — this combination is recognised by the complementary T cell receptor on a specific T helper cell, which becomes activated (this is antigen presentation, making the macrophage an 'antigen-presenting cell')."},
+{t:"6.7", id:"6.7-03", front:"Describe the events resulting in T helper cell activation, following antigen presentation.", back:"The T helper cell's receptor binds specifically to the antigen-MHC complex displayed on the antigen-presenting cell's surface. This binding stimulates the T helper cell to become activated, causing it to divide by mitosis (clonal expansion) to produce many identical activated T helper cells, which then release cytokines (chemical signals) that stimulate other immune cells — including stimulating B cells to divide and differentiate into antibody-secreting plasma cells, and stimulating macrophages/cytotoxic T cells."},
+{t:"6.7", id:"6.7-04", front:"Explain why radioactive thymidine can be used to measure the rate of T lymphocyte cell division in an investigation.", back:"Thymidine is a nucleoside used specifically in the synthesis of new DNA (it contains the base thymine, unique to DNA). When cells actively divide, they must replicate their DNA (S phase), incorporating available thymidine (including any radioactively-labelled thymidine supplied) into the new DNA strands — so the amount of radioactivity incorporated into a cell population's DNA over a given time gives a measure of how much DNA replication (and therefore cell division) has occurred."},
+{t:"6.7", id:"6.7-05", front:"In an investigation of antigen-presenting cells, explain why the antigen-presenting cells (e.g. endothelial cells) were irradiated before being cultured with T lymphocytes.", back:"Irradiation damages DNA sufficiently to prevent the antigen-presenting cells themselves from dividing further, without necessarily killing them or destroying their ability to present antigen. This ensures that any radioactive thymidine subsequently incorporated into new DNA (and any increase in cell division measured) can be attributed specifically to the T LYMPHOCYTES dividing in response to antigen presentation, rather than to division of the presenting cells themselves, which would confound the results."},
+{t:"6.7", id:"6.7-06", front:"Explain why T lymphocytes needed to be washed thoroughly before measuring their radioactivity in this type of investigation.", back:"Washing removes any free, unincorporated radioactive thymidine remaining in the surrounding culture medium/solution (which was not actually taken up and incorporated into newly-synthesised DNA). Without this washing step, residual free radioactive thymidine could be measured alongside the DNA-incorporated thymidine, artificially inflating the radioactivity reading and giving a false, overestimated impression of how much cell division had actually occurred."},
+{t:"6.7", id:"6.7-07", front:"Explain why macrophages were treated with mitomycin (which cross-links DNA strands, preventing replication) in an investigation of T cell clonal selection.", back:"Mitomycin prevents the macrophages from dividing (similar in purpose to irradiation), ensuring that any subsequent increase in cell division/DNA replication detected in the culture (e.g. via radioactive thymidine incorporation) can be attributed specifically to the T CELLS responding to antigen presentation by the macrophages, rather than to the macrophages themselves proliferating — isolating T cell activation as the variable being measured."},
+{t:"6.7", id:"6.7-08", front:"Describe the production of monoclonal antibodies.", back:"An animal (e.g. a mouse) is injected with the target antigen, stimulating B lymphocytes (plasma cells) that produce a specific antibody against it. These antibody-producing cells are then fused with myeloma (cancerous, immortal) cells to create hybridoma cells, which combine the ability to produce a specific antibody with the ability to divide indefinitely. Hybridoma cells producing the desired antibody are selected, cloned, and cultured on a large scale to produce large quantities of a single, identical (monoclonal) antibody, all specific to the one target antigen."},
+{t:"6.7", id:"6.7-09", front:"Explain why myeloma cells are used in the production of monoclonal antibodies.", back:"Myeloma cells have the ability to divide indefinitely (are effectively immortal in culture), unlike normal antibody-producing B cells/plasma cells, which have a limited lifespan and cannot be cultured indefinitely on their own. Fusing an antibody-producing cell with a myeloma cell (forming a hybridoma) combines the desired antibody specificity with the myeloma's capacity for continuous division, allowing large-scale, ongoing production of that specific antibody."},
+{t:"6.7", id:"6.7-10", front:"Explain why mouse-derived monoclonal antibodies ('mouse anti-human antibodies') need to be 'humanised' before being used to treat human patients.", back:"A mouse antibody has a protein structure that is foreign to the human immune system — if injected directly, the patient's own immune system would recognise the mouse antibody itself as a foreign antigen and mount an immune response against it (producing anti-mouse antibodies), which would neutralise/destroy the therapeutic antibody before it could act, reduce its effectiveness on repeated doses, and could cause an allergic/hypersensitivity reaction in the patient. 'Humanising' the antibody (using recombinant DNA technology to replace most of the mouse protein sequence with human antibody sequence, while retaining just the antigen-binding region from the mouse) makes it far less likely to be recognised as foreign by the patient's immune system."},
+{t:"6.7", id:"6.7-11", front:"Explain how an HPV (human papillomavirus) vaccine protects against developing cervical cancer.", back:"The vaccine contains HPV antigens (e.g. virus-like particles resembling the viral capsid, without the infectious viral genetic material), which stimulate a primary immune response, causing B cells to produce specific antibodies against HPV and generating memory B cells and memory T cells. If the person is later exposed to actual HPV, these memory cells enable a much faster, stronger secondary immune response, producing antibodies rapidly enough to neutralise/destroy the virus before it can establish a persistent infection of cervical cells — since persistent HPV infection is what causes the cellular changes leading to cervical cancer, preventing infection prevents this cancer risk."},
+{t:"6.7", id:"6.7-12", front:"Explain why an HPV vaccine will not protect against infection with Chlamydia trachomatis.", back:"The HPV vaccine stimulates immunity (antibody production) specific to HPV antigens only — antibodies are highly specific, with a complementary shape to one particular antigen. Chlamydia trachomatis is a structurally and biologically completely different pathogen (a bacterium, not a virus) with entirely different surface antigens, so antibodies raised against HPV antigens will not recognise or bind to Chlamydia antigens, providing no protective immunity against it."},
+{t:"6.7", id:"6.7-13", front:"Explain the importance of vaccinating as many people as possible against a disease like rubella (herd immunity).", back:"If a sufficiently high proportion of the population is immune (vaccinated), the pathogen has very few susceptible hosts available to infect, making it much harder for the disease to spread through the population even to the small proportion who are not immune (e.g. those who cannot be vaccinated for medical reasons, or pregnant women for whom rubella infection is particularly dangerous to the fetus) — this indirect protection of non-immune individuals via a highly immune surrounding population is called herd immunity, and reduces overall disease incidence and transmission."},
+{t:"6.7", id:"6.7-14", front:"⚠ EXAMINER TRAP: A student explains 'active artificial immunity' from vaccination purely in terms of antibodies being given to the patient. Why is this description wrong?", back:"This describes PASSIVE immunity (receiving ready-made antibodies from an external source, e.g. from another organism), which gives immediate but temporary/short-lived protection (no memory cells produced). ACTIVE artificial immunity (vaccination) instead involves giving a weakened/inactivated/partial form of the antigen, which stimulates the patient's OWN immune system to produce its own antibodies via B cell clonal selection, AND crucially generates memory cells — giving longer-lasting protection because of the retained capacity for a rapid secondary response on future exposure. Always distinguish 'antibodies given directly' (passive) from 'antigen given to trigger the body's own response' (active).", trap:true},
+{t:"6.7", id:"6.7-15", front:"⚠ EXAMINER TRAP: In a vaccine trial claiming '100% effectiveness' based on a small sample where zero vaccinated people caught the disease, what limitations should a student raise when asked to criticise this claim?", back:"A small sample size means the result could easily be due to chance rather than genuine 100% protection — a true effectiveness slightly below 100% could still plausibly produce zero cases by chance in a small group; the trial may not represent the full range of the general population (e.g. age, health status, genetic variation); the follow-up period may have been too short to detect infections with a longer incubation period or waning immunity over time; and comparing against the control group's infection rate (rather than assuming 0% = 100% effective in isolation) is needed to draw a statistically meaningful conclusion — always look for sample size, control group comparison, and follow-up duration when critiquing an 'effectiveness' claim.", trap:true},
+];
+
+const TABS = [
+  {key:"6.1", label:"6.1 Microbial Techniques"},
+  {key:"6.2", label:"6.2 Bacteria as Pathogens"},
+  {key:"6.3-6.4", label:"6.3–6.4 Antibiotics"},
+  {key:"6.5-6.6", label:"6.5–6.6 Pathogenic Agents"},
+  {key:"6.7", label:"6.7 Response to Infection"},
+];
+
+const STORAGE_KEY = "bioT6MicrobiologyProgress";
+let progress = {};
+let activeTab = TABS[0].key;
+let flippedIds = new Set();
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    progress = raw ? JSON.parse(raw) : {};
+  }catch(e){ progress = {}; }
+}
+function saveProgress(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
+  catch(e){ /* storage unavailable — continue silently */ }
+}
+
+function renderTabs(){
+  const bar = document.getElementById("tabBar");
+  bar.innerHTML = "";
+  TABS.forEach(tab=>{
+    const cards = DECK.filter(c=>c.t===tab.key);
+    const known = cards.filter(c=>progress[c.id]==="know").length;
+    const btn = document.createElement("button");
+    btn.className = "tab-btn" + (tab.key===activeTab ? " active" : "");
+    btn.innerHTML = tab.label + `<span class="count">${known}/${cards.length}</span>`;
+    btn.onclick = ()=>{ activeTab = tab.key; flippedIds.clear(); renderAll(); };
+    bar.appendChild(btn);
+  });
+}
+
+function renderProgressBar(){
+  const cards = DECK.filter(c=>c.t===activeTab);
+  const known = cards.filter(c=>progress[c.id]==="know").length;
+  const pct = cards.length ? Math.round((known/cards.length)*100) : 0;
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressText").textContent = `${known} / ${cards.length} known in this tab`;
+  document.getElementById("tabTitle").textContent = TABS.find(t=>t.key===activeTab).label;
+}
+
+function renderStats(){
+  const total = DECK.length;
+  const known = DECK.filter(c=>progress[c.id]==="know").length;
+  const review = DECK.filter(c=>progress[c.id]==="review").length;
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statKnown").textContent = known;
+  document.getElementById("statReview").textContent = review;
+}
+
+function renderCards(){
+  const container = document.getElementById("cardContainer");
+  container.innerHTML = "";
+
+  if(activeTab==="6.1"){
+    const note = document.createElement("div");
+    note.className = "section-note";
+    note.innerHTML = "<b>Note:</b> 6.1 is heavily calculation- and practical-based (growth rate constant, haemocytometer counts, aseptic technique). Get the k formula and the counting-square rule automatic before anything else in this topic.";
+    container.appendChild(note);
+  }
+  if(activeTab==="6.7"){
+    const note = document.createElement("div");
+    note.className = "section-note";
+    note.innerHTML = "<b>Note:</b> 6.7 mixes core immunology (phagocytosis, antigen presentation, monoclonal antibodies) with real experimental-design scenarios (radioactive thymidine, irradiation controls). Practice explaining WHY each control step is needed, not just what it is.";
+    container.appendChild(note);
+  }
+
+  const cards = DECK.filter(c=>c.t===activeTab);
+  cards.forEach(c=>{
+    const state = progress[c.id];
+    const isFlipped = flippedIds.has(c.id);
+
+    const el = document.createElement("div");
+    el.className = "card" + (isFlipped ? " flipped" : "") + (state==="know" ? " known" : "") + (state==="review" ? " review" : "");
+
+    const top = document.createElement("div");
+    top.className = "card-top";
+    const idEl = document.createElement("span");
+    idEl.className = "card-id";
+    idEl.textContent = c.id;
+    top.appendChild(idEl);
+    if(state){
+      const chip = document.createElement("span");
+      chip.className = "status-chip " + state;
+      chip.textContent = state==="know" ? "✓ Known" : "↻ Review";
+      top.appendChild(chip);
+    }
+    el.appendChild(top);
+
+    if(c.trap){
+      const badge = document.createElement("div");
+      badge.className = "trap-badge";
+      badge.textContent = "⚠ Examiner Trap";
+      el.appendChild(badge);
+    }
+
+    const body = document.createElement("div");
+    body.className = "card-body" + (isFlipped ? " answer" : "");
+    if(!isFlipped){
+      body.innerHTML = `<span class="label">Question</span>${c.front}`;
+    } else {
+      body.innerHTML = `<span class="label">Answer</span>${c.back}`;
+    }
+    el.appendChild(body);
+
+    const hint = document.createElement("div");
+    hint.className = "hint";
+    hint.textContent = isFlipped ? "Tap to flip back" : "Tap card to reveal answer";
+    el.appendChild(hint);
+
+    el.onclick = (e)=>{
+      if(e.target.closest(".st-btn")) return;
+      if(flippedIds.has(c.id)) flippedIds.delete(c.id); else flippedIds.add(c.id);
+      renderCards();
+    };
+
+    if(isFlipped){
+      const st = document.createElement("div");
+      st.className = "self-test";
+      const knowBtn = document.createElement("button");
+      knowBtn.className = "st-btn know-btn";
+      knowBtn.textContent = "✓ I know this";
+      knowBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="know"; saveProgress(); renderAll(); };
+      const reviewBtn = document.createElement("button");
+      reviewBtn.className = "st-btn review-btn";
+      reviewBtn.textContent = "↻ Review again";
+      reviewBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="review"; saveProgress(); renderAll(); };
+      st.appendChild(knowBtn);
+      st.appendChild(reviewBtn);
+      el.appendChild(st);
+    }
+
+    container.appendChild(el);
+  });
+}
+
+function renderAll(){
+  renderTabs();
+  renderProgressBar();
+  renderStats();
+  renderCards();
+}
+
+function resetProgress(){
+  if(confirm("Reset all self-test progress for this deck? This can't be undone.")){
+    progress = {};
+    saveProgress();
+    renderAll();
+  }
+}
+
+loadProgress();
+renderAll();
+</script>
+</body>
+</html>
