@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A Level Biology — Topic 5: Energy for Biological Processes</title>
+<style>
+  :root{
+    --bg:#0f1416;
+    --panel:#171f22;
+    --panel-2:#1d272b;
+    --border:#2a373c;
+    --text:#e8eef0;
+    --muted:#8fa3a9;
+    --accent:#4fd1a5;
+    --accent-dim:#2a6b56;
+    --trap:#e8a23d;
+    --trap-bg:#3a2c15;
+    --know:#4fd1a5;
+    --review:#e8626a;
+    --card-front:#1a2327;
+    --card-back:#16232a;
+    font-size:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  header{
+    padding:22px 16px 14px;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, #131b1e 0%, var(--bg) 100%);
+  }
+  header h1{
+    margin:0 0 4px;
+    font-size:1.3rem;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  header p{
+    margin:0;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+  .deck-stats{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    margin-top:12px;
+    font-size:0.78rem;
+    color:var(--muted);
+  }
+  .deck-stats b{color:var(--accent);font-size:0.95rem;}
+
+  nav.tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:6px;
+    padding:12px 12px 8px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    flex:0 0 auto;
+    background:var(--panel);
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 13px;
+    border-radius:20px;
+    font-size:0.76rem;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .tab-btn .count{
+    display:inline-block;
+    margin-left:6px;
+    font-size:0.68rem;
+    color:var(--accent);
+    opacity:0.85;
+  }
+  .tab-btn.active{
+    background:var(--accent-dim);
+    border-color:var(--accent);
+    color:#eafff6;
+  }
+
+  .progress-wrap{
+    padding:0 16px 4px;
+  }
+  .progress-bar{
+    height:6px;
+    background:var(--panel);
+    border-radius:4px;
+    overflow:hidden;
+    border:1px solid var(--border);
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--accent-dim), var(--accent));
+    transition:width .3s ease;
+  }
+  .progress-label{
+    font-size:0.72rem;
+    color:var(--muted);
+    margin-top:4px;
+    display:flex;
+    justify-content:space-between;
+  }
+
+  main{
+    max-width:640px;
+    margin:0 auto;
+    padding:14px 16px 8px;
+  }
+
+  .card{
+    position:relative;
+    background:var(--card-front);
+    border:1px solid var(--border);
+    border-radius:14px;
+    margin-bottom:14px;
+    min-height:150px;
+    cursor:pointer;
+    transition:border-color .2s ease, transform .12s ease;
+    overflow:hidden;
+  }
+  .card:active{transform:scale(0.99);}
+  .card.flipped{background:var(--card-back);border-color:var(--accent-dim);}
+  .card.known{border-color:var(--know);}
+  .card.review{border-color:var(--review);}
+
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:12px 16px 0;
+  }
+  .card-id{
+    font-size:0.68rem;
+    color:var(--muted);
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+  }
+  .status-chip{
+    font-size:0.65rem;
+    padding:2px 8px;
+    border-radius:10px;
+    background:var(--panel-2);
+    color:var(--muted);
+  }
+  .status-chip.known{background:rgba(79,209,165,0.15);color:var(--know);}
+  .status-chip.review{background:rgba(232,98,106,0.15);color:var(--review);}
+
+  .trap-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-size:0.68rem;
+    color:var(--trap);
+    background:var(--trap-bg);
+    padding:2px 8px;
+    border-radius:10px;
+    margin:8px 16px 0;
+    width:fit-content;
+    font-weight:600;
+  }
+
+  .card-body{
+    padding:10px 16px 16px;
+    font-size:0.95rem;
+    line-height:1.5;
+  }
+  .card-body.answer{
+    color:#cfe8de;
+  }
+  .card-body .label{
+    display:block;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .hint{
+    text-align:center;
+    font-size:0.72rem;
+    color:var(--muted);
+    padding:0 16px 12px;
+  }
+
+  .self-test{
+    display:flex;
+    gap:8px;
+    padding:0 16px 16px;
+  }
+  .st-btn{
+    flex:1;
+    padding:9px 0;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    color:var(--text);
+    font-size:0.82rem;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .st-btn.know-btn{color:var(--know);border-color:var(--accent-dim);}
+  .st-btn.review-btn{color:var(--review);border-color:#5a2c30;}
+  .st-btn:active{opacity:0.7;}
+
+  footer{
+    max-width:640px;
+    margin:10px auto 0;
+    padding:10px 16px 30px;
+    text-align:center;
+  }
+  .reset-btn{
+    background:none;
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 16px;
+    border-radius:10px;
+    font-size:0.75rem;
+    cursor:pointer;
+  }
+
+  .section-note{
+    font-size:0.78rem;
+    color:var(--muted);
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 14px;
+    margin-bottom:14px;
+    line-height:1.5;
+  }
+  .section-note b{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Topic 5 — Energy for Biological Processes</h1>
+  <p>Edexcel Biology B (9BI0) · Spec points 5.1–5.7</p>
+  <div class="deck-stats">
+    <div><b id="statTotal">0</b> cards</div>
+    <div><b id="statKnown">0</b> known</div>
+    <div><b id="statReview">0</b> to review</div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabBar"></nav>
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-label"><span id="progressText">0 / 0 known in this tab</span><span id="tabTitle"></span></div>
+</div>
+
+<main id="cardContainer"></main>
+
+<footer>
+  <button class="reset-btn" onclick="resetProgress()">Reset all progress</button>
+</footer>
+
+<script>
+const DECK = [
+
+// ===================== 5.1-5.4 AEROBIC RESPIRATION =====================
+{t:"5.1-5.4", id:"5.1-01", front:"Name the four stages of aerobic respiration, in order.", back:"1) Glycolysis, 2) Link reaction, 3) Krebs cycle, 4) Oxidative phosphorylation (electron transport chain)."},
+{t:"5.1-5.4", id:"5.1-02", front:"Describe glycolysis: where it occurs and its overall inputs/outputs.", back:"Occurs in the cytoplasm (does not require oxygen). One glucose molecule (6C) is phosphorylated (using 2 ATP) then split and oxidised to form two molecules of pyruvate (3C), producing a net gain of 2 ATP (substrate-level phosphorylation) and 2 reduced NAD (NADH) per glucose."},
+{t:"5.1-5.4", id:"5.1-03", front:"Describe the link reaction: where it occurs and what happens to pyruvate.", back:"Occurs in the mitochondrial matrix. Pyruvate (3C) is decarboxylated (loses CO2) and oxidised (loses hydrogen, reducing NAD to NADH), and combined with coenzyme A to form acetyl coenzyme A (2C). This happens twice per glucose molecule (once per pyruvate)."},
+{t:"5.1-5.4", id:"5.1-04", front:"Describe the Krebs cycle: where it occurs and its role.", back:"Occurs in the mitochondrial matrix. Acetyl CoA (2C) combines with a 4C compound to form a 6C compound (citrate), which is progressively decarboxylated and oxidised through a cycle of reactions, regenerating the original 4C compound. Per acetyl CoA, this produces 1 ATP (substrate-level phosphorylation), 3 NADH, 1 reduced FAD (FADH2), and releases 2 CO2."},
+{t:"5.1-5.4", id:"5.1-05", front:"Describe oxidative phosphorylation (the electron transport chain): where it occurs and its overall role.", back:"Occurs across the inner mitochondrial membrane (electron carriers) and matrix/intermembrane space. Reduced NAD and FAD (from glycolysis, link reaction, Krebs cycle) donate electrons to a chain of carrier proteins; energy released as electrons pass along the chain is used to actively pump hydrogen ions into the intermembrane space, creating an electrochemical gradient. Hydrogen ions diffuse back through ATP synthase (chemiosmosis), generating large amounts of ATP. Oxygen acts as the final electron acceptor, combining with electrons and H+ to form water."},
+{t:"5.1-5.4", id:"5.1-06", front:"Explain what happens to oxygen at the end of the electron transport chain, and why this step is essential.", back:"Oxygen acts as the final electron acceptor: it accepts electrons from the last carrier in the chain (cytochrome oxidase) and combines with hydrogen ions to form water. This is essential because it keeps the chain flowing — without oxygen to remove electrons at the end, the carriers remain reduced and cannot accept more electrons, halting the whole chain and stopping ATP production by oxidative phosphorylation."},
+{t:"5.1-5.4", id:"5.1-07", front:"Explain why cyanide (a non-competitive inhibitor of cytochrome oxidase) can kill an animal.", back:"Cyanide binds to cytochrome oxidase (the last carrier in the electron transport chain) at a site other than the active site, changing its shape so it can no longer transfer electrons to oxygen. This halts the entire electron transport chain (electrons cannot be passed on, so the whole chain backs up), stopping the hydrogen ion gradient being generated and therefore stopping ATP synthase producing ATP by oxidative phosphorylation. Since oxidative phosphorylation normally produces the vast majority of a cell's ATP, cells (especially in the brain and heart, which have very high energy demands) rapidly run out of ATP and die, which can be fatal to the whole animal."},
+{t:"5.1-5.4", id:"5.1-08", front:"Explain the role of the Krebs cycle in aerobic respiration.", back:"The Krebs cycle completes the oxidation of the respiratory substrate (via acetyl CoA), releasing carbon dioxide as a waste product, generating a small amount of ATP directly (substrate-level phosphorylation), and — most importantly — generating large numbers of reduced coenzymes (NADH and FADH2) which carry electrons/hydrogens to the electron transport chain, where the majority of ATP is subsequently produced by oxidative phosphorylation."},
+{t:"5.1-5.4", id:"5.1-09", front:"Explain why lipids can only be respired aerobically (not anaerobically).", back:"Breaking down lipids (via beta-oxidation of fatty acids) into acetyl CoA requires entry into the link reaction/Krebs cycle and relies on the electron transport chain being able to keep regenerating oxidised NAD/FAD (by passing electrons to oxygen) so that further oxidation reactions can continue. Without oxygen, the electron transport chain stops, NAD/FAD cannot be reoxidised in the mitochondria fast enough, and the aerobic pathways required to process lipids cannot proceed."},
+{t:"5.1-5.4", id:"5.1-10", front:"Explain why the respiration of lipids generates more ATP than the respiration of an equivalent mass of carbohydrate.", back:"Lipids contain proportionally more hydrogen atoms (and carbon atoms) per gram than carbohydrates. Since the electron transport chain generates ATP using hydrogen ions/electrons carried by reduced NAD and FAD, a respiratory substrate with more hydrogen atoms available for oxidation yields more reduced NAD/FAD overall, and therefore more ATP is generated via oxidative phosphorylation per gram respired."},
+{t:"5.1-5.4", id:"5.1-11", front:"Give the formula for respiratory quotient (RQ), and state the typical RQ value for carbohydrate.", back:"RQ = volume of carbon dioxide produced ÷ volume of oxygen consumed (in the same time period). For carbohydrate, RQ = 1.0, because the complete aerobic oxidation of carbohydrate produces equal moles of CO2 to the moles of O2 consumed (reflecting its lower proportion of hydrogen relative to oxygen already present in the molecule)."},
+{t:"5.1-5.4", id:"5.1-12", front:"Explain why the RQ for lipid respiration is lower than 1.0 (typically around 0.7).", back:"Lipids contain proportionally more hydrogen and less oxygen (relative to carbon) than carbohydrates. Fully oxidising this extra hydrogen requires relatively more oxygen to be consumed per molecule of CO2 eventually produced, so the ratio of CO2 produced to O2 consumed is lower than for carbohydrate, giving RQ < 1.0."},
+{t:"5.1-5.4", id:"5.1-13", front:"Explain why an insect might have an RQ of 1.0 at rest but an RQ of 0.7 during flight.", back:"At rest, the insect is likely respiring mainly carbohydrate (RQ ≈ 1.0) as its main fuel source for lower-intensity metabolism. During flight, with much higher energy demands, the insect switches to respiring lipids (which yield more ATP per gram, better suited to sustaining high-intensity, prolonged activity), shifting the RQ down towards the lipid value of approximately 0.7."},
+{t:"5.1-5.4", id:"5.1-14", front:"Explain how the enzyme HIF (hypoxia-inducible factor) increases the rate of glycolysis in cells experiencing hypoxia (low oxygen).", back:"HIF acts as a transcription factor, binding to DNA and increasing the transcription (and therefore translation) of genes coding for glycolytic enzymes and glucose transporter proteins, increasing their concentration/activity in the cell and so increasing the rate of glycolysis."},
+{t:"5.1-5.4", id:"5.1-15", front:"Explain why cells need to increase the rate of glycolysis in response to hypoxia.", back:"Under hypoxia, oxidative phosphorylation (which normally provides the majority of ATP) cannot function properly, since there is insufficient oxygen to act as the final electron acceptor in the electron transport chain. Glycolysis is the only stage of respiration that does NOT require oxygen, so increasing its rate allows the cell to generate more ATP via this oxygen-independent pathway (and via anaerobic respiration, regenerating NAD to allow glycolysis to continue), partially compensating for the loss of oxidative phosphorylation and helping maintain the cell's ATP supply."},
+{t:"5.1-5.4", id:"5.1-16", front:"⚠ EXAMINER TRAP: A student says the link reaction and Krebs cycle occur in the cytoplasm, like glycolysis. Why is this wrong?", back:"Glycolysis occurs in the CYTOPLASM. The link reaction and Krebs cycle both occur in the MITOCHONDRIAL MATRIX (not the cytoplasm, and not the intermembrane space or inner membrane, which is where oxidative phosphorylation's electron transport chain and ATP synthase are located). Mixing up cytoplasm vs matrix is one of the most common location errors in this subtopic — always be precise about which of the four stages happens where.", trap:true},
+{t:"5.1-5.4", id:"5.1-17", front:"⚠ EXAMINER TRAP: Explain why some antibiotics that inhibit BACTERIAL ribosome production can also affect a human cancer cell's mitochondria — and why students often miss this link.", back:"Mitochondria contain their own DNA and their own ribosomes (70S, structurally similar to bacterial ribosomes — reflecting the endosymbiotic origin of mitochondria), which are needed to synthesise some of the protein components of the electron transport chain within the mitochondrion itself. Antibiotics targeting bacterial-type ribosomes can therefore also inhibit mitochondrial ribosomes, preventing synthesis of these electron transport chain proteins and impairing oxidative phosphorylation — students often forget mitochondria have their own separate ribosomes distinct from the cell's cytoplasmic (80S) ribosomes.", trap:true},
+
+// ===================== 5.5 ANAEROBIC RESPIRATION =====================
+{t:"5.5", id:"5.5-01", front:"Describe anaerobic respiration in animal cells (lactate fermentation).", back:"After glycolysis produces pyruvate (and reduces NAD to NADH), in the absence of oxygen, pyruvate is reduced directly by NADH to form lactate (lactic acid), which reoxidises NAD back to NAD+. This regenerated NAD+ can be reused in glycolysis, allowing glycolysis (and a small, limited supply of ATP) to continue even without oxygen."},
+{t:"5.5", id:"5.5-02", front:"Describe anaerobic respiration in yeast and plant cells (alcoholic fermentation).", back:"After glycolysis, pyruvate is first decarboxylated (loses CO2) to form ethanal, catalysed by the enzyme pyruvate decarboxylase. Ethanal is then reduced by NADH (catalysed by alcohol dehydrogenase) to form ethanol, reoxidising NAD+ so that glycolysis can continue."},
+{t:"5.5", id:"5.5-03", front:"Explain why anaerobic respiration produces far less ATP per glucose molecule than aerobic respiration.", back:"Anaerobic respiration only involves glycolysis (net 2 ATP per glucose via substrate-level phosphorylation) — the link reaction, Krebs cycle and oxidative phosphorylation (which together produce the vast majority of ATP in aerobic respiration) cannot proceed without oxygen. The purpose of the final anaerobic step (lactate or ethanol formation) is purely to regenerate NAD+ so glycolysis can continue, not to generate any further ATP itself."},
+{t:"5.5", id:"5.5-04", front:"Explain the changes in lactic acid concentration in a Weddell seal's muscles and blood during and after a prolonged dive.", back:"During a prolonged dive, oxygen becomes limited, so muscles increasingly rely on anaerobic respiration, causing lactic acid to build up in the muscles. Much of this lactic acid initially stays localised in the muscle (an 'oxygen debt' region), but as the dive continues or ends, it diffuses into the blood, causing blood lactic acid concentration to rise (often continuing to rise for a period even after the seal surfaces, as stored lactate is released from the muscles), before gradually being metabolised (e.g. converted back to glucose/oxidised aerobically) once oxygen becomes available again at the surface."},
+{t:"5.5", id:"5.5-05", front:"Explain the importance of the seal's lactic acid changes once it surfaces to breathe.", back:"Once oxygen is available again, the seal must repay its 'oxygen debt' — aerobically respiring the accumulated lactic acid (converting it back to pyruvate, which can enter the link reaction/Krebs cycle, or via the liver converting it back to glucose). This is essential to clear lactic acid from the muscles and blood (lactic acid build-up disrupts muscle function and can lower blood pH) and to restore the muscle's capacity for further anaerobic respiration on subsequent dives."},
+{t:"5.5", id:"5.5-06", front:"Explain why a low oxygen concentration in water would lower the blood pH of a tadpole.", back:"With low environmental oxygen, the tadpole's tissues cannot obtain enough oxygen for aerobic respiration (oxidative phosphorylation) to fully meet energy demands, so cells increasingly rely on anaerobic respiration, producing lactic acid. Lactic acid dissociates to release hydrogen ions (H+) into the blood, lowering (acidifying) the blood pH."},
+{t:"5.5", id:"5.5-07", front:"Describe how a respirometer can be used to measure the rate of (aerobic) respiration in a small organism.", back:"The organism is placed in a sealed chamber connected via a capillary tube to a manometer/coloured liquid reservoir, with soda lime present to absorb the CO2 produced (so it doesn't affect the pressure reading). As the organism respires, it consumes oxygen (reducing the gas volume/pressure in the sealed side, since the CO2 it produces is absorbed), causing the liquid in the capillary tube to move towards the organism — the distance moved in a set time (converted to a volume using the tube's known bore diameter) gives the rate of oxygen consumption."},
+{t:"5.5", id:"5.5-08", front:"Explain why the soda lime in a respirometer must be replaced (or its effectiveness checked) between measuring different organisms/species.", back:"Soda lime has a finite capacity to absorb carbon dioxide — after use it may become partially or fully saturated, reducing its ability to absorb further CO2 in a subsequent measurement. If CO2 is not fully absorbed, the pressure change measured will reflect the DIFFERENCE between O2 consumed and CO2 produced (rather than O2 consumed alone), giving an inaccurate rate of respiration for the next organism tested — so fresh soda lime is needed to ensure valid comparisons."},
+{t:"5.5", id:"5.5-09", front:"Why must the RATE of respiration measured using a respirometer be expressed relative to a suitable unit (e.g. per gram of body mass) for a valid comparison between two different species?", back:"Larger organisms/individuals will generally consume a greater absolute volume of oxygen simply due to their larger size/mass, independent of any underlying difference in metabolic rate. Expressing the rate per unit mass (e.g. cm³ O2 g⁻¹ min⁻¹) controls for this size difference, allowing a fair, valid comparison of the two species' actual metabolic rates rather than just their size."},
+{t:"5.5", id:"5.5-10", front:"⚠ EXAMINER TRAP: A student says anaerobic respiration in yeast happens because pyruvate is 'reduced to ethanol' in one step. What's missing?", back:"Alcoholic fermentation actually involves TWO separate enzyme-catalysed steps: first, pyruvate is decarboxylated (CO2 removed) to form ethanal (catalysed by pyruvate decarboxylase); only then is ethanal reduced (using NADH, catalysed by alcohol dehydrogenase) to form ethanol. Skipping the intermediate ethanal step (and the decarboxylation, which explains why CO2 is released — relevant to bread/beer-making questions) is a common simplification that loses marks.", trap:true},
+
+// ===================== 5.6 PHOTOSYNTHETIC PIGMENTS =====================
+{t:"5.6", id:"5.6-01", front:"Describe how chromatography can be used to separate photosynthetic pigments from a leaf extract.", back:"Grind up leaf tissue with a solvent (e.g. propanone) to extract the pigments. Spot a concentrated line/spot of this extract near the base of chromatography paper (or a TLC plate), then stand the paper upright in a shallow layer of solvent (below the pigment spot). As the solvent rises up the paper by capillary action, it carries the pigments with it — different pigments have different solubilities in the solvent and different degrees of attraction to the paper, so they travel at different rates and separate into distinct, visible bands/spots at different heights."},
+{t:"5.6", id:"5.6-02", front:"State the difference between an absorption spectrum and an action spectrum.", back:"An absorption spectrum shows how much light of each wavelength is ABSORBED by a specific pigment (e.g. chlorophyll a). An action spectrum shows the RATE OF PHOTOSYNTHESIS (or overall photosynthetic activity) achieved at each wavelength of light."},
+{t:"5.6", id:"5.6-03", front:"Explain how comparing the absorption spectrum and action spectrum provides evidence that chlorophyll is used in photosynthesis.", back:"The wavelengths of light most strongly absorbed by chlorophyll (peaks in the absorption spectrum, e.g. in the red and blue regions) correspond closely to the wavelengths at which the rate of photosynthesis is highest (peaks in the action spectrum) — this close match strongly suggests that chlorophyll is the pigment responsible for capturing the light energy that drives photosynthesis."},
+{t:"5.6", id:"5.6-04", front:"Explain why different seaweeds (green, brown, red) have different absorption and action spectra.", back:"Each type of seaweed contains a different combination of photosynthetic pigments (e.g. green seaweeds contain only chlorophyll; brown seaweeds contain chlorophyll plus fucoxanthin; red seaweeds contain chlorophyll plus phycoerythrin). Since each pigment absorbs a different range/pattern of wavelengths, the overall absorption spectrum (and resulting action spectrum, since photosynthesis rate depends on light absorbed) differs between seaweed types according to which pigments they contain."},
+{t:"5.6", id:"5.6-05", front:"Explain why green, brown and red seaweeds are typically found at different depths on submerged rock.", back:"Different wavelengths of light penetrate to different depths in water (longer wavelengths, e.g. red light, are absorbed/scattered near the surface; shorter wavelengths, e.g. blue-green light, penetrate deeper). Each seaweed's accessory pigments are adapted to most efficiently absorb the wavelengths of light that reach the depth at which it lives — e.g. red seaweeds (containing phycoerythrin, which absorbs blue-green light well) are typically found deeper, where mainly blue-green light remains, while green seaweeds (only chlorophyll, better suited to red/blue light) are typically found in shallower water."},
+{t:"5.6", id:"5.6-06", front:"Explain why hydrogencarbonate indicator is used to investigate the rate of photosynthesis in algal beads, and how its colour relates to CO2 concentration.", back:"Hydrogencarbonate indicator changes colour depending on the concentration of dissolved CO2 (which affects pH): high CO2 concentration turns it yellow (more acidic, from carbonic acid), a 'normal' atmospheric CO2 level keeps it red/orange, and low CO2 concentration (CO2 being removed, e.g. by photosynthesis exceeding respiration) turns it purple (more alkaline). This allows CO2 uptake (an indirect proxy for the rate of photosynthesis, once photosynthesis begins removing more CO2 than respiration produces) to be estimated visually from the colour change."},
+{t:"5.6", id:"5.6-07", front:"In an investigation of light intensity vs photosynthesis rate using algal beads and hydrogencarbonate indicator, describe two appropriate control tubes.", back:"1) A tube with hydrogencarbonate indicator and gel beads but kept in the DARK (no light) — controls for/shows the effect of respiration alone (CO2 release, no photosynthesis), confirming any colour change in the light tubes is due to photosynthesis rather than some other factor. 2) A tube with hydrogencarbonate indicator and beads WITHOUT algae (empty gel beads) — controls for any colour change caused by the gel/beads themselves rather than the algae's photosynthesis/respiration."},
+{t:"5.6", id:"5.6-08", front:"Explain why the original algal-bead method (using colour change and bead position, judged by eye) needs to be modified to give VALID, QUANTITATIVE results.", back:"Judging colour 'by eye' is subjective and only gives a qualitative (categorical) result, not numerical data suitable for statistical analysis or precise comparison. A modification could use a colorimeter to measure the absorbance of the indicator solution numerically at set time intervals, giving quantitative, more objective and more precise data on how CO2 concentration (and therefore photosynthesis rate) changes over time and between light intensities."},
+{t:"5.6", id:"5.6-09", front:"Explain why red light was used (rather than white light) in an investigation of the effect of ethanol on plant cell membranes measured by colorimetry/absorbance.", back:"Red light is likely to be a wavelength that is NOT absorbed by the pigment/substance being measured by the colorimeter (or is a wavelength the specific dye/pigment absorbs strongly, depending on the context of the investigation) — using a controlled, specific single wavelength avoids interference from other wavelengths and ensures the absorbance readings are only affected by the change in the substance actually being tracked, giving more valid and comparable results across all readings."},
+{t:"5.6", id:"5.6-10", front:"⚠ EXAMINER TRAP: A student says the action spectrum measures the same thing as the absorption spectrum, just for a different pigment. Why is this wrong?", back:"They measure fundamentally different things: the absorption spectrum measures light ABSORPTION by a pigment (a chemical/physical property of the pigment molecule alone); the action spectrum measures the RATE OF PHOTOSYNTHESIS of the whole organism/chloroplast at each wavelength (a biological outcome, dependent on ALL pigments present working together, not just one). Confusing 'what a pigment absorbs' with 'how much photosynthesis results' is a common conceptual error — the two are correlated (which is the evidence pigments are used in photosynthesis) but are not the same measurement.", trap:true},
+
+// ===================== 5.7 PHOTOSYNTHESIS =====================
+{t:"5.7", id:"5.7-01", front:"Name the two main stages of photosynthesis and state where each occurs within the chloroplast.", back:"The light-dependent stage occurs in the thylakoid membranes (and thylakoid space). The light-independent stage (Calvin cycle) occurs in the stroma."},
+{t:"5.7", id:"5.7-02", front:"Describe the light-dependent stage of photosynthesis.", back:"Chlorophyll and other pigments in the thylakoid membrane absorb light energy, which excites electrons and drives photolysis (the splitting of water into oxygen, hydrogen ions and electrons). Electrons pass along an electron transport chain in the thylakoid membrane, releasing energy used to actively pump hydrogen ions into the thylakoid space, creating a proton gradient. Hydrogen ions diffuse back out through ATP synthase (chemiosmosis), generating ATP; NADP+ is reduced to NADPH using electrons and hydrogen ions. Oxygen is released as a by-product of photolysis."},
+{t:"5.7", id:"5.7-03", front:"Where in the chloroplast do the hydrogen ions produced during the light-dependent stage accumulate, and why is this significant?", back:"Hydrogen ions accumulate in the thylakoid space (the space enclosed by the thylakoid membrane), pumped there during electron transport. This creates a high concentration/electrochemical gradient of H+ relative to the stroma, which drives the hydrogen ions to diffuse back out through ATP synthase (embedded in the thylakoid membrane), generating ATP by chemiosmosis."},
+{t:"5.7", id:"5.7-04", front:"Describe the light-independent stage (Calvin cycle) of photosynthesis.", back:"Occurs in the stroma. Carbon dioxide is combined with a 5-carbon compound (RuBP) in a reaction catalysed by the enzyme RuBisCO, forming an unstable 6-carbon compound that immediately splits into two molecules of a 3-carbon compound (GP/glycerate 3-phosphate). GP is then reduced (using ATP and NADPH from the light-dependent stage) to form GALP (glyceraldehyde 3-phosphate). Most GALP is used to regenerate RuBP (using more ATP), allowing the cycle to continue; some GALP is used to synthesise glucose and other organic molecules."},
+{t:"5.7", id:"5.7-05", front:"Explain the effect of increasing carbon dioxide concentration on the rate of formation of GALP (at constant, non-limiting light and temperature).", back:"Increasing CO2 concentration increases the rate of the carbon fixation reaction (CO2 + RuBP, catalysed by RuBisCO), producing more GP, which in turn (provided sufficient ATP/NADPH are available from the light-dependent stage) increases the rate of GP being reduced to GALP — so increasing CO2 concentration increases the rate of GALP formation, up to the point where another factor (e.g. light or temperature, affecting ATP/NADPH supply, or RuBisCO enzyme saturation) becomes limiting."},
+{t:"5.7", id:"5.7-06", front:"Explain the effect of increasing temperature (within a normal range) on the rate of formation of GALP.", back:"RuBisCO and other enzymes involved in the Calvin cycle (and light-dependent reactions) work faster as temperature increases (within the enzyme's optimal range), due to increased kinetic energy and more frequent successful enzyme-substrate collisions, increasing the rate of carbon fixation and therefore GALP formation — up to an optimum temperature, beyond which enzyme denaturation causes the rate to fall sharply."},
+{t:"5.7", id:"5.7-07", front:"Describe how carbon fixation takes place in chloroplasts.", back:"Carbon dioxide diffuses into the stroma and combines directly with the 5-carbon compound ribulose bisphosphate (RuBP), in a reaction catalysed by the enzyme RuBisCO. This produces an unstable 6-carbon intermediate, which immediately breaks down into two molecules of the 3-carbon compound glycerate 3-phosphate (GP) — this is the 'fixation' of inorganic carbon (CO2) into an organic molecule (GP)."},
+{t:"5.7", id:"5.7-08", front:"Explain why wider stomatal apertures (as in some genetically modified crop plants) could increase crop yield.", back:"Wider stomata allow a greater rate of diffusion of carbon dioxide into the leaf (larger area/less resistance for gas exchange), increasing the CO2 concentration available at the site of carbon fixation in the chloroplasts. If CO2 was previously a limiting factor, this can increase the rate of the light-independent stage (Calvin cycle), increasing the rate of photosynthesis and, over time, biomass/yield production — although this may come at the cost of increased water loss through the wider stomata."},
+{t:"5.7", id:"5.7-09", front:"What is meant by 'primary productivity', and name two abiotic factors that can affect it.", back:"Primary productivity is the rate at which photosynthetic organisms (e.g. plants) convert light energy into chemical energy stored in organic molecules (biomass) per unit area/time. Abiotic factors affecting it include light intensity/day length (affecting the light-dependent stage), temperature (affecting enzyme-catalysed reactions in both stages) and carbon dioxide/water availability (affecting the light-independent stage and stomatal opening)."},
+{t:"5.7", id:"5.7-10", front:"Explain why chloroplasts are thought to have originated by endosymbiosis from cyanobacteria (photosynthetic prokaryotes).", back:"Chloroplasts share several key structural and genetic similarities with free-living cyanobacteria: they have their own circular DNA (cpDNA, not associated with histones, similar to prokaryotic DNA), their own 70S ribosomes (like bacteria, distinct from the cell's cytoplasmic 80S ribosomes), a double membrane (consistent with having originally been engulfed by a host cell via endocytosis), and they replicate independently by a process resembling binary fission — together this evidence supports the theory that chloroplasts originated as free-living photosynthetic prokaryotes that were engulfed by, and became a permanent symbiotic partner within, an early eukaryotic host cell."},
+{t:"5.7", id:"5.7-11", front:"⚠ EXAMINER TRAP: A student says both the light-dependent and light-independent stages occur in the same part of the chloroplast. Why is this wrong, and why is it commonly confused?", back:"The light-dependent stage occurs in/across the THYLAKOID MEMBRANES; the light-independent stage (Calvin cycle) occurs in the STROMA (the fluid surrounding the thylakoids). Although both are needed together and are linked (ATP/NADPH made in the light-dependent stage are used in the light-independent stage), they occur in physically distinct locations within the chloroplast — this is commonly confused with the (correctly analogous) mitochondrion, where students may incorrectly assume an equivalent single-location simplification.", trap:true},
+{t:"5.7", id:"5.7-12", front:"⚠ EXAMINER TRAP: Explain why 'more CO2 always increases the rate of photosynthesis' is an oversimplified statement that can lose marks.", back:"This is only true up to the point where CO2 stops being the LIMITING FACTOR — beyond that point, some other factor (e.g. light intensity, temperature, or the maximum rate at which RuBisCO/other enzymes can work) becomes limiting instead, and the rate plateaus regardless of further CO2 increases. Full-mark answers on limiting factors graphs should identify which factor is limiting at each part of the curve, rather than assuming one factor always has an unlimited positive effect.", trap:true},
+];
+
+const TABS = [
+  {key:"5.1-5.4", label:"5.1–5.4 Aerobic Resp."},
+  {key:"5.5", label:"5.5 Anaerobic Resp."},
+  {key:"5.6", label:"5.6 Photosyn. Pigments"},
+  {key:"5.7", label:"5.7 Photosynthesis"},
+];
+
+const STORAGE_KEY = "bioT5EnergyProgress";
+let progress = {};
+let activeTab = TABS[0].key;
+let flippedIds = new Set();
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    progress = raw ? JSON.parse(raw) : {};
+  }catch(e){ progress = {}; }
+}
+function saveProgress(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
+  catch(e){ /* storage unavailable — continue silently */ }
+}
+
+function renderTabs(){
+  const bar = document.getElementById("tabBar");
+  bar.innerHTML = "";
+  TABS.forEach(tab=>{
+    const cards = DECK.filter(c=>c.t===tab.key);
+    const known = cards.filter(c=>progress[c.id]==="know").length;
+    const btn = document.createElement("button");
+    btn.className = "tab-btn" + (tab.key===activeTab ? " active" : "");
+    btn.innerHTML = tab.label + `<span class="count">${known}/${cards.length}</span>`;
+    btn.onclick = ()=>{ activeTab = tab.key; flippedIds.clear(); renderAll(); };
+    bar.appendChild(btn);
+  });
+}
+
+function renderProgressBar(){
+  const cards = DECK.filter(c=>c.t===activeTab);
+  const known = cards.filter(c=>progress[c.id]==="know").length;
+  const pct = cards.length ? Math.round((known/cards.length)*100) : 0;
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressText").textContent = `${known} / ${cards.length} known in this tab`;
+  document.getElementById("tabTitle").textContent = TABS.find(t=>t.key===activeTab).label;
+}
+
+function renderStats(){
+  const total = DECK.length;
+  const known = DECK.filter(c=>progress[c.id]==="know").length;
+  const review = DECK.filter(c=>progress[c.id]==="review").length;
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statKnown").textContent = known;
+  document.getElementById("statReview").textContent = review;
+}
+
+function renderCards(){
+  const container = document.getElementById("cardContainer");
+  container.innerHTML = "";
+
+  if(activeTab==="5.1-5.4"){
+    const note = document.createElement("div");
+    note.className = "section-note";
+    note.innerHTML = "<b>Note:</b> Get the location of each of the four stages (cytoplasm vs matrix vs inner membrane) rock solid first — nearly every question in this section assumes you already know this before asking about mechanism or inhibitors.";
+    container.appendChild(note);
+  }
+  if(activeTab==="5.7"){
+    const note = document.createElement("div");
+    note.className = "section-note";
+    note.innerHTML = "<b>Note:</b> Limiting factor graph questions (CO2 / temperature / light vs GALP or photosynthesis rate) are the dominant style here — practice reading off WHICH factor is limiting at each part of a curve, not just describing the trend.";
+    container.appendChild(note);
+  }
+
+  const cards = DECK.filter(c=>c.t===activeTab);
+  cards.forEach(c=>{
+    const state = progress[c.id];
+    const isFlipped = flippedIds.has(c.id);
+
+    const el = document.createElement("div");
+    el.className = "card" + (isFlipped ? " flipped" : "") + (state==="know" ? " known" : "") + (state==="review" ? " review" : "");
+
+    const top = document.createElement("div");
+    top.className = "card-top";
+    const idEl = document.createElement("span");
+    idEl.className = "card-id";
+    idEl.textContent = c.id;
+    top.appendChild(idEl);
+    if(state){
+      const chip = document.createElement("span");
+      chip.className = "status-chip " + state;
+      chip.textContent = state==="know" ? "✓ Known" : "↻ Review";
+      top.appendChild(chip);
+    }
+    el.appendChild(top);
+
+    if(c.trap){
+      const badge = document.createElement("div");
+      badge.className = "trap-badge";
+      badge.textContent = "⚠ Examiner Trap";
+      el.appendChild(badge);
+    }
+
+    const body = document.createElement("div");
+    body.className = "card-body" + (isFlipped ? " answer" : "");
+    if(!isFlipped){
+      body.innerHTML = `<span class="label">Question</span>${c.front}`;
+    } else {
+      body.innerHTML = `<span class="label">Answer</span>${c.back}`;
+    }
+    el.appendChild(body);
+
+    const hint = document.createElement("div");
+    hint.className = "hint";
+    hint.textContent = isFlipped ? "Tap to flip back" : "Tap card to reveal answer";
+    el.appendChild(hint);
+
+    el.onclick = (e)=>{
+      if(e.target.closest(".st-btn")) return;
+      if(flippedIds.has(c.id)) flippedIds.delete(c.id); else flippedIds.add(c.id);
+      renderCards();
+    };
+
+    if(isFlipped){
+      const st = document.createElement("div");
+      st.className = "self-test";
+      const knowBtn = document.createElement("button");
+      knowBtn.className = "st-btn know-btn";
+      knowBtn.textContent = "✓ I know this";
+      knowBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="know"; saveProgress(); renderAll(); };
+      const reviewBtn = document.createElement("button");
+      reviewBtn.className = "st-btn review-btn";
+      reviewBtn.textContent = "↻ Review again";
+      reviewBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="review"; saveProgress(); renderAll(); };
+      st.appendChild(knowBtn);
+      st.appendChild(reviewBtn);
+      el.appendChild(st);
+    }
+
+    container.appendChild(el);
+  });
+}
+
+function renderAll(){
+  renderTabs();
+  renderProgressBar();
+  renderStats();
+  renderCards();
+}
+
+function resetProgress(){
+  if(confirm("Reset all self-test progress for this deck? This can't be undone.")){
+    progress = {};
+    saveProgress();
+    renderAll();
+  }
+}
+
+loadProgress();
+renderAll();
+</script>
+</body>
+</html>
