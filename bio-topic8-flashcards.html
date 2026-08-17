@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A Level Biology — Topic 8: Origins of Genetic Variation</title>
+<style>
+  :root{
+    --bg:#0f1416;
+    --panel:#171f22;
+    --panel-2:#1d272b;
+    --border:#2a373c;
+    --text:#e8eef0;
+    --muted:#8fa3a9;
+    --accent:#4fd1a5;
+    --accent-dim:#2a6b56;
+    --trap:#e8a23d;
+    --trap-bg:#3a2c15;
+    --know:#4fd1a5;
+    --review:#e8626a;
+    --card-front:#1a2327;
+    --card-back:#16232a;
+    font-size:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  header{
+    padding:22px 16px 14px;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, #131b1e 0%, var(--bg) 100%);
+  }
+  header h1{
+    margin:0 0 4px;
+    font-size:1.3rem;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  header p{
+    margin:0;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+  .deck-stats{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    margin-top:12px;
+    font-size:0.78rem;
+    color:var(--muted);
+  }
+  .deck-stats b{color:var(--accent);font-size:0.95rem;}
+
+  nav.tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:6px;
+    padding:12px 12px 8px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    flex:0 0 auto;
+    background:var(--panel);
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 13px;
+    border-radius:20px;
+    font-size:0.76rem;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .tab-btn .count{
+    display:inline-block;
+    margin-left:6px;
+    font-size:0.68rem;
+    color:var(--accent);
+    opacity:0.85;
+  }
+  .tab-btn.active{
+    background:var(--accent-dim);
+    border-color:var(--accent);
+    color:#eafff6;
+  }
+
+  .progress-wrap{
+    padding:0 16px 4px;
+  }
+  .progress-bar{
+    height:6px;
+    background:var(--panel);
+    border-radius:4px;
+    overflow:hidden;
+    border:1px solid var(--border);
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--accent-dim), var(--accent));
+    transition:width .3s ease;
+  }
+  .progress-label{
+    font-size:0.72rem;
+    color:var(--muted);
+    margin-top:4px;
+    display:flex;
+    justify-content:space-between;
+  }
+
+  main{
+    max-width:640px;
+    margin:0 auto;
+    padding:14px 16px 8px;
+  }
+
+  .card{
+    position:relative;
+    background:var(--card-front);
+    border:1px solid var(--border);
+    border-radius:14px;
+    margin-bottom:14px;
+    min-height:150px;
+    cursor:pointer;
+    transition:border-color .2s ease, transform .12s ease;
+    overflow:hidden;
+  }
+  .card:active{transform:scale(0.99);}
+  .card.flipped{background:var(--card-back);border-color:var(--accent-dim);}
+  .card.known{border-color:var(--know);}
+  .card.review{border-color:var(--review);}
+
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:12px 16px 0;
+  }
+  .card-id{
+    font-size:0.68rem;
+    color:var(--muted);
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+  }
+  .status-chip{
+    font-size:0.65rem;
+    padding:2px 8px;
+    border-radius:10px;
+    background:var(--panel-2);
+    color:var(--muted);
+  }
+  .status-chip.known{background:rgba(79,209,165,0.15);color:var(--know);}
+  .status-chip.review{background:rgba(232,98,106,0.15);color:var(--review);}
+
+  .trap-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-size:0.68rem;
+    color:var(--trap);
+    background:var(--trap-bg);
+    padding:2px 8px;
+    border-radius:10px;
+    margin:8px 16px 0;
+    width:fit-content;
+    font-weight:600;
+  }
+
+  .card-body{
+    padding:10px 16px 16px;
+    font-size:0.95rem;
+    line-height:1.5;
+  }
+  .card-body.answer{
+    color:#cfe8de;
+  }
+  .card-body .label{
+    display:block;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .hint{
+    text-align:center;
+    font-size:0.72rem;
+    color:var(--muted);
+    padding:0 16px 12px;
+  }
+
+  .self-test{
+    display:flex;
+    gap:8px;
+    padding:0 16px 16px;
+  }
+  .st-btn{
+    flex:1;
+    padding:9px 0;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    color:var(--text);
+    font-size:0.82rem;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .st-btn.know-btn{color:var(--know);border-color:var(--accent-dim);}
+  .st-btn.review-btn{color:var(--review);border-color:#5a2c30;}
+  .st-btn:active{opacity:0.7;}
+
+  footer{
+    max-width:640px;
+    margin:10px auto 0;
+    padding:10px 16px 30px;
+    text-align:center;
+  }
+  .reset-btn{
+    background:none;
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 16px;
+    border-radius:10px;
+    font-size:0.75rem;
+    cursor:pointer;
+  }
+
+  .section-note{
+    font-size:0.78rem;
+    color:var(--muted);
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 14px;
+    margin-bottom:14px;
+    line-height:1.5;
+  }
+  .section-note b{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Topic 8 — Origins of Genetic Variation</h1>
+  <p>Edexcel Biology B (9BI0) · Spec points 8.1–8.2 · Paper 2</p>
+  <div class="deck-stats">
+    <div><b id="statTotal">0</b> cards</div>
+    <div><b id="statKnown">0</b> known</div>
+    <div><b id="statReview">0</b> to review</div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabBar"></nav>
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-label"><span id="progressText">0 / 0 known in this tab</span><span id="tabTitle"></span></div>
+</div>
+
+<main id="cardContainer"></main>
+
+<footer>
+  <button class="reset-btn" onclick="resetProgress()">Reset all progress</button>
+</footer>
+
+<script>
+const DECK = [
+
+// ===================== 8.1 ORIGINS OF GENETIC VARIATION =====================
+{t:"8.1", id:"8.1-01", front:"State the three sources of genetic variation covered in this topic.", back:"1) Mutation (a change to the DNA base sequence), 2) Meiosis (via independent assortment and crossing over, producing new combinations of existing alleles in gametes), 3) Random fertilisation (which gamete from each parent randomly fuses with which)."},
+{t:"8.1", id:"8.1-02", front:"Define gene mutation.", back:"A change to at least one nucleotide base in DNA, or a change in the arrangement of bases (e.g. substitution, insertion, deletion). Gene mutations occur spontaneously (e.g. errors during DNA replication) and may be harmful, neutral or beneficial."},
+{t:"8.1", id:"8.1-03", front:"Explain how independent assortment during meiosis I produces new combinations of alleles.", back:"Homologous chromosome pairs line up randomly at the equator during metaphase I, and which chromosome of each pair moves to which pole during anaphase I is independent of how every other homologous pair orientates. This random assortment means many different combinations of maternal and paternal chromosomes (and therefore alleles on different chromosomes) can end up together in a single gamete."},
+{t:"8.1", id:"8.1-04", front:"Explain how crossing over produces new combinations of alleles, and state when in meiosis it occurs.", back:"During prophase I, homologous chromosomes pair up closely (forming a bivalent) and sections of DNA can be exchanged between non-sister chromatids at points called chiasmata. This creates chromatids with new combinations of alleles (a mixture of maternal and paternal alleles on the same chromosome) that did not exist in either original parental chromosome."},
+{t:"8.1", id:"8.1-05", front:"Explain how random fertilisation contributes to genetic variation.", back:"Because independent assortment and crossing over already produce many genetically different possible gametes from each parent, and because fertilisation involves the random fusion of any one of millions of possible sperm with any one of the possible eggs, an enormous number of different allele combinations are possible in the resulting zygote — contributing a further layer of variation on top of that already generated during meiosis."},
+{t:"8.1", id:"8.1-06", front:"Distinguish continuous and discontinuous variation, and state which type of inheritance is associated with each.", back:"Continuous variation: produced by polygenic inheritance (many genes contribute to the phenotype), giving phenotypes spread across a continuous range of values (e.g. human height). Discontinuous variation: produced by monogenic inheritance (a single gene, often with few alleles), giving phenotypes that fall into distinct, separate categories (e.g. ABO blood group)."},
+{t:"8.1", id:"8.1-07", front:"Define linked genes.", back:"Genes that have loci close together on the same chromosome, and are therefore usually (though not always, due to crossing over) inherited together rather than assorting independently."},
+{t:"8.1", id:"8.1-08", front:"Give the formula for recombination frequency, and explain what a HIGHER recombination frequency between two linked genes indicates.", back:"Recombination frequency = (number of offspring with a recombinant phenotype ÷ total number of offspring) × 100%. A higher recombination frequency indicates the two gene loci are FURTHER APART on the chromosome, since there is more physical distance/opportunity for a crossover event to occur between them during prophase I."},
+{t:"8.1", id:"8.1-09", front:"Explain why crossing over between two genes on a pair of homologous chromosomes results in a MAXIMUM of 50% recombinant gametes, even when the genes are very far apart.", back:"If the two genes are far enough apart that a crossover occurs between them in essentially every meiotic division, the alleles at the two loci end up assorting into gametes just as if the genes were on two entirely separate chromosomes (i.e. behaving as if independently assorting) — giving equal numbers of parental-type and recombinant-type gametes (a 1:1:1:1 ratio of the four possible combinations), which works out as 50% recombinant. Recombination frequency can approach but never exceed 50%, since beyond that point the result would be statistically indistinguishable from independent assortment."},
+{t:"8.1", id:"8.1-10", front:"Using rabbit coat colour (C > cch > ch > c) as an example, explain what is meant by 'multiple alleles'.", back:"Multiple alleles means more than two possible alleles exist for a single gene within a population (though any individual diploid organism still only carries two of them). In this rabbit example, four alleles (C, cch, ch, c) exist for the coat colour gene across the population, with a dominance hierarchy where C is dominant to all others, cch is dominant to ch and c, and ch is dominant to c only."},
+{t:"8.1", id:"8.1-11", front:"State all the possible genotypes of a rabbit with brown fur, given C (brown) is dominant to all other coat-colour alleles (cch, ch, c).", back:"CC, Ccch, Cch, or Cc — since C is dominant to every other allele, any genotype containing at least one C allele (paired with any of the four possible alleles, including a second C) will produce brown fur."},
+{t:"8.1", id:"8.1-12", front:"Give three differences between the events of meiosis and mitosis that relate to genetic variation.", back:"1) Meiosis involves crossing over (exchange of alleles between non-sister chromatids); mitosis does not. 2) Meiosis involves independent assortment of homologous chromosome PAIRS; mitosis has no equivalent pairing/assortment step of this kind. 3) Meiosis produces four genetically DIFFERENT haploid daughter cells; mitosis produces two genetically IDENTICAL diploid daughter cells."},
+{t:"8.1", id:"8.1-13", front:"Which of the following increases the NUMBER of different alleles present in a population: crossing over, gene mutation, independent assortment, or random fusion of gametes — and why?", back:"Gene mutation is the only one of these four processes that can increase the actual number of DIFFERENT ALLELES in a population, since it creates an entirely new DNA sequence variant that didn't exist before. Crossing over, independent assortment, and random fusion of gametes all create new COMBINATIONS of alleles that already exist — they shuffle existing genetic variation but do not, by themselves, generate new alleles."},
+{t:"8.1", id:"8.1-14", front:"⚠ EXAMINER TRAP: A student says crossing over first occurs during metaphase I. Why is this wrong, and what's the correct stage?", back:"Crossing over first takes place during PROPHASE I, when homologous chromosomes pair up closely as bivalents and chiasmata form between non-sister chromatids. By metaphase I, the bivalents have already formed and are simply lining up at the equator — the exchange of genetic material has already happened by this point. Mixing up prophase I and metaphase I for 'when crossing over occurs' is a very common multiple-choice error.", trap:true},
+{t:"8.1", id:"8.1-15", front:"⚠ EXAMINER TRAP: A student says mutation, meiosis and fertilisation all directly 'increase genetic variation' in the same way. Why should these be distinguished more carefully in a full-mark answer?", back:"Mutation creates genuinely NEW alleles (the ultimate source of all genetic variation). Meiosis (via independent assortment and crossing over) and random fertilisation only reshuffle EXISTING alleles into new combinations — they don't create new alleles themselves. A precise, full-mark answer distinguishes 'creates new alleles' (mutation only) from 'creates new combinations of existing alleles' (meiosis and fertilisation), rather than treating all three as interchangeable sources of 'variation' in the same sense.", trap:true},
+
+// ===================== 8.2 TRANSFER OF GENETIC INFORMATION =====================
+{t:"8.2", id:"8.2-01", front:"Define genotype, phenotype, homozygote and heterozygote.", back:"Genotype: the genetic makeup (allele combination) of an organism for a particular gene. Phenotype: the observable physical characteristics of an organism, resulting from its genotype (and often environment). Homozygote: an organism with two identical alleles for a gene (e.g. AA or aa). Heterozygote: an organism with two different alleles for a gene (e.g. Aa)."},
+{t:"8.2", id:"8.2-02", front:"Describe how a test cross is used to determine whether an organism showing the dominant phenotype is homozygous or heterozygous for that gene.", back:"The organism of unknown genotype is crossed with an organism that is homozygous recessive for that gene. If ALL the offspring show the dominant phenotype, the unknown parent is most likely homozygous dominant. If approximately HALF the offspring show the recessive phenotype (and half the dominant), the unknown parent is heterozygous."},
+{t:"8.2", id:"8.2-03", front:"Explain why a dihybrid cross between two organisms heterozygous for two UNLINKED genes typically produces offspring in a 9:3:3:1 phenotypic ratio.", back:"Because the two genes are on different chromosomes (or far enough apart to assort independently), each gamete has an equal, independent chance of receiving either allele at each locus, giving four equally-likely gamete types from each heterozygous parent. Combining these via a Punnett square produces 16 equally-likely genotype combinations, which group into four phenotype categories in the ratio 9 (dominant-dominant) : 3 (dominant-recessive) : 3 (recessive-dominant) : 1 (recessive-recessive)."},
+{t:"8.2", id:"8.2-04", front:"Explain why a dihybrid cross between two organisms heterozygous for two LINKED genes does NOT produce the standard 9:3:3:1 ratio.", back:"Because the genes are close together on the same chromosome, they tend to be inherited together as a unit (parental combinations) rather than assorting independently — producing mostly two 'parental' phenotype combinations in a ratio much closer to 3:1 (or other non-9:3:3:1 ratio), with only a smaller minority of 'recombinant' phenotype combinations arising from crossing over between the two loci."},
+{t:"8.2", id:"8.2-05", front:"What is codominance? Use the tortoiseshell cat (X^B black, X^O orange, both located on the X chromosome) as an example.", back:"Codominance is where two different alleles are BOTH fully expressed in the phenotype of a heterozygote, rather than one masking the other. In tortoiseshell cats, a heterozygous female (X^B X^O) expresses patches of BOTH black and orange fur, rather than showing only one colour or a blended intermediate colour."},
+{t:"8.2", id:"8.2-06", front:"Explain why all tortoiseshell cats are female.", back:"The fur colour gene is located on the X chromosome, and tortoiseshell colouring requires a cat to carry BOTH the X^B and X^O alleles simultaneously (codominant expression). Only females (XX) have two X chromosomes and can therefore be heterozygous (X^B X^O) for this gene. Males (XY) have only one X chromosome, so they can only carry one of the two alleles (either X^B Y or X^O Y) and will show only ONE solid colour, never both."},
+{t:"8.2", id:"8.2-07", front:"Explain how a family pedigree diagram can show that an allele is recessive (rather than dominant).", back:"If two unaffected (phenotypically 'normal') parents produce a child who DOES show the condition/trait, this shows the allele responsible must be recessive — because both parents must be heterozygous carriers (each contributing one recessive allele) for a homozygous recessive, affected child to be possible; if the allele were dominant, at least one parent would need to show the trait themselves for a child to inherit it."},
+{t:"8.2", id:"8.2-08", front:"Explain how a pedigree diagram can be used to determine whether a condition is sex-linked (X-linked) or autosomal.", back:"If the condition appears much more frequently in males than females (a classic pattern for X-linked recessive conditions, since males only need one copy of the recessive allele on their single X chromosome to be affected, while females need two copies), and particularly if an affected father never passes the condition to his sons (no Y-to-Y transmission possible) but his daughters become carriers, this pattern strongly suggests X-linkage rather than autosomal inheritance, where the condition would typically affect both sexes roughly equally."},
+{t:"8.2", id:"8.2-09", front:"Explain why the results of a genetic cross can differ depending on which parent (mother or father) carries a particular X-linked allele (reciprocal crosses giving different results).", back:"Because a gene is X-linked, males (XY) always inherit their single X chromosome (and therefore their phenotype for that gene) from their MOTHER only, while females (XX) inherit one X from each parent. This means the outcome of a cross depends on which parent was carrying which allele — e.g. crossing a red-eyed female × white-eyed male gives different offspring ratios than crossing a white-eyed female × red-eyed male, even though the same two alleles are involved, because the pattern of X chromosome inheritance differs between the sexes."},
+{t:"8.2", id:"8.2-10", front:"Using haemophilia (X-linked recessive, X^H = clotting, X^h = haemophilia) as an example, give the genotype of an unaffected carrier female and an affected male.", back:"Unaffected carrier female: X^H X^h (heterozygous — she carries one copy of the haemophilia allele but is not affected herself, since X^H is dominant). Affected male: X^h Y (he has only one X chromosome, so a single copy of the recessive X^h allele is enough to cause haemophilia, since there is no second X chromosome carrying a dominant allele to mask it)."},
+{t:"8.2", id:"8.2-11", front:"State the formula for the Chi-squared (χ²) test.", back:"χ² = Σ [(O − E)² ÷ E], where O is the observed number of individuals in each phenotype category, and E is the expected number in that category (based on the predicted ratio from the genetic cross), summed (Σ) across all categories."},
+{t:"8.2", id:"8.2-12", front:"What is the purpose of a Chi-squared test in a genetics investigation, and what would be a suitable null hypothesis?", back:"The Chi-squared test determines whether the difference between OBSERVED results and the EXPECTED results (predicted by a genetic hypothesis, e.g. a particular ratio) is small enough to be due to chance, or large enough to be statistically significant (suggesting the hypothesis should be rejected). A suitable null hypothesis states that there is NO significant difference between the observed and expected results (i.e. any difference is due to chance)."},
+{t:"8.2", id:"8.2-13", front:"How is a calculated Chi-squared value used, alongside a critical value table, to decide whether to accept or reject the null hypothesis?", back:"The calculated χ² value is compared against the appropriate CRITICAL VALUE from a table, found using the correct degrees of freedom (usually number of categories − 1) at a chosen significance level (typically p = 0.05). If the calculated χ² value is LESS than the critical value, the null hypothesis is ACCEPTED (differences are likely due to chance). If the calculated χ² value is GREATER than the critical value, the null hypothesis is REJECTED (the difference between observed and expected is statistically significant, and unlikely to be due to chance alone)."},
+{t:"8.2", id:"8.2-14", front:"How many degrees of freedom would be used for a Chi-squared test on a dihybrid cross with four phenotype categories (e.g. testing a 9:3:3:1 ratio)?", back:"Degrees of freedom = number of categories − 1 = 4 − 1 = 3."},
+{t:"8.2", id:"8.2-15", front:"A woman who is a carrier for cystic fibrosis (recessive) has a partner who is neither affected nor a carrier. Determine the probability that their child will be a carrier.", back:"Carrier mother = Ff; unaffected, non-carrier father = FF. Cross: Ff × FF → offspring genotypes are ½ FF (unaffected, non-carrier) and ½ Ff (unaffected carrier). So the probability of a carrier child is ½ (50%)."},
+{t:"8.2", id:"8.2-16", front:"⚠ EXAMINER TRAP: A student assumes any calculated Chi-squared value close to the critical value should automatically be treated the same way regardless of which side of the critical value it falls on. Why is a small numerical difference sometimes still decisive?", back:"The Chi-squared test gives a strict pass/fail cut-off at the chosen critical value for the given degrees of freedom — there is no 'partial' significance. Even a calculated value only slightly ABOVE the critical value means the null hypothesis is formally REJECTED (result is statistically significant), while a value only slightly BELOW means it is formally ACCEPTED — students should state the comparison and conclusion clearly (calculated value vs critical value, and which side it falls on) rather than describing the result vaguely as 'close' or 'roughly matching'.", trap:true},
+{t:"8.2", id:"8.2-17", front:"⚠ EXAMINER TRAP: In a codominance cross (e.g. cauliflower colour, or tortoiseshell cats), a student predicts a 3:1 ratio as if one allele were simply dominant over the other. Why is this wrong?", back:"With CODOMINANCE, heterozygotes produce their OWN distinct, third phenotype (e.g. light purple cauliflower, or tortoiseshell fur) rather than resembling one of the homozygous phenotypes. This changes the expected ratio from the classic monohybrid 3:1 (dominant:recessive) to a 1:2:1 ratio of the three distinct phenotypes (homozygous type A : heterozygous/intermediate-or-mixed type : homozygous type B). Applying standard dominant/recessive ratio rules to a codominant cross is a common and heavily-penalised error.", trap:true},
+];
+
+const TABS = [
+  {key:"8.1", label:"8.1 Origins of Variation"},
+  {key:"8.2", label:"8.2 Transfer of Info"},
+];
+
+const STORAGE_KEY = "bioT8GeneticVariationProgress";
+let progress = {};
+let activeTab = TABS[0].key;
+let flippedIds = new Set();
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    progress = raw ? JSON.parse(raw) : {};
+  }catch(e){ progress = {}; }
+}
+function saveProgress(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
+  catch(e){ /* storage unavailable — continue silently */ }
+}
+
+function renderTabs(){
+  const bar = document.getElementById("tabBar");
+  bar.innerHTML = "";
+  TABS.forEach(tab=>{
+    const cards = DECK.filter(c=>c.t===tab.key);
+    const known = cards.filter(c=>progress[c.id]==="know").length;
+    const btn = document.createElement("button");
+    btn.className = "tab-btn" + (tab.key===activeTab ? " active" : "");
+    btn.innerHTML = tab.label + `<span class="count">${known}/${cards.length}</span>`;
+    btn.onclick = ()=>{ activeTab = tab.key; flippedIds.clear(); renderAll(); };
+    bar.appendChild(btn);
+  });
+}
+
+function renderProgressBar(){
+  const cards = DECK.filter(c=>c.t===activeTab);
+  const known = cards.filter(c=>progress[c.id]==="know").length;
+  const pct = cards.length ? Math.round((known/cards.length)*100) : 0;
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressText").textContent = `${known} / ${cards.length} known in this tab`;
+  document.getElementById("tabTitle").textContent = TABS.find(t=>t.key===activeTab).label;
+}
+
+function renderStats(){
+  const total = DECK.length;
+  const known = DECK.filter(c=>progress[c.id]==="know").length;
+  const review = DECK.filter(c=>progress[c.id]==="review").length;
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statKnown").textContent = known;
+  document.getElementById("statReview").textContent = review;
+}
+
+function renderCards(){
+  const container = document.getElementById("cardContainer");
+  container.innerHTML = "";
+
+  if(activeTab==="8.2"){
+    const note = document.createElement("div");
+    note.className = "section-note";
+    note.innerHTML = "<b>Note:</b> 8.2 is the calculation- and diagram-heavy half of this topic — monohybrid/dihybrid crosses, sex linkage, codominance, pedigrees, and the Chi-squared test all come up repeatedly. Practice drawing the actual genetic diagram every time, not just stating the ratio.";
+    container.appendChild(note);
+  }
+
+  const cards = DECK.filter(c=>c.t===activeTab);
+  cards.forEach(c=>{
+    const state = progress[c.id];
+    const isFlipped = flippedIds.has(c.id);
+
+    const el = document.createElement("div");
+    el.className = "card" + (isFlipped ? " flipped" : "") + (state==="know" ? " known" : "") + (state==="review" ? " review" : "");
+
+    const top = document.createElement("div");
+    top.className = "card-top";
+    const idEl = document.createElement("span");
+    idEl.className = "card-id";
+    idEl.textContent = c.id;
+    top.appendChild(idEl);
+    if(state){
+      const chip = document.createElement("span");
+      chip.className = "status-chip " + state;
+      chip.textContent = state==="know" ? "✓ Known" : "↻ Review";
+      top.appendChild(chip);
+    }
+    el.appendChild(top);
+
+    if(c.trap){
+      const badge = document.createElement("div");
+      badge.className = "trap-badge";
+      badge.textContent = "⚠ Examiner Trap";
+      el.appendChild(badge);
+    }
+
+    const body = document.createElement("div");
+    body.className = "card-body" + (isFlipped ? " answer" : "");
+    if(!isFlipped){
+      body.innerHTML = `<span class="label">Question</span>${c.front}`;
+    } else {
+      body.innerHTML = `<span class="label">Answer</span>${c.back}`;
+    }
+    el.appendChild(body);
+
+    const hint = document.createElement("div");
+    hint.className = "hint";
+    hint.textContent = isFlipped ? "Tap to flip back" : "Tap card to reveal answer";
+    el.appendChild(hint);
+
+    el.onclick = (e)=>{
+      if(e.target.closest(".st-btn")) return;
+      if(flippedIds.has(c.id)) flippedIds.delete(c.id); else flippedIds.add(c.id);
+      renderCards();
+    };
+
+    if(isFlipped){
+      const st = document.createElement("div");
+      st.className = "self-test";
+      const knowBtn = document.createElement("button");
+      knowBtn.className = "st-btn know-btn";
+      knowBtn.textContent = "✓ I know this";
+      knowBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="know"; saveProgress(); renderAll(); };
+      const reviewBtn = document.createElement("button");
+      reviewBtn.className = "st-btn review-btn";
+      reviewBtn.textContent = "↻ Review again";
+      reviewBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="review"; saveProgress(); renderAll(); };
+      st.appendChild(knowBtn);
+      st.appendChild(reviewBtn);
+      el.appendChild(st);
+    }
+
+    container.appendChild(el);
+  });
+}
+
+function renderAll(){
+  renderTabs();
+  renderProgressBar();
+  renderStats();
+  renderCards();
+}
+
+function resetProgress(){
+  if(confirm("Reset all self-test progress for this deck? This can't be undone.")){
+    progress = {};
+    saveProgress();
+    renderAll();
+  }
+}
+
+loadProgress();
+renderAll();
+</script>
+</body>
+</html>
