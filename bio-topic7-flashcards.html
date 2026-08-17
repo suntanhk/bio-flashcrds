@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A Level Biology — Topic 7: Modern Genetics</title>
+<style>
+  :root{
+    --bg:#0f1416;
+    --panel:#171f22;
+    --panel-2:#1d272b;
+    --border:#2a373c;
+    --text:#e8eef0;
+    --muted:#8fa3a9;
+    --accent:#4fd1a5;
+    --accent-dim:#2a6b56;
+    --trap:#e8a23d;
+    --trap-bg:#3a2c15;
+    --know:#4fd1a5;
+    --review:#e8626a;
+    --card-front:#1a2327;
+    --card-back:#16232a;
+    font-size:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  header{
+    padding:22px 16px 14px;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, #131b1e 0%, var(--bg) 100%);
+  }
+  header h1{
+    margin:0 0 4px;
+    font-size:1.3rem;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  header p{
+    margin:0;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+  .deck-stats{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    margin-top:12px;
+    font-size:0.78rem;
+    color:var(--muted);
+  }
+  .deck-stats b{color:var(--accent);font-size:0.95rem;}
+
+  nav.tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:6px;
+    padding:12px 12px 8px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    flex:0 0 auto;
+    background:var(--panel);
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 13px;
+    border-radius:20px;
+    font-size:0.76rem;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .tab-btn .count{
+    display:inline-block;
+    margin-left:6px;
+    font-size:0.68rem;
+    color:var(--accent);
+    opacity:0.85;
+  }
+  .tab-btn.active{
+    background:var(--accent-dim);
+    border-color:var(--accent);
+    color:#eafff6;
+  }
+
+  .progress-wrap{
+    padding:0 16px 4px;
+  }
+  .progress-bar{
+    height:6px;
+    background:var(--panel);
+    border-radius:4px;
+    overflow:hidden;
+    border:1px solid var(--border);
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--accent-dim), var(--accent));
+    transition:width .3s ease;
+  }
+  .progress-label{
+    font-size:0.72rem;
+    color:var(--muted);
+    margin-top:4px;
+    display:flex;
+    justify-content:space-between;
+  }
+
+  main{
+    max-width:640px;
+    margin:0 auto;
+    padding:14px 16px 8px;
+  }
+
+  .card{
+    position:relative;
+    background:var(--card-front);
+    border:1px solid var(--border);
+    border-radius:14px;
+    margin-bottom:14px;
+    min-height:150px;
+    cursor:pointer;
+    transition:border-color .2s ease, transform .12s ease;
+    overflow:hidden;
+  }
+  .card:active{transform:scale(0.99);}
+  .card.flipped{background:var(--card-back);border-color:var(--accent-dim);}
+  .card.known{border-color:var(--know);}
+  .card.review{border-color:var(--review);}
+
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:12px 16px 0;
+  }
+  .card-id{
+    font-size:0.68rem;
+    color:var(--muted);
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+  }
+  .status-chip{
+    font-size:0.65rem;
+    padding:2px 8px;
+    border-radius:10px;
+    background:var(--panel-2);
+    color:var(--muted);
+  }
+  .status-chip.known{background:rgba(79,209,165,0.15);color:var(--know);}
+  .status-chip.review{background:rgba(232,98,106,0.15);color:var(--review);}
+
+  .trap-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-size:0.68rem;
+    color:var(--trap);
+    background:var(--trap-bg);
+    padding:2px 8px;
+    border-radius:10px;
+    margin:8px 16px 0;
+    width:fit-content;
+    font-weight:600;
+  }
+
+  .card-body{
+    padding:10px 16px 16px;
+    font-size:0.95rem;
+    line-height:1.5;
+  }
+  .card-body.answer{
+    color:#cfe8de;
+  }
+  .card-body .label{
+    display:block;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .hint{
+    text-align:center;
+    font-size:0.72rem;
+    color:var(--muted);
+    padding:0 16px 12px;
+  }
+
+  .self-test{
+    display:flex;
+    gap:8px;
+    padding:0 16px 16px;
+  }
+  .st-btn{
+    flex:1;
+    padding:9px 0;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    color:var(--text);
+    font-size:0.82rem;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .st-btn.know-btn{color:var(--know);border-color:var(--accent-dim);}
+  .st-btn.review-btn{color:var(--review);border-color:#5a2c30;}
+  .st-btn:active{opacity:0.7;}
+
+  footer{
+    max-width:640px;
+    margin:10px auto 0;
+    padding:10px 16px 30px;
+    text-align:center;
+  }
+  .reset-btn{
+    background:none;
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:8px 16px;
+    border-radius:10px;
+    font-size:0.75rem;
+    cursor:pointer;
+  }
+
+  .section-note{
+    font-size:0.78rem;
+    color:var(--muted);
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 14px;
+    margin-bottom:14px;
+    line-height:1.5;
+  }
+  .section-note b{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Topic 7 — Modern Genetics</h1>
+  <p>Edexcel Biology B (9BI0) · Spec points 7.1–7.4</p>
+  <div class="deck-stats">
+    <div><b id="statTotal">0</b> cards</div>
+    <div><b id="statKnown">0</b> known</div>
+    <div><b id="statReview">0</b> to review</div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabBar"></nav>
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-label"><span id="progressText">0 / 0 known in this tab</span><span id="tabTitle"></span></div>
+</div>
+
+<main id="cardContainer"></main>
+
+<footer>
+  <button class="reset-btn" onclick="resetProgress()">Reset all progress</button>
+</footer>
+
+<script>
+const DECK = [
+
+// ===================== 7.1 USING GENE SEQUENCING =====================
+{t:"7.1", id:"7.1-01", front:"Define genome and genomics.", back:"Genome: all of the genetic information (DNA) within an organism, including mitochondrial (and, in plants, chloroplast) DNA, not just nuclear DNA. Genomics: the study of the structure, function, and mapping of genomes."},
+{t:"7.1", id:"7.1-02", front:"What is DNA amplification, and what technique is commonly used to achieve it?", back:"DNA amplification is the production of many copies of a DNA sequence from a small starting amount. The polymerase chain reaction (PCR) is the standard laboratory technique used to amplify DNA."},
+{t:"7.1", id:"7.1-03", front:"Describe the three main steps of one cycle of the polymerase chain reaction (PCR).", back:"1) Denaturation: the reaction mixture (DNA sample, primers, free nucleotides, heat-stable DNA polymerase) is heated to around 95°C, breaking the hydrogen bonds between complementary strands and separating the DNA into two single strands. 2) Annealing: the mixture is cooled to around 50-65°C, allowing short DNA primers to bind (anneal) to complementary sequences at the start of the target region on each single strand. 3) Extension: the temperature is raised to around 72°C, the optimum for heat-stable DNA polymerase (e.g. Taq polymerase), which adds free complementary nucleotides to extend each primer, synthesising a new complementary strand — doubling the amount of target DNA each cycle."},
+{t:"7.1", id:"7.1-04", front:"Explain why a HEAT-STABLE (thermostable) DNA polymerase (e.g. Taq polymerase, originally from a thermophilic bacterium) is required for PCR.", back:"Each PCR cycle requires heating the mixture to around 95°C to separate the DNA strands. A normal DNA polymerase (like the human enzyme) would denature/be destroyed at this high temperature, meaning fresh enzyme would need to be added every single cycle. A heat-stable polymerase can withstand repeated heating to 95°C without denaturing, so it remains functional and does not need to be replaced between cycles, allowing PCR to run as an automated, repeated cycle."},
+{t:"7.1", id:"7.1-05", front:"State the role of a restriction endonuclease.", back:"A restriction endonuclease is an enzyme that recognises a specific (usually short, palindromic) base sequence in DNA and cuts the DNA at or near that specific recognition site, producing DNA fragments."},
+{t:"7.1", id:"7.1-06", front:"Describe how gel electrophoresis is used to separate DNA fragments after PCR, to create a DNA profile.", back:"DNA fragments are loaded into wells in an agarose gel and an electric current is applied. Since DNA is negatively charged (due to phosphate groups), fragments migrate towards the positive electrode; smaller fragments move faster/further through the gel than larger fragments in a given time, separating fragments by size into a pattern of bands — this banding pattern (which varies between individuals at certain repetitive DNA regions) forms a DNA profile."},
+{t:"7.1", id:"7.1-07", front:"Explain why PCR is carried out BEFORE gel electrophoresis when producing a DNA profile from a small sample (e.g. from a crime scene or a blood sample).", back:"The original amount of DNA extracted from a sample (e.g. a small number of white blood cells) is often too small to produce bands that are visible/detectable on a gel. PCR amplifies (makes millions of copies of) the target DNA regions first, so there is enough DNA present to produce clear, visible, distinguishable bands once gel electrophoresis is carried out."},
+{t:"7.1", id:"7.1-08", front:"How can a DNA profile be used to determine biological parentage (e.g. matching a child's profile to potential parents)?", back:"A child inherits half of their DNA profile bands from their biological mother and half from their biological father — so a true biological parent-child pair will share a consistent proportion of matching bands (each of the child's bands should be traceable to one or other biological parent), whereas a non-biological relationship will show bands in the child's profile that cannot be matched to either alleged parent."},
+{t:"7.1", id:"7.1-09", front:"What is DNA profiling?", back:"A method of comparing DNA sequences (typically at multiple short, highly variable repetitive regions of the genome) by cutting/amplifying DNA into fragments and comparing the resulting fragment patterns (e.g. via gel electrophoresis) between individuals, used for genetic identification (e.g. forensics) or determining genetic relationships (e.g. paternity testing)."},
+{t:"7.1", id:"7.1-10", front:"⚠ EXAMINER TRAP: A student describes PCR's three steps but forgets to give the correct approximate TEMPERATURE for each step. Why does this cost marks?", back:"Exam mark schemes for PCR frequently require the specific approximate temperatures for full credit: denaturation ~95°C, annealing ~50–65°C (varies with primer), extension ~72°C (Taq polymerase's optimum). Simply naming the three steps in the right order without any temperatures, or giving vague temperatures ('hot' / 'cold'), typically loses marks — learn the three named steps paired with their approximate temperature ranges together, not separately.", trap:true},
+
+// ===================== 7.2 FACTORS AFFECTING GENE EXPRESSION =====================
+{t:"7.2", id:"7.2-01", front:"What is epigenetics / epigenetic modification?", back:"Heritable changes in gene expression (i.e. whether/how much a gene is transcribed) that do NOT involve any change to the underlying DNA base sequence itself — instead involving chemical modifications to the DNA or its associated histone proteins that affect how accessible a gene is to transcription."},
+{t:"7.2", id:"7.2-02", front:"Describe DNA methylation as an example of epigenetic modification, and its general effect on gene expression.", back:"DNA methylation involves the addition of a methyl group (–CH3) to a cytosine base (usually within a CpG sequence) in DNA, WITHOUT changing the base sequence. Increased/high methylation of a gene's promoter region is generally associated with the gene being 'switched off' (transcription is inhibited/silenced), for example by preventing transcription factors or RNA polymerase from binding, or by causing DNA to coil more tightly around histones."},
+{t:"7.2", id:"7.2-03", front:"Explain how HIF (hypoxia-inducible factor) increases the rate of glycolysis in cells experiencing hypoxia.", back:"HIF is a transcription factor: when stabilised under low-oxygen conditions, it enters the nucleus and binds to specific DNA sequences (promoter/enhancer regions) associated with genes coding for glycolytic enzymes and glucose transporter proteins, increasing the rate of transcription of these genes, and therefore increasing the concentration of these proteins in the cell — increasing the rate of glycolysis."},
+{t:"7.2", id:"7.2-04", front:"Explain why cells need to increase the rate of glycolysis in response to hypoxia (low oxygen).", back:"Under hypoxia, oxidative phosphorylation (which normally generates the majority of a cell's ATP) cannot function properly, since it relies on oxygen as the final electron acceptor in the electron transport chain. Glycolysis is the only stage of respiration that doesn't require oxygen, so increasing its rate — alongside anaerobic respiration to regenerate NAD+ so glycolysis can keep running — allows the cell to generate more ATP via this oxygen-independent route, at least partially compensating for the loss of ATP normally produced by oxidative phosphorylation and helping maintain the cell's energy supply."},
+{t:"7.2", id:"7.2-05", front:"Distinguish totipotent, pluripotent and multipotent stem cells.", back:"Totipotent: can differentiate into ANY cell type in the body, INCLUDING extra-embryonic tissue (e.g. placenta) — found only in very early embryos (e.g. the zygote and cells shortly after). Pluripotent: can differentiate into almost any cell type in the body, but NOT extra-embryonic tissue — found in the embryo slightly later (e.g. inner cell mass of the blastocyst). Multipotent: can differentiate into a limited range of related, specialised cell types (e.g. haematopoietic/bone marrow stem cells can form various blood cell types, but not, say, nerve cells) — found in specific adult tissues."},
+{t:"7.2", id:"7.2-06", front:"Explain why, during early embryonic development, changes in DNA methylation are linked to cells becoming more restricted in what they can differentiate into (totipotent → pluripotent → multipotent → fully differentiated).", back:"As development proceeds, increasing (and increasingly specific, cell-type-dependent) patterns of DNA methylation permanently silence genes that are not needed for that cell's eventual specialised role, while genes needed for its specific function remain accessible for transcription. This progressive, largely irreversible epigenetic silencing of unneeded genes restricts which genes CAN be expressed in that cell line, correspondingly restricting the range of cell types it is still capable of differentiating into as development continues."},
+{t:"7.2", id:"7.2-07", front:"Describe how a bone marrow (haematopoietic) stem cell differentiates into either a common myeloid progenitor cell or a common lymphoid progenitor cell.", back:"The haematopoietic stem cell is multipotent and receives specific chemical signals (e.g. growth factors/cytokines present in its local environment) that activate particular transcription factors. These transcription factors switch on (increase transcription of) the specific combination of genes needed for either the myeloid lineage (leading eventually to red blood cells, platelets, and some white blood cells) or the lymphoid lineage (leading eventually to lymphocytes), while other genes remain switched off — this selective, signal-directed gene expression commits the cell to becoming a progenitor of one lineage rather than the other."},
+{t:"7.2", id:"7.2-08", front:"Describe post-transcriptional modification of a pre-tRNA (precursor tRNA) molecule to form a functional, mature tRNA.", back:"The precursor molecule undergoes several modifications: extra/incorrect nucleotide sequences at the ends are removed (trimming), unwanted internal sections (introns) may be spliced (cut) out and the remaining sections (exons) joined together, and specific new nucleotides may be added at particular positions (e.g. a CCA sequence added at the 3' end, which becomes the site of amino acid attachment) — together these modifications convert the precursor into the correct, folded, functional (mature) tRNA molecule specific for its amino acid."},
+{t:"7.2", id:"7.2-09", front:"⚠ EXAMINER TRAP: A student says epigenetic modification changes 'which genes an organism has.' Why is this a fundamental misunderstanding?", back:"Epigenetic modification does NOT change the DNA base sequence (which genes are present) at all — it changes whether/how much an existing, unchanged gene is EXPRESSED (transcribed). This distinguishes epigenetics from mutation (which does change the base sequence). Always be precise: epigenetics affects gene EXPRESSION, not the genetic CODE/sequence itself — conflating the two is one of the most fundamental and heavily-penalised errors in this subtopic.", trap:true},
+
+// ===================== 7.3 STEM CELLS =====================
+{t:"7.3", id:"7.3-01", front:"Explain why some (fully differentiated) cells are not able to become other cell types.", back:"As a cell differentiates, epigenetic modifications (e.g. DNA methylation, histone modification) permanently silence genes not required for that cell's specialised function, while only the genes needed for its specific role remain able to be transcribed. Since the genes needed to express other, different cell-type characteristics have effectively been switched off (though the DNA sequence itself is unchanged), a fully differentiated cell can no longer express the genes needed to develop into a different cell type."},
+{t:"7.3", id:"7.3-02", front:"Compare and contrast the properties and typical uses of embryonic stem cells with induced pluripotent stem (iPS) cells.", back:"Embryonic stem cells: naturally pluripotent, obtained from early embryos (raising significant ethical concerns, as it typically involves destroying the embryo); once obtained they can differentiate into almost any adult cell type. iPS cells: created by taking a fully differentiated adult (somatic) cell and artificially reprogramming it (e.g. by introducing specific transcription factor genes) to revert to a pluripotent state; they avoid the ethical concerns of embryo destruction and can be made from a patient's own cells (reducing immune rejection risk if used therapeutically in that same patient), but the reprogramming process is technically complex and the resulting cells may carry a higher risk of unwanted mutations or abnormal behaviour (e.g. tumour formation) compared with naturally-derived embryonic stem cells."},
+{t:"7.3", id:"7.3-03", front:"Give one advantage of using iPS cells rather than embryonic stem cells for developing new heart cells to treat heart disease.", back:"iPS cells avoid the ethical objections associated with destroying a human embryo to obtain stem cells, and (if derived from the actual patient being treated) would be genetically identical to the patient's own cells, reducing the risk of immune rejection of the resulting tissue compared with using cells derived from a donor embryo."},
+{t:"7.3", id:"7.3-04", front:"State the meaning of the term DNA methylation.", back:"The addition of a methyl group (–CH3) to a base in a DNA molecule (typically to cytosine), which does not change the base sequence but can affect whether the gene at that location is expressed (transcribed)."},
+{t:"7.3", id:"7.3-05", front:"Analyse a typical graph showing DNA methylation levels falling sharply just after fertilisation, then rising steadily as an embryo develops, to explain why DNA methylation is involved in embryo development.", back:"The initial drop in methylation shortly after fertilisation removes most inherited epigenetic marks, resetting the zygote's genome to a state where genes are broadly accessible — consistent with the zygote's totipotency (ability to become any cell type). As development proceeds and methylation levels then rise progressively, genes not required for a particular cell lineage become increasingly silenced in a cell-type-specific pattern, restricting each cell line's potential — consistent with cells becoming progressively more specialised (totipotent → pluripotent → multipotent → fully differentiated) as methylation increases."},
+{t:"7.3", id:"7.3-06", front:"⚠ EXAMINER TRAP: A student says stem cells are defined by WHERE they come from (e.g. 'embryonic cells are pluripotent, adult cells are multipotent') rather than by their actual potency. Why is this an oversimplification?", back:"Potency should be defined by CAPABILITY (what range of cell types the cell can differentiate into), not simply by origin/location. While it's true embryonic cells are typically more potent than most adult cells, this isn't an absolute rule to apply blindly — for example, iPS cells are ADULT (somatic) cells that have been artificially reprogrammed to become PLURIPOTENT, demonstrating that potency is not fixed purely by which tissue a cell originally came from. Always define totipotent/pluripotent/multipotent by what the cell CAN become, and treat location as a typical association rather than a strict rule.", trap:true},
+
+// ===================== 7.4 GENE TECHNOLOGY =====================
+{t:"7.4", id:"7.4-01", front:"Outline the general steps involved in genetically modifying a plant (e.g. soya bean) to produce large numbers of GM plants.", back:"The gene of interest is identified and isolated (e.g. cut out using a restriction endonuclease, or synthesised), then inserted into a vector (e.g. a bacterial plasmid, often using Agrobacterium tumefaciens, or via a 'gene gun'/biolistics) which is used to transfer the gene into plant cells (e.g. via infection or direct DNA bombardment). Cells that have successfully taken up the gene are selected (e.g. using a marker gene for antibiotic/herbicide resistance) and cultured using plant tissue culture techniques (e.g. on a growth-hormone-containing medium) to regenerate/clone many complete, genetically identical GM plants from the modified cells."},
+{t:"7.4", id:"7.4-02", front:"Describe how a fungus could be genetically modified to produce a foreign protein (e.g. a spider toxin gene, to kill mosquitoes).", back:"The gene coding for the desired protein (e.g. the spider toxin gene) is identified and isolated/synthesised, then inserted into a vector (e.g. a plasmid) along with a promoter sequence that will function in the fungus, and a selectable marker gene. This vector is introduced into fungal cells (e.g. via a technique appropriate to fungal cell walls, such as protoplast transformation), and cells that have successfully taken up and incorporated the vector (confirmed using the marker gene) are selected and cultured, so that the fungus now transcribes and translates the foreign gene, producing the desired protein (e.g. spider toxin)."},
+{t:"7.4", id:"7.4-03", front:"Explain why the low success rate of GM techniques (e.g. only 1 in a few thousand injected mosquito eggs successfully becoming GM) is not necessarily a major obstacle to producing large numbers of GM organisms.", back:"Even though the proportion of successful modifications per attempt is low, a very large number of eggs/cells can be treated simultaneously, so even a small percentage success rate can still yield a substantial absolute number of successfully modified individuals. Additionally, GM individuals identified (e.g. using a marker gene such as fluorescence to easily distinguish successfully modified organisms) can then be selectively bred/cloned/cultured to rapidly multiply the number of GM organisms from that initial successful population."},
+{t:"7.4", id:"7.4-04", front:"Explain why GM crops engineered to resist a specific pathogen (e.g. stem rust fungus) can eventually become vulnerable again as new spore types form during the pathogen's life cycle.", back:"As the pathogen reproduces (e.g. through sexual reproduction stages in its life cycle, producing basidiospores, or through further asexual urediniospore generations), genetic variation can arise (e.g. through recombination during sexual stages, or mutation). If a new pathogen strain arises with an altered structure (e.g. of a protein the GM plant's resistance mechanism specifically targets) that is no longer recognised/blocked by the plant's resistance genes, this new strain can overcome the GM plant's resistance and successfully infect it — meaning GM resistance bred against one pathogen genotype is not necessarily permanent as the pathogen population continues to evolve."},
+{t:"7.4", id:"7.4-05", front:"Explain why a different type of drug (not an antibiotic) is needed to treat a viral infection such as Zika virus.", back:"Antibiotics target structures/processes specific to living BACTERIAL cells (e.g. bacterial cell wall synthesis, bacterial 70S ribosomes) — since viruses are not living cells, have no cell wall of their own, and rely entirely on hijacking the host cell's own machinery to replicate, there is no bacterial-type target for an antibiotic to act on. Antiviral drugs must instead target virus-specific processes (e.g. viral enzymes, entry into host cells, or assembly of new virus particles) without harming the host's own cells."},
+{t:"7.4", id:"7.4-06", front:"Explain why people are advised to use mosquito nets even after they have already contracted a mosquito-borne virus such as Zika.", back:"A mosquito that bites an already-infected person can pick up the virus from that person's blood and then transmit it to OTHER people it subsequently bites, spreading the infection further through the population. Using a mosquito net (even after already being infected) prevents mosquitoes from biting that infected person and acquiring the virus in the first place, helping to break the transmission cycle and protect the wider community from further spread."},
+{t:"7.4", id:"7.4-07", front:"Explain why a study comparing the nutritional content of GM (transgenic) and non-GM soya beans would also analyse the specific types of fatty acid present, not just total fat content.", back:"Total fat content alone does not reveal whether the genetic modification has changed the PROPORTIONS of different specific fatty acids present (e.g. relative amounts of saturated vs unsaturated, or specific fatty acids like oleic acid) — since different fatty acids can have different nutritional/health implications (and the GM trait itself may specifically be intended to alter fatty acid composition, e.g. increasing a particular beneficial fatty acid), analysing the individual fatty acid types provides more meaningful information about whether the genetic modification achieved its intended nutritional effect and about the overall nutritional quality of the product, beyond a single total fat measurement."},
+{t:"7.4", id:"7.4-08", front:"When analysing data comparing GM and non-GM crop nutritional content grown in two different regions with different soil fertility/climate, why is it important to consider environmental factors alongside the genetic modification itself?", back:"Differences in nutritional content between samples could be due to the environmental growing conditions (e.g. soil fertility, temperature, rainfall) rather than (or in addition to) the genetic modification itself — since environmental factors independently affect plant growth, nutrient uptake and metabolism. A valid analysis must consider both possible causes and, ideally, compare GM vs non-GM plants grown under the SAME environmental conditions to isolate the effect of the genetic modification specifically, rather than attributing all observed differences to genetics alone when environment could be a confounding variable."},
+{t:"7.4", id:"7.4-09", front:"⚠ EXAMINER TRAP: A student explains genetic modification using only 'a gene is inserted into the organism' without describing HOW the gene actually gets in or how successful cells are identified. Why does this lose marks on longer 'describe how...' questions?", back:"Longer-mark genetic modification questions typically expect the FULL practical sequence: isolating/obtaining the gene, using a vector (and explaining what the vector is, e.g. plasmid), the actual transfer mechanism into the target cell (e.g. via a bacterium, gene gun, or other named method appropriate to the organism), AND how successfully-modified cells are then identified/selected (e.g. using a marker gene) and multiplied/cultured into whole organisms. A vague 'the gene is inserted' skips several distinct, separately-credited marking points that examiners are specifically looking for.", trap:true},
+];
+
+const TABS = [
+  {key:"7.1", label:"7.1 Gene Sequencing"},
+  {key:"7.2", label:"7.2 Gene Expression"},
+  {key:"7.3", label:"7.3 Stem Cells"},
+  {key:"7.4", label:"7.4 Gene Technology"},
+];
+
+const STORAGE_KEY = "bioT7GeneticsProgress";
+let progress = {};
+let activeTab = TABS[0].key;
+let flippedIds = new Set();
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    progress = raw ? JSON.parse(raw) : {};
+  }catch(e){ progress = {}; }
+}
+function saveProgress(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
+  catch(e){ /* storage unavailable — continue silently */ }
+}
+
+function renderTabs(){
+  const bar = document.getElementById("tabBar");
+  bar.innerHTML = "";
+  TABS.forEach(tab=>{
+    const cards = DECK.filter(c=>c.t===tab.key);
+    const known = cards.filter(c=>progress[c.id]==="know").length;
+    const btn = document.createElement("button");
+    btn.className = "tab-btn" + (tab.key===activeTab ? " active" : "");
+    btn.innerHTML = tab.label + `<span class="count">${known}/${cards.length}</span>`;
+    btn.onclick = ()=>{ activeTab = tab.key; flippedIds.clear(); renderAll(); };
+    bar.appendChild(btn);
+  });
+}
+
+function renderProgressBar(){
+  const cards = DECK.filter(c=>c.t===activeTab);
+  const known = cards.filter(c=>progress[c.id]==="know").length;
+  const pct = cards.length ? Math.round((known/cards.length)*100) : 0;
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressText").textContent = `${known} / ${cards.length} known in this tab`;
+  document.getElementById("tabTitle").textContent = TABS.find(t=>t.key===activeTab).label;
+}
+
+function renderStats(){
+  const total = DECK.length;
+  const known = DECK.filter(c=>progress[c.id]==="know").length;
+  const review = DECK.filter(c=>progress[c.id]==="review").length;
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statKnown").textContent = known;
+  document.getElementById("statReview").textContent = review;
+}
+
+function renderCards(){
+  const container = document.getElementById("cardContainer");
+  container.innerHTML = "";
+
+  if(activeTab==="7.2"){
+    const note = document.createElement("div");
+    note.className = "section-note";
+    note.innerHTML = "<b>Note:</b> 7.2 overlaps heavily with Topic 5 (HIF/hypoxia/glycolysis) and Topic 7.3 (stem cell potency) — the exam treats these as one connected story, so revise this tab alongside 7.3 rather than in isolation.";
+    container.appendChild(note);
+  }
+  if(activeTab==="7.4"){
+    const note = document.createElement("div");
+    note.className = "section-note";
+    note.innerHTML = "<b>Note:</b> 7.4 questions are almost always embedded in a real scenario (GM crops, GM mosquitoes, malaria/Zika control) with data to analyse — practice the full 'describe how to genetically modify X' answer structure (isolate gene → vector → transfer → select → culture), not just the concept.";
+    container.appendChild(note);
+  }
+
+  const cards = DECK.filter(c=>c.t===activeTab);
+  cards.forEach(c=>{
+    const state = progress[c.id];
+    const isFlipped = flippedIds.has(c.id);
+
+    const el = document.createElement("div");
+    el.className = "card" + (isFlipped ? " flipped" : "") + (state==="know" ? " known" : "") + (state==="review" ? " review" : "");
+
+    const top = document.createElement("div");
+    top.className = "card-top";
+    const idEl = document.createElement("span");
+    idEl.className = "card-id";
+    idEl.textContent = c.id;
+    top.appendChild(idEl);
+    if(state){
+      const chip = document.createElement("span");
+      chip.className = "status-chip " + state;
+      chip.textContent = state==="know" ? "✓ Known" : "↻ Review";
+      top.appendChild(chip);
+    }
+    el.appendChild(top);
+
+    if(c.trap){
+      const badge = document.createElement("div");
+      badge.className = "trap-badge";
+      badge.textContent = "⚠ Examiner Trap";
+      el.appendChild(badge);
+    }
+
+    const body = document.createElement("div");
+    body.className = "card-body" + (isFlipped ? " answer" : "");
+    if(!isFlipped){
+      body.innerHTML = `<span class="label">Question</span>${c.front}`;
+    } else {
+      body.innerHTML = `<span class="label">Answer</span>${c.back}`;
+    }
+    el.appendChild(body);
+
+    const hint = document.createElement("div");
+    hint.className = "hint";
+    hint.textContent = isFlipped ? "Tap to flip back" : "Tap card to reveal answer";
+    el.appendChild(hint);
+
+    el.onclick = (e)=>{
+      if(e.target.closest(".st-btn")) return;
+      if(flippedIds.has(c.id)) flippedIds.delete(c.id); else flippedIds.add(c.id);
+      renderCards();
+    };
+
+    if(isFlipped){
+      const st = document.createElement("div");
+      st.className = "self-test";
+      const knowBtn = document.createElement("button");
+      knowBtn.className = "st-btn know-btn";
+      knowBtn.textContent = "✓ I know this";
+      knowBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="know"; saveProgress(); renderAll(); };
+      const reviewBtn = document.createElement("button");
+      reviewBtn.className = "st-btn review-btn";
+      reviewBtn.textContent = "↻ Review again";
+      reviewBtn.onclick = (e)=>{ e.stopPropagation(); progress[c.id]="review"; saveProgress(); renderAll(); };
+      st.appendChild(knowBtn);
+      st.appendChild(reviewBtn);
+      el.appendChild(st);
+    }
+
+    container.appendChild(el);
+  });
+}
+
+function renderAll(){
+  renderTabs();
+  renderProgressBar();
+  renderStats();
+  renderCards();
+}
+
+function resetProgress(){
+  if(confirm("Reset all self-test progress for this deck? This can't be undone.")){
+    progress = {};
+    saveProgress();
+    renderAll();
+  }
+}
+
+loadProgress();
+renderAll();
+</script>
+</body>
+</html>
