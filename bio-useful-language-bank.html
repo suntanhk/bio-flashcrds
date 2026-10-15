@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Biology Exam Language Bank - Flashcards</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:#0d1117;color:#e6edf3;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
+body{padding:env(safe-area-inset-top) 14px calc(env(safe-area-inset-bottom) + 24px) 14px;max-width:720px;margin:0 auto}
+h1{font-size:20px;margin:18px 0 2px;color:#2dd4bf}
+.sub{font-size:13px;color:#8b949e;margin:0 0 12px}
+.bar{height:8px;background:#161b22;border-radius:6px;overflow:hidden;margin:8px 0 4px}
+.bar>div{height:100%;width:0;background:linear-gradient(90deg,#2dd4bf,#a78bfa);transition:width .3s}
+.stats{font-size:12px;color:#8b949e;display:flex;justify-content:space-between;margin-bottom:10px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:4px 0 10px;-webkit-overflow-scrolling:touch}
+.tab{flex:0 0 auto;background:#161b22;border:1px solid #30363d;color:#c9d1d9;padding:7px 12px;border-radius:18px;font-size:13px;cursor:pointer}
+.tab.on{background:#2dd4bf;color:#0d1117;border-color:#2dd4bf;font-weight:600}
+.tools{display:flex;gap:8px;margin-bottom:10px}
+.tools button{flex:1;background:#161b22;border:1px solid #30363d;color:#c9d1d9;padding:9px;border-radius:10px;font-size:13px;cursor:pointer}
+.card{background:#161b22;border:1px solid #30363d;border-radius:16px;padding:18px;min-height:330px;cursor:pointer;position:relative}
+.chip{display:inline-block;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:#a78bfa;border:1px solid #a78bfa;border-radius:10px;padding:2px 9px;margin-bottom:12px}
+.q{font-size:20px;font-weight:600;color:#f0f6fc;margin:6px 0 14px}
+.hint{font-size:13px;color:#8b949e;margin-top:18px}
+.lab{font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin:14px 0 4px}
+.weak .lab{color:#f85149}
+.good .lab{color:#2dd4bf}
+.weak p{margin:0;color:#8b949e;text-decoration:line-through;text-decoration-color:#f8514988;font-size:15px}
+.good p{margin:0;color:#e6edf3;font-size:15.5px;background:#0f2a2a;border-left:3px solid #2dd4bf;padding:10px 12px;border-radius:6px}
+.nav{display:flex;gap:8px;margin-top:12px}
+.nav button{flex:1;padding:13px 6px;border-radius:12px;border:1px solid #30363d;background:#161b22;color:#e6edf3;font-size:14px;cursor:pointer}
+.nav .know{background:#12261e;border-color:#238636;color:#56d364}
+.nav .rev{background:#2b1a1a;border-color:#da3633;color:#ff7b72}
+.count{text-align:center;font-size:12px;color:#8b949e;margin-top:10px}
+.mark{position:absolute;top:14px;right:14px;font-size:12px}
+.mark.k{color:#56d364}
+.mark.r{color:#ff7b72}
+.empty{padding:40px 10px;text-align:center;color:#8b949e}
+</style>
+</head>
+<body>
+<h1>Biology Exam Language Bank</h1>
+<p class="sub">Edexcel 9BI0 &middot; Topics 1, 2, 3, 4, 10 &middot; Say it like the mark scheme</p>
+<div class="bar"><div id="fill"></div></div>
+<div class="stats"><span id="known">Known 0</span><span id="review">To review 0</span><span id="total">0 cards</span></div>
+<div class="tabs" id="tabs"></div>
+<div class="tools"><button id="shuf">Shuffle</button><button id="reset">Reset progress</button></div>
+<div id="stage"></div>
+<div class="nav" id="nav">
+<button id="prev">Prev</button>
+<button class="rev" id="rev">Review</button>
+<button class="know" id="knw">Got it</button>
+<button id="next">Next</button>
+</div>
+<div class="count" id="count"></div>
+
+<script>
+var T={T1:"Topic 1 Molecules",T2:"Topic 2 Cells",T3:"Topic 3 Biodiversity",T4:"Topic 4 Exchange",T10:"Topic 10 Ecosystems",SK:"Skills"};
+var C=[
+["T1","Condensation and glycosidic bond","Two sugars stick together and water comes out.","A condensation reaction joins two monosaccharides with a glycosidic bond and releases a molecule of water."],
+["T1","Hydrolysis","Water breaks the bond.","Hydrolysis breaks a glycosidic, peptide or ester bond by adding a molecule of water."],
+["T1","Water as a solvent","Water is good at dissolving things.","Water is a polar molecule, so polar and ionic substances dissolve in it; this allows metabolic reactions to occur in solution and substances to be transported."],
+["T1","High specific heat capacity","Water doesn't get hot quickly.","Hydrogen bonds between water molecules absorb a lot of energy before the temperature rises, so water has a high specific heat capacity and temperature changes are buffered."],
+["T1","Cohesion and surface tension","Water sticks together.","Hydrogen bonds between water molecules cause cohesion, so water forms a continuous column in the xylem and has a high surface tension."],
+["T1","Starch","Starch is where plants store energy.","Starch is a storage polysaccharide of alpha-glucose made of amylose (unbranched, coiled and compact) and amylopectin (branched, with many ends for rapid hydrolysis). It is insoluble, so it does not affect water potential."],
+["T1","Glycogen","Animals store glycogen.","Glycogen is a highly branched polymer of alpha-glucose. The many terminal ends allow rapid hydrolysis to release glucose, and it is compact and insoluble."],
+["T1","Cellulose","Cellulose is strong.","Cellulose is a polymer of beta-glucose in straight chains. Hydrogen bonds between parallel chains form microfibrils with a high tensile strength, which supports the cell wall."],
+["T1","Triglyceride","A fat has three tails.","A triglyceride is one glycerol joined to three fatty acids by ester bonds, formed in condensation reactions."],
+["T1","Saturated and unsaturated fatty acids","Unsaturated fats are bendy.","Saturated fatty acids have no C=C double bonds; unsaturated fatty acids have one or more C=C double bonds, which cause kinks in the hydrocarbon chain."],
+["T1","Phospholipid","The head loves water and the tail hates it.","The phosphate head is hydrophilic and the fatty acid tails are hydrophobic, so in water phospholipids form a bilayer with the heads facing the water and the tails facing inwards."],
+["T1","Peptide bond","Amino acids join together.","A condensation reaction between the amine group of one amino acid and the carboxyl group of another forms a peptide bond and releases water."],
+["T1","Protein structure","The protein folds into a shape.","Primary: the sequence of amino acids joined by peptide bonds. Secondary: hydrogen bonds form alpha-helices and beta-pleated sheets. Tertiary: further folding held by hydrogen bonds, ionic bonds, disulfide bonds and hydrophobic interactions. Quaternary: two or more polypeptide chains."],
+["T1","Structure and function of proteins","The shape is important.","The specific tertiary structure, determined by the primary sequence, gives a protein its function, for example the shape of an enzyme's active site."],
+["T1","Enzyme action","The enzyme fits the substrate like a lock and key.","The substrate binds to the active site, which is complementary to its shape, forming an enzyme-substrate complex. Induced fit moulds the active site around the substrate, which lowers the activation energy."],
+["T1","Activation energy","The enzyme makes the reaction faster.","The enzyme lowers the activation energy by holding the substrates in the correct orientation and straining their bonds, so the reaction needs less energy to start."],
+["T1","Effect of temperature on enzymes","Too hot and the enzyme dies.","As temperature rises, kinetic energy increases, so collisions are more frequent and more enzyme-substrate complexes form. Above the optimum, hydrogen and ionic bonds break, the tertiary structure changes, the active site is no longer complementary and the enzyme is denatured."],
+["T1","Effect of pH on enzymes","The wrong pH damages the enzyme.","A pH away from the optimum changes the charges on the R groups and breaks ionic and hydrogen bonds. The tertiary structure and the shape of the active site change, so fewer enzyme-substrate complexes form."],
+["T1","Effect of substrate concentration","More substrate makes it faster until it stops.","Rate increases because more substrate gives more frequent collisions and more complexes. It levels off when all the active sites are occupied, so enzyme concentration becomes the limiting factor."],
+["T1","Competitive inhibitor","It blocks the enzyme.","The inhibitor has a shape similar to the substrate, binds to the active site and prevents the substrate binding. The effect is reduced by increasing the substrate concentration."],
+["T1","Non-competitive inhibitor","It changes the enzyme.","The inhibitor binds to an allosteric site, which alters the tertiary structure and the shape of the active site so the substrate cannot bind. Increasing the substrate concentration does not overcome it."],
+["T1","DNA structure","DNA is a twisted ladder.","DNA is a double helix of two antiparallel polynucleotide strands. Nucleotides are joined by phosphodiester bonds, and complementary bases pair by hydrogen bonds: A with T by two, C with G by three."],
+["T1","DNA and mRNA","RNA is the copy.","DNA is double-stranded with deoxyribose and thymine. mRNA is single-stranded, shorter, and has ribose and uracil."],
+["T1","Semi-conservative replication","DNA copies itself.","Helicase breaks the hydrogen bonds and unwinds the helix. Each strand acts as a template. Free nucleotides pair by complementary base pairing. DNA polymerase joins them with phosphodiester bonds. Each new molecule has one original and one new strand."],
+["T1","Meselson and Stahl","They proved DNA copies itself.","Bacteria grown in 15N were transferred to 14N. After one generation all the DNA had an intermediate density; after two, half was intermediate and half light. This supports semi-conservative replication."],
+["T1","Biochemical tests","Add the chemical and it changes colour.","Reducing sugar: heat with Benedict's reagent, blue to green, yellow, orange or brick-red precipitate. Starch: iodine solution, yellow-brown to blue-black. Protein: biuret reagent, blue to purple. Lipid: dissolve in ethanol then add water, cloudy white emulsion."],
+["T1","Test for a non-reducing sugar","Boil it again.","Boil with dilute hydrochloric acid to hydrolyse the glycosidic bond, neutralise with sodium hydrogencarbonate, then heat with Benedict's reagent. A brick-red precipitate shows a non-reducing sugar was present."],
+
+["T2","Fluid mosaic model","The membrane has phospholipids and proteins.","The membrane is a phospholipid bilayer that is fluid because the molecules move laterally, with proteins embedded in it (the mosaic). Cholesterol regulates fluidity and glycoproteins act as receptors."],
+["T2","Simple diffusion","Things move from lots to little.","The net movement of molecules from a region of higher concentration to a region of lower concentration, down a concentration gradient, due to random movement. No energy is needed."],
+["T2","Facilitated diffusion","Proteins help things across.","Polar molecules and ions diffuse down their concentration gradient through channel or carrier proteins. No ATP is used."],
+["T2","Osmosis","Water goes to where there is more salt.","The net movement of water from a region of higher water potential to a region of lower water potential across a partially permeable membrane."],
+["T2","Active transport","It uses energy to move things.","The movement of substances against a concentration gradient through carrier proteins, using energy from ATP."],
+["T2","Endocytosis and exocytosis","The cell swallows things or spits them out.","In endocytosis the membrane invaginates and forms a vesicle around the material; in exocytosis vesicles fuse with the cell-surface membrane and release their contents."],
+["T2","Prokaryote and eukaryote","Bacteria don't have a nucleus.","Prokaryotes have no membrane-bound organelles, circular DNA free in the cytoplasm, 70S ribosomes and a peptidoglycan cell wall. Eukaryotes have a nucleus, membrane-bound organelles and 80S ribosomes."],
+["T2","Nucleus","The nucleus is the control centre.","The nucleus contains DNA as chromosomes, which codes for proteins. Nuclear pores let mRNA leave, and the nucleolus makes ribosomal RNA."],
+["T2","Mitochondria","The powerhouse of the cell.","The site of aerobic respiration. The inner membrane is folded into cristae to give a large surface area for ATP synthesis, and the matrix contains enzymes."],
+["T2","Chloroplast","Where photosynthesis happens.","The site of photosynthesis. Thylakoid membranes stacked in grana contain chlorophyll to absorb light, and the stroma contains the enzymes for the light-independent reactions."],
+["T2","Protein secretion pathway","The cell makes the protein and sends it out.","Protein is made on ribosomes on the rough endoplasmic reticulum, transported in vesicles to the Golgi apparatus, which modifies and packages it into secretory vesicles. The vesicles fuse with the cell-surface membrane and release the protein by exocytosis."],
+["T2","Lysosome","It gets rid of waste.","Lysosomes contain hydrolytic enzymes that digest worn-out organelles and material taken in by endocytosis."],
+["T2","Resolution and magnification","The electron microscope zooms in more.","Magnification is how many times larger the image is than the object. Resolution is the ability to distinguish two points that are close together. An electron microscope has higher resolution because electrons have a shorter wavelength than light."],
+["T2","Magnification calculation","Measure the picture and work it out.","Magnification = image size divided by actual size. Convert to the same units first: 1 mm = 1000 micrometres. Rearrange to find the actual size = image size divided by magnification."],
+["T2","TEM, SEM and light microscope","TEM is stronger than SEM.","TEM passes electrons through a very thin specimen and gives a high-resolution 2D image of internal structure. SEM scans electrons over the surface and gives a 3D image of the surface. Both need a vacuum, so the specimen must be dead. A light microscope can view living specimens but has lower resolution."],
+["T2","Staining","It makes it easier to see.","Stains bind to specific structures and increase the contrast, so different structures can be distinguished."],
+["T2","Cell cycle","The cell grows and then divides.","Interphase: G1 (cell growth, protein synthesis), S (DNA replication) and G2 (growth, preparation for mitosis). Then mitosis, followed by cytokinesis."],
+["T2","Mitosis stages","The chromosomes line up and get pulled apart.","Prophase: chromosomes condense and the nuclear envelope breaks down. Metaphase: chromosomes line up on the equator attached to spindle fibres. Anaphase: centromeres divide and sister chromatids are pulled to opposite poles. Telophase: nuclear envelopes reform and chromosomes decondense."],
+["T2","Mitotic index","The number of cells dividing.","Mitotic index = number of cells in mitosis divided by total number of cells."],
+["T2","Importance of mitosis","The cell makes copies of itself.","Mitosis produces genetically identical daughter cells with the same chromosome number, for growth, tissue repair and asexual reproduction."],
+["T2","Cancer","Cells grow out of control.","Mutations in the genes that control the cell cycle cause uncontrolled cell division, which forms a tumour."],
+["T2","Virus structure","A virus is a tiny germ.","A virus is acellular: genetic material (DNA or RNA) inside a protein capsid, with attachment proteins on the surface; some have a lipid envelope. It has no cytoplasm or organelles and can only replicate inside a host cell."],
+["T2","HIV replication","HIV takes over the cell.","The attachment protein binds to the CD4 receptor on a T helper cell. The RNA enters the cell, and reverse transcriptase makes DNA from the RNA. The DNA is inserted into the host genome, host ribosomes make viral proteins, and new viruses are assembled and released by budding."],
+["T2","Fertilisation in mammals","The sperm meets the egg.","The acrosome releases hydrolytic enzymes that digest the egg's outer layer. The sperm and egg membranes fuse, and the nuclei fuse to form a diploid zygote."],
+["T2","Fertilisation in flowering plants","The pollen reaches the ovule.","A pollen grain lands on the stigma and a pollen tube grows down the style to the ovule. In double fertilisation, one male nucleus fuses with the egg nucleus to form the zygote and the other fuses with the polar nuclei to form the endosperm."],
+
+["T3","Taxonomic hierarchy","Animals are put into groups.","Domain, kingdom, phylum, class, order, family, genus, species: a hierarchy in which each group is nested inside a larger group and there is no overlap."],
+["T3","Binomial naming","Scientists give animals a Latin name.","The binomial system names an organism by its genus then its species. The genus has a capital letter, the species a lower-case letter, and both are italicised or underlined. It is universal, so it avoids confusion caused by different common names in different languages."],
+["T3","Species","Animals that are the same.","A group of organisms with similar features that can interbreed to produce fertile offspring."],
+["T3","Three domains","Bacteria are split into two types.","The three domains are Archaea, Bacteria and Eukarya. They were proposed from differences in ribosomal RNA sequences and cell membrane chemistry, which showed that Archaea differ from Bacteria."],
+["T3","DNA evidence for classification","Scientists use DNA to see who is related.","Comparing DNA base sequences (or amino acid sequences of proteins) shows the more similar the sequences, the more recent the common ancestor. It is objective evidence that can resolve classifications based on appearance alone."],
+["T3","Phylogenetic tree","A family tree of animals.","A phylogenetic tree shows evolutionary relationships. Each branch point represents a common ancestor, and species that share a more recent branch point are more closely related."],
+["T3","Biodiversity","The number of different animals.","The variety of living organisms in an area. It includes species richness (the number of species), genetic diversity (the variety of alleles within a species) and ecosystem diversity."],
+["T3","Index of diversity","A big number means lots of animals.","D = 1 minus the sum of (n/N) squared. A value close to 1 shows many species with similar numbers. A low value shows a few species dominate, and the community is more vulnerable to change."],
+["T3","Genetic diversity and survival","More variation makes them stronger.","A greater variety of alleles means that if the environment changes or a disease arises, some individuals are more likely to have an allele that gives resistance. They survive and reproduce, so the species is less likely to become extinct."],
+["T3","Causes of reduced genetic diversity","Small populations are weak.","A population bottleneck or the founder effect leaves fewer alleles in the gene pool, and inbreeding increases the proportion of homozygous recessive genotypes."],
+["T3","Random sampling","Pick places at random.","Use a grid or tape measures to divide the area, and use a random number generator to pick coordinates. This removes bias, so the sample is representative. Take enough samples and repeat."],
+["T3","Natural selection","The strongest survive.","Variation exists in the population because of mutation. A selection pressure, such as disease, acts on the population. Individuals with the advantageous allele are more likely to survive and reproduce, and they pass on that allele. Over generations the allele frequency increases."],
+["T3","Antibiotic resistance","Bacteria learn to resist antibiotics.","A random mutation gives some bacteria resistance. The antibiotic is a selection pressure, so resistant bacteria survive and reproduce, passing on the resistance allele. The allele frequency increases in the population."],
+["T3","Types of adaptation","The animal is built for its environment.","Anatomical (a structural feature, for example thick fur), physiological (a feature of how the body works, for example producing antifreeze proteins) or behavioural (an action, for example migration)."],
+["T3","Evidence for evolution","There are fossils.","The fossil record shows changes in organisms over time. DNA sequence comparisons and protein comparisons such as cytochrome c show similarities that match the proposed evolutionary relationships."],
+
+["T4","Surface area to volume ratio","Small animals have more surface.","Small organisms have a large surface area to volume ratio, so the diffusion distance is short and oxygen reaches all cells by diffusion. Large organisms have a small ratio, so they need specialised exchange surfaces and a mass transport system."],
+["T4","Features of a good exchange surface","It has to be big and thin.","A large surface area, a thin barrier giving a short diffusion distance, and a steep concentration gradient maintained by ventilation and blood flow. These increase the rate of diffusion (Fick's law)."],
+["T4","Insect gas exchange","Insects have holes in their body.","Air enters through spiracles into tracheae, which branch into tracheoles that reach the muscle cells. Oxygen diffuses down its concentration gradient directly to the cells, and abdominal pumping ventilates the system."],
+["T4","Fish gills","Water goes one way and blood goes the other.","Water and blood flow in opposite directions (countercurrent), so a concentration gradient is maintained along the whole length of the lamella. Oxygen keeps diffusing into the blood, and equilibrium is never reached, so a high percentage of oxygen is absorbed."],
+["T4","Alveoli adaptations","The lungs are good for gas exchange.","The alveolar wall and capillary wall are each one cell thick, giving a short diffusion distance. There are millions of alveoli, which give a large surface area. Ventilation and blood flow maintain a steep concentration gradient."],
+["T4","Inspiration","You breathe in and the lungs fill.","The external intercostal muscles contract, raising the ribs up and out, and the diaphragm contracts and flattens. The volume of the thorax increases, so the pressure falls below atmospheric pressure and air flows in."],
+["T4","Expiration","You breathe out.","The external intercostal muscles relax and the ribs move down and in; the diaphragm relaxes and rises. The thorax volume decreases and the pressure rises above atmospheric, so air is forced out. Forced expiration uses the internal intercostal muscles."],
+["T4","Gas exchange in a leaf","Air gets in through the holes.","Gases diffuse through open stomata into the air spaces of the spongy mesophyll, then dissolve in the film of water on the cell walls and diffuse into the cells. Guard cells control the size of the stomata."],
+["T4","Xerophyte adaptations","Cacti keep water.","A thick waxy cuticle reduces evaporation. Sunken stomata, rolled leaves and hairs trap a region of humid air, which reduces the water potential gradient, so less water vapour diffuses out and the rate of transpiration falls."],
+["T4","Water loss and carbon dioxide uptake","The plant has to open its stomata.","Stomata must open for CO2 to diffuse in for photosynthesis, but opening them also lets water vapour diffuse out. The plant balances these two needs."],
+["T4","Artery, vein and capillary","Arteries are thick and veins have valves.","Arteries have thick walls with elastic fibres to withstand high pressure and recoil to maintain the pressure. Veins have thinner walls and valves to prevent backflow. Capillaries are one cell thick, giving a short diffusion distance."],
+["T4","Tissue fluid formation","Fluid leaks out of the capillaries.","At the arteriole end the hydrostatic pressure is higher than the oncotic pressure, so fluid is forced out through the capillary walls. Large plasma proteins stay in the blood. At the venous end, water returns by osmosis down a water potential gradient, and the excess drains into the lymphatic system."],
+["T4","Cardiac cycle: atrial systole","The heart squeezes.","The atria contract, the pressure rises and the atrioventricular valves open, so blood is forced into the ventricles."],
+["T4","Cardiac cycle: ventricular systole","The valves open and close.","The ventricles contract and the pressure rises above the atria, so the atrioventricular valves close. When the ventricular pressure exceeds the pressure in the aorta, the semilunar valves open and blood is forced out."],
+["T4","Cardiac cycle: diastole","The heart relaxes.","The pressure in the aorta is higher than in the ventricle, so the semilunar valves close. The atria fill with blood and the pressure builds again."],
+["T4","Cardiac output","How much blood the heart pumps.","Cardiac output = stroke volume multiplied by heart rate, in cm3 per minute."],
+["T4","Haemoglobin loading and unloading","Haemoglobin picks up oxygen and drops it off.","At a high partial pressure of oxygen in the lungs haemoglobin loads oxygen to form oxyhaemoglobin. At a low partial pressure in the tissues it unloads oxygen."],
+["T4","S-shaped dissociation curve","It's a curve.","Binding of the first oxygen molecule changes the shape of haemoglobin, which makes it easier for further molecules to bind. This cooperative binding makes the curve S-shaped."],
+["T4","Bohr effect","CO2 changes the haemoglobin.","A high concentration of CO2 lowers the pH. Haemoglobin changes shape and has a lower affinity for oxygen, so the curve shifts to the right and more oxygen is unloaded at the respiring tissues."],
+["T4","Fetal haemoglobin","The baby's blood is stronger.","Fetal haemoglobin has a higher affinity for oxygen than adult haemoglobin at the same partial pressure, so the curve is to the left, which lets it load oxygen from the mother's blood in the placenta."],
+["T4","Carbon dioxide transport","CO2 goes in the blood.","Most CO2 is converted to hydrogencarbonate ions in red blood cells by carbonic anhydrase. Some is carried as carbaminohaemoglobin and a small amount dissolves in the plasma."],
+["T4","Water uptake by roots","Roots take in water.","Water enters root hair cells by osmosis down a water potential gradient. It crosses the cortex by the apoplast pathway (through cell walls) and the symplast pathway (through cytoplasm and plasmodesmata). The Casparian strip blocks the apoplast pathway at the endodermis, forcing water into the symplast."],
+["T4","Cohesion-tension","Water is pulled up the plant.","Evaporation from the mesophyll cells lowers the water potential of the leaf and creates tension in the xylem. Water molecules are held together by hydrogen bonds (cohesion), so a continuous column is pulled up. Adhesion to the xylem walls helps."],
+["T4","Factors affecting transpiration","Wind makes plants lose more water.","Light causes stomata to open. A higher temperature increases the kinetic energy of the molecules, so evaporation increases. Low humidity steepens the water potential gradient. Wind removes water vapour from around the leaf, so the gradient stays steep. Each of these increases the rate of transpiration."],
+["T4","Potometer","It measures how much water the plant uses.","A potometer measures the rate of water uptake, which is used as an estimate of transpiration. Measure the distance moved by the air bubble in a set time. Not all the water taken up is lost by transpiration."],
+["T4","Mass flow in the phloem","Sugar is moved around the plant.","Sucrose is actively loaded into the sieve tubes, which lowers the water potential, so water enters by osmosis and the hydrostatic pressure increases at the source. Mass flow carries sucrose to the sink, where it is unloaded and used or stored."],
+["T4","Evidence for mass flow","Scientists have tested it.","Ringing a tree removes the phloem, and sugar builds up above the ring. Aphid stylets sample the sap, which is under pressure. Radioactive tracers (14C) can be followed along the phloem."],
+
+["T10","Ecosystem, habitat, population, community","Where animals live.","An ecosystem is all the living organisms (biotic) and the non-living factors (abiotic) in an area. A habitat is where an organism lives, a population is all the members of one species in a habitat, and a community is all the populations in a habitat."],
+["T10","Niche","Where it lives.","The role of a species in its ecosystem, including its habitat, feeding relationships and adaptations. Two species cannot occupy exactly the same niche in the long term."],
+["T10","Abiotic and biotic factors","Things in the environment.","Abiotic factors are non-living, such as temperature, light intensity and pH. Biotic factors are living, such as competition, predation and disease."],
+["T10","Interspecific and intraspecific competition","Animals fight over food.","Interspecific competition is between different species for the same resources. Intraspecific competition is between members of the same species and has a greater effect on population size, because they use exactly the same resources."],
+["T10","Predator and prey cycles","Predators eat prey and numbers go up and down.","As the prey population increases, more food is available, so the predator population increases. More predation reduces the prey population, so the predator population then falls because of less food. The cycle repeats, with the predator peak lagging behind the prey peak."],
+["T10","Carrying capacity","The most animals that can live there.","The maximum population size that an environment can support over a long period, limited by resources such as food, space and disease."],
+["T10","Limiting factors","Things that stop the population growing.","Density-dependent factors, such as food supply and disease, have a greater effect as the population gets larger. Density-independent factors, such as fire and extreme weather, affect the population regardless of its size."],
+["T10","Population growth curve","The population goes up then flattens.","Lag phase (slow growth, few individuals), exponential phase (births exceed deaths, resources plentiful), stationary phase (births equal deaths at the carrying capacity), then decline when resources run out."],
+["T10","Primary succession","Plants take over a bare area.","Pioneer species such as lichens colonise bare rock. They tolerate harsh abiotic conditions, and as they die and decompose they form soil. This changes the abiotic conditions so that other species colonise, with an increase in species diversity and biomass."],
+["T10","Climax community","The final stage of succession.","A stable community in balance with the abiotic conditions, with the greatest diversity and biomass, and no further change in species composition."],
+["T10","Secondary succession","It happens after a fire.","Succession on land where soil is already present, such as after a fire or the abandonment of farmland. It is faster than primary succession because the soil already contains nutrients and seeds."],
+["T10","Quadrats","Count the plants in a square.","Place quadrats at random using a random number generator for coordinates, to avoid bias. Calculate percentage cover or frequency, and repeat with enough quadrats to get a representative mean."],
+["T10","Transects","Walk in a line.","A line or belt transect is used to sample along an environmental gradient, such as from the shore inland. Place quadrats at regular intervals and record the species present."],
+["T10","Mark-release-recapture","Catch, mark and count animals.","Capture a sample (n1) and mark the animals without harming them, release them, then capture a second sample (n2) and count the marked ones (m2). Population estimate = (n1 multiplied by n2) divided by m2."],
+["T10","Assumptions of mark-release-recapture","The marks stay on.","The marked individuals mix randomly with the population, there is no migration, births or deaths in the time between samples, and the mark is not lost and does not make the animal more likely to be caught or eaten."],
+["T10","Gross and net primary productivity","How much energy plants make.","Gross primary productivity (GPP) is the total energy fixed by photosynthesis. Net primary productivity (NPP) = GPP minus the energy lost in respiration (R), and is the energy available to the next trophic level."],
+["T10","Energy transfer between trophic levels","Energy is lost along the food chain.","Only a small percentage is transferred because energy is lost as heat from respiration, in uneaten parts, and in faeces and urine. Efficiency = energy transferred to the next level divided by energy available at the previous level, multiplied by 100."],
+["T10","Carbon cycle","Carbon goes round and round.","Carbon is fixed by photosynthesis, passes along food chains by feeding, and is returned to the atmosphere by respiration, and by decomposition (saprobionts) and combustion."],
+["T10","Nitrogen cycle","Bacteria change nitrogen.","Nitrogen fixation converts N2 to ammonium (Rhizobium in root nodules). Ammonification by saprobionts converts nitrogen in dead matter to ammonium. Nitrification converts ammonium to nitrite (Nitrosomonas) then nitrate (Nitrobacter). Denitrification converts nitrate to N2 in waterlogged, anaerobic soil."],
+["T10","Saprobionts","Bacteria and fungi rot dead things.","Saprobionts secrete enzymes onto dead organic matter (extracellular digestion) and absorb the soluble products. This recycles nutrients to the soil."],
+["T10","Eutrophication","Fertiliser pollutes rivers and kills the fish.","Nitrate from fertiliser run-off causes rapid algal growth, and the algal bloom blocks light, so plants die. Aerobic bacteria decomposing the dead plants use up the oxygen, so the biological oxygen demand rises and fish and other aerobic organisms die."],
+["T10","Greenhouse effect","Gases warm the planet.","Greenhouse gases such as CO2 and methane absorb infra-red radiation reflected from the Earth's surface and re-emit it, which warms the atmosphere. Increases in these gases enhance the effect and contribute to global warming."],
+["T10","Human impact on ecosystems","Humans destroy habitats.","Deforestation and monoculture reduce habitat variety and species diversity. Overfishing lowers population sizes, and pollution changes the abiotic factors."],
+["T10","Sustainability","Don't use up too much.","Resources are used at a rate that allows them to be replaced, for example fishing quotas, larger mesh sizes, closed seasons and crop rotation."],
+["T10","In situ conservation","Protect the animals where they live.","The species is protected in its natural habitat, for example in a national park. The natural behaviour and habitat are maintained, but poaching and disease are difficult to control."],
+["T10","Ex situ conservation","Keep the animals in a zoo.","The species is protected outside its natural habitat, for example captive breeding or seed banks. Stud books manage genetic diversity, but small populations risk inbreeding, and reintroduction may fail if the habitat has been lost."],
+
+["SK","Describing a trend in data","It goes up and then down.","As [x] increases from [a] to [b] [unit], [y] increases from [c] to [d] [unit]. Above [b], [y] decreases to [e] [unit]. Quote the figures at the start, the peak and the end."],
+["SK","Comparing two sets of data","A is higher than B.","State the difference with figures: A is 30 cm3 compared with 12 cm3 for B, which is 2.5 times greater. Mention any overlap in the error bars or ranges."],
+["SK","Explaining a plateau","It stops going up.","State the limiting factor: for enzymes, all the active sites are saturated; for photosynthesis, another factor such as light or CO2 has become limiting."],
+["SK","Reliability and validity","I did it again to be fair.","Reliability: repeat at least three times and calculate a mean, so random errors are reduced and anomalies are identified. Validity: control all the variables other than the independent variable."],
+["SK","Accuracy and precision","They mean the same.","Accuracy is how close a measurement is to the true value; precision is how close repeated measurements are to each other."],
+["SK","Control experiment","A control is a normal test.","A control with boiled enzyme (or no enzyme) shows that the change is caused by the enzyme and not by another factor."],
+["SK","Chi-squared test","Test if the results are different.","Use when comparing observed with expected frequencies of categories. The null hypothesis: no significant difference between observed and expected, any difference is due to chance. If the calculated value is greater than the critical value at p = 0.05, reject the null hypothesis."],
+["SK","Spearman's rank test","Test if they match.","Use to test for a correlation between two sets of paired data. The null hypothesis: no significant correlation. If the calculated value is greater than the critical value at p = 0.05, reject it; there is a significant correlation. Correlation does not prove cause."],
+["SK","Student's t-test","Test if the averages differ.","Use to compare the means of two sets of normally distributed data. The null hypothesis: no significant difference between the means. If the calculated value is greater than the critical value at p = 0.05, reject it; there is a significant difference."],
+["SK","Structuring a six-mark answer","Write everything I know about the topic.","List six or more separate points first. Open with a direct answer, write one point per sentence using key terms and links such as so or which means, do not repeat a point, and for an evaluation finish with a justified judgement."]
+];
+
+var KEY="bioLangProgress";
+var prog={};
+try{prog=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){prog={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(prog))}catch(e){}}
+function cid(i){return C[i][0]+":"+C[i][1]}
+
+var tabKey="ALL",order=[],pos=0,flipped=false;
+var tabsEl=document.getElementById("tabs"),stage=document.getElementById("stage"),countEl=document.getElementById("count");
+
+function tabList(){
+  var l=[["ALL","All"],["REV","To review"]];
+  for(var k in T)l.push([k,T[k]]);
+  return l;
+}
+function buildTabs(){
+  tabsEl.innerHTML="";
+  tabList().forEach(function(t){
+    var b=document.createElement("div");b.className="tab"+(t[0]===tabKey?" on":"");b.textContent=t[1];
+    b.onclick=function(){tabKey=t[0];pos=0;flipped=false;makeOrder();buildTabs();render()};
+    tabsEl.appendChild(b);
+  });
+}
+function makeOrder(){
+  order=[];
+  for(var i=0;i<C.length;i++){
+    if(tabKey==="ALL"||C[i][0]===tabKey||(tabKey==="REV"&&prog[cid(i)]==="r"))order.push(i);
+  }
+}
+function stats(){
+  var k=0,r=0;
+  for(var i=0;i<C.length;i++){var s=prog[cid(i)];if(s==="k")k++;else if(s==="r")r++}
+  document.getElementById("known").textContent="Known "+k;
+  document.getElementById("review").textContent="To review "+r;
+  document.getElementById("total").textContent=C.length+" cards";
+  document.getElementById("fill").style.width=(C.length?Math.round(k/C.length*100):0)+"%";
+}
+function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
+function render(){
+  stats();stage.innerHTML="";
+  if(!order.length){stage.appendChild(el("div","empty","No cards here yet. Mark some cards as Review to see them in this tab."));countEl.textContent="";return}
+  if(pos>=order.length)pos=0;if(pos<0)pos=order.length-1;
+  var i=order[pos],c=C[i];
+  var card=el("div","card");
+  card.appendChild(el("div","chip",T[c[0]]));
+  var s=prog[cid(i)];
+  if(s==="k")card.appendChild(el("div","mark k","Known"));
+  if(s==="r")card.appendChild(el("div","mark r","Review"));
+  card.appendChild(el("div","q",c[1]));
+  if(!flipped){
+    card.appendChild(el("div","hint","Write your answer in full sentences, then tap the card to see the exam-language answer."));
+  }else{
+    var w=el("div","weak");w.appendChild(el("div","lab","Own words - loses marks"));w.appendChild(el("p","",c[2]));card.appendChild(w);
+    var g=el("div","good");g.appendChild(el("div","lab","Exam language - scores"));g.appendChild(el("p","",c[3]));card.appendChild(g);
+  }
+  card.onclick=function(){flipped=!flipped;render()};
+  stage.appendChild(card);
+  countEl.textContent=(pos+1)+" / "+order.length;
+}
+function go(d){pos+=d;flipped=false;render()}
+function mark(v){
+  if(!order.length)return;
+  prog[cid(order[pos])]=v;save();
+  if(tabKey==="REV"&&v==="k"){makeOrder();flipped=false;render();return}
+  go(1);
+}
+document.getElementById("prev").onclick=function(){go(-1)};
+document.getElementById("next").onclick=function(){go(1)};
+document.getElementById("knw").onclick=function(){mark("k")};
+document.getElementById("rev").onclick=function(){mark("r")};
+document.getElementById("shuf").onclick=function(){
+  for(var i=order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=order[i];order[i]=order[j];order[j]=t}
+  pos=0;flipped=false;render();
+};
+document.getElementById("reset").onclick=function(){
+  if(confirm("Reset all progress?")){prog={};save();makeOrder();pos=0;flipped=false;render()}
+};
+document.addEventListener("keydown",function(e){
+  if(e.key==="ArrowRight")go(1);
+  else if(e.key==="ArrowLeft")go(-1);
+  else if(e.key===" "){e.preventDefault();flipped=!flipped;render()}
+});
+buildTabs();makeOrder();render();
+</script>
+</body>
+</html>
