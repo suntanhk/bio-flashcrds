@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jody's A-Level Biology B (9BI0) Nov Exam Hub</title>
+    <style>
+        :root {
+            --primary: #059669; /* Emerald 600 */
+            --primary-light: #ecfdf5; /* Emerald 50 */
+            --primary-gradient: linear-gradient(135deg, #047857 0%, #10b981 100%);
+            --secondary: #334155;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            
+            /* Badge Colors */
+            --badge-must-read: #ef4444; /* Red */
+            --badge-high-yield: #f59e0b; /* Amber */
+            --badge-core: #3b82f6; /* Blue */
+            --badge-practice: #8b5cf6; /* Purple */
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: #1e293b;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .header h1 { margin: 0 0 10px 0; font-size: 2.2rem; }
+        .header p { margin: 0; font-size: 1.1rem; opacity: 0.95; font-weight: 300; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .section-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border-top: 4px solid var(--primary);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-card.urgent { border-top-color: var(--badge-must-read); }
+        .section-card.yield { border-top-color: var(--badge-high-yield); }
+
+        .section-card h2 {
+            font-size: 1.3rem;
+            margin-top: 0;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-card.urgent h2 { color: var(--badge-must-read); }
+        .section-card.yield h2 { color: #d97706; }
+        
+        .section-desc {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 15px;
+            margin-top: -10px;
+        }
+
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { margin-bottom: 10px; }
+
+        a {
+            text-decoration: none;
+            color: var(--secondary);
+            display: block;
+            padding: 12px 15px;
+            border-radius: 8px;
+            background-color: #f1f5f9;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        a:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .link-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .badge.must-read { background-color: var(--badge-must-read); }
+        .badge.high-yield { background-color: var(--badge-high-yield); }
+        .badge.core { background-color: var(--badge-core); }
+        .badge.practice { background-color: var(--badge-practice); }
+
+        .scrollable-list {
+            max-height: 280px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 5px;
+            background-color: #fafafa;
+        }
+        
+        .scrollable-list a {
+            margin-bottom: 5px;
+            background-color: white;
+            border: 1px solid #f1f5f9;
+        }
+        
+        .scrollable-list a:hover {
+            border-color: var(--primary-light);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #475569;
+            background-color: var(--primary-light);
+            border-radius: 12px;
+            font-size: 1.05rem;
+            border: 1px dashed #6ee7b7;
+        }
+        
+        .footer-note strong { color: var(--primary); }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8rem; }
+            .container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🌿 Jody's 9BI0 Biology Exam Hub</h1>
+        <p>11月 A-Level 測驗衝刺專屬導航｜生物 B科大補帖</p>
+    </div>
+
+    <div class="container">
+        
+        <!-- Priority 1: Core Strategy -->
+        <div class="section-card urgent">
+            <h2>🚀 階段一：備考戰略與計畫</h2>
+            <p class="section-desc">建立整體大局觀，確保溫習方向不走偏。</p>
+            <ul>
+                <li>
+                    <a href="12week_plan.html">
+                        <span class="link-text">📅 12週溫習計畫 (12-Week Plan)</span>
+                        <span class="badge must-read">Must Read</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="predicted_grades_plan.html">
+                        <span class="link-text">📈 預估分作戰計畫 (Predicted Grades)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="fullick_study_system.html">
+                        <span class="link-text">🧠 Fullick 溫習系統 (Study System)</span>
+                        <span class="badge core">Core</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="spec_audit_flashcards.html">
+                        <span class="link-text">📋 課綱檢核記憶卡 (Syllabus Audit)</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Priority 2: Language & 6-Markers -->
+        <div class="section-card yield">
+            <h2>💡 階段二：考官語言與 6分長題突破</h2>
+            <p class="section-desc">掌握標準字眼，精準收割關鍵分數。</p>
+            <ul>
+                <li>
+                    <a href="Biology-Exam-Language-Bank-Say-It-Like-the-Mark-Scheme-(9BI0).pdf" target="_blank">
+                        <span class="link-text">🗣️ 考官標準語言指南 (PDF)</span>
+                        <span class="badge must-read">Must Read</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="bio-useful-language-bank.html">
+                        <span class="link-text">💬 實用答題語料庫 (Language Bank)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="biology-50-six-mark-questions.html">
+                        <span class="link-text">✍️ 50題 6分題特訓 (50 6-Markers)</span>
+                        <span class="badge high-yield">High Yield</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="100_sixmark_answers.html">
+                        <span class="link-text">💯 100題 6分題滿分範答</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="biology-100-high-frequency-questions.html">
+                        <span class="link-text">🔥 100 高頻考題 (High Freq Qs)</span>
+                        <span class="badge high-yield">High Yield</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="synoptic_biology.html">
+                        <span class="link-text">🌐 跨課題綜合考點 (Synoptic Bio)</span>
+                        <span class="badge core">Core</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Priority 3: High-Yield Topic Packs -->
+        <div class="section-card yield">
+            <h2>🔥 階段三：核心主題預測包</h2>
+            <p class="section-desc">針對重點單元深度打擊的專屬資源包。</p>
+            <ul>
+                <li><a href="biology-dna-protein-synthesis-cell-division-pack.html"><span class="link-text">🧬 DNA, 蛋白質合成與細胞分裂</span></a></li>
+                <li><a href="biology-enzymes-prediction-pack.html"><span class="link-text">🧪 酶 (Enzymes) 預測包</span></a></li>
+                <li><a href="biology-gas-exchange-cardiovascular-pack.html"><span class="link-text">🫁 氣體交換與心血管系統</span></a></li>
+                <li><a href="biology-genetics-evolution-biodiversity-pack.html"><span class="link-text">🌍 遺傳、演化與生物多樣性</span></a></li>
+                <li><a href="biology-immunity-microbiology-pack.html"><span class="link-text">🦠 免疫與微生物預測包</span></a></li>
+                <li><a href="biology-membrane-structure-fluid-mosaic-pack.html"><span class="link-text">🔬 細胞膜結構預測包</span></a></li>
+                <li><a href="biology-membranes-transport-prediction-pack.html"><span class="link-text">🚪 膜與細胞運輸預測包</span></a></li>
+                <li><a href="biology-respiration-atp-prediction-pack.html"><span class="link-text">⚡ 呼吸作用與 ATP 預測包</span></a></li>
+                <li><a href="topic42_transport_mammals.html"><span class="link-text">🫀 Topic 4.2: 哺乳動物運輸</span></a></li>
+                <li><a href="topic4_astar_R1.html"><span class="link-text">⭐ Topic 4: A* 重點溫習 R1</span></a></li>
+            </ul>
+        </div>
+
+        <!-- Priority 4: Topic-by-Topic Predicts -->
+        <div class="section-card">
+            <h2>🎯 階段四：單元重點預測</h2>
+            <p class="section-desc">各章節的考前精準預測，查漏補缺。</p>
+            <ul>
+                <li>
+                    <a href="bio-topics-exam-predict-index.html" style="background-color: var(--primary-light); border: 1px solid #a7f3d0;">
+                        <span class="link-text">📋 單元預測總覽 (Predicts Index)</span>
+                        <span class="badge core">Core</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="scrollable-list mt-2" style="margin-top: 10px;">
+                <a href="bio-topic1-exam-predict.html"><span class="link-text">Topic 1 Prediction</span></a>
+                <a href="bio-topic2-Exam-predict.html"><span class="link-text">Topic 2 Prediction</span></a>
+                <a href="bio-topic3-exam-predict.html"><span class="link-text">Topic 3 Prediction</span></a>
+                <a href="bio-topic4-exam-predict.html"><span class="link-text">Topic 4 Prediction</span></a>
+                <a href="bio-topic5-exam-predict.html"><span class="link-text">Topic 5 Prediction</span></a>
+                <a href="bio-topic6-exam-predict.html"><span class="link-text">Topic 6 Prediction</span></a>
+                <a href="bio-topic7-exam-predict.html"><span class="link-text">Topic 7 Prediction</span></a>
+                <a href="bio-topic8-exam-predict.html"><span class="link-text">Topic 8 Prediction</span></a>
+                <a href="bio-topic9-exam-predict.html"><span class="link-text">Topic 9 Prediction</span></a>
+                <a href="bio-topic10-exam-predict.html"><span class="link-text">Topic 10 Prediction</span></a>
+            </div>
+        </div>
+
+        <!-- Priority 5: Exam Questions -->
+        <div class="section-card">
+            <h2>📚 階段五：歷屆試題與實戰演練</h2>
+            <p class="section-desc">刷題專區，累積手感與實戰經驗。</p>
+            <ul>
+                <li>
+                    <a href="exam_questions_1_96.html">
+                        <span class="link-text">📝 Exam Questions (1 - 96)</span>
+                        <span class="badge practice">Practice</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="exam_questions_97_200.html">
+                        <span class="link-text">📝 Exam Questions (97 - 200)</span>
+                        <span class="badge practice">Practice</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Priority 6: Flashcards & Active Recall -->
+        <div class="section-card">
+            <h2>📇 階段六：記憶閃卡與檢核</h2>
+            <p class="section-desc">零碎時間拿來刷 Flashcards，強化長期記憶。</p>
+            <div class="scrollable-list">
+                <a href="active_recall_flashcards.html"><span class="link-text">🧠 主動回憶閃卡 (Active Recall)</span></a>
+                <a href="astar_checklist_flashcards.html"><span class="link-text">✅ A* 檢核清單閃卡</span></a>
+                <a href="biology-phase2-flashcards.html"><span class="link-text">🔄 Phase 2 記憶卡</span></a>
+                <a href="biology-mock-paper-1-flashcards.html"><span class="link-text">📄 Mock Paper 1 記憶卡 (v1)</span></a>
+                <a href="mock-paper-1-flashcards.html"><span class="link-text">📄 Mock Paper 1 記憶卡 (v2)</span></a>
+                <a href="mock-paper-2-flashcards.html"><span class="link-text">📄 Mock Paper 2 記憶卡</span></a>
+                <a href="mock-paper-3-flashcards.html"><span class="link-text">📄 Mock Paper 3 記憶卡</span></a>
+                <a href="volume13_flashcardsQ1-5.html"><span class="link-text">📖 Volume 13 記憶卡 Q1-5</span></a>
+                <a href="volume13_flashcardsQ1-9.html"><span class="link-text">📖 Volume 13 記憶卡 Q1-9</span></a>
+                <a href="volume13_flashcardsQ1-20.html"><span class="link-text">📖 Volume 13 記憶卡 Q1-20</span></a>
+                <a href="volume13_Q1-5 sort flashcards.html"><span class="link-text">🔀 Volume 13 Q1-5 排序記憶卡</span></a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-note">
+        <p><strong>You're capable of amazing things, Jody! 🌱</strong></p>
+        <p>Take it one step at a time, trust the process, and crush those November Biology assessments!</p>
+    </div>
+
+</body>
+</html>
